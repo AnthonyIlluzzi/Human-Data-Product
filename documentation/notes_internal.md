@@ -72,54 +72,62 @@ Last pipeline refresh: date stamp (dynamically updated python as today or someth
 
 **[Modal] Data model - schema - linked from data product Page 1**  Do I need to define schema attributes? i.e. nullable, data type
 
+Notation: 
+documentation/schema.md with a simple ERD/DBML-style description (human-readable)
+backend/schema.sql with CREATE TABLE statements (canonical)
+
 Table 1:
 experience(
-experience_id,  PK
+experience_id (PK),
 company,
 role,
 start_date,
 end_date,
 domain,
 focus_area,
-impact
+impact,
+sort_order
 )
 
 Table 2:
-projects(
-project_id,  PK
-experience_id,  FK
+project(
+project_id (PK),
+experience_id,
 name, 
 domain,
-tech, 
 value, 
 link
 )
 
-Table 3: 
+Table 3:
 project_skill(
-project_id,  CK
-skill_id  CK
+project_id FK → projects.project_id,
+skill_id FK → skill.skill_id, 
+PRIMARY KEY (project_id, skill_id)
 )
 
 Table 4:
 skill(
-skill_id,  PK
+skill_id PK,
 category, 
 skill, 
 level
 )
 
 Table 5:
-principles(
-Principle_id,  PK
-principle_desc
+principle(
+Principle_id (PK),
+principle_desc,
+sort_order
 )
 
-Table 5:
+Table 6:
 contact_info(
-contact_id,  pk
+contact_id (PK),
 category,
-value
+value,
+is_public,
+sort_order
 )
 
 **Data contract**
