@@ -26,8 +26,8 @@ skill
 •	level
 
 project_skill
-•	project_id (FK → projects.project_id)
-•	skill_id (FK → skills.skill_id)
+•	project_id (FK → project.project_id)
+•	skill_id (FK → skill.skill_id)
 •	PRIMARY KEY (project_id, skill_id)
 
 principle
@@ -39,9 +39,8 @@ contact_info
 •	contact_id (PK)
 •	category
 •	value
-•	sort_order
 •	is_public (boolean)
 
 product_metadata
-•	key (PK)
-•	value
+•	meta_key (PK)
+•	meta_value
