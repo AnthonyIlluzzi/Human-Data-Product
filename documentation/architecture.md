@@ -1,18 +1,17 @@
-<md>
-Human Data Product Architecture
+**#Human Data Product Architecture**
 
-Sources
-  Resume
-  LinkedIn
-  Project notes
+**Sources**
+- Resume
+- LinkedIn
+- Project notes
 
-Transformation
-  Python data pipeline
+**Transformation**
+- Python data pipeline
 
-Structured Model
-  SQLite database
+**Structured Model**
+- SQLite database
 
-Consumption Interfaces
-  REST API
-  SQL query interface
-  Insight explorer
+**Consumption Interfaces**
+- REST API
+- SQL query interface
+- Insight explorer
