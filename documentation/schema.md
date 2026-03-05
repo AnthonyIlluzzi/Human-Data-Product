@@ -13,7 +13,8 @@ Key design principles:
 
 experience → project  
 project → project_skill → skill  
-experience → feedback  
+experience → feedback
+education → feedback
 
 Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
 
@@ -30,12 +31,16 @@ The diagram below provides a lightweight, embedded view of the core relationship
 %%{init: {'theme':'neutral'}}%%
 erDiagram
   EXPERIENCE ||--o{ PROJECT : contains
-  EXPERIENCE ||--o{ FEEDBACK : receives
   PROJECT ||--o{ PROJECT_SKILL : maps
   SKILL ||--o{ PROJECT_SKILL : maps
 
+  %% Polymorphic feedback (enforced by loader, not DB FK constraints)
+  EXPERIENCE ||--o{ FEEDBACK : references
+  EDUCATION ||--o{ FEEDBACK : references
+  PROJECT ||--o{ FEEDBACK : references
+
   EXPERIENCE {
-    int     experience_id PK
+    int    experience_id PK
     string  company
     string  role
     date    start_date
@@ -43,12 +48,24 @@ erDiagram
     string  domain
     string  focus_area
     string  impact
-    int     sort_order
+    int    sort_order
+  }
+
+  EDUCATION {
+    int    education_id PK
+    string  institution
+    string  location
+    string  degree
+    string  field_of_study
+    string  domain
+    boolean honors_flag
+    date    completion_date
+    int    sort_order
   }
 
   PROJECT {
-    int     project_id PK
-    int     experience_id FK
+    int    project_id PK
+    int    experience_id FK
     string  name
     string  domain
     string  value
@@ -56,28 +73,42 @@ erDiagram
   }
 
   SKILL {
-    int     skill_id PK
+    int    skill_id PK
     string  category
     string  skill_name
     string  level
   }
 
+  CREDENTIAL {
+    int    credential_id PK
+    string  type
+    string  title
+    string  issuer
+    date    issue_date
+    date    end_date
+    string  status
+    string  description
+    string  link
+    int    sort_order
+  }
+
   PROJECT_SKILL {
-    int     project_id PK, FK
-    int     skill_id   PK, FK
+    int    project_id PK, FK
+    int    skill_id  PK, FK
   }
 
   FEEDBACK {
-    int     feedback_id PK
-    int     experience_id FK
+    int    feedback_id PK
+    string  entity_type
+    int    entity_id
     string  source_type
     string  quote
     string  theme
-    int     year
+    int    year
   }
 
   ROLE_PREFERENCE {
-    int     preference_id PK
+    int    preference_id PK
     string  dimension
     string  category
     string  value
@@ -85,13 +116,13 @@ erDiagram
   }
 
   PRINCIPLE {
-    int     principle_id PK
+    int    principle_id PK
     string  principle_desc
-    int     sort_order
+    int    sort_order
   }
 
   CONTACT_INFO {
-    int     contact_id PK
+    int    contact_id PK
     string  category
     string  value
     boolean is_public
@@ -101,6 +132,7 @@ erDiagram
     string  meta_key PK
     string  meta_value
   }
+
 ```
 ### Full ERD (dbdiagram.io)
 The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid.
@@ -123,6 +155,20 @@ Primary domain entity representing roles over time
 | focus_area    | TEXT    |     | Primary focus area of the role    |
 | impact        | TEXT    |     | Summary of impact or achievements |
 | sort_order    | INTEGER |     | Controls display order            |
+
+### education
+Formal education history
+| Column          | Type    | Key | Notes                                                  |
+| --------------- | ------- | --- | ------------------------------------------------------ |
+| education_id    | INTEGER | PK  | Unique identifier                                      |
+| institution     | TEXT    |     | School / institution name                              |
+| location        | TEXT    |     | City, State (or Country)                               |
+| degree          | TEXT    |     | Degree earned (e.g., BS, BA, MS)                       |
+| field_of_study  | TEXT    |     | Major / concentration                                  |
+| domain          | TEXT    |     | Optional: thematic domain (e.g., Business, Analytics)  |
+| honors_flag     | BOOLEAN |     | TRUE if honors/distinction applies                     |
+| completion_date | DATE    |     | Graduation / completion date (use NULL if in progress) |
+| sort_order      | INTEGER |     | Controls display order                                 |
 
 ### project
 Key initiatives or work performed during an experience
@@ -154,6 +200,21 @@ Normalized skill catalog
 | skill_name  | TEXT    |     | Skill name                                                    |
 | level       | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
 
+### credential
+Professional certifications, courses, or credentials
+| Column        | Type    | Key | Notes                                                     |
+| ------------- | ------- | --- | --------------------------------------------------------- |
+| credential_id | INTEGER | PK  | Unique identifier                                         |
+| type          | TEXT    |     | Credential type (certification, course, badge, license)   |
+| title         | TEXT    |     | Credential name/title                                     |
+| issuer        | TEXT    |     | Issuing organization (SAP, Microsoft, etc.)               |
+| issue_date    | DATE    |     | Date issued (NULL if in progress)                         |
+| end_date      | DATE    |     | Expiration/end date (NULL if none)                        |
+| status        | TEXT    |     | Status (active, in_progress, expired)                     |
+| description   | TEXT    |     | Optional short description of relevance                   |
+| link          | TEXT    |     | Optional URL (credential verification, course page, etc.) |
+| sort_order    | INTEGER |     | Controls display order                                    |
+
 ### project_skill
 Join table mapping projects to skills
 | Column     | Type    | Key     | Notes                           |
@@ -184,14 +245,17 @@ Contact information exposed through API
 
 ### feedback
 Peer or leadership feedback tied to a specific experience
-| Column        | Type    | Key | Notes                                                              |
-| ------------- | ------- | --- | ------------------------------------------------------------------ |
-| feedback_id   | INTEGER | PK  | Unique identifier                                                  |
-| experience_id | INTEGER | FK  | References `experience.experience_id`                              |
-| source_type   | TEXT    |     | Source of feedback (manager, peer, stakeholder, customer, partner) |
-| quote         | TEXT    |     | Feedback quote                                                     |
-| theme         | TEXT    |     | Feedback theme (architecture, leadership, collaboration)           |
-| year          | INTEGER |     | Year feedback was given                                            |
+| Column      | Type    | Key | Notes                                                                        |
+| ----------- | ------- | --- | ---------------------------------------------------------------------------- |
+| feedback_id | INTEGER | PK  | Unique identifier                                                            |
+| entity_type | TEXT    |     | Target entity type (experience, education, project, credential)              |
+| entity_id   | INTEGER |     | Target entity id (validated by loader; not a DB-enforced FK)                 |
+| source_type | TEXT    |     | Source of feedback (manager, peer, stakeholder, linkedin)                    |
+| quote       | TEXT    |     | Feedback quote (consider trimming names/private details)                     |
+| theme       | TEXT    |     | Theme (architecture, execution, leadership, collaboration, growth, strategy) |
+| year        | INTEGER |     | Year feedback was given                                                      |
+**entity_type** should be one of: experience, education, project, credential
+entity_id must exist in the corresponding table (enforced in your load_data.py validation step)
 
 ### product_metadata
 Metadata describing the Human Data Product
