@@ -98,12 +98,9 @@ erDiagram
   }
 ```
 ---
-## experience
-| Column | Type | Key | Notes |
-|------|------|------|------|
-| experience_id | INTEGER | PK | Unique identifier for experience |
 
 ## experience
+Primary domain entity representing roles over time
 | Column        | Type    | Key | Notes                             |
 | ------------- | ------- | --- | --------------------------------- |
 | experience_id | INTEGER | PK  | Unique identifier for experience  |
@@ -117,6 +114,7 @@ erDiagram
 | sort_order    | INTEGER |     | Controls display order            |
 
 ## project
+Key initiatives or work performed during an experience
 | Column        | Type    | Key | Notes                                 |
 | ------------- | ------- | --- | ------------------------------------- |
 | project_id    | INTEGER | PK  | Unique identifier for project         |
@@ -127,6 +125,7 @@ erDiagram
 | link          | TEXT    |     | Optional external reference           |
 
 ## role_preference
+Preferences describing ideal future roles
 | Column        | Type    | Key | Notes                                                   |
 | ------------- | ------- | --- | ------------------------------------------------------- |
 | preference_id | INTEGER | PK  | Unique identifier                                       |
@@ -135,6 +134,7 @@ erDiagram
 | priority      | TEXT    |     | Importance level (high, medium, low)                    |
 
 ## skill
+Normalized skill catalog
 | Column      | Type    | Key | Notes                                                         |
 | ----------- | ------- | --- | ------------------------------------------------------------- |
 | skill_id    | INTEGER | PK  | Unique identifier                                             |
@@ -143,6 +143,7 @@ erDiagram
 | level       | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
 
 ## project_skill
+Join table mapping projects to skills
 | Column     | Type    | Key     | Notes                           |
 | ---------- | ------- | ------- | ------------------------------- |
 | project_id | INTEGER | PK / FK | References `project.project_id` |
@@ -153,6 +154,7 @@ erDiagram
 This table represents a **many-to-many relationship** between projects and skills.
 
 ## principle
+Architecture or professional principles
 | Column         | Type    | Key | Notes                                |
 | -------------- | ------- | --- | ------------------------------------ |
 | principle_id   | INTEGER | PK  | Unique identifier                    |
@@ -160,6 +162,7 @@ This table represents a **many-to-many relationship** between projects and skill
 | sort_order     | INTEGER |     | Controls display order               |
 
 ## contact_info
+Contact information exposed through API
 | Column     | Type    | Key | Notes                                      |
 | ---------- | ------- | --- | ------------------------------------------ |
 | contact_id | INTEGER | PK  | Unique identifier                          |
@@ -168,6 +171,7 @@ This table represents a **many-to-many relationship** between projects and skill
 | is_public  | BOOLEAN |     | Determines whether field is exposed in API |
 
 ## feedback
+Peer or leadership feedback tied to a specific experience
 | Column        | Type    | Key | Notes                                                              |
 | ------------- | ------- | --- | ------------------------------------------------------------------ |
 | feedback_id   | INTEGER | PK  | Unique identifier                                                  |
@@ -178,6 +182,7 @@ This table represents a **many-to-many relationship** between projects and skill
 | year          | INTEGER |     | Year feedback was given                                            |
 
 ## product_metadata
+Metadata describing the Human Data Product
 | Column     | Type | Key | Notes                                                          |
 | ---------- | ---- | --- | -------------------------------------------------------------- |
 | meta_key   | TEXT | PK  | Metadata key (version, product status, last refresh timestamp) |
