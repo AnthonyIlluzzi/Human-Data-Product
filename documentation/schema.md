@@ -54,7 +54,7 @@ erDiagram
   SKILL {
     int     skill_id PK
     string  category
-    string  skill
+    string  skill_name
     string  level
   }
 
@@ -135,12 +135,12 @@ erDiagram
 | priority      | TEXT    |     | Importance level (high, medium, low)                    |
 
 ## skill
-| Column   | Type    | Key | Notes                                                         |
-| -------- | ------- | --- | ------------------------------------------------------------- |
-| skill_id | INTEGER | PK  | Unique identifier                                             |
-| category | TEXT    |     | Skill category (data, platform, architecture, etc.)           |
-| skill    | TEXT    |     | Skill name                                                    |
-| level    | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
+| Column      | Type    | Key | Notes                                                         |
+| ----------- | ------- | --- | ------------------------------------------------------------- |
+| skill_id    | INTEGER | PK  | Unique identifier                                             |
+| category    | TEXT    |     | Skill category (data, platform, architecture, etc.)           |
+| skill_name  | TEXT    |     | Skill name                                                    |
+| level       | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
 
 ## project_skill
 | Column     | Type    | Key     | Notes                           |
