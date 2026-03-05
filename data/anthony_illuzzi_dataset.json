@@ -297,135 +297,518 @@
 ]
 
   "experience": [
-    {
-      "experience_id": 1,
-      "company": "SAP",
-      "role": "Senior Analytics Architect, Product Success",
-      "start_date": "2023-08-01",
-      "end_date": null,
-      "domain": "Enterprise Data Platforms",
-      "focus_area": "Analytics architecture, product intelligence, platform adoption strategy",
-      "impact": "Designed analytics architecture and adoption frameworks enabling scalable insights and self-service capabilities for SAP Fieldglass.",
-      "sort_order": 1
-    },
-    {
-      "experience_id": 2,
-      "company": "SAP",
-      "role": "Senior Adoption Consultant",
-      "start_date": "2020-08-01",
-      "end_date": "2023-07-31",
-      "domain": "Customer Success / Platform Adoption",
-      "focus_area": "Strategic customer enablement and analytics-driven adoption",
-      "impact": "Enabled strategic platform adoption for major enterprise clients, aligning product capabilities with measurable business outcomes.",
-      "sort_order": 2
-    },
-    {
-      "experience_id": 3,
-      "company": "SAP",
-      "role": "Adoption Consultant / Operations Consultant",
-      "start_date": "2018-05-01",
-      "end_date": "2020-07-31",
-      "domain": "Customer Program Optimization",
-      "focus_area": "Operational analytics and workforce program optimization",
-      "impact": "Supported enterprise clients in optimizing workforce management programs and improving operational efficiency through analytics.",
-      "sort_order": 3
-    },
-    {
-      "experience_id": 4,
-      "company": "SAP",
-      "role": "Business Analyst, Account Services",
-      "start_date": "2016-07-01",
-      "end_date": "2018-04-30",
-      "domain": "Enterprise Workforce Management",
-      "focus_area": "Program analytics and client advisory",
-      "impact": "Supported large enterprise workforce programs totaling billions in spend, providing analytical insight and operational improvements.",
-      "sort_order": 4
-    },
-    {
-      "experience_id": 5,
-      "company": "Capsim Management Simulations",
-      "role": "Client Relationship Consultant",
-      "start_date": "2012-09-01",
-      "end_date": "2016-07-31",
-      "domain": "Business Education Technology",
-      "focus_area": "Client success and analytics reporting",
-      "impact": "Delivered analytical insights and consulting support for academic institutions using simulation-based learning platforms.",
-      "sort_order": 5
-    }
-  ],
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "start_date": "2023-08-01",
+    "end_date": null,
+    "domain": "Enterprise Data Platforms",
+    "focus_area": "Analytics architecture, platform enablement, governance, product intelligence",
+    "impact": "Improved scalability and adoption through accelerators, self-service analytics, metadata governance, and data-driven roadmap execution.",
+    "sort_order": 1
+  },
+  {
+    "experience_id": 2,
+    "company": "SAP",
+    "role": "Senior Adoption Consultant",
+    "start_date": "2020-08-01",
+    "end_date": "2023-07-31",
+    "domain": "Customer Adoption / Platform Enablement",
+    "focus_area": "Customer value realization, consultative enablement, program leadership",
+    "impact": "Enabled customer outcomes across large enterprise portfolios through strategic enablement and value realization measurement.",
+    "sort_order": 2
+  },
+  {
+    "experience_id": 3,
+    "company": "SAP",
+    "role": "Adoption Consultant (formerly Operations Consultant)",
+    "start_date": "2018-05-01",
+    "end_date": "2020-07-31",
+    "domain": "Customer Program Optimization",
+    "focus_area": "Change management, operational enablement, stakeholder alignment",
+    "impact": "Supported enterprise workforce programs through analytics-informed operational improvements and advisory.",
+    "sort_order": 3
+  },
+  {
+    "experience_id": 4,
+    "company": "SAP",
+    "role": "Business Analyst, Account Services",
+    "start_date": "2016-07-01",
+    "end_date": "2018-04-30",
+    "domain": "Enterprise Workforce Management",
+    "focus_area": "Program analytics, customer advisory, platform SME",
+    "impact": "Supported large MSP portfolio programs and operational efficiencies through analysis and platform expertise.",
+    "sort_order": 4
+  },
+  {
+    "experience_id": 5,
+    "company": "Capsim Management Simulations",
+    "role": "Client Relationship Consultant / Associate",
+    "start_date": "2012-09-01",
+    "end_date": "2016-07-31",
+    "domain": "Education Technology",
+    "focus_area": "Client success, analytics reporting, implementations, program optimization",
+    "impact": "Delivered client portfolio growth and analytics reporting used for program outcomes and accreditation support.",
+    "sort_order": 5
+  },
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "start_date": "2025-01-01",
+    "end_date": null,
+    "domain": "Data Products / Portfolio Engineering",
+    "focus_area": "Building public-facing demonstrations of data platform + product thinking (API, SQL, governance, insights)",
+    "impact": "Created portfolio-grade artifacts that demonstrate end-to-end data product architecture and consumption patterns.",
+    "sort_order": 0
+  }
+]
 
   "project": [
-    {
-      "project_id": 1,
-      "experience_id": 1,
-      "name": "Fieldglass Integration Accelerator Framework",
-      "domain": "Platform Enablement",
-      "value": "Designed seven accelerators and 20 integration objects to reduce implementation effort and accelerate production deployments.",
-      "link": null
-    },
-    {
-      "project_id": 2,
-      "experience_id": 1,
-      "name": "Adoption Analytics Redesign",
-      "domain": "Product Analytics",
-      "value": "Expanded reporting architecture enabling scalable self-service insights across customer adoption analytics.",
-      "link": null
-    },
-    {
-      "project_id": 3,
-      "experience_id": 1,
-      "name": "Configuration Metadata Governance Framework",
-      "domain": "Data Governance",
-      "value": "Introduced metadata frameworks for configuration environments supporting traceability and scalable platform evolution.",
-      "link": null
-    },
-    {
-      "project_id": 4,
-      "experience_id": 2,
-      "name": "Customer Value Realization Toolkit",
-      "domain": "Analytics Framework",
-      "value": "Developed analytical framework to measure customer value realization across platform capabilities.",
-      "link": null
-    },
-    {
-      "project_id": 5,
-      "experience_id": 5,
-      "name": "Academic Program Analytics Reporting",
-      "domain": "Education Analytics",
-      "value": "Produced analytical reporting used by universities to evaluate simulation program outcomes and accreditation performance.",
-      "link": null
-    }
-  ],
+  {
+    "project_id": 1001,
+    "experience_id": 1,
+    "name": "Deployment Services SKU Separation & Monetization Model",
+    "domain": "Platform Strategy / Monetization",
+    "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
+    "link": null
+  },
+  {
+    "project_id": 1002,
+    "experience_id": 1,
+    "name": "Fieldglass Integration Accelerators & Integration Objects",
+    "domain": "Integration Enablement",
+    "value": "Engineered 7 leading-practice accelerators and introduced 20 integration objects, reducing implementation effort ~10%, saving 50+ hours per deployment, accelerating production migration ~75%, and achieving an 85% usability score.",
+    "link": null
+  },
+  {
+    "project_id": 1003,
+    "experience_id": 1,
+    "name": "Adoption Analytics Reporting Redesign",
+    "domain": "Product Analytics",
+    "value": "Redesigned Adoption Analytics reporting and expanded configuration coverage by 42% to enable scalable self-service insights and reduce reliance on manual analysis.",
+    "link": null
+  },
+  {
+    "project_id": 1004,
+    "experience_id": 1,
+    "name": "Configuration Self-Service Expansion",
+    "domain": "Self-Service Enablement",
+    "value": "Advanced configuration self-service capabilities to 89% coverage, reducing related support case volume by 50% and driving sustained external adoption (>200 monthly interactions).",
+    "link": null
+  },
+  {
+    "project_id": 1005,
+    "experience_id": 1,
+    "name": "Roadmap Business Cases for Self-Service Initiatives",
+    "domain": "Decision Support / Strategy",
+    "value": "Formulated data-driven business cases for additional self-service roadmap initiatives projected to deflect 25%+ of related support cases, reducing development and SME effort.",
+    "link": null
+  },
+  {
+    "project_id": 1006,
+    "experience_id": 1,
+    "name": "SQL-driven Usage Analysis → Solution Enhancements",
+    "domain": "Product Intelligence",
+    "value": "Performed SQL-based analysis of customer usage and configuration data to drive 62 solution enhancements (82% delivered as self-service) to improve scalability and accelerate time-to-value.",
+    "link": null
+  },
+  {
+    "project_id": 1007,
+    "experience_id": 1,
+    "name": "Configuration Metadata Governance Framework",
+    "domain": "Data Governance / Metadata",
+    "value": "Instituted metadata frameworks and governance processes for configuration data, environments, and documentation to support traceability and sustainable platform evolution.",
+    "link": null
+  },
+  {
+    "project_id": 1008,
+    "experience_id": 1,
+    "name": "GA Launch Readiness: Testing Strategy & Defect Resolution",
+    "domain": "Release Readiness",
+    "value": "Supported launch readiness through testing strategy and defect resolution, identifying 33 defects and resolving 97% prior to GA launch.",
+    "link": null
+  },
+  {
+    "project_id": 2001,
+    "experience_id": 2,
+    "name": "Customer Portfolio Value Realization Toolkit",
+    "domain": "Value Realization / KPI Framework",
+    "value": "Partnered with leadership to develop a toolkit to measure value realization of system functionality across customer adoption initiatives.",
+    "link": null
+  },
+  {
+    "project_id": 2002,
+    "experience_id": 2,
+    "name": "Strategic Enablement for Top-Tier Customer Portfolio",
+    "domain": "Customer Strategy",
+    "value": "Enabled satisfaction, retention, and renewal outcomes for a portfolio including three of Fieldglass’s largest feature customers (~$26.87M contract value; ~$1.52B annual spend).",
+    "link": null
+  },
+  {
+    "project_id": 3001,
+    "experience_id": 4,
+    "name": "MSP Portfolio Analytics Support (Allegis Global Services)",
+    "domain": "Program Analytics",
+    "value": "Supported MSP account portfolio of 21 clients totaling ~$2.4B yearly spend through analytical support, platform SME guidance, and change impact assessment.",
+    "link": null
+  },
+  {
+    "project_id": 5001,
+    "experience_id": 5,
+    "name": "Client Portfolio Growth & Performance Insights",
+    "domain": "Client Analytics / Success",
+    "value": "Managed 90+ academic and corporate clients (~$689K annual revenue) and delivered ~25% YoY growth through consultative engagement and solution alignment.",
+    "link": null
+  },
+  {
+    "project_id": 5002,
+    "experience_id": 5,
+    "name": "University Outcome Analytics & Accreditation Reporting",
+    "domain": "Education Analytics",
+    "value": "Produced analytical reports used by universities to evaluate outcomes and support accreditation reviews.",
+    "link": null
+  },
+  {
+    "project_id": 5003,
+    "experience_id": 5,
+    "name": "Global Competition Operations Improvement",
+    "domain": "Operations / Program Enablement",
+    "value": "Coordinated large-scale initiative including a global competition with 1,400+ participants (+37% participation) through process documentation and operational improvements.",
+    "link": null
+  },
+  {
+    "project_id": 9001,
+    "experience_id": 999,
+    "name": "Human Data Product (Portfolio)",
+    "domain": "Data Product / Portfolio Engineering",
+    "value": "Built a public-facing 'data product' version of professional experience: curated dataset → SQLite → API + SQL query console + insight cards.",
+    "link": "https://anthonyilluzzi.com"
+  },
+  {
+    "project_id": 9002,
+    "experience_id": 999,
+    "name": "PRISM (Portfolio / Concept Project)",
+    "domain": "Data / AI Concept",
+    "value": "Placeholder for PRISM side project; intended to demonstrate structured thinking around data/AI enablement and decision systems. (To be detailed by Anthony.)",
+    "link": null
+  }
+]
 
-  "skill": [
-    { "skill_id": 1, "category": "data", "skill": "SQL", "level": "advanced" },
-    { "skill_id": 2, "category": "data", "skill": "Python", "level": "intermediate" },
-    { "skill_id": 3, "category": "platform", "skill": "SAP Fieldglass", "level": "advanced" },
-    { "skill_id": 4, "category": "platform", "skill": "SAP Business Data Cloud", "level": "intermediate" },
-    { "skill_id": 5, "category": "platform", "skill": "SAP Datasphere", "level": "intermediate" },
-    { "skill_id": 6, "category": "analytics", "skill": "Product Usage Analytics", "level": "advanced" },
-    { "skill_id": 7, "category": "architecture", "skill": "Metadata Architecture", "level": "advanced" },
-    { "skill_id": 8, "category": "architecture", "skill": "Lakehouse Platforms", "level": "intermediate" },
-    { "skill_id": 9, "category": "analytics", "skill": "KPI Framework Design", "level": "advanced" },
-    { "skill_id": 10, "category": "governance", "skill": "Data Governance", "level": "advanced" },
-    { "skill_id": 11, "category": "integration", "skill": "API Testing & Integration", "level": "intermediate" },
-    { "skill_id": 12, "category": "tools", "skill": "Jira", "level": "advanced" },
-    { "skill_id": 13, "category": "tools", "skill": "Confluence", "level": "advanced" }
-  ],
-
+"skill": [
+  {
+    "skill_id": 1,
+    "category": "data",
+    "skill": "SQL",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 2,
+    "category": "data",
+    "skill": "Python",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 3,
+    "category": "platform",
+    "skill": "SAP Fieldglass",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 4,
+    "category": "architecture",
+    "skill": "Analytics Architecture",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 5,
+    "category": "architecture",
+    "skill": "Metadata Architecture",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 6,
+    "category": "governance",
+    "skill": "Data Governance",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 7,
+    "category": "analytics",
+    "skill": "Product Usage Analytics",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 8,
+    "category": "analytics",
+    "skill": "KPI / Value Realization Frameworks",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 9,
+    "category": "strategy",
+    "skill": "Platform Adoption Strategy",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 10,
+    "category": "integration",
+    "skill": "API Testing (Bruno)",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 11,
+    "category": "engineering",
+    "skill": "Testing Strategy & Release Readiness",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 12,
+    "category": "data",
+    "skill": "Lakehouse Platforms (Databricks)",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 13,
+    "category": "tools",
+    "skill": "Jira",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 14,
+    "category": "tools",
+    "skill": "Confluence",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 15,
+    "category": "leadership",
+    "skill": "Cross-Functional Collaboration",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 16,
+    "category": "leadership",
+    "skill": "Executive Communication",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 17,
+    "category": "architecture",
+    "skill": "Semantic Modeling",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 18,
+    "category": "platform",
+    "skill": "SAP Business Data Cloud",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 19,
+    "category": "platform",
+    "skill": "SAP Datasphere",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 20,
+    "category": "platform",
+    "skill": "SAP BTP",
+    "level": "intermediate"
+  },
+  {
+    "skill_id": 21,
+    "category": "capability",
+    "skill": "Systems Thinking",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 22,
+    "category": "capability",
+    "skill": "Analytical Problem Solving",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 23,
+    "category": "capability",
+    "skill": "Structured Communication",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 24,
+    "category": "capability",
+    "skill": "Conceptual Abstraction",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 25,
+    "category": "capability",
+    "skill": "Intellectual Curiosity",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 26,
+    "category": "capability",
+    "skill": "Cross-disciplinary Thinking",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 27,
+    "category": "capability",
+    "skill": "Strategic Thinking",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 28,
+    "category": "capability",
+    "skill": "Stakeholder Alignment",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 29,
+    "category": "capability",
+    "skill": "Attention to Detail",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 30,
+    "category": "leadership",
+    "skill": "Program & Initiative Leadership",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 31,
+    "category": "leadership",
+    "skill": "Change Management",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 32,
+    "category": "capability",
+    "skill": "Requirements Analysis & Solution Design",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 33,
+    "category": "leadership",
+    "skill": "Mentorship & Capability Building",
+    "level": "advanced"
+  }
+]
+  
   "project_skill": [
-    { "project_id": 1, "skill_id": 3 },
-    { "project_id": 1, "skill_id": 11 },
-    { "project_id": 2, "skill_id": 6 },
-    { "project_id": 2, "skill_id": 1 },
-    { "project_id": 3, "skill_id": 7 },
-    { "project_id": 3, "skill_id": 10 },
-    { "project_id": 4, "skill_id": 9 },
-    { "project_id": 4, "skill_id": 1 },
-    { "project_id": 5, "skill_id": 6 },
-    { "project_id": 5, "skill_id": 1 }
-  ],
+  { "project_id": 1001, "skill_id": 9 },
+  { "project_id": 1001, "skill_id": 16 },
+  { "project_id": 1001, "skill_id": 15 },
+  { "project_id": 1001, "skill_id": 27 },
+  { "project_id": 1001, "skill_id": 23 },
+  { "project_id": 1001, "skill_id": 28 },
 
+  { "project_id": 1002, "skill_id": 3 },
+  { "project_id": 1002, "skill_id": 10 },
+  { "project_id": 1002, "skill_id": 9 },
+  { "project_id": 1002, "skill_id": 21 },
+  { "project_id": 1002, "skill_id": 22 },
+  { "project_id": 1002, "skill_id": 32 },
+  { "project_id": 1002, "skill_id": 29 },
+
+  { "project_id": 1003, "skill_id": 1 },
+  { "project_id": 1003, "skill_id": 4 },
+  { "project_id": 1003, "skill_id": 7 },
+  { "project_id": 1003, "skill_id": 21 },
+  { "project_id": 1003, "skill_id": 22 },
+  { "project_id": 1003, "skill_id": 23 },
+  { "project_id": 1003, "skill_id": 27 },
+
+  { "project_id": 1004, "skill_id": 9 },
+  { "project_id": 1004, "skill_id": 1 },
+  { "project_id": 1004, "skill_id": 7 },
+  { "project_id": 1004, "skill_id": 30 },
+  { "project_id": 1004, "skill_id": 28 },
+  { "project_id": 1004, "skill_id": 29 },
+
+  { "project_id": 1005, "skill_id": 1 },
+  { "project_id": 1005, "skill_id": 8 },
+  { "project_id": 1005, "skill_id": 16 },
+  { "project_id": 1005, "skill_id": 27 },
+  { "project_id": 1005, "skill_id": 23 },
+
+  { "project_id": 1006, "skill_id": 1 },
+  { "project_id": 1006, "skill_id": 7 },
+  { "project_id": 1006, "skill_id": 4 },
+  { "project_id": 1006, "skill_id": 22 },
+  { "project_id": 1006, "skill_id": 29 },
+
+  { "project_id": 1007, "skill_id": 5 },
+  { "project_id": 1007, "skill_id": 6 },
+  { "project_id": 1007, "skill_id": 17 },
+  { "project_id": 1007, "skill_id": 21 },
+  { "project_id": 1007, "skill_id": 27 },
+  { "project_id": 1007, "skill_id": 29 },
+  { "project_id": 1007, "skill_id": 23 },
+
+  { "project_id": 1008, "skill_id": 11 },
+  { "project_id": 1008, "skill_id": 13 },
+  { "project_id": 1008, "skill_id": 15 },
+  { "project_id": 1008, "skill_id": 29 },
+  { "project_id": 1008, "skill_id": 30 },
+
+  { "project_id": 2001, "skill_id": 8 },
+  { "project_id": 2001, "skill_id": 1 },
+  { "project_id": 2001, "skill_id": 16 },
+  { "project_id": 2001, "skill_id": 27 },
+  { "project_id": 2001, "skill_id": 32 },
+
+  { "project_id": 2002, "skill_id": 9 },
+  { "project_id": 2002, "skill_id": 15 },
+  { "project_id": 2002, "skill_id": 16 },
+  { "project_id": 2002, "skill_id": 28 },
+  { "project_id": 2002, "skill_id": 31 },
+  { "project_id": 2002, "skill_id": 30 },
+
+  { "project_id": 3001, "skill_id": 3 },
+  { "project_id": 3001, "skill_id": 1 },
+  { "project_id": 3001, "skill_id": 15 },
+  { "project_id": 3001, "skill_id": 28 },
+  { "project_id": 3001, "skill_id": 31 },
+
+  { "project_id": 5001, "skill_id": 8 },
+  { "project_id": 5001, "skill_id": 16 },
+  { "project_id": 5001, "skill_id": 15 },
+  { "project_id": 5001, "skill_id": 28 },
+  { "project_id": 5001, "skill_id": 23 },
+
+  { "project_id": 5002, "skill_id": 7 },
+  { "project_id": 5002, "skill_id": 1 },
+  { "project_id": 5002, "skill_id": 16 },
+  { "project_id": 5002, "skill_id": 23 },
+  { "project_id": 5002, "skill_id": 22 },
+
+  { "project_id": 5003, "skill_id": 13 },
+  { "project_id": 5003, "skill_id": 15 },
+  { "project_id": 5003, "skill_id": 16 },
+  { "project_id": 5003, "skill_id": 30 },
+  { "project_id": 5003, "skill_id": 29 },
+
+  { "project_id": 9001, "skill_id": 2 },
+  { "project_id": 9001, "skill_id": 1 },
+  { "project_id": 9001, "skill_id": 10 },
+  { "project_id": 9001, "skill_id": 5 },
+  { "project_id": 9001, "skill_id": 21 },
+  { "project_id": 9001, "skill_id": 24 },
+  { "project_id": 9001, "skill_id": 25 },
+  { "project_id": 9001, "skill_id": 26 },
+  { "project_id": 9001, "skill_id": 23 },
+  { "project_id": 9001, "skill_id": 29 },
+
+  { "project_id": 9002, "skill_id": 2 },
+  { "project_id": 9002, "skill_id": 12 },
+  { "project_id": 9002, "skill_id": 4 },
+  { "project_id": 9002, "skill_id": 24 },
+  { "project_id": 9002, "skill_id": 27 }
+]
+  
   "feedback": [
     {
       "feedback_id": 1,
