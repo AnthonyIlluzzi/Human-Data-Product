@@ -107,8 +107,9 @@ This diagram is the authoritative visual reference for the Human Data Product sc
 
 ![Human Data Product ERD](images/Human_Data_Product_ERD.svg)
 ---
+## Database Architecture
 
-## experience
+### experience
 Primary domain entity representing roles over time
 | Column        | Type    | Key | Notes                             |
 | ------------- | ------- | --- | --------------------------------- |
@@ -122,7 +123,7 @@ Primary domain entity representing roles over time
 | impact        | TEXT    |     | Summary of impact or achievements |
 | sort_order    | INTEGER |     | Controls display order            |
 
-## project
+### project
 Key initiatives or work performed during an experience
 | Column        | Type    | Key | Notes                                 |
 | ------------- | ------- | --- | ------------------------------------- |
@@ -133,7 +134,7 @@ Key initiatives or work performed during an experience
 | value         | TEXT    |     | Description of value delivered        |
 | link          | TEXT    |     | Optional external reference           |
 
-## role_preference
+### role_preference
 Preferences describing ideal future roles
 | Column        | Type    | Key | Notes                                                   |
 | ------------- | ------- | --- | ------------------------------------------------------- |
@@ -142,7 +143,7 @@ Preferences describing ideal future roles
 | value         | TEXT    |     | Preference value                                        |
 | priority      | TEXT    |     | Importance level (high, medium, low)                    |
 
-## skill
+### skill
 Normalized skill catalog
 | Column      | Type    | Key | Notes                                                         |
 | ----------- | ------- | --- | ------------------------------------------------------------- |
@@ -151,7 +152,7 @@ Normalized skill catalog
 | skill_name  | TEXT    |     | Skill name                                                    |
 | level       | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
 
-## project_skill
+### project_skill
 Join table mapping projects to skills
 | Column     | Type    | Key     | Notes                           |
 | ---------- | ------- | ------- | ------------------------------- |
@@ -162,7 +163,7 @@ Join table mapping projects to skills
 
 This table represents a **many-to-many relationship** between projects and skills.
 
-## principle
+### principle
 Architecture or professional principles
 | Column         | Type    | Key | Notes                                |
 | -------------- | ------- | --- | ------------------------------------ |
@@ -170,7 +171,7 @@ Architecture or professional principles
 | principle_desc | TEXT    |     | Architecture or philosophy principle |
 | sort_order     | INTEGER |     | Controls display order               |
 
-## contact_info
+### contact_info
 Contact information exposed through API
 | Column     | Type    | Key | Notes                                      |
 | ---------- | ------- | --- | ------------------------------------------ |
@@ -179,7 +180,7 @@ Contact information exposed through API
 | value      | TEXT    |     | Contact value                              |
 | is_public  | BOOLEAN |     | Determines whether field is exposed in API |
 
-## feedback
+### feedback
 Peer or leadership feedback tied to a specific experience
 | Column        | Type    | Key | Notes                                                              |
 | ------------- | ------- | --- | ------------------------------------------------------------------ |
@@ -190,7 +191,7 @@ Peer or leadership feedback tied to a specific experience
 | theme         | TEXT    |     | Feedback theme (architecture, leadership, collaboration)           |
 | year          | INTEGER |     | Year feedback was given                                            |
 
-## product_metadata
+### product_metadata
 Metadata describing the Human Data Product
 | Column     | Type | Key | Notes                                                          |
 | ---------- | ---- | --- | -------------------------------------------------------------- |
