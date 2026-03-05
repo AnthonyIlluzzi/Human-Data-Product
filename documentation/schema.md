@@ -9,12 +9,13 @@ Key design principles:
 - Feedback and principles support insight generation
 - Metadata enables the site to behave like a real data product catalog****
 
-## Key Relationships
+### Key Relationships
 
-experience → project  
-project → project_skill → skill  
-experience → feedback
-education → feedback
+- experience → project
+- project → project_skill → skill
+- experience → feedback
+- education → feedback
+- project → feedback
 
 Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
 
