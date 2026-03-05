@@ -18,10 +18,14 @@ experience → feedback
 Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
 
 ---
-## Entity Relationship Diagram
+## Entity Relationship Diagrams
 
 The schema centers on professional experience as the primary domain entity.
 Projects and skills describe technical work, while feedback and preferences provide signals by the insight layer of the data product.
+
+### Inline ERD (Mermaid)
+The diagram below provides a lightweight, embedded view of the core relationships in the schema for quick reference within the documentation.
+
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 erDiagram
@@ -97,6 +101,11 @@ erDiagram
     string  meta_value
   }
 ```
+### Full ERD (dbdiagram.io)
+The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid.
+This diagram is the authoritative visual reference for the Human Data Product schema.
+
+![Human Data Product ERD](images/Human_Data_Product_ERD.svg)
 ---
 
 ## experience
