@@ -3,9 +3,13 @@
     { "meta_key": "product_name", "meta_value": "Anthony.Profile" },
     { "meta_key": "version", "meta_value": "1.0.0" },
     { "meta_key": "status", "meta_value": "active" },
-    { "meta_key": "data_product_type", "meta_value": "human-data-product" },
+    { "meta_key": "data_product_type", "meta_value": "derived: human-data-product" },
+    { "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
     { "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
-    { "meta_key": "last_refresh", "meta_value": "2026-03-05" }
+    { "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" }
+    { "meta_key": "api_status", "meta_value": "Operational" }
+    { "meta_key": "schema_validation", "meta_value": "PASS" }
+    { "meta_key": "query_engine", "meta_value": "active" }
   ],
 
   "contact_info": [
