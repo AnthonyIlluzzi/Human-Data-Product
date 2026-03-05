@@ -6,9 +6,9 @@
     { "meta_key": "data_product_type", "meta_value": "derived: human-data-product" },
     { "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
     { "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
-    { "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" }
-    { "meta_key": "api_status", "meta_value": "Operational" }
-    { "meta_key": "schema_validation", "meta_value": "PASS" }
+    { "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" },
+    { "meta_key": "api_status", "meta_value": "Operational" },
+    { "meta_key": "schema_validation", "meta_value": "PASS" },
     { "meta_key": "query_engine", "meta_value": "active" }
   ],
 
@@ -500,199 +500,199 @@
   {
     "skill_id": 1,
     "category": "data",
-    "skill": "SQL",
+    "skill_name": "SQL",
     "level": "advanced"
   },
   {
     "skill_id": 2,
     "category": "data",
-    "skill": "Python",
+    "skill_name": "Python",
     "level": "intermediate"
   },
   {
     "skill_id": 3,
     "category": "platform",
-    "skill": "SAP Fieldglass",
+    "skill_name": "SAP Fieldglass",
     "level": "advanced"
   },
   {
     "skill_id": 4,
     "category": "architecture",
-    "skill": "Analytics Architecture",
+    "skill_name": "Analytics Architecture",
     "level": "advanced"
   },
   {
     "skill_id": 5,
     "category": "architecture",
-    "skill": "Metadata Architecture",
+    "skill_name": "Metadata Architecture",
     "level": "advanced"
   },
   {
     "skill_id": 6,
     "category": "governance",
-    "skill": "Data Governance",
+    "skill_name": "Data Governance",
     "level": "advanced"
   },
   {
     "skill_id": 7,
     "category": "analytics",
-    "skill": "Product Usage Analytics",
+    "skill_name": "Product Usage Analytics",
     "level": "advanced"
   },
   {
     "skill_id": 8,
     "category": "analytics",
-    "skill": "KPI / Value Realization Frameworks",
+    "skill_name": "KPI / Value Realization Frameworks",
     "level": "advanced"
   },
   {
     "skill_id": 9,
     "category": "strategy",
-    "skill": "Platform Adoption Strategy",
+    "skill_name": "Platform Adoption Strategy",
     "level": "advanced"
   },
   {
     "skill_id": 10,
     "category": "integration",
-    "skill": "API Testing (Bruno)",
+    "skill_name": "API Testing (Bruno)",
     "level": "intermediate"
   },
   {
     "skill_id": 11,
     "category": "engineering",
-    "skill": "Testing Strategy & Release Readiness",
+    "skill_name": "Testing Strategy & Release Readiness",
     "level": "advanced"
   },
   {
     "skill_id": 12,
     "category": "data",
-    "skill": "Lakehouse Platforms (Databricks)",
+    "skill_name": "Lakehouse Platforms (Databricks)",
     "level": "intermediate"
   },
   {
     "skill_id": 13,
     "category": "tools",
-    "skill": "Jira",
+    "skill_name": "Jira",
     "level": "advanced"
   },
   {
     "skill_id": 14,
     "category": "tools",
-    "skill": "Confluence",
+    "skill_name": "Confluence",
     "level": "advanced"
   },
   {
     "skill_id": 15,
     "category": "leadership",
-    "skill": "Cross-Functional Collaboration",
+    "skill_name": "Cross-Functional Collaboration",
     "level": "advanced"
   },
   {
     "skill_id": 16,
     "category": "leadership",
-    "skill": "Executive Communication",
+    "skill_name": "Executive Communication",
     "level": "advanced"
   },
   {
     "skill_id": 17,
     "category": "architecture",
-    "skill": "Semantic Modeling",
+    "skill_name": "Semantic Modeling",
     "level": "advanced"
   },
   {
     "skill_id": 18,
     "category": "platform",
-    "skill": "SAP Business Data Cloud",
+    "skill_name": "SAP Business Data Cloud",
     "level": "intermediate"
   },
   {
     "skill_id": 19,
     "category": "platform",
-    "skill": "SAP Datasphere",
+    "skill_name": "SAP Datasphere",
     "level": "intermediate"
   },
   {
     "skill_id": 20,
     "category": "platform",
-    "skill": "SAP BTP",
+    "skill_name": "SAP BTP",
     "level": "intermediate"
   },
   {
     "skill_id": 21,
     "category": "capability",
-    "skill": "Systems Thinking",
+    "skill_name": "Systems Thinking",
     "level": "advanced"
   },
   {
     "skill_id": 22,
     "category": "capability",
-    "skill": "Analytical Problem Solving",
+    "skill_name": "Analytical Problem Solving",
     "level": "advanced"
   },
   {
     "skill_id": 23,
     "category": "capability",
-    "skill": "Structured Communication",
+    "skill_name": "Structured Communication",
     "level": "advanced"
   },
   {
     "skill_id": 24,
     "category": "capability",
-    "skill": "Conceptual Abstraction",
+    "skill_name": "Conceptual Abstraction",
     "level": "advanced"
   },
   {
     "skill_id": 25,
     "category": "capability",
-    "skill": "Intellectual Curiosity",
+    "skill_name": "Intellectual Curiosity",
     "level": "advanced"
   },
   {
     "skill_id": 26,
     "category": "capability",
-    "skill": "Cross-disciplinary Thinking",
+    "skill_name": "Cross-disciplinary Thinking",
     "level": "advanced"
   },
   {
     "skill_id": 27,
     "category": "capability",
-    "skill": "Strategic Thinking",
+    "skill_name": "Strategic Thinking",
     "level": "advanced"
   },
   {
     "skill_id": 28,
     "category": "capability",
-    "skill": "Stakeholder Alignment",
+    "skill_name": "Stakeholder Alignment",
     "level": "advanced"
   },
   {
     "skill_id": 29,
     "category": "capability",
-    "skill": "Attention to Detail",
+    "skill_name": "Attention to Detail",
     "level": "advanced"
   },
   {
     "skill_id": 30,
     "category": "leadership",
-    "skill": "Program & Initiative Leadership",
+    "skill_name": "Program & Initiative Leadership",
     "level": "advanced"
   },
   {
     "skill_id": 31,
     "category": "leadership",
-    "skill": "Change Management",
+    "skill_name": "Change Management",
     "level": "advanced"
   },
   {
     "skill_id": 32,
     "category": "capability",
-    "skill": "Requirements Analysis & Solution Design",
+    "skill_name": "Requirements Analysis & Solution Design",
     "level": "advanced"
   },
   {
     "skill_id": 33,
     "category": "leadership",
-    "skill": "Mentorship & Capability Building",
+    "skill_name": "Mentorship & Capability Building",
     "level": "advanced"
   }
 ]
@@ -980,8 +980,8 @@
     "institution": "DePaul University",
     "location": "Chicago, IL",
     "degree": "MBA",
-    "field_of_study": "Business Strategy & Decision Making",
-    "honors_flag": TRUE,
+    "field_of_study": "Business Strategy & Decision Making; Management Information Systems",
+    "honors_flag": true,
     "completion_date": "2018-11-01",
     "sort_order": 1
   },
@@ -989,31 +989,11 @@
     "education_id": 2,
     "institution": "DePaul University",
     "location": "Chicago, IL",
-    "degree": "MBA",
-    "field_of_study": "Management Information Systems",
-    "honors_flag": TRUE,
-    "completion_date": "2018-11-01",
+    "degree": "B.S.",
+    "field_of_study": "Marketing (Concentration: Sales Leadership); Management (Concentration: Leadership & Change Management) ",
+    "honors_flag": true,
+    "completion_date": "2012-06-01",
     "sort_order": 2
-  },
-  {
-    "education_id": 3,
-    "institution": "DePaul University",
-    "location": "Chicago, IL",
-    "degree": "B.S.",
-    "field_of_study": "Marketing (Concentration: Sales Leadership)",
-    "honors_flag": TRUE,
-    "completion_date": "2012-06-01",
-    "sort_order": 3
-  },
-  {
-    "education_id": 4,
-    "institution": "DePaul University",
-    "location": "Chicago, IL",
-    "degree": "B.S.",
-    "field_of_study": "Management (Concentration: Leadership & Change Management)",
-    "honors_flag": TRUE,
-    "completion_date": "2012-06-01",
-    "sort_order": 4
   }
 ]
   
