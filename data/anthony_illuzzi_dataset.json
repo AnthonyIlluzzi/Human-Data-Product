@@ -1,1 +1,435 @@
+{
+  "product_metadata": [
+    { "meta_key": "product_name", "meta_value": "Anthony.Profile" },
+    { "meta_key": "version", "meta_value": "1.0.0" },
+    { "meta_key": "status", "meta_value": "active" },
+    { "meta_key": "data_product_type", "meta_value": "human-data-product" },
+    { "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
+    { "meta_key": "last_refresh", "meta_value": "2026-03-05" }
+  ],
 
+  "contact_info": [
+    {
+      "contact_id": 1,
+      "category": "email",
+      "value": "Anthony.Illuzzi@yahoo.com",
+      "is_public": true
+    },
+    {
+      "contact_id": 2,
+      "category": "phone",
+      "value": "630.485.8225",
+      "is_public": true
+    },
+    {
+      "contact_id": 3,
+      "category": "linkedin",
+      "value": "https://linkedin.com/in/anthonyilluzzi",
+      "is_public": true
+    },
+    {
+      "contact_id": 4,
+      "category": "location",
+      "value": "Libertyville, Illinois (Chicago Area)",
+      "is_public": true
+    }
+  ],
+
+  "principle": [
+    {
+      "principle_id": 1,
+      "principle_desc": "Data without structure is noise. My job is to enable music.",
+      "sort_order": 1
+    },
+    {
+      "principle_id": 2,
+      "principle_desc": "Good data products reduce friction between questions and answers.",
+      "sort_order": 2
+    },
+    {
+      "principle_id": 3,
+      "principle_desc": "Architecture should make the right behavior the easiest behavior.",
+      "sort_order": 3
+    },
+    {
+      "principle_id": 4,
+      "principle_desc": "Insights scale only when the underlying data model is trustworthy.",
+      "sort_order": 4
+    }
+  ],
+
+ "role_preference": [
+  {
+    "preference_id": 1,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 2,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Analytics Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 3,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Platform Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 4,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Platform Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 5,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Product Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 6,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Lead Data Architect",
+    "priority": "high"
+  },
+  {
+    "preference_id": 7,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Enterprise Architect",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 8,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Systems Architect",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 9,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Principal",
+    "priority": "high"
+  },
+  {
+    "preference_id": 10,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Staff",
+    "priority": "high"
+  },
+  {
+    "preference_id": 11,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Lead",
+    "priority": "high"
+  },
+  {
+    "preference_id": 12,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "Remote",
+    "priority": "high"
+  },
+  {
+    "preference_id": 13,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "Hybrid",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 14,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "On-site",
+    "priority": "low"
+  },
+  {
+    "preference_id": 15,
+    "dimension": "location",
+    "category": "preferred_onsite_location",
+    "value": "Chicago, IL",
+    "priority": "high"
+  },
+  {
+    "preference_id": 16,
+    "dimension": "location",
+    "category": "preferred_onsite_location",
+    "value": "Greater Chicago Area",
+    "priority": "high"
+  },
+  {
+    "preference_id": 17,
+    "dimension": "domain_focus",
+    "category": "domain",
+    "value": "Enterprise Data Platforms",
+    "priority": "high"
+  },
+  {
+    "preference_id": 18,
+    "dimension": "domain_focus",
+    "category": "domain",
+    "value": "Analytics & AI Enablement",
+    "priority": "high"
+  },
+  {
+    "preference_id": 19,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "Data Platforms",
+    "priority": "high"
+  },
+  {
+    "preference_id": 20,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "Analytics Platforms",
+    "priority": "high"
+  },
+  {
+    "preference_id": 21,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "AI Enablement Platforms",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 22,
+    "dimension": "industry",
+    "category": "industry",
+    "value": "Technology / Enterprise Software",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 23,
+    "dimension": "industry",
+    "category": "industry",
+    "value": "Tech-adjacent (B2B SaaS)",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 24,
+    "dimension": "impact",
+    "category": "impact_focus",
+    "value": "Data Product Strategy",
+    "priority": "high"
+  },
+  {
+    "preference_id": 25,
+    "dimension": "impact",
+    "category": "impact_focus",
+    "value": "Enterprise Data Strategy",
+    "priority": "high"
+  },
+  {
+    "preference_id": 26,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Data Democratization",
+    "priority": "high"
+  },
+  {
+    "preference_id": 27,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Platform Adoption",
+    "priority": "high"
+  },
+  {
+    "preference_id": 28,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Decision Intelligence",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 29,
+    "dimension": "employment",
+    "category": "employment_type",
+    "value": "Full-time",
+    "priority": "high"
+  },
+  {
+    "preference_id": 30,
+    "dimension": "leadership",
+    "category": "people_leadership",
+    "value": "Strategic IC",
+    "priority": "high"
+  },
+  {
+    "preference_id": 31,
+    "dimension": "leadership",
+    "category": "people_leadership",
+    "value": "Open to small team leadership",
+    "priority": "medium"
+  },
+  {
+    "preference_id": 32,
+    "dimension": "travel",
+    "category": "travel_tolerance",
+    "value": "Low",
+    "priority": "high"
+  },
+  {
+    "preference_id": 33,
+    "dimension": "travel",
+    "category": "travel_percent_max",
+    "value": "10%",
+    "priority": "high"
+  }
+]
+
+  "experience": [
+    {
+      "experience_id": 1,
+      "company": "SAP",
+      "role": "Senior Analytics Architect, Product Success",
+      "start_date": "2023-08-01",
+      "end_date": null,
+      "domain": "Enterprise Data Platforms",
+      "focus_area": "Analytics architecture, product intelligence, platform adoption strategy",
+      "impact": "Designed analytics architecture and adoption frameworks enabling scalable insights and self-service capabilities for SAP Fieldglass.",
+      "sort_order": 1
+    },
+    {
+      "experience_id": 2,
+      "company": "SAP",
+      "role": "Senior Adoption Consultant",
+      "start_date": "2020-08-01",
+      "end_date": "2023-07-31",
+      "domain": "Customer Success / Platform Adoption",
+      "focus_area": "Strategic customer enablement and analytics-driven adoption",
+      "impact": "Enabled strategic platform adoption for major enterprise clients, aligning product capabilities with measurable business outcomes.",
+      "sort_order": 2
+    },
+    {
+      "experience_id": 3,
+      "company": "SAP",
+      "role": "Adoption Consultant / Operations Consultant",
+      "start_date": "2018-05-01",
+      "end_date": "2020-07-31",
+      "domain": "Customer Program Optimization",
+      "focus_area": "Operational analytics and workforce program optimization",
+      "impact": "Supported enterprise clients in optimizing workforce management programs and improving operational efficiency through analytics.",
+      "sort_order": 3
+    },
+    {
+      "experience_id": 4,
+      "company": "SAP",
+      "role": "Business Analyst, Account Services",
+      "start_date": "2016-07-01",
+      "end_date": "2018-04-30",
+      "domain": "Enterprise Workforce Management",
+      "focus_area": "Program analytics and client advisory",
+      "impact": "Supported large enterprise workforce programs totaling billions in spend, providing analytical insight and operational improvements.",
+      "sort_order": 4
+    },
+    {
+      "experience_id": 5,
+      "company": "Capsim Management Simulations",
+      "role": "Client Relationship Consultant",
+      "start_date": "2012-09-01",
+      "end_date": "2016-07-31",
+      "domain": "Business Education Technology",
+      "focus_area": "Client success and analytics reporting",
+      "impact": "Delivered analytical insights and consulting support for academic institutions using simulation-based learning platforms.",
+      "sort_order": 5
+    }
+  ],
+
+  "project": [
+    {
+      "project_id": 1,
+      "experience_id": 1,
+      "name": "Fieldglass Integration Accelerator Framework",
+      "domain": "Platform Enablement",
+      "value": "Designed seven accelerators and 20 integration objects to reduce implementation effort and accelerate production deployments.",
+      "link": null
+    },
+    {
+      "project_id": 2,
+      "experience_id": 1,
+      "name": "Adoption Analytics Redesign",
+      "domain": "Product Analytics",
+      "value": "Expanded reporting architecture enabling scalable self-service insights across customer adoption analytics.",
+      "link": null
+    },
+    {
+      "project_id": 3,
+      "experience_id": 1,
+      "name": "Configuration Metadata Governance Framework",
+      "domain": "Data Governance",
+      "value": "Introduced metadata frameworks for configuration environments supporting traceability and scalable platform evolution.",
+      "link": null
+    },
+    {
+      "project_id": 4,
+      "experience_id": 2,
+      "name": "Customer Value Realization Toolkit",
+      "domain": "Analytics Framework",
+      "value": "Developed analytical framework to measure customer value realization across platform capabilities.",
+      "link": null
+    },
+    {
+      "project_id": 5,
+      "experience_id": 5,
+      "name": "Academic Program Analytics Reporting",
+      "domain": "Education Analytics",
+      "value": "Produced analytical reporting used by universities to evaluate simulation program outcomes and accreditation performance.",
+      "link": null
+    }
+  ],
+
+  "skill": [
+    { "skill_id": 1, "category": "data", "skill": "SQL", "level": "advanced" },
+    { "skill_id": 2, "category": "data", "skill": "Python", "level": "intermediate" },
+    { "skill_id": 3, "category": "platform", "skill": "SAP Fieldglass", "level": "advanced" },
+    { "skill_id": 4, "category": "platform", "skill": "SAP Business Data Cloud", "level": "intermediate" },
+    { "skill_id": 5, "category": "platform", "skill": "SAP Datasphere", "level": "intermediate" },
+    { "skill_id": 6, "category": "analytics", "skill": "Product Usage Analytics", "level": "advanced" },
+    { "skill_id": 7, "category": "architecture", "skill": "Metadata Architecture", "level": "advanced" },
+    { "skill_id": 8, "category": "architecture", "skill": "Lakehouse Platforms", "level": "intermediate" },
+    { "skill_id": 9, "category": "analytics", "skill": "KPI Framework Design", "level": "advanced" },
+    { "skill_id": 10, "category": "governance", "skill": "Data Governance", "level": "advanced" },
+    { "skill_id": 11, "category": "integration", "skill": "API Testing & Integration", "level": "intermediate" },
+    { "skill_id": 12, "category": "tools", "skill": "Jira", "level": "advanced" },
+    { "skill_id": 13, "category": "tools", "skill": "Confluence", "level": "advanced" }
+  ],
+
+  "project_skill": [
+    { "project_id": 1, "skill_id": 3 },
+    { "project_id": 1, "skill_id": 11 },
+    { "project_id": 2, "skill_id": 6 },
+    { "project_id": 2, "skill_id": 1 },
+    { "project_id": 3, "skill_id": 7 },
+    { "project_id": 3, "skill_id": 10 },
+    { "project_id": 4, "skill_id": 9 },
+    { "project_id": 4, "skill_id": 1 },
+    { "project_id": 5, "skill_id": 6 },
+    { "project_id": 5, "skill_id": 1 }
+  ],
+
+  "feedback": [
+    {
+      "feedback_id": 1,
+      "experience_id": 1,
+      "source_type": "manager",
+      "quote": "Simplifies complex data architecture challenges into actionable and scalable solutions.",
+      "theme": "architecture",
+      "year": 2024
+    }
+  ]
+}
