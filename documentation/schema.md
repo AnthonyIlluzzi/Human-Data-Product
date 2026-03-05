@@ -106,7 +106,7 @@ erDiagram
 The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid.
 This diagram is the authoritative visual reference for the Human Data Product schema.
 
-![Human Data Product ERD](images/Human_Data_Product_ERD.svg)
+![Human Data Product ERD](images/Human_Data_Product_ERD_v2.svg)
 ---
 ## Database Architecture
 
