@@ -255,6 +255,7 @@ Peer or leadership feedback tied to a specific experience
 | quote       | TEXT    |     | Feedback quote (consider trimming names/private details)                     |
 | theme       | TEXT    |     | Theme (architecture, execution, leadership, collaboration, growth, strategy) |
 | year        | INTEGER |     | Year feedback was given                                                      |
+
 **entity_type** should be one of: experience, education, project, credential
 entity_id must exist in the corresponding table (enforced in your load_data.py validation step)
 
