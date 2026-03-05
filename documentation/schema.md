@@ -145,31 +145,31 @@ This diagram is the authoritative visual reference for the Human Data Product sc
 
 ### experience
 Primary domain entity representing roles over time
-| Column        | Type    | Key | Notes                             |
-| ------------- | ------- | --- | --------------------------------- |
-| experience_id | INTEGER | PK  | Unique identifier for experience  |
-| company       | TEXT    |     | Company name                      |
-| role          | TEXT    |     | Role title                        |
-| start_date    | DATE    |     | Start date                        |
-| end_date      | DATE    |     | End date (NULL if current)        |
-| domain        | TEXT    |     | Business or technology domain     |
-| focus_area    | TEXT    |     | Primary focus area of the role    |
-| impact        | TEXT    |     | Summary of impact or achievements |
-| sort_order    | INTEGER |     | Controls display order            |
+| Column        | Type    | Key | Notes                                             |
+| ------------- | ------- | --- | ------------------------------------------------- |
+| experience_id | INTEGER | PK  | Unique identifier for experience                  |
+| company       | TEXT    |     | Company name                                      |
+| role          | TEXT    |     | Role title                                        |
+| start_date    | DATE    |     | Start date ISO YYYY-MM-DD Format                  |
+| end_date      | DATE    |     | End date (NULL if current) ISO YYYY-MM-DD Format  |
+| domain        | TEXT    |     | Business or technology domain                     |
+| focus_area    | TEXT    |     | Primary focus area of the role                    |
+| impact        | TEXT    |     | Summary of impact or achievements                 |
+| sort_order    | INTEGER |     | Controls display order                            |
 
 ### education
 Formal education history
-| Column          | Type    | Key | Notes                                                  |
-| --------------- | ------- | --- | ------------------------------------------------------ |
-| education_id    | INTEGER | PK  | Unique identifier                                      |
-| institution     | TEXT    |     | School / institution name                              |
-| location        | TEXT    |     | City, State (or Country)                               |
-| degree          | TEXT    |     | Degree earned (e.g., BS, BA, MS)                       |
-| field_of_study  | TEXT    |     | Major / concentration                                  |
-| domain          | TEXT    |     | Optional: thematic domain (e.g., Business, Analytics)  |
-| honors_flag     | BOOLEAN |     | TRUE if honors/distinction applies                     |
-| completion_date | DATE    |     | Graduation / completion date (use NULL if in progress) |
-| sort_order      | INTEGER |     | Controls display order                                 |
+| Column          | Type    | Key | Notes                                                                        |
+| --------------- | ------- | --- | ---------------------------------------------------------------------------- |
+| education_id    | INTEGER | PK  | Unique identifier                                                            |
+| institution     | TEXT    |     | School / institution name                                                    |
+| location        | TEXT    |     | City, State (or Country)                                                     |
+| degree          | TEXT    |     | Degree earned (e.g., BS, BA, MS)                                             |
+| field_of_study  | TEXT    |     | Major / concentration                                                        |
+| domain          | TEXT    |     | Optional: thematic domain (e.g., Business, Analytics)                        |
+| honors_flag     | BOOLEAN |     | TRUE if honors/distinction applies                                           |
+| completion_date | DATE    |     | Graduation / completion date (use NULL if in progress) ISO YYYY-MM-DD Format |
+| sort_order      | INTEGER |     | Controls display order                                                       |
 
 ### project
 Key initiatives or work performed during an experience
@@ -209,8 +209,8 @@ Professional certifications, courses, or credentials
 | type          | TEXT    |     | Credential type (certification, course, badge, license)   |
 | title         | TEXT    |     | Credential name/title                                     |
 | issuer        | TEXT    |     | Issuing organization (SAP, Microsoft, etc.)               |
-| issue_date    | DATE    |     | Date issued (NULL if in progress)                         |
-| end_date      | DATE    |     | Expiration/end date (NULL if none)                        |
+| issue_date    | DATE    |     | Date issued (NULL if in progress) ISO YYYY-MM-DD Format   |
+| end_date      | DATE    |     | Expiration/end date (NULL if none) ISO YYYY-MM-DD Format  |
 | status        | TEXT    |     | Status (active, in_progress, expired)                     |
 | description   | TEXT    |     | Optional short description of relevance                   |
 | link          | TEXT    |     | Optional URL (credential verification, course page, etc.) |
