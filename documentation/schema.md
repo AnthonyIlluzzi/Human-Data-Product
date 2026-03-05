@@ -20,7 +20,10 @@ Projects belong to an experience, and each project can reference multiple skills
 ---
 ## Entity Relationship Diagram
 
+The schema centers on professional experience as the primary domain entity.
+Projects and skills describe technical work, while feedback and preferences provide signals by the insight layer of the data product.
 ```mermaid
+%%{init: {'theme':'neutral'}}%%
 erDiagram
   EXPERIENCE ||--o{ PROJECT : contains
   EXPERIENCE ||--o{ FEEDBACK : receives
