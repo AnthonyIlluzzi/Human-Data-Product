@@ -1,46 +1,98 @@
-Tables
+# Human Data Product Schema
 
-experience
-•	experience_id (PK)
-•	company
-•	role
-•	start_date
-•	end_date
-•	domain
-•	focus_area
-•	impact
-•	sort_order
+This schema models professional experience as a structured data product.
 
-project
-•	project_id (PK)
-•	experience_id
-•	name
-•	domain
-•	value
-•	link
+Key design principles:
+- Experience represents roles held over time
+- Projects capture key initiatives within each role
+- Skills are normalized and mapped through a join table
+- Feedback and principles support insight generation
+- Metadata enables the site to behave like a real data product catalog****
 
-skill
-•	skill_id (PK)
-•	category
-•	skill
-•	level
+## Key Relationships
 
-project_skill
-•	project_id (FK → project.project_id)
-•	skill_id (FK → skill.skill_id)
-•	PRIMARY KEY (project_id, skill_id)
+experience → project  
+project → project_skill → skill  
+experience → feedback  
 
-principle
-•	principle_id (PK)
-•	principle_desc
-•	sort_order
+Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
 
-contact_info
-•	contact_id (PK)
-•	category
-•	value
-•	is_public (boolean)
+## experience
+| Column        | Type    | Key | Notes                             |
+| ------------- | ------- | --- | --------------------------------- |
+| experience_id | INTEGER | PK  | Unique identifier for experience  |
+| company       | TEXT    |     | Company name                      |
+| role          | TEXT    |     | Role title                        |
+| start_date    | DATE    |     | Start date                        |
+| end_date      | DATE    |     | End date (NULL if current)        |
+| domain        | TEXT    |     | Business or technology domain     |
+| focus_area    | TEXT    |     | Primary focus area of the role    |
+| impact        | TEXT    |     | Summary of impact or achievements |
+| sort_order    | INTEGER |     | Controls display order            |
 
-product_metadata
-•	meta_key (PK)
-•	meta_value
+## project
+| Column        | Type    | Key | Notes                                 |
+| ------------- | ------- | --- | ------------------------------------- |
+| project_id    | INTEGER | PK  | Unique identifier for project         |
+| experience_id | INTEGER | FK  | References `experience.experience_id` |
+| name          | TEXT    |     | Project name                          |
+| domain        | TEXT    |     | Domain or subject area                |
+| value         | TEXT    |     | Description of value delivered        |
+| link          | TEXT    |     | Optional external reference           |
+
+## role_preference
+| Column        | Type    | Key | Notes                                                   |
+| ------------- | ------- | --- | ------------------------------------------------------- |
+| preference_id | INTEGER | PK  | Unique identifier                                       |
+| category      | TEXT    |     | Preference category (location, work_mode, domain, etc.) |
+| value         | TEXT    |     | Preference value                                        |
+| priority      | TEXT    |     | Importance level (high, medium, low)                    |
+
+## skill
+| Column   | Type    | Key | Notes                                                         |
+| -------- | ------- | --- | ------------------------------------------------------------- |
+| skill_id | INTEGER | PK  | Unique identifier                                             |
+| category | TEXT    |     | Skill category (data, platform, architecture, etc.)           |
+| skill    | TEXT    |     | Skill name                                                    |
+| level    | TEXT    |     | Proficiency level (beginner, intermediate, advanced, expert)  |
+
+## project_skill
+| Column     | Type    | Key     | Notes                           |
+| ---------- | ------- | ------- | ------------------------------- |
+| project_id | INTEGER | PK / FK | References `project.project_id` |
+| skill_id   | INTEGER | PK / FK | References `skill.skill_id`     |
+
+**Composite Primary Key:** (project_id, skill_id)
+
+This table represents a **many-to-many relationship** between projects and skills.
+
+## principle
+| Column         | Type    | Key | Notes                                |
+| -------------- | ------- | --- | ------------------------------------ |
+| principle_id   | INTEGER | PK  | Unique identifier                    |
+| principle_desc | TEXT    |     | Architecture or philosophy principle |
+| sort_order     | INTEGER |     | Controls display order               |
+
+## contact_info
+| Column     | Type    | Key | Notes                                      |
+| ---------- | ------- | --- | ------------------------------------------ |
+| contact_id | INTEGER | PK  | Unique identifier                          |
+| category   | TEXT    |     | Contact type (email, linkedin, website)    |
+| value      | TEXT    |     | Contact value                              |
+| is_public  | BOOLEAN |     | Determines whether field is exposed in API |
+
+## feedback
+| Column        | Type    | Key | Notes                                                              |
+| ------------- | ------- | --- | ------------------------------------------------------------------ |
+| feedback_id   | INTEGER | PK  | Unique identifier                                                  |
+| experience_id | INTEGER | FK  | References `experience.experience_id`                              |
+| source_type   | TEXT    |     | Source of feedback (manager, peer, stakeholder, customer, partner) |
+| quote         | TEXT    |     | Feedback quote                                                     |
+| theme         | TEXT    |     | Feedback theme (architecture, leadership, collaboration)           |
+| year          | INTEGER |     | Year feedback was given                                            |
+
+## product_metadata
+| Column     | Type | Key | Notes                                                          |
+| ---------- | ---- | --- | -------------------------------------------------------------- |
+| meta_key   | TEXT | PK  | Metadata key (version, product status, last refresh timestamp) |
+| meta_value | TEXT |     | Metadata value                                                 |
