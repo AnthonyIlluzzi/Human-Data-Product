@@ -17,6 +17,89 @@ experience → feedback
 
 Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
 
+---
+## Entity Relationship Diagram
+
+```mermaid
+erDiagram
+  EXPERIENCE ||--o{ PROJECT : contains
+  EXPERIENCE ||--o{ FEEDBACK : receives
+  PROJECT ||--o{ PROJECT_SKILL : maps
+  SKILL ||--o{ PROJECT_SKILL : maps
+
+  EXPERIENCE {
+    int     experience_id PK
+    string  company
+    string  role
+    date    start_date
+    date    end_date
+    string  domain
+    string  focus_area
+    string  impact
+    int     sort_order
+  }
+
+  PROJECT {
+    int     project_id PK
+    int     experience_id FK
+    string  name
+    string  domain
+    string  value
+    string  link
+  }
+
+  SKILL {
+    int     skill_id PK
+    string  category
+    string  skill
+    string  level
+  }
+
+  PROJECT_SKILL {
+    int     project_id PK, FK
+    int     skill_id   PK, FK
+  }
+
+  FEEDBACK {
+    int     feedback_id PK
+    int     experience_id FK
+    string  source_type
+    string  quote
+    string  theme
+    int     year
+  }
+
+  ROLE_PREFERENCE {
+    int     preference_id PK
+    string  category
+    string  value
+    string  priority
+  }
+
+  PRINCIPLE {
+    int     principle_id PK
+    string  principle_desc
+    int     sort_order
+  }
+
+  CONTACT_INFO {
+    int     contact_id PK
+    string  category
+    string  value
+    boolean is_public
+  }
+
+  PRODUCT_METADATA {
+    string  meta_key PK
+    string  meta_value
+  }
+```
+---
+## experience
+| Column | Type | Key | Notes |
+|------|------|------|------|
+| experience_id | INTEGER | PK | Unique identifier for experience |
+
 ## experience
 | Column        | Type    | Key | Notes                             |
 | ------------- | ------- | --- | --------------------------------- |
