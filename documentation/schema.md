@@ -187,7 +187,7 @@ Preferences describing ideal future roles
 | Column        | Type    | Key | Notes                                                   |
 | ------------- | ------- | --- | ------------------------------------------------------- |
 | preference_id | INTEGER | PK  | Unique identifier                                       |
-| dimension     | INTEGER | PK  | Unique identifier                                       |
+| dimension     | TEXT    |     | Categorial grouping axes                                |
 | category      | TEXT    |     | Preference category (location, work_mode, domain, etc.) |
 | value         | TEXT    |     | Preference value                                        |
 | priority      | TEXT    |     | Importance level (high, medium, low)                    |
