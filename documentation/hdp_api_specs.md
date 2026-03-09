@@ -21,6 +21,12 @@ http://localhost:8000
 - GET /projects/{project_id}
 - GET /skills
 - GET /search/projects
+- GET /analytics/career-timeline
+- GET /analytics/skill-utilization
+- GET /analytics/feedback-themes
+- GET /analytics/projects-by-domain
+- GET /analytics/projects-by-experience
+- GET /insights
 
 ### Data Model Overview
 | Entity         | Description                                           |
@@ -46,7 +52,7 @@ Confirms the API service is operational.
 None
 
 ### Example Response
-----------------
+---------------------
 {
   "status": "ok",
   "service": "human-data-product-api"
@@ -78,7 +84,7 @@ experience count, project count, skill count, and current role.
 None
 
 ### Example Response
-----------------
+---------------------
 {
   "owner": "Anthony Illuzzi",
   "current_role": {
@@ -121,7 +127,7 @@ Returns the architectural identity of the Human Data Product owner.
 None
 
 ### Example Response
-----------------
+---------------------
 {
   "specialization": "Enterprise Data Platforms & Analytics Enablement",
   "core_focus_areas": [
@@ -159,7 +165,7 @@ Returns structured career experience entries.
 None
 
 ### Example Response
-----------------
+---------------------
 [
   {
     "experience_id": 999,
@@ -207,7 +213,7 @@ Returns all projects associated with the Human Data Product.
 None
 
 ### Example Response
-----------------
+---------------------
 [
   {
     "project_id": 1001,
@@ -265,8 +271,7 @@ GET /projects/1001
 None
 
 ### Example Response
-----------------
-
+--------------------
 [
   {
     "project_id": 1001,
@@ -348,7 +353,6 @@ GET /search/projects?q=analytics
 
 ### Example Response
 ----------------
-
 [
   {
     "project_id": 1001,
@@ -377,3 +381,254 @@ GET /search/projects?q=analytics
 ]
 
 Note: Response may contain multiple records.
+
+## GET /analytics/career-timeline
+
+## Purpose
+-------
+Returns structured experience records formatted for timeline-style visualization of career progression.
+
+### Response Structure
+| Field         | Type          | Description                    |
+| ------------- | ------------- | ------------------------------ |
+| experience_id | integer       | Unique experience identifier   |
+| company       | string        | Organization name              |
+| role          | string        | Role title                     |
+| start_date    | string (date) | Role start date                |
+| end_date      | string/null   | Role end date, null if current |
+| sort_order    | integer       | Ordered career sequence        |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+[
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "start_date": "2025-01-01",
+    "end_date": null,
+    "sort_order": 0
+  },
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "start_date": "2023-08-01",
+    "end_date": null,
+    "sort_order": 1
+  }
+]
+
+### Notes
+- Intended for timeline or career progression visualizations.
+- Ordered by sort_order ascending.
+
+## GET /analytics/skill-utilization
+
+## Purpose
+-------
+Returns skill usage metrics showing how frequently each skill is associated with projects.
+
+### Response Structure
+
+| Field         | Type    | Description                               |
+| ------------- | ------- | ----------------------------------------- |
+| skill_id      | integer | Unique skill identifier                   |
+| skill_name    | string  | Skill name                                |
+| category      | string  | Skill category                            |
+| level         | string  | Skill proficiency level                   |
+| project_count | integer | Number of linked projects using the skill |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+[
+  {
+    "skill_id": 1,
+    "skill_name": "SQL",
+    "category": "data",
+    "level": "advanced",
+    "project_count": 6
+  },
+  {
+    "skill_id": 21,
+    "skill_name": "Systems Thinking",
+    "category": "capability",
+    "level": "advanced",
+    "project_count": 4
+  }
+]
+
+### Notes
+- Useful for bar charts, ranking tables, or “most applied skills” cards.
+- project_count is derived from project_skill relationships.
+
+## GET /analytics/feedback-themes
+
+## Purpose
+-------
+Returns grouped feedback theme counts for qualitative pattern analysis.
+
+### Example
+-------
+GET /analytics/feedback-themes
+GET /analytics/feedback-themes?source_type=manager
+GET /analytics/feedback-themes?entity_type=experience
+GET /analytics/feedback-themes?source_type=peer&entity_type=experience
+
+### Response Structure
+
+| Field          | Type    | Description                              |
+| -------------- | ------- | ---------------------------------------- |
+| theme          | string  | Feedback theme                           |
+| feedback_count | integer | Number of feedback entries in that theme |
+
+### Query Parameters
+| Parameter   | Type   | Required | Description                                                                   |
+| ----------- | ------ | -------- | ----------------------------------------------------------------------------- |
+| source_type | string | No       | Optional filter for feedback source, such as `peer`, `manager`, or `linkedin` |
+| entity_type | string | No       | Optional filter for related entity type, such as `experience` or `education`  |
+
+### Example Response
+---------------------
+[
+  {
+    "theme": "collaboration",
+    "feedback_count": 3
+  },
+  {
+    "theme": "leadership",
+    "feedback_count": 3
+  },
+  {
+    "theme": "execution",
+    "feedback_count": 2
+  }
+]
+
+### Notes
+- Useful for bar charts, donut charts, or filterable feedback analysis.
+- Supports optional filtering by source_type and entity_type.
+
+## GET /analytics/projects-by-domain
+
+## Purpose
+-------
+Returns project counts grouped by domain for domain concentration analysis.
+
+### Response Structure
+
+| Field         | Type    | Description                       |
+| ------------- | ------- | --------------------------------- |
+| domain        | string  | Project domain or category        |
+| project_count | integer | Number of projects in that domain |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+[
+  {
+    "domain": "Platform Strategy / Monetization",
+    "project_count": 1
+  },
+  {
+    "domain": "Integration Enablement",
+    "project_count": 1
+  },
+  {
+    "domain": "Product Analytics",
+    "project_count": 1
+  }
+]
+
+### Notes
+- Useful for domain distribution charts.
+- Helps identify concentration of work across project areas.
+
+## GET /analytics/projects-by-experience
+
+## Purpose
+-------
+Returns project counts grouped by experience record to show how project activity maps across career roles.
+
+### Response Structure
+
+| Field         | Type    | Description                                       |
+| ------------- | ------- | ------------------------------------------------- |
+| experience_id | integer | Unique experience identifier                      |
+| company       | string  | Organization name                                 |
+| role          | string  | Role title                                        |
+| project_count | integer | Number of projects tied to that experience record |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+[
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "project_count": 2
+  },
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "project_count": 8
+  }
+]
+
+### Notes
+- Useful for comparing project density across roles.
+- Supports “projects by role” or “experience contribution” visualizations.
+
+## GET /insights
+
+## Purpose
+-------
+Returns curated analytics and narrative insight cards derived from the Human Data Product.
+
+### Response Structure
+
+| Field   | Type   | Description                         |
+| ------- | ------ | ----------------------------------- |
+| id      | string | Unique insight identifier           |
+| title   | string | Insight card title                  |
+| type    | string | Insight classification              |
+| summary | string | Short high-level insight statement  |
+| detail  | string | Expanded explanation of the insight |
+
+### Query Parameters
+None
+
+### Example Response
+[
+  {
+    "id": "architect_operator",
+    "title": "Architect + Operator",
+    "type": "insight",
+    "summary": "Combines architectural thinking with practical execution and delivery.",
+    "detail": "Project history and capability mix show repeated platform design, enablement, analytics, and execution-oriented outcomes rather than abstract architecture alone."
+  },
+  {
+    "id": "complexity_translator",
+    "title": "Complexity Translator",
+    "type": "insight",
+    "summary": "Strength lies in turning complex systems, requests, and data into structured, understandable paths.",
+    "detail": "Architecture, systems thinking, semantic modeling, and stakeholder-oriented capabilities collectively point to an ability to translate ambiguity into action."
+  }
+]
+
+### Notes
+- Intended for insight cards in the frontend.
+- Cards are currently curated/derived in the transformation layer and exposed through the API.
+- This endpoint is designed for human-friendly consumption rather than raw entity retrieval.
