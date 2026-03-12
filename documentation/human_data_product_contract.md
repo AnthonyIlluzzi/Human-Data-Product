@@ -1,0 +1,34 @@
+# Human Data Product Contract
+
+## Product Overview
+The Human Data Product transforms structured professional signals into a set of analytical insight views representing experience patterns, platform exposure, and capability signals.
+
+## Inputs
+- Structured dataset (JSON)
+- Platform exposure metadata
+- Career timeline attributes
+- Domain tags
+
+## Transformations
+- Signal aggregation
+- Domain normalization
+- Platform classification
+- Experience weighting
+
+## Output Ports
+- Insight views
+- Capability signals
+- Operational health indicators
+- Platform exposure summaries
+
+## Access Methods
+- REST API endpoints
+- Frontend dashboard
+
+## Update Model
+Manual ingestion through dataset loader.
+
+## Data Guarantees
+- Schema validation
+- Deterministic transformation logic
+- Stable API contract
