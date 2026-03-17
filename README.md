@@ -78,9 +78,23 @@ The system follows a defined contract for inputs, transformations, and outputs:
 - Stable access interfaces (API + SQL)  
 - Derived analytical outputs
 
-See full contract: /documentation/human_data_product_contract.md
-
 ---
+
+## Documentation
+
+For deeper exploration of the system design:
+
+- **Data Product Contract**  
+  /documentation/human_data_product_contract.md
+
+- **Data Model / Schema**  
+  /documentation/hdp_schema.md
+
+- **API Specifications**  
+  /documentation/hdp_api_specs.md
+
+- **Architecture Diagram**  
+  /documentation/Images/Human_data_product_ERD_V3.svg
 
 ## Notes
 
