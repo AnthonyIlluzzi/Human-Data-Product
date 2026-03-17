@@ -4,11 +4,12 @@ import json
 import sqlite3
 from pathlib import Path
 from typing import Any, Iterable
+from datetime import date
 
 
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
-DATASET_PATH = PROJECT_ROOT / "data" / "anthony_dataset.json"
+DATASET_PATH = PROJECT_ROOT / "data" / "anthony_illuzzi_dataset.json"
 DB_PATH = BASE_DIR / "human_data_product.db"
 
 
@@ -221,6 +222,20 @@ def validate_dataset(data: dict[str, Any]) -> None:
 
     validate_referential_integrity(data)
 
+def apply_runtime_metadata(data: dict[str, Any]) -> None:
+    today = date.today().isoformat()
+
+    for record in data["product_metadata"]:
+        if record["meta_key"] == "last_pipeline_refresh":
+            record["meta_value"] = today
+            break
+    else:
+        data["product_metadata"].append(
+            {
+                "meta_key": "last_pipeline_refresh",
+                "meta_value": today,
+            }
+        )
 
 def get_connection(db_path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path)
@@ -477,6 +492,9 @@ def main() -> None:
 
     print("Validating dataset...")
     validate_dataset(data)
+
+    print("Applying runtime metadata...")
+    apply_runtime_metadata(data)
 
     print(f"Opening database: {DB_PATH}")
     conn = get_connection(DB_PATH)

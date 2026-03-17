@@ -344,11 +344,14 @@ def show_identity():
 
     print("Core Focus Areas:")
     focus_areas = [
-        "Data platform architecture",
-        "Analytics enablement & product intelligence",
-        "Self-service analytics and configuration scalability",
-        "Metadata modeling and governance frameworks",
-        "Platform adoption and value realization"
+        "Data Platform Architecture",
+        "Analytics Enablement",
+        "Self-Service Analytics",
+        "Data Product Thinking",
+        "Metadata Modeling",
+        "Data Governance",
+        "Platform Adoption",
+        "Value Realization",
     ]
 
     for area in focus_areas:

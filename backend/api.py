@@ -1,6 +1,31 @@
-from pathlib import Path
-import sqlite3
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from data_service import (
+    get_health,
+    get_product_metadata,
+    get_contact_info,
+    get_summary,
+    get_identity,
+    get_experiences,
+    get_projects,
+    get_project_detail,
+    get_skills,
+    search_projects,
+    get_role_preferences,
+    get_target_opportunity,
+    get_career_timeline,
+    get_skill_utilization,
+    get_feedback_themes,
+    get_feedback_theme_details,
+    get_projects_by_domain,
+    get_projects_by_experience,
+    get_experience_projects,
+    get_skill_projects,
+    get_insights,
+    execute_readonly_query,
+)
 
 app = FastAPI(
     title="Human Data Product API",
@@ -8,188 +33,138 @@ app = FastAPI(
     version="1.0.0"
 )
 
-DB_PATH = Path(__file__).resolve().parent / "human_data_product.db"
+class SqlQueryRequest(BaseModel):
+    sql: str
 
-
-def get_connection():
-    if not DB_PATH.exists():
-        raise FileNotFoundError(f"Database not found at: {DB_PATH}")
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def rows_to_dicts(rows):
-    return [dict(row) for row in rows]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "human-data-product-api"}
+    return get_health()
+
+
+@app.get("/product-metadata")
+def product_metadata():
+    return get_product_metadata()
+
+
+@app.get("/contact-info")
+def contact_info():
+    return get_contact_info()
 
 
 @app.get("/summary")
-def get_summary():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            SELECT meta_value
-            FROM product_metadata
-            WHERE meta_key = 'owner'
-        """)
-        owner_row = cursor.fetchone()
-        owner = owner_row["meta_value"] if owner_row else "Unknown"
-
-        cursor.execute("""
-            SELECT company, role, start_date
-            FROM experience
-            WHERE end_date IS NULL
-            ORDER BY
-                CASE WHEN company = 'SAP' THEN 0 ELSE 1 END,
-                start_date DESC
-            LIMIT 1
-        """)
-        current_role = cursor.fetchone()
-
-        cursor.execute("SELECT COUNT(*) AS count FROM experience")
-        experience_count = cursor.fetchone()["count"]
-
-        cursor.execute("SELECT COUNT(*) AS count FROM project")
-        project_count = cursor.fetchone()["count"]
-
-        cursor.execute("SELECT COUNT(*) AS count FROM skill")
-        skill_count = cursor.fetchone()["count"]
-
-        cursor.execute("""
-            SELECT category, COUNT(*) AS skill_total
-            FROM skill
-            GROUP BY category
-            ORDER BY skill_total DESC, category
-        """)
-        skill_categories = rows_to_dicts(cursor.fetchall())
-
-        return {
-            "owner": owner,
-            "current_role": dict(current_role) if current_role else None,
-            "experience_count": experience_count,
-            "project_count": project_count,
-            "skill_count": skill_count,
-            "skill_categories": skill_categories
-        }
+def summary():
+    return get_summary()
 
 
 @app.get("/identity")
-def get_identity():
-    return {
-        "specialization": "Enterprise Data Platforms & Analytics Enablement",
-        "core_focus_areas": [
-            "Data platform architecture",
-            "Analytics enablement & product intelligence",
-            "Self-service analytics and configuration scalability",
-            "Metadata modeling and governance frameworks",
-            "Platform adoption and value realization"
-        ],
-        "architectural_pattern": (
-            "Transform fragmented operational data into structured, trusted data products "
-            "that enable scalable insight, decision intelligence, and enterprise adoption."
-        ),
-        "primary_strength": (
-            "Bridging technical architecture, analytics intelligence, and organizational "
-            "platform adoption to maximize value from enterprise data ecosystems."
-        )
-    }
+def identity():
+    return get_identity()
 
 
-@app.get("/experience")
-def get_experience():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT experience_id, company, role, start_date, end_date, domain, focus_area, impact, sort_order
-            FROM experience
-            ORDER BY sort_order ASC
-        """)
-        return rows_to_dicts(cursor.fetchall())
+@app.get("/experiences")
+def experiences():
+    return get_experiences()
 
 
 @app.get("/projects")
-def get_projects():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT project_id, experience_id, name, domain, value, link
-            FROM project
-            ORDER BY project_id ASC
-        """)
-        return rows_to_dicts(cursor.fetchall())
+def projects():
+    return get_projects()
 
 
 @app.get("/projects/{project_id}")
-def get_project_detail(project_id: int):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            SELECT project_id, experience_id, name, domain, value, link
-            FROM project
-            WHERE project_id = ?
-        """, (project_id,))
-        project = cursor.fetchone()
-
-        if not project:
-            raise HTTPException(status_code=404, detail="Project not found")
-
-        cursor.execute("""
-            SELECT s.skill_id, s.skill_name, s.category, s.level
-            FROM skill s
-            JOIN project_skill ps
-              ON s.skill_id = ps.skill_id
-            WHERE ps.project_id = ?
-            ORDER BY s.skill_name
-        """, (project_id,))
-        skills = rows_to_dicts(cursor.fetchall())
-
-        return {
-            "project": dict(project),
-            "associated_skills": skills
-        }
+def project_detail(project_id: int):
+    result = get_project_detail(project_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return result
 
 
 @app.get("/skills")
-def get_skills(category: str | None = None):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-
-        if category:
-            cursor.execute("""
-                SELECT skill_id, category, skill_name, level
-                FROM skill
-                WHERE category = ?
-                ORDER BY skill_name
-            """, (category,))
-        else:
-            cursor.execute("""
-                SELECT skill_id, category, skill_name, level
-                FROM skill
-                ORDER BY category, skill_name
-            """)
-
-        return rows_to_dicts(cursor.fetchall())
-
+def skills(category: str | None = None):
+    return get_skills(category=category)
+    
+@app.post("/query/execute")
+def query_execute(payload: SqlQueryRequest):
+    try:
+        return execute_readonly_query(payload.sql)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
 @app.get("/search/projects")
-def search_projects(q: str = Query(..., min_length=2)):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT project_id, experience_id, name, domain, value, link
-            FROM project
-            WHERE name LIKE ? OR domain LIKE ? OR value LIKE ?
-            ORDER BY project_id
-        """, (f"%{q}%", f"%{q}%", f"%{q}%"))
+def search_projects_endpoint(q: str = Query(..., min_length=2)):
+    return search_projects(q)
 
-        return {
-            "query": q,
-            "results": rows_to_dicts(cursor.fetchall())
-        }
+
+@app.get("/role-preferences")
+def role_preferences(
+    dimension: str | None = None,
+    category: str | None = None,
+    priority: str | None = None
+):
+    return get_role_preferences(
+        dimension=dimension,
+        category=category,
+        priority=priority
+    )
+
+
+@app.get("/target-opportunity")
+def target_opportunity():
+    return get_target_opportunity()
+
+
+@app.get("/analytics/career-timeline")
+def career_timeline():
+    return get_career_timeline()
+
+
+@app.get("/analytics/skill-utilization")
+def skill_utilization():
+    return get_skill_utilization()
+
+
+@app.get("/analytics/skill-projects/{skill_id}")
+def skill_projects(skill_id: int):
+    return get_skill_projects(skill_id)
+
+
+@app.get("/analytics/feedback-themes")
+def feedback_themes(
+    source_type: str | None = None,
+    entity_type: str | None = None
+):
+    return get_feedback_themes(source_type=source_type, entity_type=entity_type)
+
+
+@app.get("/analytics/feedback-theme-details/{theme}")
+def feedback_theme_details(theme: str):
+    return get_feedback_theme_details(theme)
+
+
+@app.get("/analytics/projects-by-domain")
+def projects_by_domain():
+    return get_projects_by_domain()
+
+
+@app.get("/analytics/projects-by-experience")
+def projects_by_experience():
+    return get_projects_by_experience()
+
+
+@app.get("/analytics/experience-projects/{experience_id}")
+def experience_projects(experience_id: int):
+    return get_experience_projects(experience_id)
+
+
+@app.get("/insights")
+def insights():
+    return get_insights()
