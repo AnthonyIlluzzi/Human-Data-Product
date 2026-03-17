@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Human Data Product</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Landing / Catalog Page -->
+  <section id="catalog-page" class="page-shell">
+    <div class="landing-layout">
+      <aside class="landing-sidebar">
+        <div class="landing-brand">
+          <div class="brand-badge">HDP</div>
+          <div>
+            <div class="landing-title">Human Data Product</div>
+            <div class="landing-subtitle">Data Product Portfolio</div>
+          </div>
+        </div>
+
+        <nav class="landing-nav">
+          <a href="#catalog-section" class="landing-link active-link">Catalog</a>
+          <button class="landing-link landing-link-button" data-modal-target="about-modal">About Project</button>
+          <button class="landing-link landing-link-button" data-modal-target="contact-modal">Contact</button>
+        </nav>
+      </aside>
+
+      <main class="landing-content">
+        <section id="landing-hero" class="landing-hero">
+                    <div class="landing-hero-text">
+  <div class="hero-eyebrow">Human Data Product</div>
+
+  <h1>Modeling my professional career as a real data product.</h1>
+
+  <p class="hero-lead">
+    This project explores a simple idea:
+    <em>What if my professional experience was structured, queryable,
+    and consumable like a modern data platform?</em>
+  </p>
+
+  <p>
+    Instead of presenting experience as a static resume, this system models
+    career history as a <strong>structured dataset</strong> with APIs, analytical views,
+    and insight generation.
+  </p>
+  <p class="hero-support">
+    It demonstrates how a human-centered dataset can behave like a real data product.
+  </p>
+  <div class="hero-feature-row">
+    <span class="hero-feature-label">Features</span>
+    <div class="hero-feature-pills">
+      <span class="tag-chip hero-chip">Structured Dataset</span>
+      <span class="tag-chip hero-chip">Queryable SQL</span>
+      <span class="tag-chip hero-chip">REST API Access</span>
+      <span class="tag-chip hero-chip">Derived Insights</span>
+      <span class="tag-chip hero-chip">Metadata Catalog</span>
+      <span class="tag-chip hero-chip">Schema Documentation</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="landing-hero-image">
+  <img
+    src="assets/data_flow.png"
+    alt="Flowing data particles representing structured information and insight"
+  />
+</div>
+        </section>
+
+		<section id="definition-section">
+  <div class="definition-human-grid">
+    <div class="definition-card">
+      <span class="section-kicker">Data Product Definition</span>
+      <p class="definition-text">
+        A <strong>data product</strong> is a curated, reusable, and governed data asset
+        often derived from fragmented data sources. They are pre-packaged 'products' that include not just the data itself,
+        but also access paths, semantical context, metadata, transformations, and documentation. They are designed to enable
+        better decision making, and therefore must be reliable, discoverable, and provide analytical usability.
+      </p>
+    </div>
+
+    <div class="human-context-card">
+      <span class="section-kicker">The Human Behind the Data</span>
+
+      <p class="human-context-text">
+        Anthony lives in Libertyville, IL with his fiancé Bailey and his two sons, Vinny (3) and Dominic (1).
+      </p>
+
+      <p class="human-context-text human-context-text-secondary">
+        Professionally, Anthony works as a data and analytics architect focused on turning complex systems into structured, scalable platforms.
+		Outside of work, he enjoys getting outdoors with his family, trying new local restaurants, watching hockey, 
+		learning new ideas, and exploring creative ways to integrate technology with the human experience.
+      </p>
+
+      <div class="human-context-chips">
+        <span class="tag-chip human-context-chip">Chicago Area</span>
+        <span class="tag-chip human-context-chip">Father</span>
+        <span class="tag-chip human-context-chip">Foodie</span>
+        <span class="tag-chip human-context-chip">Curious Builder</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <section id="catalog-section" class="catalog-section-shell">
+  <div class="catalog-section-card">
+    <div class="section-header compact-header">
+      <h2>Data Product Catalog</h2>
+      <p>Browse available data products and open a product workspace.</p>
+    </div>
+
+    <div class="catalog-grid">
+      <article class="product-tile active">
+        <div class="tile-top">
+          <span class="tile-type">Data Product</span>
+          <span class="status-pill">
+            <span class="status-dot"></span> ACTIVE
+          </span>
+        </div>
+
+        <div class="tile-content">
+          <h2>Anthony Illuzzi</h2>
+
+          <p class="product-summary">
+            A working portfolio demonstration that models professional experience as a
+            consumable data product with structured entities, API interfaces, guided query
+            exploration, and derived analytical insights.
+          </p>
+
+          <p class="product-summary secondary">
+            Designed to showcase data architecture, platform thinking, and human-centered
+            data product design through a real interactive system.
+          </p>
+        </div<div class="tile-footer">
+
+        <div class="tile-footer">
+          <span id="catalog-version-text">Version 1.0.0</span>
+          <button id="open-product-btn" class="btn-primary">Open Product</button>
+        </div>
+      </article>
+
+      <article class="product-tile placeholder">
+        <div class="tile-top">
+          <span class="tile-type">Catalog Placeholder</span>
+          <span class="status-pill muted">PLANNED</span>
+        </div>
+
+        <div class="tile-content">
+          <h2>More Products Coming</h2>
+
+          <p>
+            Reserved placeholder for future portfolio-grade data products.
+          </p>
+        </div>
+
+                <div class="tile-footer">
+          <span>Future Phase</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+      </main>
+    </div>
+  </section>
+
+  <!-- Landing Modals -->
+  <div id="about-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>About Project</h2>
+        <button class="modal-close" data-close-modal="about-modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This project was built to demonstrate data product thinking across
+          modeling, transformation, API exposure, documentation, analytics,
+          opportunity targeting, and frontend consumption.
+        </p>
+        <p>
+          It treats professional experience not as static resume content, but as
+          a structured system that can be queried, explored, interpreted, and aligned
+          to future opportunities.
+        </p>
+        <p>
+          <a href="https://github.com/AnthonyIlluzzi/Human-Data-Product" target="_blank" rel="noopener noreferrer">
+            View GitHub Repository
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact-modal" class="modal-overlay hidden">
+  <div class="modal-card contact-modal-card">
+    <div class="modal-header">
+      <h2>Let's Connect</h2>
+      <button class="modal-close" data-close-modal="contact-modal">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="contact-modal-layout">
+        <div class="card compact-card modal-inner-card contact-info-card">
+          <div class="contact-intro">
+            <p>
+              Contact me directly or share feedback using the channels below.
+            </p>
+          </div>
+
+          <div id="landing-contact-list" class="contact-detail-list">
+            <div class="contact-detail-item">Loading contact information...</div>
+          </div>
+        </div>
+
+        <div class="card compact-card modal-inner-card">
+          <h3>Actions</h3>
+          <div class="button-column">
+            <a class="btn-primary link-btn" href="../documentation/Anthony-Illuzzi-Enterprise-Data-Platform-Strategy.pdf" id="resume-link" target="_blank" rel="noopener noreferrer">Download Resume</a>
+            <a
+              class="btn-secondary link-btn"
+              href="https://linkedin.com/in/anthonyilluzzi"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="linkedin-link"
+            >
+              Open LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Product Page -->
+  <section id="product-page" class="page-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-badge">HDP</div>
+        <div>
+          <div class="sidebar-title">Human Data Product</div>
+          <div class="sidebar-subtitle">Workspace</div>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-btn active" data-panel="overview-panel">Overview</button>
+        <button class="nav-btn" data-panel="sql-panel">SQL Query</button>
+        <button class="nav-btn" data-panel="api-panel">API Access</button>
+        <button class="nav-btn" data-panel="insights-panel">Insights</button>
+        <button class="nav-btn nav-modal-btn" data-modal-target="contact-modal">Contact</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="back-to-catalog-btn" class="btn-secondary full-width">Back to Catalog</button>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <!-- Overview Panel -->
+      <section id="overview-panel" class="workspace-panel active">
+        <div class="panel-header">
+          <h1>Data Product Overview</h1>
+          <p>Product metadata, current state, and high-level identity.</p>
+        </div>
+
+        <div class="overview-layout">
+          <div class="overview-main">
+                        <div class="card hero-card hero-card-with-photo">
+              <div class="hero-copy">
+                <h2 id="product-owner">Loading owner...</h2>
+                <p id="product-specialization" class="hero-subtext">Loading specialization...</p>
+                <p class="hero-description">
+                  This workspace presents the Human Data Product as a real consumable
+                  asset: queryable through SQL, extractable through API, interpretable
+                  through analytics and insight cards, and aligned to future opportunities.
+                </p>
+              </div>
+
+              <div class="hero-profile">
+                <img
+                  src="assets/AI_Headshot_white_recent.jpg"
+                  alt="Anthony Illuzzi headshot"
+                  class="profile-photo"
+                />
+              </div>
+            </div>
+
+                        <div class="card compact-card section-card">
+              <div class="section-heading">
+                <h3>Description</h3>
+              </div>
+
+			  <p>
+				The Human Data Product is a structured representation of Anthony
+				Illuzzi’s professional experience, designed to demonstrate data
+				product thinking across modeling, transformation, API exposure,
+				analytics, future-role targeting, and frontend consumption.
+			  </p>
+			</div>
+
+<div class="card compact-card pipeline-visual-card pipeline-visual-card-full">
+  <div class="section-heading">
+    <h3>Product Architecture</h3>
+    <p class="section-subtext">
+      High-level flow of how curated source data is transformed into a consumable workspace.
+    </p>
+  </div>
+
+  <div class="pipeline-visual-frame architecture-flow">
+    <div class="architecture-stage">
+      <div class="architecture-icon-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="6.5" ry="2.5"></ellipse>
+          <path d="M5.5 5v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V5"></path>
+          <path d="M5.5 11v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-6"></path>
+        </svg>
+      </div>
+      <div class="architecture-stage-body">
+        <h4>Curated Dataset</h4>
+        <p>Source data</p>
+      </div>
+    </div>
+
+    <div class="architecture-flow-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M13 7l6 5-6 5"></path>
+      </svg>
+    </div>
+
+    <div class="architecture-stage">
+      <div class="architecture-icon-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 7.5h15"></path>
+          <path d="M4.5 12h15"></path>
+          <path d="M4.5 16.5h15"></path>
+          <rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect>
+        </svg>
+      </div>
+      <div class="architecture-stage-body">
+        <h4>SQLite Model</h4>
+        <p>Structured storage</p>
+      </div>
+    </div>
+
+    <div class="architecture-flow-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M13 7l6 5-6 5"></path>
+      </svg>
+    </div>
+
+    <div class="architecture-stage">
+      <div class="architecture-icon-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="5" width="16" height="14" rx="2.5"></rect>
+          <path d="M8 9h8"></path>
+          <path d="M8 12h5"></path>
+          <path d="M8 15h8"></path>
+        </svg>
+      </div>
+      <div class="architecture-stage-body">
+        <h4>Consumption Layer</h4>
+        <p>FastAPI + SQL access</p>
+      </div>
+    </div>
+
+    <div class="architecture-flow-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M13 7l6 5-6 5"></path>
+      </svg>
+    </div>
+
+    <div class="architecture-stage">
+      <div class="architecture-icon-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 18V9"></path>
+          <path d="M10 18V6"></path>
+          <path d="M15 18v-4"></path>
+          <path d="M20 18V11"></path>
+        </svg>
+      </div>
+      <div class="architecture-stage-body">
+        <h4>Derived Insights</h4>
+        <p>Analytics + interpretation</p>
+      </div>
+    </div>
+
+    <div class="architecture-flow-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M13 7l6 5-6 5"></path>
+      </svg>
+    </div>
+
+    <div class="architecture-stage">
+      <div class="architecture-icon-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="5" width="16" height="11" rx="2.5"></rect>
+          <path d="M9 19h6"></path>
+          <path d="M12 16v3"></path>
+        </svg>
+      </div>
+      <div class="architecture-stage-body">
+        <h4>Frontend Workspace</h4>
+        <p>SQL, API, insights</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="pipeline-visual-caption">
+    Illustrates how structured professional data is modeled, exposed, and consumed as a Data Product.
+  </p>
+</div>
+
+<div class="card compact-card section-card">
+  <div class="section-heading">
+    <h3>Documentation</h3>
+  </div>
+
+  <p>
+    <a href="../documentation/human_data_product_contract.md" target="_blank" rel="noopener noreferrer">
+      Data Product Contract
+    </a>
+  </p>
+</div>
+
+                        <div class="card compact-card section-card">
+              <div class="section-heading">
+                <h3>Output Ports</h3>
+				<p class="section-subtext">Interact with the data product through its available access ports.</p>
+              </div>
+
+              <div class="ports-grid">
+                <button class="port-card-mini interactive-port" data-panel-target="sql-panel">
+                  <strong>SQL</strong>
+                  <p>Explore predefined queries and schema guidance.</p>
+                </button>
+
+                <button class="port-card-mini interactive-port" data-panel-target="api-panel">
+                  <strong>API</strong>
+                  <p>Consume raw and derived data through REST endpoints.</p>
+                </button>
+
+                <button class="port-card-mini interactive-port" data-panel-target="insights-panel" data-tab-target="visualizations-tab">
+                  <strong>Insights</strong>
+                  <p>Explore analytical views and narrative insight cards.</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+                    <aside class="overview-side">
+            <div class="card metadata-card metadata-card-compact section-card">
+              <div class="section-heading">
+                <h3>Product Metadata</h3>
+              </div>
+
+              <div class="metadata-grid">
+                <div class="meta-row">
+                  <span>Status</span>
+                  <strong>
+                    <span id="meta-status" class="status-pill">Loading...</span>
+                  </strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Type</span>
+                  <strong id="meta-type">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Version</span>
+                  <strong id="meta-version">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Last Pipeline Refresh</span>
+                  <strong id="meta-refresh">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Owner</span>
+                  <strong id="meta-owner">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Experience Records</span>
+                  <strong id="meta-experience-count">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Projects</span>
+                  <strong id="meta-project-count">Loading...</strong>
+                </div>
+
+                <div class="meta-row">
+                  <span>Skills</span>
+                  <strong id="meta-skill-count">Loading...</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="card metadata-card metadata-card-compact section-card">
+              <div class="section-heading">
+                <h3>Operational Health</h3>
+              </div>
+
+              <div class="health-grid">
+                <div class="health-row">
+                  <span>Schema Validation</span>
+                  <span id="health-schema" class="status-pill">Loading...</span>
+                </div>
+                <div class="health-row">
+                  <span>Query Engine</span>
+                  <span id="health-query" class="status-pill">Loading...</span>
+                </div>
+                <div class="health-row">
+                  <span>API Status</span>
+                  <span id="health-api" class="status-pill">Loading...</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card compact-card tags-card tags-card-sidebar section-card">
+              <div class="section-heading">
+                <h3>Professional Tags</h3>
+              </div>
+
+              <div class="tag-section">
+                <div class="tag-subheading">Core Focus Areas</div>
+                <div id="focus-area-list" class="tag-list">
+                  <span class="tag-chip">Loading focus areas...</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+</div>
+</section>
+
+      <!-- SQL Panel -->
+      <section id="sql-panel" class="workspace-panel">
+        <div class="panel-header">
+          <h1>SQL Workspace</h1>
+          <p>Guided query exploration for the Human Data Product.</p>
+        </div>
+
+                <div class="card compact-card section-card">
+  <div class="section-heading">
+    <h3>Simple Query Tool</h3>
+  </div>
+  <p>
+    Run guided read-only SQL queries against the local Human Data Product database.
+    Starter queries can be loaded below and edited directly. Only SELECT / WITH queries are allowed.
+  </p>
+
+  <textarea id="sql-editor" class="code-box" rows="8"></textarea>
+
+  <div class="sql-shortcuts sql-shortcuts-matrix">
+    <div class="sql-row">
+      <div class="sql-category">Core Data</div>
+      <div class="sql-buttons">
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT experience_id, company, role, start_date, end_date, domain
+FROM experience
+ORDER BY sort_order;"
+        >
+          Experiences
+        </button>
+
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT project_id, name, domain, experience_id
+FROM project
+ORDER BY project_id;"
+        >
+          Projects
+        </button>
+
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT skill_id, category, skill_name, level
+FROM skill
+ORDER BY category, skill_name;"
+        >
+          Skills
+        </button>
+      </div>
+    </div>
+
+    <div class="sql-row">
+      <div class="sql-category">Relationships</div>
+      <div class="sql-buttons">
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT p.project_id, p.name, s.skill_name, s.level
+FROM project p
+JOIN project_skill ps
+  ON p.project_id = ps.project_id
+JOIN skill s
+  ON s.skill_id = ps.skill_id
+ORDER BY p.project_id, s.skill_name;"
+        >
+          Project Skills
+        </button>
+
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT e.company, e.role, COUNT(p.project_id) AS project_count
+FROM experience e
+LEFT JOIN project p
+  ON e.experience_id = p.experience_id
+GROUP BY e.experience_id, e.company, e.role, e.sort_order
+ORDER BY e.sort_order;"
+        >
+          Projects by Experience
+        </button>
+      </div>
+    </div>
+
+    <div class="sql-row">
+      <div class="sql-category">Signals</div>
+      <div class="sql-buttons">
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT dimension, category, value, priority
+FROM role_preference
+ORDER BY
+  CASE priority
+    WHEN 'high' THEN 1
+    WHEN 'medium' THEN 2
+    ELSE 3
+  END,
+  dimension,
+  category,
+  value;"
+        >
+          Role Preferences
+        </button>
+
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT theme, COUNT(*) AS feedback_count
+FROM feedback
+GROUP BY theme
+ORDER BY feedback_count DESC, theme;"
+        >
+          Feedback Themes
+        </button>
+      </div>
+    </div>
+
+    <div class="sql-row">
+      <div class="sql-category">Portfolio</div>
+      <div class="sql-buttons">
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT p.project_id, p.name, p.domain, p.link
+FROM project p
+JOIN experience e
+  ON p.experience_id = e.experience_id
+WHERE e.company = 'Personal'
+ORDER BY p.project_id;"
+        >
+          Side Projects
+        </button>
+
+        <button
+          class="sql-template-btn"
+          data-sql="SELECT company, role, start_date
+FROM experience
+WHERE end_date IS NULL
+ORDER BY
+  CASE WHEN company = 'SAP' THEN 0 ELSE 1 END,
+  start_date DESC
+LIMIT 1;"
+        >
+          Current Role
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <button class="btn-primary" id="run-sql-btn">Submit</button>
+	<button class="btn-secondary" id="clear-sql-btn" type="button">Clear</button>
+  </div>
+</div>
+
+        <div class="card compact-card section-card">
+          <div class="section-heading">
+            <h3>Documentation</h3>
+          </div>
+          <p>
+            <a href="../documentation/schema.md" target="_blank" rel="noopener noreferrer">
+              Database Schema
+            </a>
+          </p>
+        </div>
+
+        <div class="card compact-card section-card">
+          <div class="section-heading">
+            <h3>Query Result</h3>
+          </div>
+          <pre id="sql-output" class="output-box">Load a predefined query and submit.</pre>
+        </div>
+      </section>
+
+      <!-- API Panel -->
+      <section id="api-panel" class="workspace-panel">
+        <div class="panel-header">
+          <h1>API Workspace</h1>
+          <p>Test raw and derived endpoints exposed by the Human Data Product API.</p>
+        </div>
+
+        <div class="card compact-card section-card">
+          <div class="section-heading">
+            <h3>Simple API Tool</h3>
+          </div>
+		  <p>
+			Call REST endpoints exposed by the Human Data Product API. 
+			Use the input field to execute requests or select a predefined endpoint below.
+		  </p>
+
+          <div class="api-input-row">
+            <input id="api-endpoint-input" type="text" value="/summary" />
+            <button class="btn-primary" id="call-api-btn">Execute</button>
+          </div>
+
+<div class="api-shortcuts api-shortcuts-matrix">
+  <div class="endpoint-row">
+    <div class="endpoint-category">System</div>
+    <div class="endpoint-buttons">
+      <button class="endpoint-btn">/summary</button>
+      <button class="endpoint-btn">/identity</button>
+      <button class="endpoint-btn">/product-metadata</button>
+    </div>
+  </div>
+
+  <div class="endpoint-row">
+    <div class="endpoint-category">Core Data</div>
+    <div class="endpoint-buttons">
+      <button class="endpoint-btn">/experiences</button>
+      <button class="endpoint-btn">/projects</button>
+      <button class="endpoint-btn">/skills</button>
+    </div>
+  </div>
+
+  <div class="endpoint-row">
+    <div class="endpoint-category">Role Intelligence</div>
+    <div class="endpoint-buttons">
+      <button class="endpoint-btn">/target-opportunity</button>
+      <button class="endpoint-btn">/role-preferences</button>
+    </div>
+  </div>
+
+  <div class="endpoint-row">
+    <div class="endpoint-category">Analytics</div>
+    <div class="endpoint-buttons">
+      <button class="endpoint-btn">/analytics/career-timeline</button>
+      <button class="endpoint-btn">/analytics/skill-utilization</button>
+      <button class="endpoint-btn">/analytics/projects-by-experience</button>
+      <button class="endpoint-btn">/analytics/feedback-themes</button>
+    </div>
+  </div>
+</div>
+        </div>
+
+        <div class="card compact-card section-card">
+          <div class="section-heading">
+            <h3>Documentation</h3>
+          </div>
+          <p>
+            <a href="../documentation/hdp_api_specs.md" target="_blank" rel="noopener noreferrer">
+              API Specifications
+            </a>
+          </p>
+        </div>
+
+        <div class="card compact-card section-card">
+          <div class="section-heading">
+            <h3>API Response</h3>
+          </div>
+          <pre id="api-output" class="output-box">Execute an endpoint to populate this area.</pre>
+        </div>
+      </section>
+
+      <!-- Insights Panel -->
+      <section id="insights-panel" class="workspace-panel">
+        <div class="panel-header">
+          <h1>Insights Workspace</h1>
+          <p>Analytical views, curated insight cards, and next opportunity fit.</p>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="visualizations-tab">Visualizations</button>
+          <button class="tab-btn" data-tab="cards-tab">Insight Cards</button>
+          <button class="tab-btn" data-tab="next-opportunity-tab">Next Opportunity</button>
+        </div>
+
+        <div id="visualizations-tab" class="tab-panel active">
+  <div class="viz-grid viz-dashboard-grid">
+    <div class="card compact-card viz-card viz-card-wide">
+      <div class="viz-card-header">
+        <h3>Career Timeline</h3>
+        <p class="viz-card-subtitle">Career progression across roles and organizations.</p>
+      </div>
+      <div id="career-timeline-viz" class="timeline-viz timeline-rail"></div>
+    </div>
+
+    <div class="card compact-card viz-card">
+      <div class="viz-card-header">
+        <h3>Skill Utilization</h3>
+        <p class="viz-card-subtitle">Most frequently applied skills across projects.</p>
+      </div>
+      <div class="viz-split-layout">
+        <div id="skill-utilization-viz" class="viz-list"></div>
+        <div id="skill-drilldown" class="viz-detail-panel">
+          <div class="detail-empty-state">
+            <div class="detail-eyebrow">Skill Drilldown</div>
+            <h4>Select a skill</h4>
+            <p>Click a bar to view the projects where that skill was applied.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card compact-card viz-card">
+      <div class="viz-card-header">
+        <h3>Projects by Experience</h3>
+        <p class="viz-card-subtitle">Project density across roles, with role-level drilldown.</p>
+      </div>
+      <div class="viz-split-layout">
+        <div id="projects-by-experience-viz" class="card-bar-grid"></div>
+        <div id="experience-drilldown" class="viz-detail-panel">
+          <div class="detail-empty-state">
+            <div class="detail-eyebrow">Experience Drilldown</div>
+            <h4>Select a role</h4>
+            <p>Click a bar to explore the projects associated with that experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card compact-card viz-card viz-card-wide">
+      <div class="viz-card-header">
+        <h3>Feedback Themes</h3>
+        <p class="viz-card-subtitle">Theme distribution with drilldown to source type and quote-level detail.</p>
+      </div>
+      <div class="viz-feedback-layout">
+        <div class="feedback-chart-panel">
+          <div id="feedback-themes-viz" class="feedback-donut"></div>
+          <div id="feedback-donut-legend" class="feedback-legend"></div>
+        </div>
+        <div id="feedback-drilldown" class="viz-detail-panel">
+          <div class="detail-empty-state">
+            <div class="detail-eyebrow">Theme Drilldown</div>
+            <h4>Select a theme</h4>
+            <p>Choose a theme to view source breakdown and supporting feedback excerpts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cards-tab" class="tab-panel">
+  <div id="insight-cards-grid" class="insight-grid"></div>
+</div>
+
+        <div id="next-opportunity-tab" class="tab-panel">
+  <div class="next-opportunity-layout">
+    <div class="card compact-card opportunity-hero-card full-width-card">
+      <div class="opportunity-hero-main">
+        <div class="opportunity-eyebrow">Opportunity Insight</div>
+        <h3>Best-Fit Opportunity Profile</h3>
+        <p id="target-opportunity-summary" class="opportunity-summary">
+          Loading target opportunity summary...
+        </p>
+
+        <div class="opportunity-highlight-block">
+          <div class="opportunity-section-label">Top fit signals</div>
+          <div id="opportunity-highlight-chips" class="opportunity-chip-list">
+            <span class="opportunity-chip emphasis">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="opportunity-scorecard">
+        <div class="opportunity-score-item">
+          <span class="opportunity-score-label">Target Level</span>
+          <strong id="target-career-level-brief">Loading...</strong>
+        </div>
+        <div class="opportunity-score-item">
+          <span class="opportunity-score-label">Work Mode</span>
+          <strong id="target-work-mode-brief">Loading...</strong>
+        </div>
+        <div class="opportunity-score-item">
+          <span class="opportunity-score-label">Preferred Location</span>
+          <strong id="target-location-brief">Loading...</strong>
+        </div>
+        <div class="opportunity-score-item">
+          <span class="opportunity-score-label">Travel Ceiling</span>
+          <strong id="target-travel-max">Loading...</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="opportunity-pillars-grid full-width-card">
+  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--tall pillar-role-shape">
+    <div class="opportunity-section-label">Role Shape</div>
+    <h4>Architecture-oriented scope</h4>
+    <div id="opportunity-role-shape" class="opportunity-chip-list">
+      <span class="opportunity-chip">Loading...</span>
+    </div>
+  </div>
+
+  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--tall pillar-problem-space">
+    <div class="opportunity-section-label">Problem Space</div>
+    <h4>Highest-value focus areas</h4>
+    <div id="opportunity-problem-space" class="opportunity-chip-list">
+      <span class="opportunity-chip">Loading...</span>
+    </div>
+  </div>
+
+  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--compact pillar-work-context">
+    <div class="opportunity-section-label">Work Context</div>
+    <h4>Environment fit</h4>
+    <div id="opportunity-work-context" class="opportunity-chip-list opportunity-chip-list--compact">
+      <span class="opportunity-chip">Loading...</span>
+    </div>
+  </div>
+
+  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--compact pillar-leadership-style">
+    <div class="opportunity-section-label">Leadership Style</div>
+    <h4>Preferred operating model</h4>
+    <div id="opportunity-leadership-style" class="opportunity-chip-list opportunity-chip-list--compact">
+      <span class="opportunity-chip">Loading...</span>
+    </div>
+  </div>
+</div>
+
+    <div class="card compact-card opportunity-evidence-card full-width-card">
+      <div class="section-heading">
+        <h3>Why this fit is credible</h3>
+        <p>Representative proof points showing the type of impact this target profile is built on.</p>
+      </div>
+
+      <div id="opportunity-evidence-list" class="opportunity-evidence-grid">
+        <div class="opportunity-evidence-item">Loading supporting evidence...</div>
+      </div>
+    </div>
+
+    <div class="card compact-card opportunity-structured-card full-width-card">
+	  <div class="section-heading">
+		<h3>Preference Signal Matrix</h3>
+		<p>Condensed role-fit signals grouped into four fit dimensions.</p>
+	  </div>
+
+	  <div id="role-preferences-groups" class="preference-groups preference-groups--matrix">
+		Loading role preferences...
+	  </div>
+	</div>
+  </div>
+</div>
+
+      </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
