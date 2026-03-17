@@ -1,4 +1,8 @@
-const API_BASE = "http://127.0.0.1:8000";
+const PROD_API_BASE = "https://YOUR-BACKEND-SERVICE.onrender.com";
+
+const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+  ? "http://127.0.0.1:8000"
+  : PROD_API_BASE;
 
 document.addEventListener("DOMContentLoaded", async () => {
   bindCatalogNavigation();
