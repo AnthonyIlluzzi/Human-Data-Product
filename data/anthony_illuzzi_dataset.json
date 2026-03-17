@@ -3,7 +3,7 @@
     { "meta_key": "product_name", "meta_value": "Anthony.Profile" },
     { "meta_key": "version", "meta_value": "1.0.0" },
     { "meta_key": "status", "meta_value": "active" },
-    { "meta_key": "data_product_type", "meta_value": "derived: human-data-product" },
+    { "meta_key": "data_product_type", "meta_value": "derived" },
     { "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
     { "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
     { "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" },
@@ -22,7 +22,7 @@
     {
       "contact_id": 2,
       "category": "phone",
-      "value": "630.485.8225",
+      "value": "6304858225",
       "is_public": true
     },
     {
@@ -294,7 +294,7 @@
     "value": "10%",
     "priority": "high"
   }
-]
+],
 
   "experience": [
   {
@@ -363,7 +363,7 @@
     "impact": "Created portfolio-grade artifacts that demonstrate end-to-end data product architecture and consumption patterns.",
     "sort_order": 0
   }
-]
+],
 
   "project": [
   {
@@ -494,7 +494,7 @@
     "value": "Placeholder for PRISM side project; intended to demonstrate structured thinking around data/AI enablement and decision systems. (To be detailed by Anthony.)",
     "link": null
   }
-]
+],
 
 "skill": [
   {
@@ -695,7 +695,7 @@
     "skill_name": "Mentorship & Capability Building",
     "level": "advanced"
   }
-]
+],
   
   "project_skill": [
   { "project_id": 1001, "skill_id": 9 },
@@ -807,7 +807,7 @@
   { "project_id": 9002, "skill_id": 4 },
   { "project_id": 9002, "skill_id": 24 },
   { "project_id": 9002, "skill_id": 27 }
-]
+],
   
   "feedback": [
   {
@@ -972,7 +972,7 @@
     "theme": "leadership",
     "year": 2025
   }
-]
+],
   
   "education": [
   {
@@ -995,7 +995,7 @@
     "completion_date": "2012-06-01",
     "sort_order": 2
   }
-]
+],
   
   "credential": [
   {
