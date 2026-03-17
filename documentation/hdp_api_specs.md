@@ -11,30 +11,65 @@ skills, and architectural identity through structured endpoints.
 --------
 http://localhost:8000
 
-### Endpoint List
---------
-- GET /health
-- GET /summary
-- GET /identity
-- GET /experience
-- GET /projects
-- GET /projects/{project_id}
-- GET /skills
-- GET /search/projects
-- GET /analytics/career-timeline
-- GET /analytics/skill-utilization
-- GET /analytics/feedback-themes
-- GET /analytics/projects-by-domain
-- GET /analytics/projects-by-experience
-- GET /insights
+## Endpoint List
+
+### System
+| Method | Endpoint          | Description                                                                                                 |
+|--------|-------------------|-------------------------------------------------------------------------------------------------------------|
+| GET    | /health           | Health check for the API service                                                                            |
+| GET    | /product-metadata | Returns Human Data Product metadata including status, owner, and record counts                              |
+| GET    | /contact-info     | Returns contact channels for the Human Data Product owner                                                   |
+| GET    | /summary          | Returns a high-level summary of the Human Data Product including counts of experience, projects, and skills |
+| GET    | /identity         | Returns identity information describing the Human Data Product owner                                        |
+
+### Core Data Retrieval
+| Method | Endpoint               | Description                                         |
+|--------|------------------------|-----------------------------------------------------|
+| GET    | /experiences           | Returns all experience records                      |
+| GET    | /projects              | Returns all project records                         |
+| GET    | /projects/{project_id} | Returns detailed information for a specific project |
+| GET    | /skills                | Returns all skill records                           |
+
+### Search
+| Method | Endpoint         | Description                |
+|--------|------------------|----------------------------|
+| GET    | /search/projects | Search projects by keyword |
+
+### Role Intelligence
+| Method | Endpoint            | Description                                                  |
+|--------|---------------------|--------------------------------------------------------------|
+| GET    | /role-preferences   | Returns structured role preferences for future opportunities |
+| GET    | /target-opportunity | Returns synthesized target opportunity profile               |
+
+### Analytics
+| Method | Endpoint                                       | Description                                                   |
+|--------|------------------------------------------------|---------------------------------------------------------------|
+| GET    | /analytics/projects-by-domain                  | Returns project distribution by domain                        |
+| GET    | /analytics/projects-by-experience              | Returns project distribution by experience                    |
+| GET    | /analytics/career-timeline                     | Returns career timeline data for visualization                |
+| GET    | /analytics/skill-utilization                   | Returns skill utilization statistics                          |
+| GET    | /analytics/feedback-themes                     | Returns aggregated feedback themes                            |
+| GET    | /analytics/skill-projects/{skill_id}           | Returns projects associated with a specific skill             |
+| GET    | /analytics/experience-projects/{experience_id} | Returns projects associated with a specific experience        |
+| GET    | /analytics/feedback-theme-details/{theme}      | Returns detailed feedback entries for a feedback theme        |
+
+### Insights
+| Method | Endpoint  | Description                                              |
+|--------|-----------|----------------------------------------------------------|
+| GET    | /insights | Returns curated insight cards for the Insights Workspace |
 
 ### Data Model Overview
-| Entity         | Description                                           |
-| -------------- | ----------------------------------------------------- |
-| Experience     | Career roles and professional positions               |
-| Projects       | Key initiatives and deliverables tied to experience   |
-| Skills         | Technical, architectural, and leadership capabilities |
-| Project_Skills | Many-to-many relationship between projects and skills |
+| Entity           | Description                                                               |
+| ---------------- | ------------------------------------------------------------------------- |
+| Experience       | Career roles and professional positions across the timeline               |
+| Projects         | Key initiatives and deliverables tied to specific experience              |
+| Skills           | Technical, architectural, and leadership capabilities                     |
+| Project_Skills   | Many-to-many relationship mapping projects to skills                      |
+| Feedback         | Structured qualitative signals tied to experience, projects, or education |
+| Role_Preference  | Structured preferences for future role direction and fit                  |
+| Principle        | Personal operating principles used to reinforce insight narrative         |
+| Contact_Info     | Public contact channels for the Human Data Product owner                  |
+| Product_Metadata | Product-level metadata used for status, versioning, and health            |
 
 ## GET /health
 
@@ -57,6 +92,79 @@ None
   "status": "ok",
   "service": "human-data-product-api"
 }
+
+## GET /product-metadata
+
+### Purpose
+-------
+Returns high-level metadata for the Human Data Product, including status,
+type, version, refresh date, owner, and record counts.
+
+### Response Structure
+| Field                 | Type   | Description                                  |
+| --------------------- | ------ | -------------------------------------------- |
+| status                | string | Product status                               |
+| type                  | string | Product classification                       |
+| version               | string | Current product version                      |
+| last_pipeline_refresh | string | Last refresh date for the data pipeline      |
+| owner                 | string | Human Data Product owner                     |
+| experience_count      | integer| Total number of experience records           |
+| project_count         | integer| Total number of project records              |
+| skill_count           | integer| Total number of skill records                |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+{
+  "status": "active",
+  "type": "Human Data Product",
+  "version": "1.0",
+  "last_pipeline_refresh": "2026-03-05",
+  "owner": "Anthony Illuzzi",
+  "experience_count": 6,
+  "project_count": 16,
+  "skill_count": 33
+}
+
+## GET /contact-info
+
+### Purpose
+-------
+Returns contact channels associated with the Human Data Product owner.
+
+### Response Structure
+| Field    | Type   | Description                                |
+| -------- | ------ | ------------------------------------------ |
+| category | string | Contact channel type                       |
+| value    | string | Contact value for the specified channel    |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+[
+  {
+    "category": "email",
+    "value": "Anthony.Illuzzi@yahoo.com"
+  },
+  {
+    "category": "phone",
+    "value": "6304858225"
+  },
+  {
+    "category": "linkedin",
+    "value": "https://linkedin.com/in/anthonyilluzzi"
+  },
+  {
+    "category": "location",
+    "value": "Libertyville, Illinois (Chicago Area)"
+  }
+]
+
+Note: Response may contain multiple records.
 
 ## GET /summary
 
@@ -131,18 +239,21 @@ None
 {
   "specialization": "Enterprise Data Platforms & Analytics Enablement",
   "core_focus_areas": [
-    "Data platform architecture",
-    "Analytics enablement & product intelligence",
-    "Self-service analytics and configuration scalability",
-    "Metadata modeling and governance frameworks",
-    "Platform adoption and value realization"
-  ],
+	  "Data Platform Architecture",
+	  "Analytics Enablement",
+	  "Self-Service Analytics",
+	  "Data Product Thinking",
+	  "Metadata Modeling",
+	  "Data Governance",
+	  "Platform Adoption",
+	  "Value Realization"
+	],
   "architectural_pattern": "Transform fragmented operational data into structured, trusted data products that enable scalable insight, decision intelligence, and enterprise adoption.",
   "primary_strength": "Bridging technical architecture, analytics intelligence, and organizational platform adoption to maximize value from enterprise data ecosystems."
 }
 
 
-## GET /experience
+## GET /experiences
 
 ### Purpose
 -------
@@ -252,20 +363,20 @@ GET /projects/1001
 | project_id | integer | Unique identifier of the requested project |
 
 ### Response Structure
-| Field                 | Type        | Description                        |
-| --------------------- | ----------- | ---------------------------------- |
-| project               | object      | Project details                    |
-| project.project_id    | integer     | Project identifier                 |
-| project.experience_id | integer     | Related experience record          |
-| project.name          | string      | Project title                      |
-| project.domain        | string      | Project domain                     |
-| project.value         | string      | Project description and impact     |
-| project.link          | string/null | Optional reference link            |
-| skills                | array       | Skills associated with the project |
-| skills.skill_id       | integer     | Skill identifier                   |
-| skills.skill_name     | string      | Skill name                         |
-| skills.category       | string      | Skill category                     |
-| skills.level          | string      | Skill proficiency level            |
+| Field                            | Type        | Description                        |
+| ---------------------------------| ----------- | ---------------------------------- |
+| project                          | object      | Project details                    |
+| project.project_id               | integer     | Project identifier                 |
+| project.experience_id            | integer     | Related experience record          |
+| project.name                     | string      | Project title                      |
+| project.domain                   | string      | Project domain                     |
+| project.value                    | string      | Project description and impact     |
+| project.link                     | string/null | Optional reference link            |
+| associated_skills                | array       | Skills associated with the project |
+| associated_skills.skill_id       | integer     | Skill identifier                   |
+| associated_skills.skill_name     | string      | Skill name                         |
+| associated_skills.category       | string      | Skill category                     |
+| associated_skills.level          | string      | Skill proficiency level            |
 
 ### Query Parameters
 None
@@ -382,6 +493,105 @@ GET /search/projects?q=analytics
 
 Note: Response may contain multiple records.
 
+## GET /role-preferences
+
+### Purpose
+-------
+Returns structured role preferences for future opportunities, including
+dimension, category, value, and priority.
+
+### Response Structure
+| Field         | Type   | Description                              |
+| ------------- | ------ | ---------------------------------------- |
+| preference_id | integer| Unique role preference identifier        |
+| dimension     | string | Preference dimension                     |
+| category      | string | Preference grouping within the dimension |
+| value         | string | Preferred value                          |
+| priority      | string | Preference priority level                |
+
+### Query Parameters
+| Parameter | Type   | Description                                           |
+| --------- | ------ | ----------------------------------------------------- |
+| dimension | string | Optional filter for a specific preference dimension   |
+| category  | string | Optional filter for a specific preference category    |
+| priority  | string | Optional filter for a specific priority level         |
+
+### Example Response
+---------------------
+[
+  {
+    "preference_id": 1,
+    "dimension": "work_mode",
+    "category": "flexibility",
+    "value": "Remote",
+    "priority": "high"
+  },
+  {
+    "preference_id": 2,
+    "dimension": "compensation",
+    "category": "target_range",
+    "value": "$200K+",
+    "priority": "high"
+  }
+]
+
+Note: Response may contain multiple records.
+
+## GET /target-opportunity
+
+### Purpose
+-------
+Returns the synthesized target opportunity profile for the next best-fit role.
+
+### Response Structure
+| Field                  | Type   | Description                                     |
+| ---------------------- | ------ | ----------------------------------------------- |
+| summary                | string | Narrative summary of target opportunity         |
+| target_role_types      | array  | Preferred role types                            |
+| target_career_levels   | array  | Preferred career levels                         |
+| preferred_work_modes   | array  | Preferred work arrangements                     |
+| focus_areas            | array  | Preferred functional or domain focus areas      |
+| preferred_locations    | array  | Preferred geographies                           |
+| leadership_preference  | array  | Leadership preference statements                |
+| travel_max             | string | Maximum desired travel expectation              |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+{
+  "summary": "Targeting senior platform, analytics, or data architecture roles with strong flexibility, high compensation, and manageable workload.",
+  "target_role_types": [
+    "Data Platform Architect",
+    "Analytics Architect",
+    "Solution Data Architect"
+  ],
+  "target_career_levels": [
+    "Senior",
+    "Principal",
+    "Staff"
+  ],
+  "preferred_work_modes": [
+    "Remote",
+    "Hybrid"
+  ],
+  "focus_areas": [
+    "Platform",
+    "Analytics",
+    "Data"
+  ],
+  "preferred_locations": [
+    "Remote",
+    "Chicago"
+  ],
+  "leadership_preference": [
+    "Strategic individual contributor",
+    "Small team leadership"
+  ],
+  "travel_max": "Low to moderate"
+}
+
 ## GET /analytics/career-timeline
 
 ## Purpose
@@ -468,6 +678,62 @@ None
 - Useful for bar charts, ranking tables, or “most applied skills” cards.
 - project_count is derived from project_skill relationships.
 
+## GET /analytics/skill-projects/{skill_id}
+
+### Purpose
+-------
+Returns projects associated with a specific skill to support drilldown
+from skill utilization views.
+
+### Example
+-------
+GET /analytics/skill-projects/5
+
+### Path Parameters
+| Parameter | Type    | Description                              |
+| --------- | ------- | ---------------------------------------- |
+| skill_id  | integer | Unique identifier of the requested skill |
+
+### Response Structure
+| Field                 | Type    | Description                               |
+| --------------------- | ------- | ----------------------------------------- |
+| skill_id              | integer | Skill identifier                          |
+| skill_name            | string  | Skill name                                |
+| project_count         | integer | Total number of related projects          |
+| projects              | array   | Projects associated with the skill        |
+| projects.project_id   | integer | Unique project identifier                 |
+| projects.name         | string  | Project title                             |
+| projects.domain       | string  | Project domain                            |
+| projects.value        | string  | Project impact description                |
+| projects.experience_id| integer | Related experience record                 |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+{
+  "skill_id": 5,
+  "skill_name": "Metadata Architecture",
+  "project_count": 2,
+  "projects": [
+    {
+      "project_id": 1003,
+      "name": "Metadata Governance Framework",
+      "domain": "Governance / Architecture",
+      "value": "Defined metadata structures and governance patterns to improve analytics scalability and consistency.",
+      "experience_id": 1
+    },
+    {
+      "project_id": 1011,
+      "name": "Semantic Model Enablement",
+      "domain": "Analytics Architecture",
+      "value": "Improved downstream reporting and trust through structured semantic modeling patterns.",
+      "experience_id": 2
+    }
+  ]
+}
+
 ## GET /analytics/feedback-themes
 
 ## Purpose
@@ -514,6 +780,54 @@ GET /analytics/feedback-themes?source_type=peer&entity_type=experience
 ### Notes
 - Useful for bar charts, donut charts, or filterable feedback analysis.
 - Supports optional filtering by source_type and entity_type.
+
+## GET /analytics/feedback-theme-details/{theme}
+
+### Purpose
+-------
+Returns detailed feedback entries for a specific feedback theme.
+
+### Example
+-------
+GET /analytics/feedback-theme-details/communication
+
+### Path Parameters
+| Parameter | Type   | Description                           |
+| --------- | ------ | ------------------------------------- |
+| theme     | string | Feedback theme to retrieve in detail  |
+
+### Response Structure
+| Field               | Type   | Description                                  |
+| ------------------- | ------ | -------------------------------------------- |
+| theme               | string | Requested feedback theme                     |
+| entries             | array  | Matching feedback entries                    |
+| entries.source_type | string | Source classification for the feedback entry |
+| entries.entity_type | string | Entity type associated with the feedback     |
+| entries.entity_id   | integer| Identifier of the associated entity          |
+| entries.quote       | string | Detailed feedback quote or statement         |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+{
+  "theme": "communication",
+  "entries": [
+    {
+      "source_type": "peer_feedback",
+      "entity_type": "experience",
+      "entity_id": 1,
+      "quote": "Consistently translates complex concepts into actionable guidance."
+    },
+    {
+      "source_type": "manager_feedback",
+      "entity_type": "project",
+      "entity_id": 1005,
+      "quote": "Strong communicator across technical and business stakeholders."
+    }
+  ]
+}
 
 ## GET /analytics/projects-by-domain
 
@@ -590,6 +904,64 @@ None
 ### Notes
 - Useful for comparing project density across roles.
 - Supports “projects by role” or “experience contribution” visualizations.
+
+## GET /analytics/experience-projects/{experience_id}
+
+### Purpose
+-------
+Returns projects associated with a specific experience record to support
+drilldown from projects-by-experience views.
+
+### Example
+-------
+GET /analytics/experience-projects/1
+
+### Path Parameters
+| Parameter     | Type    | Description                                   |
+| ------------- | ------- | --------------------------------------------- |
+| experience_id | integer | Unique identifier of the requested experience |
+
+### Response Structure
+| Field                  | Type    | Description                              |
+| ---------------------- | ------- | ---------------------------------------- |
+| experience_id          | integer | Experience identifier                    |
+| company                | string  | Organization name                        |
+| role                   | string  | Role title                               |
+| project_count          | integer | Total number of related projects         |
+| projects               | array   | Projects associated with the experience  |
+| projects.project_id    | integer | Unique project identifier                |
+| projects.name          | string  | Project title                            |
+| projects.domain        | string  | Project domain                           |
+| projects.value         | string  | Project impact description               |
+| projects.link          | string/null | Optional reference link             |
+
+### Query Parameters
+None
+
+### Example Response
+---------------------
+{
+  "experience_id": 1,
+  "company": "SAP",
+  "role": "Senior Analytics Architect, Product Success",
+  "project_count": 3,
+  "projects": [
+    {
+      "project_id": 1001,
+      "name": "Deployment Services SKU Separation & Monetization Model",
+      "domain": "Platform Strategy / Monetization",
+      "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model.",
+      "link": null
+    },
+    {
+      "project_id": 1002,
+      "name": "Fieldglass Integration Accelerators & Integration Objects",
+      "domain": "Integration Enablement",
+      "value": "Engineered accelerators and integration objects to reduce implementation effort and speed deployment migration.",
+      "link": null
+    }
+  ]
+}
 
 ## GET /insights
 
