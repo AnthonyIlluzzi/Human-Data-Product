@@ -1,5 +1,9 @@
 # Human Data Product API
-http://127.0.0.1:8000/docs
+https://human-data-product-api.onrender.com/docs
+
+### Production Access
+--------
+Live backend service hosted on Render.
 
 ## Overview
 --------
@@ -9,7 +13,7 @@ skills, and architectural identity through structured endpoints.
 
 ### Base URL
 --------
-http://localhost:8000
+https://human-data-product-api.onrender.com
 
 ## Endpoint List
 
