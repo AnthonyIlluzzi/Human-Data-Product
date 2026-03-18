@@ -484,7 +484,7 @@
     "name": "Human Data Product (Portfolio)",
     "domain": "Data Product / Portfolio Engineering",
     "value": "Built a public-facing 'data product' version of professional experience: curated dataset → SQLite → API + SQL query console + insight cards.",
-    "link": "https://anthonyilluzzi.com"
+    "link": "https://human-data-product-web.onrender.com/"
   },
   {
     "project_id": 9002,
