@@ -746,10 +746,10 @@ Returns grouped feedback theme counts for qualitative pattern analysis.
 
 ### Example
 -------
-GET /analytics/feedback-themes
-GET /analytics/feedback-themes?source_type=manager
-GET /analytics/feedback-themes?entity_type=experience
-GET /analytics/feedback-themes?source_type=peer&entity_type=experience
+- GET /analytics/feedback-themes
+- GET /analytics/feedback-themes?source_type=manager
+- GET /analytics/feedback-themes?entity_type=experience
+- GET /analytics/feedback-themes?source_type=peer&entity_type=experience
 
 ### Response Structure
 
@@ -793,7 +793,7 @@ Returns detailed feedback entries for a specific feedback theme.
 
 ### Example
 -------
-GET /analytics/feedback-theme-details/communication
+GET /analytics/feedback-theme-details/architecture
 
 ### Path Parameters
 | Parameter | Type   | Description                           |
@@ -801,37 +801,58 @@ GET /analytics/feedback-theme-details/communication
 | theme     | string | Feedback theme to retrieve in detail  |
 
 ### Response Structure
-| Field               | Type   | Description                                  |
-| ------------------- | ------ | -------------------------------------------- |
-| theme               | string | Requested feedback theme                     |
-| entries             | array  | Matching feedback entries                    |
-| entries.source_type | string | Source classification for the feedback entry |
-| entries.entity_type | string | Entity type associated with the feedback     |
-| entries.entity_id   | integer| Identifier of the associated entity          |
-| entries.quote       | string | Detailed feedback quote or statement         |
+| Field                    | Type   | Description                                                                    |
+| ------------------------ | ------ | ------------------------------------------------------------------------------ |
+| theme                    | string | Requested feedback theme                                                       |
+| entries                  | array  | Matching feedback entries                                                      |
+| entries.entity_type      | string | Entity type associated with the feedback                                       |
+| entries.entity_id        | integer| Identifier of the associated entity                                            |
+| entries.source_type      | string | Source classification for the feedback entry                                   |
+| entries.quote            | string | Detailed feedback quote or statement                                           |
+| entries.year             | string | feedback year                                                                  |
+| entries.viz_display_flag | boolean| Indicates whether the record is included in the curated default drilldown view |
+| entries.viz_display_rank | string | Rank order within the curated subset; null for non-curated records             |
 
 ### Query Parameters
 None
 
 ### Example Response
 ---------------------
-{
-  "theme": "communication",
+  "theme": "architecture",
   "entries": [
     {
-      "source_type": "peer_feedback",
+      "feedback_id": 40,
       "entity_type": "experience",
       "entity_id": 1,
-      "quote": "Consistently translates complex concepts into actionable guidance."
+      "source_type": "manager",
+      "quote": "Your contributions in the pursuit of...",
+      "theme": "architecture",
+      "year": 2024,
+      "viz_display_flag": 1,
+      "viz_display_rank": 1
     },
     {
-      "source_type": "manager_feedback",
-      "entity_type": "project",
-      "entity_id": 1005,
-      "quote": "Strong communicator across technical and business stakeholders."
+      "feedback_id": 106,
+      "entity_type": "experience",
+      "entity_id": 4,
+      "source_type": "customer",
+      "quote": "My colleague and I have worked with your organization...",
+      "theme": "architecture",
+      "year": 2017,
+      "viz_display_flag": 1,
+      "viz_display_rank": 2
     }
-  ]
-}
+]
+
+### Notes
+#### Curated drilldown behavior
+
+Theme detail responses now include presentation metadata used by the frontend.
+
+- Records marked with `viz_display_flag = 1` are intended for default drilldown display
+- `viz_display_rank` determines curated ordering
+- The API still returns the full set of records for the selected theme
+- Records are returned curated-first to support the default UI experience
 
 ## GET /analytics/projects-by-domain
 
