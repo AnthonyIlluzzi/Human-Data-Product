@@ -1,5 +1,7 @@
 # Human Data Product
 
+🔗 **Live Product:** https://human-data-product-web.onrender.com/
+
 This project models my professional career as a **real data product**.
 
 Instead of presenting experience as a static resume, it structures career data into a system that can be **queried, consumed, and explored** — just like modern data platforms used in enterprise environments.
