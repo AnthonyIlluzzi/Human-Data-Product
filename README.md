@@ -30,6 +30,26 @@ The dataset is exposed through multiple consumption layers:
 
 These interfaces simulate how modern data products are consumed across analytical and operational use cases.
 
+### Curated Feedback System
+
+The feedback insights layer includes a curated feedback display model designed to improve signal clarity without hiding the underlying dataset.
+
+Each feedback record can include:
+
+- `viz_display_flag` — indicates whether the record is part of the curated highlight set
+- `viz_display_rank` — defines display order within the curated subset
+
+#### Behavior
+
+- Theme counts still include all feedback records
+- The drilldown view defaults to the top curated records for a theme
+- Users can toggle to view all records for full transparency
+- Curated records are selected to prioritize:
+  - quote quality and specificity
+  - source diversity where available
+  - recency when it strengthens the narrative
+
+This preserves analytical integrity while improving usability and narrative clarity in the Insights workspace.
 ---
 
 ## Architecture
