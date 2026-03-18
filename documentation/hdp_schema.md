@@ -106,6 +106,8 @@ erDiagram
     string  quote
     string  theme
     int    year
+    boolean  viz_display_flag
+    int    viz_display_rank
   }
 
   ROLE_PREFERENCE {
@@ -139,7 +141,7 @@ erDiagram
 The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid.
 This diagram is the authoritative visual reference for the Human Data Product schema.
 
-![Human Data Product ERD](images/Human_Data_Product_ERD_v3.svg)
+![Human Data Product ERD](images/Human_Data_Product_ERD.png)
 ---
 ## Database Architecture
 
@@ -246,18 +248,28 @@ Contact information exposed through API
 
 ### feedback
 Peer or leadership feedback tied to a specific experience
-| Column      | Type    | Key | Notes                                                                        |
-| ----------- | ------- | --- | ---------------------------------------------------------------------------- |
-| feedback_id | INTEGER | PK  | Unique identifier                                                            |
-| entity_type | TEXT    |     | Target entity type (experience, education, project, credential)              |
-| entity_id   | INTEGER |     | Target entity id (validated by loader; not a DB-enforced FK)                 |
-| source_type | TEXT    |     | Source of feedback (manager, peer, stakeholder, linkedin)                    |
-| quote       | TEXT    |     | Feedback quote (consider trimming names/private details)                     |
-| theme       | TEXT    |     | Theme (architecture, execution, leadership, collaboration, growth, strategy) |
-| year        | INTEGER |     | Year feedback was given                                                      |
+| Column           | Type              | Key | Notes                                                                         |
+| -----------      | -------           | --- | ----------------------------------------------------------------------------- |
+| feedback_id      | INTEGER           | PK  | Unique identifier                                                             |
+| entity_type      | TEXT              |     | Target entity type (experience, education, project, credential)               |
+| entity_id        | INTEGER           |     | Target entity id (validated by loader; not a DB-enforced FK)                  |
+| source_type      | TEXT              |     | Source of feedback (manager, peer, stakeholder, linkedin)                     |
+| quote            | TEXT              |     | Feedback quote (consider trimming names/private details)                      |
+| theme            | TEXT              |     | Theme (architecture, execution, leadership, collaboration, growth, strategy)  |
+| year             | INTEGER           |     | Year feedback was given                                                       |
+| viz_display_flag | INTEGER / BOOLEAN |     |Indicates whether the record is included in the curated default drilldown view |
+| viz_display_rank | INTEGER           |     | Rank order within the curated subset; null for non-curated records            |
 
 **entity_type** should be one of: experience, education, project, credential
 entity_id must exist in the corresponding table (enforced in your load_data.py validation step)
+
+#### Curated feedback presentation metadata
+
+The feedback entity includes optional presentation metadata used by the frontend drilldown experience.
+
+- `viz_display_flag = 1` identifies records shown by default in theme drilldowns
+- `viz_display_rank` controls the order of curated records
+- All feedback records still participate in aggregate theme counts and analytics
 
 ### product_metadata
 Metadata describing the Human Data Product
