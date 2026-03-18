@@ -545,7 +545,7 @@ function renderFeedbackThemes(chartId, legendId, detailId, items) {
             value: item.count
           }));
 
-          const showEntries = (sourceFilter = null, activeIndex = null) => {
+        const showEntries = (sourceFilter = null, activeIndex = null, showAll = false) => {
             const filtered = sourceFilter
               ? entries.filter(entry => entry.source_type === sourceFilter)
               : entries;
@@ -557,7 +557,11 @@ function renderFeedbackThemes(chartId, legendId, detailId, items) {
                 ? `${titleCase(sourceFilter.replaceAll("_", " "))} • ${filtered.length} entries`
                 : `${entries.length} feedback entries`,
               entries: filtered,
-              onBack: resetThemeView
+              showAll,
+              onBack: resetThemeView,
+              onToggleShowAll: (nextShowAll) => {
+                showEntries(sourceFilter, activeIndex, nextShowAll);
+              }
             });
 
             renderDonutView({
@@ -684,7 +688,23 @@ function renderProjectDrilldown(container, { eyebrow, title, meta, chips = [], p
   `;
 }
 
-function renderFeedbackDetail(container, { eyebrow, title, subtitle, entries = [], onBack }) {
+function renderFeedbackDetail(
+  container,
+  {
+    eyebrow,
+    title,
+    subtitle,
+    entries = [],
+    onBack,
+    showAll = false,
+    onToggleShowAll = null
+  }
+) {
+  const curatedData = splitCuratedFeedbackEntries(entries);
+  const curatedEntries = curatedData.curated;
+  const visibleEntries = showAll || curatedEntries.length === 0 ? entries : curatedEntries;
+  const showingCurated = !showAll && curatedEntries.length > 0;
+
   container.innerHTML = `
     <div class="detail-toolbar">
       <div>
@@ -694,8 +714,18 @@ function renderFeedbackDetail(container, { eyebrow, title, subtitle, entries = [
       <button type="button" class="detail-back-btn">Back</button>
     </div>
     <p class="detail-note">${escapeHtml(subtitle)}</p>
+    ${curatedEntries.length && entries.length > curatedEntries.length ? `
+      <div class="detail-toolbar" style="margin-bottom: 10px;">
+        <div class="detail-eyebrow">
+          ${showingCurated ? `Showing curated highlights (${curatedEntries.length})` : `Showing all entries (${entries.length})`}
+        </div>
+        <button type="button" class="detail-back-btn detail-toggle-btn">
+          ${showingCurated ? `Show all (${entries.length})` : "Show curated"}
+        </button>
+      </div>
+    ` : ""}
     <div class="detail-card-list">
-      ${entries.length ? entries.map(entry => `
+      ${visibleEntries.length ? visibleEntries.map(entry => `
         <div class="feedback-quote-card">
           <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
           <p>${escapeHtml(entry.quote || "")}</p>
@@ -705,6 +735,9 @@ function renderFeedbackDetail(container, { eyebrow, title, subtitle, entries = [
   `;
 
   container.querySelector(".detail-back-btn")?.addEventListener("click", onBack);
+  container.querySelector(".detail-toggle-btn")?.addEventListener("click", () => {
+    onToggleShowAll?.(!showAll);
+  });
 }
 
 function renderEmptyDetailState(container, eyebrow, title, body) {
@@ -779,6 +812,23 @@ function aggregateBy(items, key) {
   return Array.from(map.entries())
     .map(([entryKey, count]) => ({ key: entryKey, count }))
     .sort((a, b) => b.count - a.count);
+}
+
+function splitCuratedFeedbackEntries(entries = []) {
+  const curated = entries
+    .filter(entry => entry.viz_display_flag)
+    .sort((a, b) => {
+      const rankA = a.viz_display_rank ?? 999;
+      const rankB = b.viz_display_rank ?? 999;
+      if (rankA !== rankB) return rankA - rankB;
+      if ((b.year ?? 0) !== (a.year ?? 0)) return (b.year ?? 0) - (a.year ?? 0);
+      return (b.feedback_id ?? 0) - (a.feedback_id ?? 0);
+    });
+
+  return {
+    curated,
+    all: entries
+  };
 }
 
 function formatMonthYear(value) {

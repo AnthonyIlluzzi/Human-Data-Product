@@ -510,10 +510,26 @@ def get_feedback_theme_details(theme: str):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT feedback_id, entity_type, entity_id, source_type, quote, theme, year
+            SELECT
+                feedback_id,
+                entity_type,
+                entity_id,
+                source_type,
+                quote,
+                theme,
+                year,
+                viz_display_flag,
+                viz_display_rank
             FROM feedback
             WHERE theme = ?
-            ORDER BY year DESC, feedback_id
+            ORDER BY
+                COALESCE(viz_display_flag, 0) DESC,
+                CASE
+                    WHEN COALESCE(viz_display_flag, 0) = 1 THEN COALESCE(viz_display_rank, 999)
+                    ELSE 999
+                END ASC,
+                year DESC,
+                feedback_id DESC
         """, (theme,))
         entries = rows_to_dicts(cursor.fetchall())
 

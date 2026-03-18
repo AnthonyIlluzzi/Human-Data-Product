@@ -216,7 +216,17 @@ def validate_dataset(data: dict[str, Any]) -> None:
     )
     require_keys(
         data["feedback"],
-        {"feedback_id", "entity_type", "entity_id", "source_type", "quote", "theme", "year"},
+        {
+            "feedback_id",
+            "entity_type",
+            "entity_id",
+            "source_type",
+            "quote",
+            "theme",
+            "year",
+            "viz_display_flag",
+            "viz_display_rank",
+        },
         "feedback",
     )
 
@@ -341,7 +351,9 @@ def create_tables(conn: sqlite3.Connection) -> None:
             source_type TEXT,
             quote TEXT,
             theme TEXT,
-            year INTEGER
+            year INTEGER,
+            viz_display_flag BOOLEAN,
+            viz_display_rank INTEGER
         );
         """
     )
@@ -479,7 +491,17 @@ def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
     insert_many(
         conn,
         "feedback",
-        ["feedback_id", "entity_type", "entity_id", "source_type", "quote", "theme", "year"],
+        [
+            "feedback_id",
+            "entity_type",
+            "entity_id",
+            "source_type",
+            "quote",
+            "theme",
+            "year",
+            "viz_display_flag",
+            "viz_display_rank",
+        ],
         data["feedback"],
     )
 
