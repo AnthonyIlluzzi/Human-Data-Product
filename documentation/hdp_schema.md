@@ -9,6 +9,13 @@ Key design principles:
 - Feedback and principles support insight generation
 - Metadata enables the site to behave like a real data product catalog****
 
+## Modeling Approach
+
+- Normalized relational structure using SQLite
+- Entity-based modeling (experience, projects, skills)
+- Derived analytical views created via SQL
+- Designed for both API access and analytical querying
+
 ### Key Relationships
 
 - experience → project
