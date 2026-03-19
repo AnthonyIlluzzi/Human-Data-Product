@@ -895,11 +895,19 @@ body {
   display: none;
   width: 100%;
   max-width: var(--max-content);
+  min-width: 0;
 }
 
 .workspace-panel.active {
   display: grid;
   gap: 14px;
+}
+
+.workspace,
+.workspace-panel,
+.tab-panel,
+.card {
+  min-width: 0;
 }
 
 /* Overview page spacing override */
@@ -1350,6 +1358,10 @@ body {
 }
 
 .output-box {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   white-space: pre;
   background: #f8fafc;
   min-height: 170px;
@@ -1358,7 +1370,7 @@ body {
   overflow-y: auto;
   line-height: 1.5;
   tab-size: 2;
-  max-width: 100%;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
 }
 
