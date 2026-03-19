@@ -1,7 +1,10 @@
 # Human Data Product API
+
 https://human-data-product-api.onrender.com/docs
 
-### Production Access
+Production Base URL:
+https://human-data-product-api.onrender.com
+
 --------
 Live backend service hosted on Render.
 
@@ -10,10 +13,6 @@ Live backend service hosted on Render.
 This API exposes curated professional data representing Anthony Illuzzi's
 Human Data Product. It allows consumers to query experience, projects,
 skills, and architectural identity through structured endpoints.
-
-### Base URL
---------
-https://human-data-product-api.onrender.com
 
 ## Endpoint List
 
@@ -76,9 +75,6 @@ https://human-data-product-api.onrender.com
 | Product_Metadata | Product-level metadata used for status, versioning, and health            |
 
 ## GET /health
-
-### Purpose
--------
 Confirms the API service is operational.
 
 ### Response Structure
@@ -98,9 +94,6 @@ None
 }
 
 ## GET /product-metadata
-
-### Purpose
--------
 Returns high-level metadata for the Human Data Product, including status,
 type, version, refresh date, owner, and record counts.
 
@@ -133,9 +126,6 @@ None
 }
 
 ## GET /contact-info
-
-### Purpose
--------
 Returns contact channels associated with the Human Data Product owner.
 
 ### Response Structure
@@ -171,9 +161,6 @@ None
 Note: Response may contain multiple records.
 
 ## GET /summary
-
-### Purpose
--------
 Returns a high-level summary of the Human Data Product including
 experience count, project count, skill count, and current role.
 
@@ -222,9 +209,6 @@ None
 Note: Response may contain multiple records.
 
 ## GET /identity
-
-### Purpose
--------
 Returns the architectural identity of the Human Data Product owner.
 
 ### Response Structure
@@ -258,9 +242,6 @@ None
 
 
 ## GET /experiences
-
-### Purpose
--------
 Returns structured career experience entries.
 
 ### Response Structure
@@ -309,9 +290,6 @@ None
 Note: Response may contain multiple records.
 
 ## GET /projects
-
-### Purpose
--------
 Returns all projects associated with the Human Data Product.
 
 ### Response Structure
@@ -351,9 +329,6 @@ None
 Note: Response may contain multiple records.
 
 ## GET /projects/{project_id}
-
-## Purpose
--------
 Returns detailed information about a specific project
 including associated skills.
 
@@ -401,9 +376,6 @@ None
 Note: Response may contain multiple records.
 
 ## GET /skills
-
-### Purpose
--------
 Returns all skills associated with the Human Data Product.
 
 ### Example
@@ -442,9 +414,6 @@ GET /skills?category=architecture
 Note: Response may contain multiple records.
 
 ## GET /search/projects?q={keyword}
-
-## Purpose
--------
 Searches projects by keyword.
 
 Example
@@ -498,9 +467,6 @@ GET /search/projects?q=analytics
 Note: Response may contain multiple records.
 
 ## GET /role-preferences
-
-### Purpose
--------
 Returns structured role preferences for future opportunities, including
 dimension, category, value, and priority.
 
@@ -542,9 +508,6 @@ dimension, category, value, and priority.
 Note: Response may contain multiple records.
 
 ## GET /target-opportunity
-
-### Purpose
--------
 Returns the synthesized target opportunity profile for the next best-fit role.
 
 ### Response Structure
@@ -597,9 +560,6 @@ None
 }
 
 ## GET /analytics/career-timeline
-
-## Purpose
--------
 Returns structured experience records formatted for timeline-style visualization of career progression.
 
 ### Response Structure
@@ -641,9 +601,6 @@ None
 - Ordered by sort_order ascending.
 
 ## GET /analytics/skill-utilization
-
-## Purpose
--------
 Returns skill usage metrics showing how frequently each skill is associated with projects.
 
 ### Response Structure
@@ -683,9 +640,6 @@ None
 - project_count is derived from project_skill relationships.
 
 ## GET /analytics/skill-projects/{skill_id}
-
-### Purpose
--------
 Returns projects associated with a specific skill to support drilldown
 from skill utilization views.
 
@@ -739,9 +693,6 @@ None
 }
 
 ## GET /analytics/feedback-themes
-
-## Purpose
--------
 Returns grouped feedback theme counts for qualitative pattern analysis.
 
 ### Example
@@ -786,9 +737,6 @@ Returns grouped feedback theme counts for qualitative pattern analysis.
 - Supports optional filtering by source_type and entity_type.
 
 ## GET /analytics/feedback-theme-details/{theme}
-
-### Purpose
--------
 Returns detailed feedback entries for a specific feedback theme.
 
 ### Example
@@ -855,9 +803,6 @@ Theme detail responses now include presentation metadata used by the frontend.
 - Records are returned curated-first to support the default UI experience
 
 ## GET /analytics/projects-by-domain
-
-## Purpose
--------
 Returns project counts grouped by domain for domain concentration analysis.
 
 ### Response Structure
@@ -892,9 +837,6 @@ None
 - Helps identify concentration of work across project areas.
 
 ## GET /analytics/projects-by-experience
-
-## Purpose
--------
 Returns project counts grouped by experience record to show how project activity maps across career roles.
 
 ### Response Structure
@@ -931,9 +873,6 @@ None
 - Supports “projects by role” or “experience contribution” visualizations.
 
 ## GET /analytics/experience-projects/{experience_id}
-
-### Purpose
--------
 Returns projects associated with a specific experience record to support
 drilldown from projects-by-experience views.
 
@@ -989,9 +928,6 @@ None
 }
 
 ## GET /insights
-
-## Purpose
--------
 Returns curated analytics and narrative insight cards derived from the Human Data Product.
 
 ### Response Structure
