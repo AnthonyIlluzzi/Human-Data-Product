@@ -745,9 +745,10 @@ LIMIT 1;"
 		  </p>
 
           <div class="api-input-row">
-            <input id="api-endpoint-input" type="text" value="/summary" />
-            <button class="btn-primary" id="call-api-btn">Execute</button>
-          </div>
+            <div class="api-method">GET</div>
+  			<input type="text" id="api-input" placeholder="/summary" />
+		    <button class="btn-primary" onclick="executeApi()">Execute</button>
+		  </div>
 
 <div class="api-shortcuts api-shortcuts-matrix">
   <div class="endpoint-row">
