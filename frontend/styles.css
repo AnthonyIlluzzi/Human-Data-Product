@@ -301,8 +301,7 @@ body {
   border-color: #d9e6f6;
 }
 
-.definition-text,
-.human-context-text {
+.definition-text {
   margin: 2px 0 0;
   line-height: 1.6;
   color: var(--muted);
@@ -2396,17 +2395,13 @@ body {
 }
 
 @media (max-width: 980px) {
-  .definition-human-grid {
+  .definition-catalog-grid {
     grid-template-columns: 1fr;
   }
 
   .definition-card,
-  .human-context-card {
+  .catalog-section-card-highlight {
     padding: 16px 18px;
-  }
-
-  .definition-points {
-    padding-top: 0;
   }
 }
 
@@ -2501,9 +2496,9 @@ body {
     margin: 0 0 18px;
   }
 
-  .definition-card {
-    padding: 16px;
-    gap: 14px;
+  .definition-card,
+.catalog-section-card-highlight {
+  padding: 16px;
   }
 
 /* --- Mobile Output Readability --- */
