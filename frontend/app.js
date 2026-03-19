@@ -35,6 +35,10 @@ function bindCatalogNavigation() {
   document.getElementById("open-product-btn")?.addEventListener("click", () => {
     document.getElementById("catalog-page").classList.add("hidden");
     document.getElementById("product-page").classList.remove("hidden");
+
+    openWorkspacePanel("overview-panel", null, {
+      scrollBehavior: "auto"
+    });
   });
 
   document.getElementById("back-to-catalog-btn")?.addEventListener("click", () => {
@@ -76,13 +80,18 @@ function bindSideNavigation() {
   });
 }
 
-function openWorkspacePanel(panelId, tabId = null) {
+function openWorkspacePanel(panelId, tabId = null, options = {}) {
   if (!panelId) return;
+
+  const {
+    scrollBehavior = "smooth"
+  } = options;
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   document.querySelectorAll(".workspace-panel").forEach(panel => panel.classList.remove("active"));
 
-  document.getElementById(panelId)?.classList.add("active");
+  const activePanel = document.getElementById(panelId);
+  activePanel?.classList.add("active");
 
   const matchingNav = Array.from(document.querySelectorAll(".nav-btn"))
     .find(btn => btn.dataset.panel === panelId);
@@ -92,6 +101,22 @@ function openWorkspacePanel(panelId, tabId = null) {
   if (tabId) {
     activateTab(tabId);
   }
+
+  requestAnimationFrame(() => {
+    scrollPanelToTop(activePanel, scrollBehavior);
+  });
+}
+
+function scrollPanelToTop(panel, behavior = "smooth") {
+  if (!panel) return;
+
+  const target = panel.querySelector(".panel-header") || panel;
+  const top = window.scrollY + target.getBoundingClientRect().top - 12;
+
+  window.scrollTo({
+    top: Math.max(top, 0),
+    behavior
+  });
 }
 
 function bindTabs() {
