@@ -2336,8 +2336,6 @@ body {
 }
 
 @media (max-width: 980px) {
-
-@media (max-width: 980px) {
   .definition-human-grid {
     grid-template-columns: 1fr;
   }
