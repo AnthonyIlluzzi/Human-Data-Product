@@ -20,57 +20,45 @@
         </div>
 
         <nav class="landing-nav">
-          <a href="#catalog-section" class="landing-link active-link">Catalog</a>
-          <button class="landing-link landing-link-button" data-modal-target="about-modal">About Project</button>
+          <a href="#definition-section" class="landing-link active-link">Catalog</a>
+          <button class="landing-link landing-link-button" data-modal-target="about-modal">HDP Project</button>
           <button class="landing-link landing-link-button" data-modal-target="contact-modal">Contact</button>
         </nav>
       </aside>
 
       <main class="landing-content">
-        <section id="landing-hero" class="landing-hero">
-                    <div class="landing-hero-text">
-  <div class="hero-eyebrow">Human Data Product</div>
+<section id="landing-hero" class="landing-hero">
+  <div class="landing-hero-text">
+    <div class="hero-eyebrow">Human Data Product</div>
 
-  <h1>Modeling my professional career as a real data product.</h1>
+    <h1>This isn’t a resume. It’s a working data product.</h1>
 
-  <p class="hero-lead">
-    This project explores a simple idea:
-    <em>What if my professional experience was structured, queryable,
-    and consumable like a modern data platform?</em>
-  </p>
+    <p class="hero-lead">
+      Built to demonstrate how professional data can be structured, queried,
+      and turned into insight — like modern data platforms.
+    </p>
 
-  <p>
-    Instead of presenting experience as a static resume, this system models
-    career history as a <strong>structured dataset</strong> with APIs, analytical views,
-    and insight generation.
-  </p>
-  <p class="hero-support">
-    It demonstrates how a human-centered dataset can behave like a real data product.
-  </p>
-  <div class="hero-feature-row">
-    <span class="hero-feature-label">Features</span>
-    <div class="hero-feature-pills">
-      <span class="tag-chip hero-chip">Structured Dataset</span>
-      <span class="tag-chip hero-chip">Queryable SQL</span>
-      <span class="tag-chip hero-chip">REST API Access</span>
-      <span class="tag-chip hero-chip">Derived Insights</span>
-      <span class="tag-chip hero-chip">Metadata Catalog</span>
-      <span class="tag-chip hero-chip">Schema Documentation</span>
+    <div class="hero-identity">
+      Anthony Illuzzi · Chicago Area · Data Platform Architect
+    </div>
+
+    <div class="hero-cta-row">
+      <button class="btn-secondary hero-human-btn" data-modal-target="contact-modal">
+        Learn more about Anthony
+      </button>
     </div>
   </div>
 
-</div>
+  <div class="landing-hero-image">
+    <img
+      src="assets/data_flow.png"
+      alt="Flowing data particles representing structured information and insight"
+    />
+  </div>
+</section>
 
-<div class="landing-hero-image">
-  <img
-    src="assets/data_flow.png"
-    alt="Flowing data particles representing structured information and insight"
-  />
-</div>
-        </section>
-
-		<section id="definition-section">
-  <div class="definition-human-grid">
+<section id="definition-section">
+  <div class="definition-catalog-grid">
     <div class="definition-card">
       <span class="section-kicker">Data Product Definition</span>
       <p class="definition-text">
@@ -81,167 +69,158 @@
       </p>
     </div>
 
-    <div class="human-context-card">
-      <span class="section-kicker">The Human Behind the Data</span>
+    <div class="catalog-section-card catalog-section-card-highlight">
+      <div class="section-header compact-header">
+        <h2>Data Product Catalog</h2>
+        <p>Browse available data products and open a product workspace.</p>
+      </div>
 
-      <p class="human-context-text">
-        Anthony lives in Libertyville, IL with his fiancé Bailey and his two sons, Vinny (3) and Dominic (1).
-      </p>
+      <div class="catalog-grid">
+        <article class="product-tile active">
+          <div class="tile-top">
+            <span class="tile-type">Data Product</span>
+            <span class="status-pill">
+              <span class="status-dot"></span> ACTIVE
+            </span>
+          </div>
 
-      <p class="human-context-text human-context-text-secondary">
-        Professionally, Anthony works as a data and analytics architect focused on turning complex systems into structured, scalable platforms.
-		Outside of work, he enjoys getting outdoors with his family, trying new local restaurants, watching hockey, 
-		learning new ideas, and exploring creative ways to integrate technology with the human experience.
-      </p>
+          <div class="tile-content">
+            <h2>Anthony Illuzzi</h2>
 
-      <div class="human-context-chips">
-        <span class="tag-chip human-context-chip">Chicago Area</span>
-        <span class="tag-chip human-context-chip">Father</span>
-        <span class="tag-chip human-context-chip">Foodie</span>
-        <span class="tag-chip human-context-chip">Curious Builder</span>
+            <p class="product-summary">
+              A working portfolio demonstration that models professional experience as a
+              consumable data product with structured entities, API interfaces, guided query
+              exploration, and derived analytical insights.
+            </p>
+
+            <p class="product-summary secondary">
+              Designed to showcase data architecture, platform thinking, and human-centered
+              data product design through a real interactive system.
+            </p>
+          </div>
+
+          <div class="tile-footer">
+            <span id="catalog-version-text">Version 1.0.0</span>
+            <button id="open-product-btn" class="btn-primary">Open Product</button>
+          </div>
+        </article>
+
+        <article class="product-tile placeholder">
+          <div class="tile-top">
+            <span class="tile-type">Catalog Placeholder</span>
+            <span class="status-pill muted">PLANNED</span>
+          </div>
+
+          <div class="tile-content">
+            <h2>More Products Coming</h2>
+
+            <p>
+              Reserved placeholder for future portfolio-grade data products.
+            </p>
+          </div>
+
+          <div class="tile-footer">
+            <span>Future Phase</span>
+          </div>
+        </article>
       </div>
     </div>
   </div>
 </section>
-
-        <section id="catalog-section" class="catalog-section-shell">
-  <div class="catalog-section-card">
-    <div class="section-header compact-header">
-      <h2>Data Product Catalog</h2>
-      <p>Browse available data products and open a product workspace.</p>
-    </div>
-
-    <div class="catalog-grid">
-      <article class="product-tile active">
-        <div class="tile-top">
-          <span class="tile-type">Data Product</span>
-          <span class="status-pill">
-            <span class="status-dot"></span> ACTIVE
-          </span>
-        </div>
-
-        <div class="tile-content">
-  <h2>Anthony Illuzzi</h2>
-
-  <p class="product-summary">
-    A working portfolio demonstration that models professional experience as a
-    consumable data product with structured entities, API interfaces, guided query
-    exploration, and derived analytical insights.
-  </p>
-
-  <p class="product-summary secondary">
-    Designed to showcase data architecture, platform thinking, and human-centered
-    data product design through a real interactive system.
-  </p>
-</div>
-
-<div class="tile-footer">
-  <span id="catalog-version-text">Version 1.0.0</span>
-  <button id="open-product-btn" class="btn-primary">Open Product</button>
-</div>
-      </article>
-
-      <article class="product-tile placeholder">
-        <div class="tile-top">
-          <span class="tile-type">Catalog Placeholder</span>
-          <span class="status-pill muted">PLANNED</span>
-        </div>
-
-        <div class="tile-content">
-          <h2>More Products Coming</h2>
-
-          <p>
-            Reserved placeholder for future portfolio-grade data products.
-          </p>
-        </div>
-
-                <div class="tile-footer">
-          <span>Future Phase</span>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-      </main>
-    </div>
-  </section>
 
   <!-- Landing Modals -->
   <div id="about-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <div class="modal-header">
-        <h2>About Project</h2>
+        <h2>About HDP Project</h2>
         <button class="modal-close" data-close-modal="about-modal">×</button>
       </div>
       <div class="modal-body">
-        <p>
-          This project was built to demonstrate data product thinking across
-          modeling, transformation, API exposure, documentation, analytics,
-          opportunity targeting, and frontend consumption.
-        </p>
-        <p>
-          It treats professional experience not as static resume content, but as
-          a structured system that can be queried, explored, interpreted, and aligned
-          to future opportunities.
-        </p>
-        <p>
-          <a href="https://github.com/AnthonyIlluzzi/Human-Data-Product/blob/main/README.md" target="_blank" rel="noopener noreferrer">
-  Overview
-</a>
-        </p>
-		  <p>
-          <a href="https://github.com/AnthonyIlluzzi/Human-Data-Product" target="_blank" rel="noopener noreferrer">
-            View GitHub Repository
-          </a>
-        </p>
-      </div>
+  <p>
+    This project was built to demonstrate data product thinking across
+    modeling, transformation, API exposure, documentation, analytics,
+    opportunity targeting, and frontend consumption.
+  </p>
+  <p>
+    It treats professional experience not as static resume content, but as
+    a structured system that can be queried, explored, interpreted, and aligned
+    to future opportunities.
+  </p>
+  <p>
+    Instead of explaining the concept on the landing page in detail, the landing
+    experience is intentionally simplified so users can move quickly from context
+    into exploration.
+  </p>
+  <p>
+    <a href="https://github.com/AnthonyIlluzzi/Human-Data-Product" target="_blank" rel="noopener noreferrer">
+      View GitHub Repository
+    </a>
+  </p>
+</div>
     </div>
   </div>
 
   <div id="contact-modal" class="modal-overlay hidden">
   <div class="modal-card contact-modal-card">
     <div class="modal-header">
-      <h2>Let's Connect</h2>
+      <h2>The Human Behind the Data</h2>
       <button class="modal-close" data-close-modal="contact-modal">×</button>
     </div>
     <div class="modal-body">
       <div class="contact-modal-layout">
-        <div class="card compact-card modal-inner-card contact-info-card">
-          <div class="contact-intro">
-            <p>
-              Contact me directly or share feedback using the channels below.
-            </p>
-          </div>
+  <div class="card compact-card modal-inner-card">
+    <h3>About the Human</h3>
 
-          <div id="landing-contact-list" class="contact-detail-list">
-            <div class="contact-detail-item">Loading contact information...</div>
-          </div>
-        </div>
+    <p>
+      Anthony lives in Libertyville, IL with his fiancé Bailey and his two sons, Vinny (3) and Dominic (1).
+    </p>
 
-        <div class="card compact-card modal-inner-card">
-          <h3>Actions</h3>
-          <div class="button-column">
-            <a 
-				class="btn-primary link-btn" href="https://github.com/AnthonyIlluzzi/Human-Data-Product/blob/main/frontend/assets/Anthony-Illuzzi-Enterprise-Data-Platform-Strategy.pdf" 
-				id="resume-link" target="_blank" 
-				rel="noopener noreferrer"
-				>Download Resume
-			</a>
-            <a
-              class="btn-secondary link-btn"
-              href="https://linkedin.com/in/anthonyilluzzi"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="linkedin-link"
-            >
-              Open LinkedIn
-            </a>
-          </div>
-        </div>
+    <p>
+      Professionally, Anthony works as a data and analytics architect focused on turning complex systems into structured, scalable platforms.
+      Outside of work, he enjoys getting outdoors with his family, trying new local restaurants, watching hockey,
+      learning new ideas, and exploring creative ways to integrate technology with the human experience.
+    </p>
+
+    <div class="human-context-chips">
+      <span class="tag-chip human-context-chip">Chicago Area</span>
+      <span class="tag-chip human-context-chip">Father</span>
+      <span class="tag-chip human-context-chip">Foodie</span>
+      <span class="tag-chip human-context-chip">Curious Builder</span>
+    </div>
+  </div>
+
+  <div class="card compact-card modal-inner-card contact-info-card">
+    <h3>Contact</h3>
+
+    <div class="contact-intro">
+      <p>
+        Contact me directly or share feedback using the channels below.
+      </p>
+    </div>
+
+    <div id="landing-contact-list" class="contact-detail-list">
+      <div class="contact-detail-item">Loading contact information...</div>
+    </div>
+  </div>
+
+  <div class="card compact-card modal-inner-card">
+    <h3>Actions</h3>
+    <div class="button-column">
+      <a class="btn-primary link-btn" href="../documentation/Anthony-Illuzzi-Enterprise-Data-Platform-Strategy.pdf" id="resume-link" target="_blank" rel="noopener noreferrer">Download Resume</a>
+      <a
+        class="btn-secondary link-btn"
+        href="https://linkedin.com/in/anthonyilluzzi"
+        target="_blank"
+        rel="noopener noreferrer"
+        id="linkedin-link"
+      >
+        Open LinkedIn
+      </a>
+    </div>
+    </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Product Page -->
   <section id="product-page" class="page-shell hidden">
