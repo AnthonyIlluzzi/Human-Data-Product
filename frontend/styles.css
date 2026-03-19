@@ -293,7 +293,8 @@ body {
 }
 
 .definition-card {
-  background: var(--surface);
+  background: linear-gradient(135deg, #f8fbff 0%, #edf4fc 100%);
+  border-color: #d9e6f6;
 }
 
 .catalog-section-card-highlight {
@@ -305,7 +306,7 @@ body {
   margin: 2px 0 0;
   line-height: 1.6;
   color: var(--muted);
-  max-width: 780px;
+  max-width: none;
 }
 
 .human-context-chips {
@@ -393,6 +394,11 @@ body {
 
 .modal-inner-card {
   box-shadow: none;
+}
+
+.modal-human-card {
+  background: linear-gradient(135deg, #f8fbff 0%, #edf4fc 100%);
+  border-color: #d9e6f6;
 }
 
 .contact-info-card {
