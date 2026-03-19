@@ -1,5 +1,14 @@
 # Human Data Product Contract
 
+## Purpose
+Defines the structure, semantics, and guarantees of the Human Data Product.
+
+This contract ensures consistency across:
+- ingestion
+- modeling
+- API exposure
+- frontend consumption
+
 ## Product Overview
 The Human Data Product transforms structured professional signals into a set of analytical insight views representing experience patterns, platform exposure, and capability signals.
 
