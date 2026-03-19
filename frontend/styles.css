@@ -1146,7 +1146,7 @@ body {
 
 .overview-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
   gap: 16px;
   align-items: start;
 }
@@ -1155,6 +1155,11 @@ body {
 .overview-side {
   display: grid;
   gap: 14px;
+  min-width: 0;
+}
+
+.overview-side {
+  align-content: start;
 }
 
 .metadata-card-compact {
