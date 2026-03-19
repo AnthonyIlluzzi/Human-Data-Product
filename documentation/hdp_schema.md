@@ -7,7 +7,7 @@ Key design principles:
 - Projects capture key initiatives within each role
 - Skills are normalized and mapped through a join table
 - Feedback and principles support insight generation
-- Metadata enables the site to behave like a real data product catalog****
+- Metadata enables the site to behave like a real data product catalog
 
 ## Modeling Approach
 
