@@ -992,6 +992,7 @@ body {
   width: 160px;
   height: 140px;
   object-fit: cover;
+  object-position: center 18%;
   border-radius: 999px;
   border: 4px solid rgba(255, 255, 255, 0.28);
   box-shadow: 0 8px 24px rgba(10, 33, 62, 0.18);
@@ -1340,11 +1341,30 @@ body {
   font-size: 14px;
 }
 
+.code-box {
+  min-height: 180px;
+  resize: vertical;
+  overflow: auto;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
 .output-box {
-  white-space: pre-wrap;
+  white-space: pre;
   background: #f8fafc;
   min-height: 170px;
-  overflow: auto;
+  max-height: 420px;
+  overflow-x: auto;
+  overflow-y: auto;
+  line-height: 1.5;
+  tab-size: 2;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+#sql-output,
+#api-output {
+  font-size: 13px;
 }
 
 .output-ports-section {
@@ -2286,7 +2306,33 @@ body {
   .opportunity-hero-card {
     grid-template-columns: 1fr;
   }
-}
+
+/* --- Mobile UX Enhancements --- */
+
+  .profile-photo {
+    width: 172px;
+    height: 172px;
+    object-position: center 16%;
+  }
+  
+  .api-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .api-input-row .btn-primary {
+    width: 100%;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .quick-actions .btn-primary,
+  .quick-actions .btn-secondary {
+    width: 100%;
+  }
 
 @media (max-width: 980px) {
   .definition-human-grid {
@@ -2397,5 +2443,18 @@ body {
   .definition-card {
     padding: 16px;
     gap: 14px;
+  }
+
+/* --- Mobile Output Readability --- */
+
+  .code-box,
+  .output-box,
+  .api-input-row input {
+    font-size: 12px;
+    padding: 10px;
+  }
+  
+  .output-box {
+    max-height: 340px;
   }
 }
