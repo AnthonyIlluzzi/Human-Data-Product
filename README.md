@@ -1,10 +1,22 @@
 # Human Data Product
 
-🔗 **Live Product:** https://human-data-product-web.onrender.com/
+A production-style data product that models, transforms, and exposes a professional profile as a consumable asset.
 
-This project models my professional career as a **real data product**.
+This system demonstrates how structured human data can be:
+- queried via SQL
+- accessed via API
+- interpreted through analytics
+- consumed through a frontend workspace
 
-Instead of presenting experience as a static resume, it structures career data into a system that can be **queried, consumed, and explored** — just like modern data platforms used in enterprise environments.
+Designed to reflect real-world data platform patterns including modeling, transformation, API exposure, and end-user consumption.
+
+## Live Demo
+
+Frontend:
+https://human-data-product-web.onrender.com/
+
+API Base:
+https://human-data-product-api.onrender.com/
 
 ---
 
@@ -14,7 +26,7 @@ A traditional resume is static, fragmented, and difficult to interrogate.
 
 This project explores a different idea:
 
-> What if professional experience was treated as structured data — designed for access, interpretation, and reuse?
+> What if my professional experience was treated as structured data - designed for access, interpretation, and reuse?
 
 The Human Data Product transforms career history into a **curated, governed dataset** with defined access patterns and analytical capabilities.
 
@@ -24,9 +36,9 @@ The Human Data Product transforms career history into a **curated, governed data
 
 The dataset is exposed through multiple consumption layers:
 
-- **SQL Interface** — query structured experience, projects, and skills  
-- **REST API** — access raw and derived data programmatically  
-- **Insights Layer** — explore aggregated signals and narrative interpretations  
+- **SQL Interface** - query structured experience, projects, and skills  
+- **REST API** - access raw and derived data programmatically  
+- **Insights Layer** - explore aggregated signals and narrative interpretations  
 
 These interfaces simulate how modern data products are consumed across analytical and operational use cases.
 
@@ -36,8 +48,8 @@ The feedback insights layer includes a curated feedback display model designed t
 
 Each feedback record can include:
 
-- `viz_display_flag` — indicates whether the record is part of the curated highlight set
-- `viz_display_rank` — defines display order within the curated subset
+- `viz_display_flag` - indicates whether the record is part of the curated highlight set
+- `viz_display_rank` - defines display order within the curated subset
 
 #### Behavior
 
@@ -49,7 +61,6 @@ Each feedback record can include:
   - source diversity where available
   - recency when it strengthens the narrative
 
-This preserves analytical integrity while improving usability and narrative clarity in the Insights workspace.
 ---
 
 ## Architecture
@@ -84,10 +95,10 @@ It reflects a belief that:
 
 The Human Data Product can be explored through:
 
-- **Overview Workspace** — product metadata and architecture  
-- **SQL Workspace** — guided query exploration  
-- **API Workspace** — direct endpoint interaction  
-- **Insights Workspace** — analytical views and interpretation  
+- **Overview Workspace** - product metadata and architecture  
+- **SQL Workspace** - guided query exploration  
+- **API Workspace** - direct endpoint interaction  
+- **Insights Workspace** - analytical views and interpretation  
 
 ---
 
@@ -117,6 +128,12 @@ For deeper exploration of the system design:
 
 - **Architecture Diagram**  
   /documentation/Images/Human_data_product_ERD_V3.svg
+
+## Operational Considerations
+
+- Deployed on Render free-tier infrastructure
+- Cold-start latency mitigated via scheduled health pings
+- API includes `/health` endpoint for uptime validation
 
 ## Notes
 
