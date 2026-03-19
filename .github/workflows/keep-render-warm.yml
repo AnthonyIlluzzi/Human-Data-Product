@@ -1,0 +1,15 @@
+name: Keep Render API Warm
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render health endpoint
+        run: |
+          curl --fail --silent --show-error \
+            https://human-data-product-api.onrender.com/health
