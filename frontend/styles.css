@@ -2333,6 +2333,9 @@ body {
   .quick-actions .btn-secondary {
     width: 100%;
   }
+}
+
+@media (max-width: 980px) {
 
 @media (max-width: 980px) {
   .definition-human-grid {
