@@ -401,11 +401,6 @@ body {
   border-color: #d9e6f6;
 }
 
-.modal-human-card {
-  background: linear-gradient(135deg, #f8fbff 0%, #edf4fc 100%);
-  border-color: #d9e6f6;
-}
-
 .contact-info-card {
   display: grid;
   gap: 18px;
