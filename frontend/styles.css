@@ -396,7 +396,7 @@ body {
   box-shadow: none;
 }
 
-.modal-human-card {
+.card.modal-human-card {
   background: linear-gradient(135deg, #f8fbff 0%, #edf4fc 100%);
   border-color: #d9e6f6;
 }
@@ -404,6 +404,23 @@ body {
 .contact-info-card {
   display: grid;
   gap: 18px;
+}
+
+.modal-inner-card {
+  padding: 18px 20px;
+}
+
+.modal-actions-card {
+  padding-top: 16px;
+}
+
+.modal-card {
+  max-height: min(88dvh, 900px);
+  overflow-y: auto;
+}
+
+.contact-modal-card {
+  width: min(760px, 100%);
 }
 
 .contact-intro h3 {
@@ -2534,6 +2551,59 @@ body {
   
   .output-box {
     max-height: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .modal-card {
+    width: 100%;
+    max-height: calc(100dvh - 24px);
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    padding: 16px 16px 10px;
+  }
+
+  .modal-body {
+    padding: 14px 16px 16px;
+  }
+
+  .contact-modal-layout {
+    gap: 12px;
+  }
+
+  .modal-inner-card {
+    padding: 16px;
+  }
+
+  .contact-info-card {
+    gap: 14px;
+  }
+
+  .contact-detail-list {
+    gap: 8px;
+  }
+
+  .contact-detail-item {
+    grid-template-columns: 32px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .contact-detail-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+
+  .button-column {
+    gap: 8px;
   }
 }
 
