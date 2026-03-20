@@ -122,7 +122,7 @@ function bindLandingModals() {
 }
 
 function bindSideNavigation() {
-  document.querySelectorAll(".nav-btn").forEach(btn => {
+  document.querySelectorAll(".nav-btn[data-panel]").forEach(btn => {
     btn.addEventListener("click", () => {
       openWorkspacePanel(btn.dataset.panel);
     });
