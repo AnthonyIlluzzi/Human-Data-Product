@@ -760,6 +760,22 @@ body {
   padding-top: 4px;
 }
 
+.product-tile {
+  position: relative;
+  z-index: 1;
+}
+
+.tile-footer {
+  position: relative;
+  z-index: 2;
+}
+
+#open-product-btn {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
 .tile-type,
 .status-pill {
   font-size: 12px;
