@@ -340,7 +340,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  z-index: 40;
+  z-index: 2000;
 }
 
 .modal-card {
@@ -949,7 +949,7 @@ body {
 }
 
 .workspace {
-  padding: 18px 24px 24px;
+  padding: 12px 24px 24px;
 }
 
 .workspace-panel {
@@ -961,7 +961,7 @@ body {
 
 .workspace-panel.active {
   display: grid;
-  gap: 14px;
+  gap: 8px;
 }
 
 .workspace,
@@ -973,7 +973,7 @@ body {
 
 /* Overview page spacing override */
 #overview-panel.workspace-panel.active {
-  gap: 12px;
+  gap: 8px;
 }
 
 .workspace-panel.active > .panel-header {
