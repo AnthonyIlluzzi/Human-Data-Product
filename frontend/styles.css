@@ -401,6 +401,10 @@ body {
   border-color: #d9e6f6;
 }
 
+.card.modal-human-card h3 {
+  color: var(--primary);
+}
+
 .contact-info-card {
   display: grid;
   gap: 18px;
