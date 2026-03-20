@@ -51,18 +51,26 @@ function bindCatalogNavigation() {
 
     overviewPanel?.classList.add("active");
 
+    /* Force Safari/WebKit to commit layout before scrolling */
+    void productPage?.offsetHeight;
+    void overviewPanel?.offsetHeight;
+    void workspace?.offsetHeight;
+
     requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
 
-      const scrollTarget =
-        overviewPanel?.querySelector(".panel-header") ||
-        workspace ||
-        productPage;
+        const scrollTarget =
+          overviewPanel?.querySelector(".panel-header") ||
+          overviewPanel ||
+          workspace ||
+          productPage;
 
-      scrollTarget?.scrollIntoView({
-        block: "start",
-        inline: "nearest",
-        behavior: "auto"
+        scrollTarget?.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
       });
     });
   });
@@ -74,12 +82,16 @@ function bindCatalogNavigation() {
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
 
+    void catalogPage?.offsetHeight;
+
     requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: "auto" });
-      catalogPage?.scrollIntoView({
-        block: "start",
-        inline: "nearest",
-        behavior: "auto"
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        catalogPage?.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
       });
     });
   });
