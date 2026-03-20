@@ -2536,3 +2536,36 @@ body {
     max-height: 340px;
   }
 }
+
+/* --- FIX: Prevent workspace collapse on navigation --- */
+
+#product-page {
+  min-height: 100vh;
+}
+
+.workspace {
+  min-height: 100vh;
+  display: block;
+}
+
+.workspace-panel {
+  min-height: 100vh;
+}
+
+/* Mobile layout stabilization */
+@media (max-width: 768px) {
+  #product-page {
+    display: block; /* override grid on mobile */
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+  }
+
+  .workspace {
+    width: 100%;
+  }
+}
+
+
