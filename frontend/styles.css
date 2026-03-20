@@ -504,7 +504,7 @@ body {
 }
 
 .panel-header {
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 
 .compact-header {
@@ -635,20 +635,20 @@ body {
 /* API endpoint grouping */
 
 .api-shortcuts {
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .api-shortcuts-matrix {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .endpoint-row {
   display: grid;
   grid-template-columns: 128px minmax(0, 1fr);
   align-items: start;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 10px;
+  padding: 6px 0;
   border-top: 1px solid #e6edf5;
 }
 
@@ -852,6 +852,24 @@ body {
   transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
+.tab-btn {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.tab-btn:hover {
+  background: #f7f9fc;
+  border-color: #c7d6ea;
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
 .btn-primary {
   background: var(--primary);
   color: white;
@@ -949,7 +967,7 @@ body {
 }
 
 .workspace {
-  padding: 12px 24px 24px;
+  padding: 8px 24px 24px;
 }
 
 .workspace-panel {
@@ -962,6 +980,7 @@ body {
 .workspace-panel.active {
   display: grid;
   gap: 8px;
+  align-content: start;
 }
 
 .workspace,
@@ -989,11 +1008,12 @@ body {
 /* Cards / Panels */
 
 .card {
-  padding: 16px 18px;
+  padding: 14px 16px;
   margin-bottom: 0;
 }
 
 .compact-card {
+  padding: 12px 14px;
   margin-bottom: 0;
 }
 
