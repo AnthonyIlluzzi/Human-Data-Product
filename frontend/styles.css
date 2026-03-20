@@ -995,10 +995,6 @@ body {
   gap: 8px;
 }
 
-.workspace-panel.active > .panel-header {
-  margin-bottom: 0;
-}
-
 #overview-panel .overview-main > .card,
 #overview-panel .overview-side > .card,
 #overview-panel .overview-main > .overview-dual-grid {
@@ -1313,7 +1309,7 @@ body {
 }
 
 .section-heading {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .section-heading h3 {
@@ -1515,13 +1511,20 @@ body {
 
 .tab-btn {
   border: 1px solid var(--border);
-  background: white;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  background: #ffffff;
+  color: var(--text);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(10, 110, 209, 0.08);
+  border-color: rgba(10, 110, 209, 0.25);
+  color: var(--text);
 }
 
 .tab-btn.active {
-  background: var(--primary);
-  color: white;
+  background: #ffffff;
+  color: var(--primary);
   border-color: var(--primary);
   position: relative;
 }
@@ -1535,11 +1538,6 @@ body {
   height: 3px;
   background: var(--primary);
   border-radius: 2px;
-}
-
-.tab-btn:hover {
-  background: rgba(10, 110, 209, 0.08);
-  border-color: rgba(10, 110, 209, 0.25);
 }
 
 .tab-panel {
