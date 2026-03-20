@@ -33,18 +33,55 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function bindCatalogNavigation() {
   document.getElementById("open-product-btn")?.addEventListener("click", () => {
-    document.getElementById("catalog-page").classList.add("hidden");
-    document.getElementById("product-page").classList.remove("hidden");
+    const catalogPage = document.getElementById("catalog-page");
+    const productPage = document.getElementById("product-page");
+    const overviewPanel = document.getElementById("overview-panel");
+    const workspace = document.querySelector(".workspace");
 
-    openWorkspacePanel("overview-panel", null, {
-      scrollBehavior: "auto"
+    catalogPage?.classList.add("hidden");
+    productPage?.classList.remove("hidden");
+
+    document.querySelectorAll(".workspace-panel").forEach(panel => {
+      panel.classList.remove("active");
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.panel === "overview-panel");
+    });
+
+    overviewPanel?.classList.add("active");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+
+      const scrollTarget =
+        overviewPanel?.querySelector(".panel-header") ||
+        workspace ||
+        productPage;
+
+      scrollTarget?.scrollIntoView({
+        block: "start",
+        inline: "nearest",
+        behavior: "auto"
+      });
     });
   });
 
   document.getElementById("back-to-catalog-btn")?.addEventListener("click", () => {
-    document.getElementById("product-page").classList.add("hidden");
-    document.getElementById("catalog-page").classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const productPage = document.getElementById("product-page");
+    const catalogPage = document.getElementById("catalog-page");
+
+    productPage?.classList.add("hidden");
+    catalogPage?.classList.remove("hidden");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      catalogPage?.scrollIntoView({
+        block: "start",
+        inline: "nearest",
+        behavior: "auto"
+      });
+    });
   });
 }
 
