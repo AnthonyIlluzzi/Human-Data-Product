@@ -1401,21 +1401,26 @@ body {
 }
 
 .tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 10px;
+  align-items: start;
 }
 
 .tag-chip {
   display: inline-flex;
   align-items: center;
-  padding: 6px 10px;
-  border-radius: 8px;
+  justify-content: center;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 10px;
   background: #eef3f9;
   border: 1px solid #d7e2ef;
   color: var(--text);
   font-size: 13px;
-  line-height: 1.2;
+  line-height: 1.25;
+  text-align: center;
 }
 
 .tag-chip {
@@ -2714,6 +2719,10 @@ body {
 
   .button-column {
     gap: 8px;
+  }
+
+  .tag-list {
+    grid-template-columns: 1fr;
   }
 }
 
