@@ -1331,6 +1331,12 @@ body {
   margin: 0 0 8px;
 }
 
+#sql-panel .section-card:last-child,
+#api-panel .section-card:last-child {
+  height: auto;
+  align-self: start;
+}
+
 .section-heading {
   margin-bottom: 8px;
 }
@@ -1478,26 +1484,15 @@ body {
   margin: 0;
   white-space: pre;
   background: #f8fafc;
-  min-height: 170px;
-  height: clamp(260px, 34vh, 420px);
-  max-height: 420px;
+  height: 320px;
+  max-height: 320px;
+  min-height: 320px;
   overflow-x: auto;
   overflow-y: auto;
   line-height: 1.5;
   tab-size: 2;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-}
-
-#sql-panel .section-card:last-child,
-#api-panel .section-card:last-child {
-  display: flex;
-  flex-direction: column;
-}
-
-#sql-output,
-#api-output {
-  flex: 1 1 auto;
 }
 
 #sql-output,
