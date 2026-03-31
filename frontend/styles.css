@@ -1259,6 +1259,37 @@ body {
   min-width: 0;
 }
 
+#overview-panel .overview-layout {
+  align-items: stretch;
+}
+
+#overview-panel .overview-main,
+#overview-panel .overview-side {
+  height: 100%;
+}
+
+#overview-panel .overview-main {
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+}
+
+#overview-panel .overview-side {
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+#overview-panel .overview-main > .card:last-child,
+#overview-panel .overview-side > .card:last-child {
+  height: 100%;
+}
+
+#overview-panel .ports-grid {
+  height: 100%;
+  align-items: stretch;
+}
+
+#overview-panel .port-card-mini {
+  height: 100%;
+}
+
 .overview-side {
   align-content: start;
 }
@@ -1400,6 +1431,8 @@ body {
 .port-card-mini {
   padding: 12px;
   min-height: 76px;
+  display: flex;
+  flex-direction: column;
 }
 
 .port-card-mini p {
@@ -1534,10 +1567,9 @@ body {
 }
 
 .tab-btn {
-  border: 1px solid var(--border);
   background: #ffffff;
   color: var(--text);
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid var(--border);
 }
 
 .tab-btn:hover {
@@ -1547,10 +1579,16 @@ body {
 }
 
 .tab-btn.active {
-  background: #eef4fb;
-  color: var(--primary-dark);
-  border-color: #d7e7fb;
-  box-shadow: inset 0 -2px 0 var(--primary);
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(10, 110, 209, 0.18);
+}
+
+.tab-btn.active:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: #ffffff;
 }
 
 .tab-panel {
