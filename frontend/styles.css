@@ -1358,19 +1358,20 @@ body {
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .tag-chip {
   display: inline-flex;
   align-items: center;
-  padding: 6px 10px;
+  padding: 5px 9px;
   border-radius: 8px;
   background: #eef3f9;
   border: 1px solid #d7e2ef;
   color: var(--text);
-  font-size: 13px;
-  line-height: 1.2;
+  font-size: 12px;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .tag-chip {
@@ -1462,6 +1463,7 @@ body {
 
 .code-box {
   min-height: 180px;
+  max-height: 260px;
   resize: vertical;
   overflow: auto;
   line-height: 1.5;
@@ -1473,6 +1475,7 @@ body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  margin: 0;
   white-space: pre;
   background: #f8fafc;
   min-height: 170px;
@@ -1482,8 +1485,19 @@ body {
   overflow-y: auto;
   line-height: 1.5;
   tab-size: 2;
-  overscroll-behavior-x: contain;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+#sql-panel .section-card:last-child,
+#api-panel .section-card:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+#sql-output,
+#api-output {
+  flex: 1 1 auto;
 }
 
 #sql-output,
