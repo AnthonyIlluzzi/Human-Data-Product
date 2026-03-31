@@ -1031,6 +1031,10 @@ body {
   margin-bottom: 0;
 }
 
+#overview-panel .card {
+  height: 100%;
+}
+
 .compact-card {
   padding: 12px 14px;
   margin-bottom: 0;
@@ -1249,7 +1253,7 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 296px;
   gap: 14px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .overview-main,
@@ -1257,6 +1261,15 @@ body {
   display: grid;
   gap: 12px;
   min-width: 0;
+  height: 100%;
+}
+
+.overview-main > .card:last-child,
+.overview-side > .card:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
 }
 
 #overview-panel .overview-layout {
@@ -1426,6 +1439,10 @@ body {
 .ports-grid {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   align-items: stretch;
+}
+
+#overview-panel .ports-grid {
+  height: 100%;
 }
 
 .port-card-mini {
