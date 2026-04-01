@@ -717,11 +717,12 @@ function bindPatternInfoTooltips() {
     if (!button) return;
 
     button.addEventListener("click", event => {
-      event.stopPropagation();
-      const isOpen = wrapper.classList.contains("is-open");
-      document.querySelectorAll(".info-tooltip-wrap.is-open").forEach(node => node.classList.remove("is-open"));
-      if (!isOpen) wrapper.classList.add("is-open");
-    });
+	  event.stopPropagation();
+	  hideFloatingInsightsTooltip();
+	  const isOpen = wrapper.classList.contains("is-open");
+	  document.querySelectorAll(".info-tooltip-wrap.is-open").forEach(node => node.classList.remove("is-open"));
+	  if (!isOpen) wrapper.classList.add("is-open");
+	});
   });
 
   document.addEventListener("click", () => {
