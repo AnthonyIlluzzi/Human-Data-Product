@@ -603,7 +603,17 @@ function renderFeedbackValidation(chartId, items) {
     value: item.feedback_count || 0
   }));
 
-  const colors = ["#0a6ed1", "#4f8fe8", "#69b2ff", "#7a6ff0", "#2f6cb3", "#7cc0d8", "#8f9fb7", "#8ba3c7", "#5f8fd6"];
+  const colors = [
+  "#0a6ed1",  // primary
+  "#1f7fe0",
+  "#3a93ea",
+  "#5ba6f0",
+  "#7cb9f5",
+  "#9dcbf8",
+  "#bcdcfb",
+  "#d6ebfd",
+  "#e9f3fe"
+];
 
   chart.innerHTML = buildDonutSvg(
     segments.map((segment, index) => ({
