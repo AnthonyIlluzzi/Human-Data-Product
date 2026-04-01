@@ -474,8 +474,8 @@ body {
 }
 
 .modal-card {
-  max-height: none;
-  overflow-y: visible;
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
 }
 
 .contact-intro h3 {
@@ -1945,12 +1945,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 280px;
+  min-height: 320px;
 }
 
 .donut-svg {
-  width: 280px;
-  height: 280px;
+  width: 320px;
+  height: 320px;
   overflow: visible;
 }
 
