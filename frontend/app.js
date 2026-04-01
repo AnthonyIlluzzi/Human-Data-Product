@@ -380,6 +380,7 @@ async function loadVisualizations() {
   renderFeedbackValidation("feedback-themes-viz", feedbackThemes);
   renderProjectPatternBlocks("project-pattern-blocks", projectsByExperience, projects);
   bindPatternInfoTooltips();
+}
 
 function renderTimeline(containerId, items) {
   const container = document.getElementById(containerId);
