@@ -414,7 +414,7 @@ body {
 }
 
 .contact-modal-card .modal-body {
-  padding: 16px 20px 18px;
+  padding: 8px 20px 18px;
   overflow-y: auto;
 }
 
@@ -466,7 +466,7 @@ body {
 
 .contact-info-card {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .modal-actions-card {
@@ -489,7 +489,7 @@ body {
 }
 
 .contact-intro {
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .contact-intro p {
