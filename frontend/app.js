@@ -377,8 +377,8 @@ async function loadVisualizations() {
 
   renderTimeline("career-timeline-viz", timeline);
   renderSkillPatternMatrix("skill-pattern-matrix", "skill-pattern-summary", skillMatrix);
+  renderFeedbackValidation("feedback-themes-viz", "feedback-theme-quicklist", feedbackThemes);
   renderProjectPatternBlocks("project-pattern-blocks", projectsByExperience, projects);
-  renderFeedbackValidation("feedback-themes-viz", "feedback-pattern-panel", feedbackThemes);
   bindPatternInfoTooltips();
 }
 
@@ -416,7 +416,7 @@ function renderSkillPatternMatrix(containerId, summaryId, data) {
   const pairs = data?.pairs || [];
 
   if (!skills.length) {
-    container.textContent = "No skill pattern data available.";
+    container.textContent = "No capability pattern data available.";
     summary.innerHTML = "";
     return;
   }
@@ -439,15 +439,29 @@ function renderSkillPatternMatrix(containerId, summaryId, data) {
 
   skills.forEach(skill => {
     const col = document.createElement("div");
-    col.className = "skill-matrix-axis";
-    col.textContent = truncateText(skill.skill_name, 14);
+    col.className = "skill-matrix-axis skill-matrix-axis--column is-hoverable";
+    col.innerHTML = formatMatrixAxisLabel(skill.skill_name);
+    attachFloatingTooltip(
+      col,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(skill.skill_name)}</span>
+        <span class="insights-hover-tooltip-body">${capitalize(skill.category)} · ${capitalize(skill.level)} · ${skill.project_count} linked project${skill.project_count === 1 ? "" : "s"}</span>
+      `
+    );
     grid.appendChild(col);
   });
 
   skills.forEach(rowSkill => {
     const rowLabel = document.createElement("div");
-    rowLabel.className = "skill-matrix-axis skill-matrix-axis--row";
-    rowLabel.textContent = rowSkill.skill_name;
+    rowLabel.className = "skill-matrix-axis skill-matrix-axis--row is-hoverable";
+    rowLabel.innerHTML = formatMatrixAxisLabel(rowSkill.skill_name);
+    attachFloatingTooltip(
+      rowLabel,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(rowSkill.skill_name)}</span>
+        <span class="insights-hover-tooltip-body">${capitalize(rowSkill.category)} · ${capitalize(rowSkill.level)} · ${rowSkill.project_count} linked project${rowSkill.project_count === 1 ? "" : "s"}</span>
+      `
+    );
     grid.appendChild(rowLabel);
 
     skills.forEach(colSkill => {
@@ -464,7 +478,18 @@ function renderSkillPatternMatrix(containerId, summaryId, data) {
       const normalized = count === 0 ? 0 : Math.ceil((count / maxPairCount) * 5);
 
       cell.className = `skill-matrix-cell ${count === 0 ? "is-empty" : `level-${normalized} is-hoverable`}`;
-      cell.title = `${rowSkill.skill_name} + ${colSkill.skill_name}: ${count} project${count === 1 ? "" : "s"}`;
+
+      if (count > 0) {
+        attachFloatingTooltip(
+          cell,
+          `
+            <span class="insights-hover-tooltip-title">${escapeHtml(rowSkill.skill_name)} + ${escapeHtml(colSkill.skill_name)}</span>
+            <span class="insights-hover-tooltip-body">Observed together in ${count} project${count === 1 ? "" : "s"}.</span>
+            <span class="insights-hover-tooltip-body">Darker intersections indicate recurring capability pairings across the project dataset.</span>
+          `
+        );
+      }
+
       grid.appendChild(cell);
     });
   });
@@ -490,7 +515,7 @@ function renderProjectPatternBlocks(containerId, projectsByExperience, allProjec
   if (!container) return;
 
   if (!projectsByExperience?.length || !allProjects?.length) {
-    container.textContent = "No project pattern data available.";
+    container.textContent = "No value pattern data available.";
     return;
   }
 
@@ -513,7 +538,7 @@ function renderProjectPatternBlocks(containerId, projectsByExperience, allProjec
           <div class="project-pattern-role">${escapeHtml(item.role)}</div>
           <div class="project-pattern-meta">${escapeHtml(item.company)} • ${linkedProjects.length} project${linkedProjects.length === 1 ? "" : "s"}</div>
           <div class="project-pattern-chip-row">
-            ${categories.map(category => `<span class="project-pattern-chip" title="${escapeHtml(category.description)}">${escapeHtml(category.label)}</span>`).join("")}
+            ${categories.map(category => `<span class="project-pattern-chip">${escapeHtml(category.label)}</span>`).join("")}
           </div>
         </div>
       `;
@@ -563,20 +588,14 @@ function deriveProjectCategories(projects) {
     .slice(0, 4);
 }
 
-function renderFeedbackValidation(chartId, detailId, items) {
+function renderFeedbackValidation(chartId, quickListId, items) {
   const chart = document.getElementById(chartId);
-  const detail = document.getElementById(detailId);
-  if (!chart || !detail) return;
+  const quickList = document.getElementById(quickListId);
+  if (!chart || !quickList) return;
 
   if (!items || items.length === 0) {
     chart.textContent = "No feedback theme data available.";
-    detail.innerHTML = `
-      <div class="feedback-placeholder">
-        <div class="detail-eyebrow">Feedback Detail</div>
-        <h4>No theme data</h4>
-        <p>Feedback themes are not available right now.</p>
-      </div>
-    `;
+    quickList.innerHTML = "";
     return;
   }
 
@@ -586,65 +605,68 @@ function renderFeedbackValidation(chartId, detailId, items) {
     value: item.feedback_count || 0
   }));
 
-  renderDonutView({
-    chart,
-    legend: document.createElement("div"),
-    segments,
-    centerValue: segments.length,
-    centerLabel: "Themes",
-    onSelect: async segment => {
-      detail.innerHTML = `
-        <div class="feedback-placeholder">
-          <div class="detail-eyebrow">Feedback Detail</div>
-          <h4>Loading ${escapeHtml(segment.label)}...</h4>
-          <p>Fetching supporting excerpts.</p>
-        </div>
-      `;
+  const colors = ["#0a6ed1", "#4f8fe8", "#69b2ff", "#7a6ff0", "#2f6cb3", "#7cc0d8", "#8f9fb7", "#8ba3c7", "#5f8fd6"];
+
+  chart.innerHTML = buildDonutSvg(
+    segments.map((segment, index) => ({
+      ...segment,
+      color: colors[index % colors.length]
+    })),
+    segments.length,
+    "Themes"
+  );
+
+  const svg = chart.querySelector("svg");
+  if (svg) {
+    svg.querySelectorAll("title").forEach(node => node.remove());
+
+    svg.querySelectorAll("[data-segment-index]").forEach(node => {
+      const idx = Number(node.getAttribute("data-segment-index"));
+      const segment = segments[idx];
+
+      attachFloatingTooltip(
+        node,
+        `
+          <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+          <span class="insights-hover-tooltip-body">${segment.value} supporting excerpt${segment.value === 1 ? "" : "s"}</span>
+        `
+      );
+
+      node.addEventListener("click", async () => {
+        try {
+          const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(segment.key)}`);
+          openFeedbackDetailModal(segment.label, data.entries || []);
+        } catch (error) {
+          console.error("Failed to load feedback theme details:", error);
+        }
+      });
+    });
+  }
+
+  quickList.innerHTML = segments
+    .slice()
+    .sort((a, b) => (b.value || 0) - (a.value || 0))
+    .slice(0, 3)
+    .map(segment => `
+      <button type="button" class="feedback-theme-chip" data-feedback-theme="${escapeHtml(segment.key)}">
+        <span>${escapeHtml(segment.label)}</span>
+        <span class="feedback-theme-chip-count">${segment.value}</span>
+      </button>
+    `)
+    .join("");
+
+  quickList.querySelectorAll("[data-feedback-theme]").forEach(button => {
+    button.addEventListener("click", async () => {
+      const key = button.dataset.feedbackTheme;
+      const label = segments.find(segment => segment.key === key)?.label || titleCase(key);
 
       try {
-        const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(segment.key)}`);
-        const entries = data.entries || [];
-        const previewEntries = entries.slice(0, 3);
-
-        detail.innerHTML = `
-          <div class="feedback-preview-header">
-            <div>
-              <div class="detail-eyebrow">Feedback Detail</div>
-              <h4>${escapeHtml(segment.label)}</h4>
-              <p class="feedback-preview-meta">${entries.length} supporting excerpt${entries.length === 1 ? "" : "s"}</p>
-            </div>
-          </div>
-
-          <div class="feedback-quote-list">
-            ${previewEntries.map(entry => `
-              <div class="feedback-quote-preview">
-                <p>${escapeHtml(entry.quote || "")}</p>
-              </div>
-            `).join("")}
-          </div>
-
-          ${entries.length > 3 ? `
-            <div class="feedback-preview-actions">
-              <button type="button" class="btn-secondary" data-feedback-theme="${escapeHtml(segment.key)}">
-                View more feedback
-              </button>
-            </div>
-          ` : ""}
-        `;
-
-        detail.querySelector("[data-feedback-theme]")?.addEventListener("click", () => {
-          openFeedbackDetailModal(segment.label, entries);
-        });
+        const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(key)}`);
+        openFeedbackDetailModal(label, data.entries || []);
       } catch (error) {
-        detail.innerHTML = `
-          <div class="feedback-placeholder">
-            <div class="detail-eyebrow">Feedback Detail</div>
-            <h4>Unable to load theme</h4>
-            <p>There was a problem loading the selected feedback theme.</p>
-          </div>
-        `;
+        console.error("Failed to load feedback theme details:", error);
       }
-    }
+    });
   });
 }
 
@@ -654,18 +676,38 @@ function openFeedbackDetailModal(themeLabel, entries) {
   const body = document.getElementById("feedback-detail-modal-body");
   if (!modal || !title || !body) return;
 
-  title.textContent = `${themeLabel} Feedback`;
-  body.innerHTML = `
-    <div class="detail-card-list">
-      ${entries.map(entry => `
-        <div class="feedback-quote-card">
-          <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
-          <p>${escapeHtml(entry.quote || "")}</p>
-        </div>
-      `).join("")}
-    </div>
-  `;
+  let expanded = false;
 
+  function renderModalContent() {
+    const visibleEntries = expanded ? entries : entries.slice(0, 3);
+
+    body.innerHTML = `
+      <div class="detail-card-list">
+        ${visibleEntries.map(entry => `
+          <div class="feedback-quote-card">
+            <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+            <p>${escapeHtml(entry.quote || "")}</p>
+          </div>
+        `).join("")}
+      </div>
+
+      ${entries.length > 3 ? `
+        <div class="feedback-preview-actions">
+          <button type="button" class="btn-secondary" id="feedback-detail-expand-btn">
+            ${expanded ? "Show curated view" : `View all ${entries.length} excerpts`}
+          </button>
+        </div>
+      ` : ""}
+    `;
+
+    body.querySelector("#feedback-detail-expand-btn")?.addEventListener("click", () => {
+      expanded = !expanded;
+      renderModalContent();
+    });
+  }
+
+  title.textContent = `${themeLabel} Feedback`;
+  renderModalContent();
   modal.classList.remove("hidden");
 }
 
@@ -684,7 +726,90 @@ function bindPatternInfoTooltips() {
 
   document.addEventListener("click", () => {
     document.querySelectorAll(".info-tooltip-wrap.is-open").forEach(node => node.classList.remove("is-open"));
-  }, { once: true });
+    hideFloatingInsightsTooltip();
+  });
+}
+
+function formatMatrixAxisLabel(skillName) {
+  return splitSkillLabel(skillName)
+    .map(line => `<span class="skill-matrix-axis-line">${escapeHtml(line)}</span>`)
+    .join("");
+}
+
+function splitSkillLabel(skillName) {
+  const explicit = {
+    "Attention to Detail": ["Attention to", "Detail"],
+    "Executive Communication": ["Executive", "Communication"],
+    "Structured Communication": ["Structured", "Communication"],
+    "Cross-Functional Collaboration": ["Cross-Functional", "Collaboration"],
+    "Strategic Thinking": ["Strategic", "Thinking"],
+    "SQL": ["SQL"]
+  };
+
+  if (explicit[skillName]) return explicit[skillName];
+
+  const parts = String(skillName).split(" ");
+  if (parts.length <= 2) return [skillName];
+
+  const midpoint = Math.ceil(parts.length / 2);
+  return [parts.slice(0, midpoint).join(" "), parts.slice(midpoint).join(" ")];
+}
+
+function attachFloatingTooltip(element, html) {
+  element.addEventListener("mouseenter", event => {
+    showFloatingInsightsTooltip(html, event.clientX, event.clientY);
+  });
+
+  element.addEventListener("mousemove", event => {
+    positionFloatingInsightsTooltip(event.clientX, event.clientY);
+  });
+
+  element.addEventListener("mouseleave", () => {
+    hideFloatingInsightsTooltip();
+  });
+}
+
+function showFloatingInsightsTooltip(html, clientX, clientY) {
+  const tooltip = document.getElementById("insights-hover-tooltip");
+  if (!tooltip) return;
+
+  tooltip.innerHTML = html;
+  tooltip.classList.remove("hidden");
+  tooltip.setAttribute("aria-hidden", "false");
+  positionFloatingInsightsTooltip(clientX, clientY);
+}
+
+function hideFloatingInsightsTooltip() {
+  const tooltip = document.getElementById("insights-hover-tooltip");
+  if (!tooltip) return;
+
+  tooltip.classList.add("hidden");
+  tooltip.setAttribute("aria-hidden", "true");
+}
+
+function positionFloatingInsightsTooltip(clientX, clientY) {
+  const tooltip = document.getElementById("insights-hover-tooltip");
+  if (!tooltip || tooltip.classList.contains("hidden")) return;
+
+  const padding = 14;
+  const tooltipRect = tooltip.getBoundingClientRect();
+
+  let left = clientX + 16;
+  let top = clientY + 16;
+
+  if (left + tooltipRect.width > window.innerWidth - padding) {
+    left = clientX - tooltipRect.width - 16;
+  }
+
+  if (top + tooltipRect.height > window.innerHeight - padding) {
+    top = clientY - tooltipRect.height - 16;
+  }
+
+  left = Math.max(padding, left);
+  top = Math.max(padding, top);
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
 }
 
 function renderSkillUtilization(containerId, items) {
