@@ -377,10 +377,9 @@ async function loadVisualizations() {
 
   renderTimeline("career-timeline-viz", timeline);
   renderSkillPatternMatrix("skill-pattern-matrix", "skill-pattern-summary", skillMatrix);
-  renderFeedbackValidation("feedback-themes-viz", "feedback-theme-quicklist", feedbackThemes);
+  renderFeedbackValidation("feedback-themes-viz", feedbackThemes);
   renderProjectPatternBlocks("project-pattern-blocks", projectsByExperience, projects);
   bindPatternInfoTooltips();
-}
 
 function renderTimeline(containerId, items) {
   const container = document.getElementById(containerId);
@@ -588,14 +587,12 @@ function deriveProjectCategories(projects) {
     .slice(0, 4);
 }
 
-function renderFeedbackValidation(chartId, quickListId, items) {
+function renderFeedbackValidation(chartId, items) {
   const chart = document.getElementById(chartId);
-  const quickList = document.getElementById(quickListId);
-  if (!chart || !quickList) return;
+  if (!chart) return;
 
   if (!items || items.length === 0) {
     chart.textContent = "No feedback theme data available.";
-    quickList.innerHTML = "";
     return;
   }
 
@@ -617,52 +614,26 @@ function renderFeedbackValidation(chartId, quickListId, items) {
   );
 
   const svg = chart.querySelector("svg");
-  if (svg) {
-    svg.querySelectorAll("title").forEach(node => node.remove());
+  if (!svg) return;
 
-    svg.querySelectorAll("[data-segment-index]").forEach(node => {
-      const idx = Number(node.getAttribute("data-segment-index"));
-      const segment = segments[idx];
+  svg.querySelectorAll("title").forEach(node => node.remove());
 
-      attachFloatingTooltip(
-        node,
-        `
-          <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
-          <span class="insights-hover-tooltip-body">${segment.value} supporting excerpt${segment.value === 1 ? "" : "s"}</span>
-        `
-      );
+  svg.querySelectorAll("[data-segment-index]").forEach(node => {
+    const idx = Number(node.getAttribute("data-segment-index"));
+    const segment = segments[idx];
 
-      node.addEventListener("click", async () => {
-        try {
-          const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(segment.key)}`);
-          openFeedbackDetailModal(segment.label, data.entries || []);
-        } catch (error) {
-          console.error("Failed to load feedback theme details:", error);
-        }
-      });
-    });
-  }
+    attachFloatingTooltip(
+      node,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+        <span class="insights-hover-tooltip-body">${segment.value} supporting excerpt${segment.value === 1 ? "" : "s"}</span>
+      `
+    );
 
-  quickList.innerHTML = segments
-    .slice()
-    .sort((a, b) => (b.value || 0) - (a.value || 0))
-    .slice(0, 3)
-    .map(segment => `
-      <button type="button" class="feedback-theme-chip" data-feedback-theme="${escapeHtml(segment.key)}">
-        <span>${escapeHtml(segment.label)}</span>
-        <span class="feedback-theme-chip-count">${segment.value}</span>
-      </button>
-    `)
-    .join("");
-
-  quickList.querySelectorAll("[data-feedback-theme]").forEach(button => {
-    button.addEventListener("click", async () => {
-      const key = button.dataset.feedbackTheme;
-      const label = segments.find(segment => segment.key === key)?.label || titleCase(key);
-
+    node.addEventListener("click", async () => {
       try {
-        const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(key)}`);
-        openFeedbackDetailModal(label, data.entries || []);
+        const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(segment.key)}`);
+        openFeedbackDetailModal(segment.label, data.entries || []);
       } catch (error) {
         console.error("Failed to load feedback theme details:", error);
       }
@@ -679,17 +650,24 @@ function openFeedbackDetailModal(themeLabel, entries) {
   let expanded = false;
 
   function renderModalContent() {
-    const visibleEntries = expanded ? entries : entries.slice(0, 3);
+    const curatedEntries = entries.slice(0, 3);
+    const visibleEntries = expanded ? entries : curatedEntries;
 
     body.innerHTML = `
-      <div class="detail-card-list">
-        ${visibleEntries.map(entry => `
-          <div class="feedback-quote-card">
-            <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
-            <p>${escapeHtml(entry.quote || "")}</p>
-          </div>
-        `).join("")}
-      </div>
+      ${visibleEntries.length ? `
+        <div class="detail-card-list">
+          ${visibleEntries.map(entry => `
+            <div class="feedback-quote-card">
+              <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+              <p>${escapeHtml(entry.quote || "")}</p>
+            </div>
+          `).join("")}
+        </div>
+      ` : `
+        <div class="detail-empty-state">
+          <p>No feedback entries found.</p>
+        </div>
+      `}
 
       ${entries.length > 3 ? `
         <div class="feedback-preview-actions">
@@ -699,6 +677,8 @@ function openFeedbackDetailModal(themeLabel, entries) {
         </div>
       ` : ""}
     `;
+
+    body.scrollTop = 0;
 
     body.querySelector("#feedback-detail-expand-btn")?.addEventListener("click", () => {
       expanded = !expanded;
