@@ -17,6 +17,7 @@ from data_service import (
     get_target_opportunity,
     get_career_timeline,
     get_skill_utilization,
+    get_skill_cooccurrence,
     get_feedback_themes,
     get_feedback_theme_details,
     get_projects_by_domain,
@@ -131,6 +132,11 @@ def career_timeline():
 def skill_utilization():
     return get_skill_utilization()
 
+
+@app.get("/analytics/skill-cooccurrence")
+def skill_cooccurrence(limit: int = Query(6, ge=4, le=8)):
+    return get_skill_cooccurrence(limit=limit)
+    
 
 @app.get("/analytics/skill-projects/{skill_id}")
 def skill_projects(skill_id: int):

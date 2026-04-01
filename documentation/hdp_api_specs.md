@@ -45,16 +45,17 @@ skills, and architectural identity through structured endpoints.
 | GET    | /target-opportunity | Returns synthesized target opportunity profile               |
 
 ### Analytics
-| Method | Endpoint                                       | Description                                                   |
-|--------|------------------------------------------------|---------------------------------------------------------------|
-| GET    | /analytics/projects-by-domain                  | Returns project distribution by domain                        |
-| GET    | /analytics/projects-by-experience              | Returns project distribution by experience                    |
-| GET    | /analytics/career-timeline                     | Returns career timeline data for visualization                |
-| GET    | /analytics/skill-utilization                   | Returns skill utilization statistics                          |
-| GET    | /analytics/feedback-themes                     | Returns aggregated feedback themes                            |
-| GET    | /analytics/skill-projects/{skill_id}           | Returns projects associated with a specific skill             |
-| GET    | /analytics/experience-projects/{experience_id} | Returns projects associated with a specific experience        |
-| GET    | /analytics/feedback-theme-details/{theme}      | Returns detailed feedback entries for a feedback theme        |
+| Method | Endpoint                                       | Description                                                         |
+|--------|------------------------------------------------|---------------------------------------------------------------------|
+| GET    | /analytics/projects-by-domain                  | Returns project distribution by domain                              |
+| GET    | /analytics/projects-by-experience              | Returns project distribution by experience                          |
+| GET    | /analytics/career-timeline                     | Returns career timeline data for visualization                      |
+| GET    | /analytics/skill-utilization                   | Returns skill utilization statistics                                |
+| GET    | /analytics/skill-cooccurrence                  | Returns co-occurrence counts for the most frequently applied skills |
+| GET    | /analytics/feedback-themes                     | Returns aggregated feedback themes                                  |
+| GET    | /analytics/skill-projects/{skill_id}           | Returns projects associated with a specific skill                   |
+| GET    | /analytics/experience-projects/{experience_id} | Returns projects associated with a specific experience              |
+| GET    | /analytics/feedback-theme-details/{theme}      | Returns detailed feedback entries for a feedback theme              |
 
 ### Insights
 | Method | Endpoint  | Description                                              |
@@ -638,6 +639,59 @@ None
 ### Notes
 - Useful for bar charts, ranking tables, or “most applied skills” cards.
 - project_count is derived from project_skill relationships.
+
+## GET /analytics/skill-cooccurrence
+
+## Purpose
+-------
+Returns co-occurrence counts for the most frequently applied skills, enabling matrix-style visualization of how capabilities appear together across projects.
+
+### Query Parameters
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| limit     | integer | Optional number of top skills to include (default 6) |
+
+### Response Structure
+| Field                     | Type    | Description                                           |
+| ------------------------- | ------- | ----------------------------------------------------- |
+| skills                    | array   | Top skills included in the matrix                     |
+| skills.skill_id           | integer | Skill identifier                                      |
+| skills.skill_name         | string  | Skill name                                            |
+| skills.category           | string  | Skill category                                        |
+| skills.level              | string  | Skill level                                           |
+| skills.project_count      | integer | Number of linked projects for the skill               |
+| pairs                     | array   | Pairwise co-occurrence counts between included skills |
+| pairs.skill_a_id          | integer | First skill identifier                                |
+| pairs.skill_b_id          | integer | Second skill identifier                               |
+| pairs.pair_count          | integer | Number of projects where both skills co-occur         |
+
+### Example Response
+---------------------
+{
+  "skills": [
+    {
+      "skill_id": 1,
+      "skill_name": "SQL",
+      "category": "data",
+      "level": "advanced",
+      "project_count": 8
+    },
+    {
+      "skill_id": 16,
+      "skill_name": "Executive Communication",
+      "category": "leadership",
+      "level": "advanced",
+      "project_count": 7
+    }
+  ],
+  "pairs": [
+    {
+      "skill_a_id": 1,
+      "skill_b_id": 16,
+      "pair_count": 6
+    }
+  ]
+}
 
 ## GET /analytics/skill-projects/{skill_id}
 Returns projects associated with a specific skill to support drilldown

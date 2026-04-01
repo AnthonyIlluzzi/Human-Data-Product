@@ -248,7 +248,7 @@
     rel="noopener noreferrer"
     id="linkedin-link"
   >
-    Open LinkedIn
+    View LinkedIn
   </a>
 </div>
         </div>
@@ -297,8 +297,8 @@
                 <p id="product-specialization" class="hero-subtext">Loading specialization...</p>
                 <p class="hero-description">
                   This workspace presents the Human Data Product as a real consumable
-                  asset: queryable through SQL, extractable through API, interpretable
-                  through analytics and insight cards, and aligned to future opportunities.
+				  asset: queryable through SQL, extractable through API, interpretable
+				  through derived analytics, and aligned to future opportunities.
                 </p>
               </div>
 
@@ -471,9 +471,9 @@
     </button>
 
     <button class="port-card-mini interactive-port" data-panel-target="insights-panel" data-tab-target="visualizations-tab">
-      <strong>Insights</strong>
-      <p>Explore analytical views and narrative insight cards.</p>
-    </button>
+  	  <strong>Insights</strong>
+  	  <p>Explore analytical views and data-derived patterns.</p>
+	</button>
   </div>
 </div>
           </div>
@@ -821,185 +821,245 @@ LIMIT 1;"
         </div>
       </section>
 
-      <!-- Insights Panel -->
+            <!-- Insights Panel -->
       <section id="insights-panel" class="workspace-panel">
         <div class="panel-header">
           <h1>Insights Workspace</h1>
-          <p>Analytical views, curated insight cards, and next opportunity fit.</p>
+          <p>Analytical views and derived patterns grounded in structured experience data.</p>
         </div>
 
-        <div class="tabs">
+        <div class="tabs insights-tabs">
           <button class="tab-btn active" data-tab="visualizations-tab">Visualizations</button>
-          <button class="tab-btn" data-tab="cards-tab">Insight Cards</button>
           <button class="tab-btn" data-tab="next-opportunity-tab">Next Opportunity</button>
         </div>
 
         <div id="visualizations-tab" class="tab-panel active">
-  <div class="viz-grid viz-dashboard-grid">
-    <div class="card compact-card viz-card viz-card-wide">
-      <div class="viz-card-header">
-        <h3>Career Timeline</h3>
-        <p class="viz-card-subtitle">Career progression across roles and organizations.</p>
-      </div>
-      <div id="career-timeline-viz" class="timeline-viz timeline-rail"></div>
-    </div>
+          <div class="viz-grid viz-dashboard-grid viz-dashboard-grid--redesign">
+            <div class="card compact-card viz-card viz-card-wide timeline-card">
+              <div class="viz-card-header">
+                <h3>Career Timeline</h3>
+                <p class="viz-card-subtitle">Career progression across roles and organizations.</p>
+              </div>
+              <div id="career-timeline-viz" class="timeline-viz timeline-rail"></div>
+            </div>
 
-    <div class="card compact-card viz-card">
-      <div class="viz-card-header">
-        <h3>Skill Utilization</h3>
-        <p class="viz-card-subtitle">Most frequently applied skills across projects.</p>
-      </div>
-      <div class="viz-split-layout">
-        <div id="skill-utilization-viz" class="viz-list"></div>
-        <div id="skill-drilldown" class="viz-detail-panel">
-          <div class="detail-empty-state">
-            <div class="detail-eyebrow">Skill Drilldown</div>
-            <h4>Select a skill</h4>
-            <p>Click a bar to view the projects where that skill was applied.</p>
+            <div class="card compact-card viz-card pattern-card">
+              <div class="viz-card-header">
+                <h3>Capability Patterns</h3>
+                <p class="viz-card-subtitle">How capabilities co-occur across projects.</p>
+              </div>
+
+              <div class="pattern-label-row">
+                <div class="derived-pattern-block">
+                  <div class="derived-pattern-label">
+                    Derived Pattern
+                    <span class="info-tooltip-wrap">
+                      <button
+                        type="button"
+                        class="pattern-info-btn"
+                        aria-label="How this pattern was derived"
+                      >i</button>
+                      <span class="pattern-info-tooltip">
+                        Based on co-occurrence of the most frequently applied skills across linked project records.
+                      </span>
+                    </span>
+                  </div>
+                  <p class="derived-pattern-copy">
+                    SQL, Communication, and Strategic Thinking consistently co-occur across projects.
+                  </p>
+                </div>
+              </div>
+
+              <div id="skill-pattern-matrix" class="skill-pattern-matrix"></div>
+              <div id="skill-pattern-summary" class="matrix-summary-list"></div>
+            </div>
+
+            <div class="card compact-card viz-card pattern-card">
+              <div class="viz-card-header">
+                <h3>Value Creation Patterns</h3>
+                <p class="viz-card-subtitle">Where value appears across roles.</p>
+              </div>
+
+              <div class="pattern-label-row">
+                <div class="derived-pattern-block">
+                  <div class="derived-pattern-label">
+                    Derived Pattern
+                    <span class="info-tooltip-wrap">
+                      <button
+                        type="button"
+                        class="pattern-info-btn"
+                        aria-label="How this pattern was derived"
+                      >i</button>
+                      <span class="pattern-info-tooltip">
+                        Based on recurring project categories and repeated outcome types across experience records.
+                      </span>
+                    </span>
+                  </div>
+                  <p class="derived-pattern-copy">
+                    Work consistently centers on enablement, structure, and scalable solution design.
+                  </p>
+                </div>
+              </div>
+
+              <div id="project-pattern-blocks" class="project-pattern-blocks"></div>
+            </div>
+
+            <div class="card compact-card viz-card viz-card-wide feedback-validation-card">
+              <div class="viz-card-header">
+                <h3>Feedback Validation</h3>
+                <p class="viz-card-subtitle">External confirmation of recurring patterns.</p>
+              </div>
+
+              <div class="pattern-label-row">
+                <div class="derived-pattern-block">
+                  <div class="derived-pattern-label">
+                    Derived Pattern
+                    <span class="info-tooltip-wrap">
+                      <button
+                        type="button"
+                        class="pattern-info-btn"
+                        aria-label="How this pattern was derived"
+                      >i</button>
+                      <span class="pattern-info-tooltip">
+                        Based on theme distribution and quote clustering across feedback sources.
+                      </span>
+                    </span>
+                  </div>
+                  <p class="derived-pattern-copy">
+                    Leadership, clarity, and collaboration appear consistently across feedback.
+                  </p>
+                </div>
+              </div>
+
+              <div class="feedback-validation-layout">
+                <div class="feedback-chart-panel">
+                  <div id="feedback-themes-viz" class="feedback-donut"></div>
+                </div>
+
+                <div id="feedback-pattern-panel" class="feedback-pattern-panel">
+                  <div class="feedback-placeholder">
+                    <div class="detail-eyebrow">Feedback Detail</div>
+                    <h4>Select a theme</h4>
+                    <p>Click a segment to view the strongest supporting excerpts.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="card compact-card viz-card">
-      <div class="viz-card-header">
-        <h3>Projects by Experience</h3>
-        <p class="viz-card-subtitle">Project density across roles, with role-level drilldown.</p>
-      </div>
-      <div class="viz-split-layout">
-        <div id="projects-by-experience-viz" class="card-bar-grid"></div>
-        <div id="experience-drilldown" class="viz-detail-panel">
-          <div class="detail-empty-state">
-            <div class="detail-eyebrow">Experience Drilldown</div>
-            <h4>Select a role</h4>
-            <p>Click a bar to explore the projects associated with that experience.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card compact-card viz-card viz-card-wide">
-      <div class="viz-card-header">
-        <h3>Feedback Themes</h3>
-        <p class="viz-card-subtitle">Theme distribution with drilldown to source type and quote-level detail.</p>
-      </div>
-      <div class="viz-feedback-layout">
-        <div class="feedback-chart-panel">
-          <div id="feedback-themes-viz" class="feedback-donut"></div>
-          <div id="feedback-donut-legend" class="feedback-legend"></div>
-        </div>
-        <div id="feedback-drilldown" class="viz-detail-panel">
-          <div class="detail-empty-state">
-            <div class="detail-eyebrow">Theme Drilldown</div>
-            <h4>Select a theme</h4>
-            <p>Choose a theme to view source breakdown and supporting feedback excerpts.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="cards-tab" class="tab-panel">
-  <div id="insight-cards-grid" class="insight-grid"></div>
-</div>
 
         <div id="next-opportunity-tab" class="tab-panel">
-  <div class="next-opportunity-layout">
-    <div class="card compact-card opportunity-hero-card full-width-card">
-      <div class="opportunity-hero-main">
-        <div class="opportunity-eyebrow">Opportunity Insight</div>
-        <h3>Best-Fit Opportunity Profile</h3>
-        <p id="target-opportunity-summary" class="opportunity-summary">
-          Loading target opportunity summary...
-        </p>
+          <div class="next-opportunity-layout next-opportunity-layout--redesign">
+            <div class="card compact-card opportunity-hero-card full-width-card opportunity-hero-card--redesign">
+              <div class="opportunity-hero-main">
+                <div class="opportunity-eyebrow">Opportunity Insight</div>
+                <h3>Best-Fit Opportunity Profile</h3>
 
-        <div class="opportunity-highlight-block">
-          <div class="opportunity-section-label">Top fit signals</div>
-          <div id="opportunity-highlight-chips" class="opportunity-chip-list">
-            <span class="opportunity-chip emphasis">Loading...</span>
+                <div class="derived-pattern-block derived-pattern-block--opportunity">
+                  <div class="derived-pattern-label">
+                    Derived Pattern
+                    <span class="info-tooltip-wrap">
+                      <button
+                        type="button"
+                        class="pattern-info-btn"
+                        aria-label="How this pattern was derived"
+                      >i</button>
+                      <span class="pattern-info-tooltip">
+                        Based on role-preference data, focus-area alignment, and representative project evidence.
+                      </span>
+                    </span>
+                  </div>
+                  <p id="target-opportunity-summary" class="opportunity-summary">
+                    Loading target opportunity summary...
+                  </p>
+                </div>
+
+                <div class="opportunity-highlight-block">
+                  <div class="opportunity-section-label">Top fit signals</div>
+                  <div id="opportunity-highlight-chips" class="opportunity-chip-list">
+                    <span class="opportunity-chip emphasis">Loading...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="opportunity-scorecard">
+                <div class="opportunity-score-item">
+                  <span class="opportunity-score-label">Target Level</span>
+                  <strong id="target-career-level-brief">Loading...</strong>
+                </div>
+                <div class="opportunity-score-item">
+                  <span class="opportunity-score-label">Work Mode</span>
+                  <strong id="target-work-mode-brief">Loading...</strong>
+                </div>
+                <div class="opportunity-score-item">
+                  <span class="opportunity-score-label">Preferred Location</span>
+                  <strong id="target-location-brief">Loading...</strong>
+                </div>
+                <div class="opportunity-score-item">
+                  <span class="opportunity-score-label">Travel Ceiling</span>
+                  <strong id="target-travel-max">Loading...</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="opportunity-core-grid full-width-card">
+              <div class="card compact-card opportunity-core-card">
+                <div class="opportunity-section-label">Roles</div>
+                <div id="opportunity-core-roles" class="opportunity-chip-list opportunity-chip-list--compact">
+                  <span class="opportunity-chip">Loading...</span>
+                </div>
+              </div>
+
+              <div class="card compact-card opportunity-core-card">
+                <div class="opportunity-section-label">Focus Areas</div>
+                <div id="opportunity-core-focus" class="opportunity-chip-list opportunity-chip-list--compact">
+                  <span class="opportunity-chip">Loading...</span>
+                </div>
+              </div>
+
+              <div class="card compact-card opportunity-core-card">
+                <div class="opportunity-section-label">Operating Model</div>
+                <div id="opportunity-core-operating" class="opportunity-chip-list opportunity-chip-list--compact">
+                  <span class="opportunity-chip">Loading...</span>
+                </div>
+              </div>
+
+              <div class="card compact-card opportunity-core-card">
+                <div class="opportunity-section-label">Environment</div>
+                <div id="opportunity-core-environment" class="opportunity-chip-list opportunity-chip-list--compact">
+                  <span class="opportunity-chip">Loading...</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card compact-card opportunity-evidence-card full-width-card">
+              <div class="section-heading">
+                <h3>Why this fit is credible</h3>
+                <p>Representative proof points showing the type of impact this target profile is built on.</p>
+              </div>
+
+              <div id="opportunity-evidence-list" class="opportunity-evidence-grid opportunity-evidence-grid--redesign">
+                <div class="opportunity-evidence-item">Loading supporting evidence...</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="opportunity-scorecard">
-        <div class="opportunity-score-item">
-          <span class="opportunity-score-label">Target Level</span>
-          <strong id="target-career-level-brief">Loading...</strong>
+        <div id="feedback-detail-modal" class="modal-overlay hidden">
+          <div class="modal-card">
+            <div class="modal-header">
+              <h2 id="feedback-detail-modal-title">Feedback Detail</h2>
+              <button class="modal-close" data-close-modal="feedback-detail-modal">×</button>
+            </div>
+            <div class="modal-body">
+              <div id="feedback-detail-modal-body" class="detail-card-list">
+                <div class="detail-empty-state">
+                  <p>No feedback selected.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="opportunity-score-item">
-          <span class="opportunity-score-label">Work Mode</span>
-          <strong id="target-work-mode-brief">Loading...</strong>
-        </div>
-        <div class="opportunity-score-item">
-          <span class="opportunity-score-label">Preferred Location</span>
-          <strong id="target-location-brief">Loading...</strong>
-        </div>
-        <div class="opportunity-score-item">
-          <span class="opportunity-score-label">Travel Ceiling</span>
-          <strong id="target-travel-max">Loading...</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="opportunity-pillars-grid full-width-card">
-  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--tall pillar-role-shape">
-    <div class="opportunity-section-label">Role Shape</div>
-    <h4>Architecture-oriented scope</h4>
-    <div id="opportunity-role-shape" class="opportunity-chip-list">
-      <span class="opportunity-chip">Loading...</span>
-    </div>
-  </div>
-
-  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--tall pillar-problem-space">
-    <div class="opportunity-section-label">Problem Space</div>
-    <h4>Highest-value focus areas</h4>
-    <div id="opportunity-problem-space" class="opportunity-chip-list">
-      <span class="opportunity-chip">Loading...</span>
-    </div>
-  </div>
-
-  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--compact pillar-work-context">
-    <div class="opportunity-section-label">Work Context</div>
-    <h4>Environment fit</h4>
-    <div id="opportunity-work-context" class="opportunity-chip-list opportunity-chip-list--compact">
-      <span class="opportunity-chip">Loading...</span>
-    </div>
-  </div>
-
-  <div class="card compact-card opportunity-pillar-card opportunity-pillar-card--compact pillar-leadership-style">
-    <div class="opportunity-section-label">Leadership Style</div>
-    <h4>Preferred operating model</h4>
-    <div id="opportunity-leadership-style" class="opportunity-chip-list opportunity-chip-list--compact">
-      <span class="opportunity-chip">Loading...</span>
-    </div>
-  </div>
-</div>
-
-    <div class="card compact-card opportunity-evidence-card full-width-card">
-      <div class="section-heading">
-        <h3>Why this fit is credible</h3>
-        <p>Representative proof points showing the type of impact this target profile is built on.</p>
-      </div>
-
-      <div id="opportunity-evidence-list" class="opportunity-evidence-grid">
-        <div class="opportunity-evidence-item">Loading supporting evidence...</div>
-      </div>
-    </div>
-
-    <div class="card compact-card opportunity-structured-card full-width-card">
-	  <div class="section-heading">
-		<h3>Preference Signal Matrix</h3>
-		<p>Condensed role-fit signals grouped into four fit dimensions.</p>
-	  </div>
-
-	  <div id="role-preferences-groups" class="preference-groups preference-groups--matrix">
-		Loading role preferences...
-	  </div>
-	</div>
-  </div>
-</div>
-
       </section>
 
   <script src="app.js"></script>

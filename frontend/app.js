@@ -13,10 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindOutputPorts();
   bindLandingModals();
 
-  const loaders = [
+const loaders = [
     loadMetadata,
     loadOverview,
-    loadInsights,
     loadVisualizations,
     loadContactInfo,
     loadNextOpportunity
@@ -364,35 +363,23 @@ async function loadOverview() {
 async function loadInsights() {
   const grid = document.getElementById("insight-cards-grid");
   if (!grid) return;
-
-  const insights = await fetchJson("/insights");
   grid.innerHTML = "";
-
-  insights.forEach(insight => {
-    const card = document.createElement("article");
-    card.className = "insight-card";
-    card.innerHTML = `
-      <div class="insight-type">${escapeHtml(insight.type || "insight")}</div>
-      <h3>${escapeHtml(insight.title || "")}</h3>
-      <p><strong>${escapeHtml(insight.summary || "")}</strong></p>
-      <p>${escapeHtml(insight.detail || "")}</p>
-    `;
-    grid.appendChild(card);
-  });
 }
 
 async function loadVisualizations() {
-  const [timeline, skillUtilization, projectsByExperience, feedbackThemes] = await Promise.all([
+  const [timeline, skillMatrix, projectsByExperience, projects, feedbackThemes] = await Promise.all([
     fetchJson("/analytics/career-timeline"),
-    fetchJson("/analytics/skill-utilization"),
+    fetchJson("/analytics/skill-cooccurrence?limit=6"),
     fetchJson("/analytics/projects-by-experience"),
+    fetchJson("/projects"),
     fetchJson("/analytics/feedback-themes")
   ]);
 
   renderTimeline("career-timeline-viz", timeline);
-  renderSkillUtilization("skill-utilization-viz", skillUtilization.slice(0, 8));
-  renderProjectsByExperience("projects-by-experience-viz", projectsByExperience);
-  renderFeedbackThemes("feedback-themes-viz", "feedback-donut-legend", "feedback-drilldown", feedbackThemes);
+  renderSkillPatternMatrix("skill-pattern-matrix", "skill-pattern-summary", skillMatrix);
+  renderProjectPatternBlocks("project-pattern-blocks", projectsByExperience, projects);
+  renderFeedbackValidation("feedback-themes-viz", "feedback-pattern-panel", feedbackThemes);
+  bindPatternInfoTooltips();
 }
 
 function renderTimeline(containerId, items) {
@@ -418,6 +405,286 @@ function renderTimeline(containerId, items) {
     `;
     container.appendChild(div);
   });
+}
+
+function renderSkillPatternMatrix(containerId, summaryId, data) {
+  const container = document.getElementById(containerId);
+  const summary = document.getElementById(summaryId);
+  if (!container || !summary) return;
+
+  const skills = data?.skills || [];
+  const pairs = data?.pairs || [];
+
+  if (!skills.length) {
+    container.textContent = "No skill pattern data available.";
+    summary.innerHTML = "";
+    return;
+  }
+
+  const maxPairCount = Math.max(...pairs.map(pair => pair.pair_count || 0), 1);
+  const pairMap = new Map();
+
+  pairs.forEach(pair => {
+    pairMap.set(`${pair.skill_a_id}-${pair.skill_b_id}`, pair.pair_count);
+    pairMap.set(`${pair.skill_b_id}-${pair.skill_a_id}`, pair.pair_count);
+  });
+
+  const grid = document.createElement("div");
+  grid.className = "skill-matrix-grid";
+
+  const corner = document.createElement("div");
+  corner.className = "skill-matrix-corner";
+  corner.textContent = "Skills";
+  grid.appendChild(corner);
+
+  skills.forEach(skill => {
+    const col = document.createElement("div");
+    col.className = "skill-matrix-axis";
+    col.textContent = truncateText(skill.skill_name, 14);
+    grid.appendChild(col);
+  });
+
+  skills.forEach(rowSkill => {
+    const rowLabel = document.createElement("div");
+    rowLabel.className = "skill-matrix-axis skill-matrix-axis--row";
+    rowLabel.textContent = rowSkill.skill_name;
+    grid.appendChild(rowLabel);
+
+    skills.forEach(colSkill => {
+      const cell = document.createElement("div");
+      const sameSkill = rowSkill.skill_id === colSkill.skill_id;
+
+      if (sameSkill) {
+        cell.className = "skill-matrix-cell is-empty";
+        grid.appendChild(cell);
+        return;
+      }
+
+      const count = pairMap.get(`${rowSkill.skill_id}-${colSkill.skill_id}`) || 0;
+      const normalized = count === 0 ? 0 : Math.ceil((count / maxPairCount) * 5);
+
+      cell.className = `skill-matrix-cell ${count === 0 ? "is-empty" : `level-${normalized} is-hoverable`}`;
+      cell.title = `${rowSkill.skill_name} + ${colSkill.skill_name}: ${count} project${count === 1 ? "" : "s"}`;
+      grid.appendChild(cell);
+    });
+  });
+
+  container.innerHTML = "";
+  container.appendChild(grid);
+
+  const topPairs = [...pairs]
+    .sort((a, b) => (b.pair_count || 0) - (a.pair_count || 0))
+    .slice(0, 2)
+    .map(pair => {
+      const skillA = skills.find(skill => skill.skill_id === pair.skill_a_id)?.skill_name || "Unknown";
+      const skillB = skills.find(skill => skill.skill_id === pair.skill_b_id)?.skill_name || "Unknown";
+      return `<div class="matrix-summary-item"><strong>${escapeHtml(skillA)} + ${escapeHtml(skillB)}</strong> (${pair.pair_count})</div>`;
+    })
+    .join("");
+
+  summary.innerHTML = topPairs;
+}
+
+function renderProjectPatternBlocks(containerId, projectsByExperience, allProjects) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!projectsByExperience?.length || !allProjects?.length) {
+    container.textContent = "No project pattern data available.";
+    return;
+  }
+
+  const projectsByExpId = new Map();
+  allProjects.forEach(project => {
+    const key = project.experience_id;
+    if (!projectsByExpId.has(key)) projectsByExpId.set(key, []);
+    projectsByExpId.get(key).push(project);
+  });
+
+  const rows = projectsByExperience
+    .filter(item => (item.project_count || 0) > 0)
+    .slice(0, 4)
+    .map(item => {
+      const linkedProjects = projectsByExpId.get(item.experience_id) || [];
+      const categories = deriveProjectCategories(linkedProjects);
+
+      return `
+        <div class="project-pattern-row">
+          <div class="project-pattern-role">${escapeHtml(item.role)}</div>
+          <div class="project-pattern-meta">${escapeHtml(item.company)} • ${linkedProjects.length} project${linkedProjects.length === 1 ? "" : "s"}</div>
+          <div class="project-pattern-chip-row">
+            ${categories.map(category => `<span class="project-pattern-chip" title="${escapeHtml(category.description)}">${escapeHtml(category.label)}</span>`).join("")}
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  container.innerHTML = rows;
+}
+
+function deriveProjectCategories(projects) {
+  const categoryRules = [
+    {
+      label: "Enablement",
+      description: "Self-service, adoption, integration, and enablement-oriented work",
+      test: project => /enablement|self-service|adoption|integration/i.test(`${project.domain} ${project.name} ${project.value}`)
+    },
+    {
+      label: "Analytics",
+      description: "Analytics, reporting, and usage insight work",
+      test: project => /analytics|reporting|usage|insight/i.test(`${project.domain} ${project.name} ${project.value}`)
+    },
+    {
+      label: "Architecture",
+      description: "Platform, metadata, architecture, and structural design work",
+      test: project => /architecture|metadata|platform|data product|governance/i.test(`${project.domain} ${project.name} ${project.value}`)
+    },
+    {
+      label: "Strategy",
+      description: "Business case, roadmap, monetization, and strategic framing work",
+      test: project => /strategy|roadmap|monetization|business case|decision/i.test(`${project.domain} ${project.name} ${project.value}`)
+    },
+    {
+      label: "Execution",
+      description: "Operational delivery, release readiness, and practical execution work",
+      test: project => /testing|defect|launch|delivery|execution|readiness/i.test(`${project.domain} ${project.name} ${project.value}`)
+    }
+  ];
+
+  return categoryRules
+    .map(rule => ({
+      label: rule.label,
+      description: rule.description,
+      count: projects.filter(project => rule.test(project)).length
+    }))
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+    .slice(0, 4);
+}
+
+function renderFeedbackValidation(chartId, detailId, items) {
+  const chart = document.getElementById(chartId);
+  const detail = document.getElementById(detailId);
+  if (!chart || !detail) return;
+
+  if (!items || items.length === 0) {
+    chart.textContent = "No feedback theme data available.";
+    detail.innerHTML = `
+      <div class="feedback-placeholder">
+        <div class="detail-eyebrow">Feedback Detail</div>
+        <h4>No theme data</h4>
+        <p>Feedback themes are not available right now.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const segments = items.map(item => ({
+    key: item.theme,
+    label: titleCase(item.theme),
+    value: item.feedback_count || 0
+  }));
+
+  renderDonutView({
+    chart,
+    legend: document.createElement("div"),
+    segments,
+    centerValue: segments.length,
+    centerLabel: "Themes",
+    onSelect: async segment => {
+      detail.innerHTML = `
+        <div class="feedback-placeholder">
+          <div class="detail-eyebrow">Feedback Detail</div>
+          <h4>Loading ${escapeHtml(segment.label)}...</h4>
+          <p>Fetching supporting excerpts.</p>
+        </div>
+      `;
+
+      try {
+        const data = await fetchJson(`/analytics/feedback-theme-details/${encodeURIComponent(segment.key)}`);
+        const entries = data.entries || [];
+        const previewEntries = entries.slice(0, 3);
+
+        detail.innerHTML = `
+          <div class="feedback-preview-header">
+            <div>
+              <div class="detail-eyebrow">Feedback Detail</div>
+              <h4>${escapeHtml(segment.label)}</h4>
+              <p class="feedback-preview-meta">${entries.length} supporting excerpt${entries.length === 1 ? "" : "s"}</p>
+            </div>
+          </div>
+
+          <div class="feedback-quote-list">
+            ${previewEntries.map(entry => `
+              <div class="feedback-quote-preview">
+                <p>${escapeHtml(entry.quote || "")}</p>
+              </div>
+            `).join("")}
+          </div>
+
+          ${entries.length > 3 ? `
+            <div class="feedback-preview-actions">
+              <button type="button" class="btn-secondary" data-feedback-theme="${escapeHtml(segment.key)}">
+                View more feedback
+              </button>
+            </div>
+          ` : ""}
+        `;
+
+        detail.querySelector("[data-feedback-theme]")?.addEventListener("click", () => {
+          openFeedbackDetailModal(segment.label, entries);
+        });
+      } catch (error) {
+        detail.innerHTML = `
+          <div class="feedback-placeholder">
+            <div class="detail-eyebrow">Feedback Detail</div>
+            <h4>Unable to load theme</h4>
+            <p>There was a problem loading the selected feedback theme.</p>
+          </div>
+        `;
+      }
+    }
+  });
+}
+
+function openFeedbackDetailModal(themeLabel, entries) {
+  const modal = document.getElementById("feedback-detail-modal");
+  const title = document.getElementById("feedback-detail-modal-title");
+  const body = document.getElementById("feedback-detail-modal-body");
+  if (!modal || !title || !body) return;
+
+  title.textContent = `${themeLabel} Feedback`;
+  body.innerHTML = `
+    <div class="detail-card-list">
+      ${entries.map(entry => `
+        <div class="feedback-quote-card">
+          <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+          <p>${escapeHtml(entry.quote || "")}</p>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
+}
+
+function bindPatternInfoTooltips() {
+  document.querySelectorAll(".info-tooltip-wrap").forEach(wrapper => {
+    const button = wrapper.querySelector(".pattern-info-btn");
+    if (!button) return;
+
+    button.addEventListener("click", event => {
+      event.stopPropagation();
+      const isOpen = wrapper.classList.contains("is-open");
+      document.querySelectorAll(".info-tooltip-wrap.is-open").forEach(node => node.classList.remove("is-open"));
+      if (!isOpen) wrapper.classList.add("is-open");
+    });
+  });
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".info-tooltip-wrap.is-open").forEach(node => node.classList.remove("is-open"));
+  }, { once: true });
 }
 
 function renderSkillUtilization(containerId, items) {
@@ -1006,9 +1273,8 @@ async function loadContactInfo() {
 
 async function loadNextOpportunity() {
   try {
-    const [targetOpportunity, rolePreferences, projects] = await Promise.all([
+    const [targetOpportunity, projects] = await Promise.all([
       fetchJson("/target-opportunity"),
-      fetchJson("/role-preferences"),
       fetchJson("/projects")
     ]);
 
@@ -1019,57 +1285,41 @@ async function loadNextOpportunity() {
 
     const highlightSignals = uniqueItems([
       targetOpportunity.target_role_types?.[0],
-      targetOpportunity.target_career_levels?.slice(0, 2).join(" / "),
-      targetOpportunity.preferred_work_modes?.slice(0, 2).join(" / "),
+      (targetOpportunity.target_career_levels || []).slice(0, 2).join(" / "),
+      (targetOpportunity.preferred_work_modes || []).slice(0, 2).join(" / "),
       targetOpportunity.leadership_preference?.[0],
       targetOpportunity.travel_max ? `Travel ≤ ${targetOpportunity.travel_max}` : null
     ]);
 
     renderChipList("opportunity-highlight-chips", highlightSignals, { emphasis: true });
 
-    renderChipList(
-      "opportunity-role-shape",
-      uniqueItems([
-        ...(targetOpportunity.target_role_types || []).slice(0, 4),
-        ...(targetOpportunity.target_career_levels || []).slice(0, 2)
-      ])
-    );
+    const roles = uniqueItems((targetOpportunity.target_role_types || []).slice(0, 3));
+    const focus = uniqueItems((targetOpportunity.focus_areas || []).slice(0, 3));
+    const operating = uniqueItems((targetOpportunity.leadership_preference || []).slice(0, 2));
+    const environment = uniqueItems([
+      ...(targetOpportunity.preferred_work_modes || []).slice(0, 2),
+      ...(targetOpportunity.preferred_locations || []).slice(0, 1),
+      targetOpportunity.travel_max ? `Travel ≤ ${targetOpportunity.travel_max}` : null
+    ]);
 
-    renderChipList(
-      "opportunity-work-context",
-      uniqueItems([
-        ...(targetOpportunity.preferred_work_modes || []).slice(0, 3),
-        ...(targetOpportunity.preferred_locations || []).slice(0, 2),
-        targetOpportunity.travel_max ? `Travel ≤ ${targetOpportunity.travel_max}` : null
-      ])
-    );
-
-    renderChipList(
-      "opportunity-problem-space",
-      uniqueItems((targetOpportunity.focus_areas || []).slice(0, 6))
-    );
-
-    renderChipList(
-      "opportunity-leadership-style",
-      uniqueItems((targetOpportunity.leadership_preference || []).slice(0, 2))
-    );
+    renderChipList("opportunity-core-roles", roles);
+    renderChipList("opportunity-core-focus", focus);
+    renderChipList("opportunity-core-operating", operating);
+    renderChipList("opportunity-core-environment", environment);
 
     const careerBrief = document.getElementById("target-career-level-brief");
     if (careerBrief) {
-      careerBrief.textContent =
-        (targetOpportunity.target_career_levels || []).slice(0, 2).join(" / ") || "Not specified";
+      careerBrief.textContent = (targetOpportunity.target_career_levels || []).slice(0, 2).join(" / ") || "Not specified";
     }
 
     const workModeBrief = document.getElementById("target-work-mode-brief");
     if (workModeBrief) {
-      workModeBrief.textContent =
-        (targetOpportunity.preferred_work_modes || []).slice(0, 2).join(" / ") || "Not specified";
+      workModeBrief.textContent = (targetOpportunity.preferred_work_modes || []).slice(0, 2).join(" / ") || "Not specified";
     }
 
     const locationBrief = document.getElementById("target-location-brief");
     if (locationBrief) {
-      locationBrief.textContent =
-        (targetOpportunity.preferred_locations || []).slice(0, 2).join(" / ") || "Not specified";
+      locationBrief.textContent = (targetOpportunity.preferred_locations || []).slice(0, 2).join(" / ") || "Not specified";
     }
 
     const travelEl = document.getElementById("target-travel-max");
@@ -1077,8 +1327,7 @@ async function loadNextOpportunity() {
       travelEl.textContent = targetOpportunity.travel_max || "Not specified";
     }
 
-    renderOpportunityEvidence(projects || []);
-    renderRolePreferenceGroups(rolePreferences || []);
+    renderOpportunityEvidenceRedesign(projects || []);
   } catch (error) {
     console.error("Failed to load next opportunity:", error);
 
@@ -1086,17 +1335,30 @@ async function loadNextOpportunity() {
     if (summaryEl) {
       summaryEl.textContent = "Unable to load target opportunity insight.";
     }
-
-    const evidenceEl = document.getElementById("opportunity-evidence-list");
-    if (evidenceEl) {
-      evidenceEl.innerHTML = `<div class="opportunity-evidence-item">Supporting evidence unavailable.</div>`;
-    }
-
-    const prefEl = document.getElementById("role-preferences-groups");
-    if (prefEl) {
-      prefEl.textContent = "Role preferences unavailable.";
-    }
   }
+}
+
+function renderOpportunityEvidenceRedesign(projects) {
+  const container = document.getElementById("opportunity-evidence-list");
+  if (!container) return;
+
+  const preferredProjectIds = [1001, 1002, 1003, 1004];
+  const selected = preferredProjectIds
+    .map(projectId => projects.find(project => project.project_id === projectId))
+    .filter(Boolean);
+
+  if (!selected.length) {
+    container.innerHTML = `<div class="opportunity-evidence-item">No supporting evidence available.</div>`;
+    return;
+  }
+
+  container.innerHTML = selected.map(project => `
+    <div class="opportunity-evidence-item">
+      <div class="detail-eyebrow">${escapeHtml(project.domain || "Project")}</div>
+      <h4>${escapeHtml(project.name || "Untitled project")}</h4>
+      <p>${escapeHtml(truncateText(project.value || "", 170))}</p>
+    </div>
+  `).join("");
 }
 
 function renderChipList(elementId, items, options = {}) {

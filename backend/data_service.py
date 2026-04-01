@@ -445,6 +445,58 @@ def get_skill_utilization():
         """)
         return rows_to_dicts(cursor.fetchall())
 
+def get_skill_cooccurrence(limit: int = 6):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                s.category,
+                s.level,
+                COUNT(ps.project_id) AS project_count
+            FROM skill s
+            JOIN project_skill ps
+              ON s.skill_id = ps.skill_id
+            GROUP BY s.skill_id, s.skill_name, s.category, s.level
+            ORDER BY project_count DESC, s.skill_name ASC
+            LIMIT ?
+            """,
+            (limit,),
+        )
+        skills = rows_to_dicts(cursor.fetchall())
+
+        skill_ids = [row["skill_id"] for row in skills]
+        if not skill_ids:
+            return {"skills": [], "pairs": []}
+
+        placeholders = ", ".join("?" for _ in skill_ids)
+
+        cursor.execute(
+            f"""
+            SELECT
+                ps1.skill_id AS skill_a_id,
+                ps2.skill_id AS skill_b_id,
+                COUNT(DISTINCT ps1.project_id) AS pair_count
+            FROM project_skill ps1
+            JOIN project_skill ps2
+              ON ps1.project_id = ps2.project_id
+             AND ps1.skill_id < ps2.skill_id
+            WHERE ps1.skill_id IN ({placeholders})
+              AND ps2.skill_id IN ({placeholders})
+            GROUP BY ps1.skill_id, ps2.skill_id
+            ORDER BY pair_count DESC, ps1.skill_id ASC, ps2.skill_id ASC
+            """,
+            (*skill_ids, *skill_ids),
+        )
+        pairs = rows_to_dicts(cursor.fetchall())
+
+    return {
+        "skills": skills,
+        "pairs": pairs,
+    }
 
 def get_skill_projects(skill_id: int):
     with get_connection() as conn:
