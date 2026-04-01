@@ -520,6 +520,7 @@ function renderProjectPatternBlocks(containerId, projectsByExperience, allProjec
   }
 
   const projectsByExpId = new Map();
+
   allProjects.forEach(project => {
     const key = project.experience_id;
     if (!projectsByExpId.has(key)) projectsByExpId.set(key, []);
@@ -533,12 +534,45 @@ function renderProjectPatternBlocks(containerId, projectsByExperience, allProjec
       const linkedProjects = projectsByExpId.get(item.experience_id) || [];
       const categories = deriveProjectCategories(linkedProjects);
 
+      if (!categories.length) {
+        return `
+          <div class="project-pattern-row">
+            <div class="project-pattern-role">${escapeHtml(item.role)}</div>
+            <div class="project-pattern-meta">${escapeHtml(item.company)} • ${linkedProjects.length} project${linkedProjects.length === 1 ? "" : "s"}</div>
+            <div class="project-pattern-empty">No recurring value categories detected.</div>
+          </div>
+        `;
+      }
+
+      const total = categories.reduce((sum, category) => sum + category.count, 0);
+      const topCategory = categories[0];
+      const supportingCategories = categories.slice(1, 3);
+
       return `
         <div class="project-pattern-row">
           <div class="project-pattern-role">${escapeHtml(item.role)}</div>
           <div class="project-pattern-meta">${escapeHtml(item.company)} • ${linkedProjects.length} project${linkedProjects.length === 1 ? "" : "s"}</div>
-          <div class="project-pattern-chip-row">
-            ${categories.map(category => `<span class="project-pattern-chip">${escapeHtml(category.label)}</span>`).join("")}
+
+          <div class="project-pattern-bar" aria-hidden="true">
+            ${categories.map((category, index) => {
+              const pct = Math.max((category.count / total) * 100, 10);
+              return `
+                <span
+                  class="project-pattern-segment segment-${Math.min(index + 1, 4)}"
+                  style="width: ${pct}%"
+                  title="${escapeHtml(category.label)}: ${category.count}"
+                ></span>
+              `;
+            }).join("")}
+          </div>
+
+          <div class="project-pattern-summary">
+            <div class="project-pattern-primary">${escapeHtml(topCategory.label)}</div>
+            ${supportingCategories.length ? `
+              <div class="project-pattern-supporting">
+                ${supportingCategories.map(category => escapeHtml(category.label)).join(" • ")}
+              </div>
+            ` : ""}
           </div>
         </div>
       `;
