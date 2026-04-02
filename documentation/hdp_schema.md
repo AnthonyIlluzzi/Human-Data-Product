@@ -8,6 +8,7 @@ Key design principles:
 - Skills are normalized and mapped through a join table
 - Feedback and principles support insight generation
 - Metadata enables the site to behave like a real data product catalog
+- System improvements capture delivered lower-grain changes that show how systems were expanded, stabilized, or made easier to consume over time
 
 ## Modeling Approach
 
@@ -23,8 +24,10 @@ Key design principles:
 - experience → feedback
 - education → feedback
 - project → feedback
+- experience → system_improvement
+- project → system_improvement (optional reference)
 
-Projects belong to an experience, and each project can reference multiple skills through the project_skill join table.
+Projects belong to an experience, and each project can reference multiple skills through the project_skill join table. System improvements belong to an experience and can optionally reference a parent project when the delivered change was part of a larger initiative.
 
 ---
 ## Entity Relationship Diagrams
@@ -39,6 +42,8 @@ The diagram below provides a lightweight, embedded view of the core relationship
 %%{init: {'theme':'neutral'}}%%
 erDiagram
   EXPERIENCE ||--o{ PROJECT : contains
+  EXPERIENCE ||--o{ SYSTEM_IMPROVEMENT : contains
+  PROJECT ||--o{ SYSTEM_IMPROVEMENT : may_reference
   PROJECT ||--o{ PROJECT_SKILL : maps
   SKILL ||--o{ PROJECT_SKILL : maps
 
@@ -78,6 +83,19 @@ erDiagram
     string  domain
     string  value
     string  link
+  }
+
+  SYSTEM_IMPROVEMENT {
+    int    improvement_id PK
+    int    experience_id FK
+    int    project_id FK
+    string system_layer
+    string description
+    string problem_type
+    string solution_type
+    string impact_type
+    date   delivered_date
+    int    sort_order
   }
 
   SKILL {
@@ -148,7 +166,7 @@ erDiagram
 The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid.
 This diagram is the authoritative visual reference for the Human Data Product schema.
 
-![Human Data Product ERD](images/Human_Data_Product_ERD.png)
+![Human Data Product ERD](images/Human_Data_Product_ERD_v4.svg)
 ---
 ## Database Architecture
 
@@ -190,6 +208,21 @@ Key initiatives or work performed during an experience
 | domain        | TEXT    |     | Domain or subject area                |
 | value         | TEXT    |     | Description of value delivered        |
 | link          | TEXT    |     | Optional external reference           |
+
+### system_improvement
+Delivered system-level changes performed within an experience, optionally linked to a larger project
+| Column          | Type    | Key     | Notes                                                                                 |
+|-----------------|---------|---------|---------------------------------------------------------------------------------------|
+| improvement_id  | INTEGER | PK      | Unique identifier for system improvement                                              |
+| experience_id   | INTEGER | FK      | References `experience.experience_id`                                                 |
+| project_id      | INTEGER | FK      | Optional reference to `project.project_id`                                            |
+| system_layer    | TEXT    |         | Primary system layer affected (`data`, `workflow`, `integration`, `UI`, `governance`) |
+| description     | TEXT    |         | Normalized description of the delivered change                                        |
+| problem_type    | TEXT    |         | Normalized problem category                                                           |
+| solution_type   | TEXT    |         | Normalized solution category                                                          |
+| impact_type     | TEXT    |         | Normalized impact category                                                            |
+| delivered_date  | DATE    |         | Delivery date in ISO YYYY-MM-DD format                                                |
+| sort_order      | INTEGER |         | Deterministic display / load order                                                    |
 
 ### role_preference
 Preferences describing ideal future roles

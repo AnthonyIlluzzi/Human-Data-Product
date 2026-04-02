@@ -10,6 +10,8 @@ from data_service import (
     get_identity,
     get_experiences,
     get_projects,
+    get_system_improvements,
+    get_system_improvement_detail,
     get_project_detail,
     get_skills,
     search_projects,
@@ -18,11 +20,18 @@ from data_service import (
     get_career_timeline,
     get_skill_utilization,
     get_skill_cooccurrence,
+    get_system_improvements_by_layer,
+    get_system_improvements_by_problem,
+    get_system_improvements_by_solution,
+    get_system_improvements_by_impact,
+    get_system_improvements_timeline,
     get_feedback_themes,
     get_feedback_theme_details,
     get_projects_by_domain,
     get_projects_by_experience,
     get_experience_projects,
+    get_project_system_improvements,
+    get_experience_system_improvements,
     get_skill_projects,
     get_insights,
     execute_readonly_query,
@@ -81,6 +90,31 @@ def projects():
     return get_projects()
 
 
+@app.get("/system-improvements")
+def system_improvements(
+    system_layer: str | None = None,
+    problem_type: str | None = None,
+    solution_type: str | None = None,
+    impact_type: str | None = None,
+    experience_id: int | None = None,
+    project_id: int | None = None,
+):
+    return get_system_improvements(
+        system_layer=system_layer,
+        problem_type=problem_type,
+        solution_type=solution_type,
+        impact_type=impact_type,
+        experience_id=experience_id,
+        project_id=project_id,
+    )
+
+@app.get("/system-improvements/{improvement_id}")
+def system_improvement_detail(improvement_id: int):
+    result = get_system_improvement_detail(improvement_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="System improvement not found")
+    return result
+
 @app.get("/projects/{project_id}")
 def project_detail(project_id: int):
     result = get_project_detail(project_id)
@@ -136,7 +170,32 @@ def skill_utilization():
 @app.get("/analytics/skill-cooccurrence")
 def skill_cooccurrence(limit: int = Query(6, ge=4, le=8)):
     return get_skill_cooccurrence(limit=limit)
-    
+
+
+@app.get("/analytics/system-improvements-by-layer")
+def system_improvements_by_layer():
+    return get_system_improvements_by_layer()
+
+
+@app.get("/analytics/system-improvements-by-problem")
+def system_improvements_by_problem():
+    return get_system_improvements_by_problem()
+
+
+@app.get("/analytics/system-improvements-by-solution")
+def system_improvements_by_solution():
+    return get_system_improvements_by_solution()
+
+
+@app.get("/analytics/system-improvements-by-impact")
+def system_improvements_by_impact():
+    return get_system_improvements_by_impact()
+
+
+@app.get("/analytics/system-improvements-timeline")
+def system_improvements_timeline():
+    return get_system_improvements_timeline()
+
 
 @app.get("/analytics/skill-projects/{skill_id}")
 def skill_projects(skill_id: int):
@@ -169,6 +228,16 @@ def projects_by_experience():
 @app.get("/analytics/experience-projects/{experience_id}")
 def experience_projects(experience_id: int):
     return get_experience_projects(experience_id)
+
+
+@app.get("/analytics/project-system-improvements/{project_id}")
+def project_system_improvements(project_id: int):
+    return get_project_system_improvements(project_id)
+
+
+@app.get("/analytics/experience-system-improvements/{experience_id}")
+def experience_system_improvements(experience_id: int):
+    return get_experience_system_improvements(experience_id)
 
 
 @app.get("/insights")

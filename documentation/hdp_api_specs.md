@@ -26,12 +26,14 @@ skills, and architectural identity through structured endpoints.
 | GET    | /identity         | Returns identity information describing the Human Data Product owner                                        |
 
 ### Core Data Retrieval
-| Method | Endpoint               | Description                                         |
-|--------|------------------------|-----------------------------------------------------|
-| GET    | /experiences           | Returns all experience records                      |
-| GET    | /projects              | Returns all project records                         |
-| GET    | /projects/{project_id} | Returns detailed information for a specific project |
-| GET    | /skills                | Returns all skill records                           |
+| Method | Endpoint                              | Description                                                  |
+|--------|---------------------------------------|--------------------------------------------------------------|
+| GET    | /experiences                          | Returns all experience records                               |
+| GET    | /projects                             | Returns all project records                                  |
+| GET    | /projects/{project_id}                | Returns detailed information for a specific project          |
+| GET    | /system-improvements                  | Returns all system improvement records with optional filters |
+| GET    | /system-improvements/{improvement_id} | Returns a specific system improvement record                 |
+| GET    | /skills                               | Returns all skill records                                    |
 
 ### Search
 | Method | Endpoint         | Description                |
@@ -45,17 +47,24 @@ skills, and architectural identity through structured endpoints.
 | GET    | /target-opportunity | Returns synthesized target opportunity profile               |
 
 ### Analytics
-| Method | Endpoint                                       | Description                                                         |
-|--------|------------------------------------------------|---------------------------------------------------------------------|
-| GET    | /analytics/projects-by-domain                  | Returns project distribution by domain                              |
-| GET    | /analytics/projects-by-experience              | Returns project distribution by experience                          |
-| GET    | /analytics/career-timeline                     | Returns career timeline data for visualization                      |
-| GET    | /analytics/skill-utilization                   | Returns skill utilization statistics                                |
-| GET    | /analytics/skill-cooccurrence                  | Returns co-occurrence counts for the most frequently applied skills |
-| GET    | /analytics/feedback-themes                     | Returns aggregated feedback themes                                  |
-| GET    | /analytics/skill-projects/{skill_id}           | Returns projects associated with a specific skill                   |
-| GET    | /analytics/experience-projects/{experience_id} | Returns projects associated with a specific experience              |
-| GET    | /analytics/feedback-theme-details/{theme}      | Returns detailed feedback entries for a feedback theme              |
+| Method | Endpoint                                                  | Description                                                         |
+|--------|-----------------------------------------------------------|---------------------------------------------------------------------|
+| GET    | /analytics/projects-by-domain                             | Returns project distribution by domain                              |
+| GET    | /analytics/projects-by-experience                         | Returns project distribution by experience                          |
+| GET    | /analytics/career-timeline                                | Returns career timeline data for visualization                      |
+| GET    | /analytics/skill-utilization                              | Returns skill utilization statistics                                |
+| GET    | /analytics/skill-cooccurrence                             | Returns co-occurrence counts for the most frequently applied skills |
+| GET    | /analytics/system-improvements-by-layer                   | Returns system improvement counts grouped by system layer           |
+| GET    | /analytics/system-improvements-by-problem                 | Returns system improvement counts grouped by problem type           |
+| GET    | /analytics/system-improvements-by-solution                | Returns system improvement counts grouped by solution type          |
+| GET    | /analytics/system-improvements-by-impact                  | Returns system improvement counts grouped by impact type            |
+| GET    | /analytics/system-improvements-timeline                   | Returns system improvement counts grouped by year-month             |
+| GET    | /analytics/project-system-improvements/{project_id}       | Returns system improvements associated with a specific project      |
+| GET    | /analytics/experience-system-improvements/{experience_id} | Returns system improvements associated with a specific experience   |
+| GET    | /analytics/feedback-themes                                | Returns aggregated feedback themes                                  |
+| GET    | /analytics/skill-projects/{skill_id}                      | Returns projects associated with a specific skill                   |
+| GET    | /analytics/experience-projects/{experience_id}            | Returns projects associated with a specific experience              |
+| GET    | /analytics/feedback-theme-details/{theme}                 | Returns detailed feedback entries for a feedback theme              |
 
 ### Insights
 | Method | Endpoint  | Description                                              |
@@ -63,17 +72,18 @@ skills, and architectural identity through structured endpoints.
 | GET    | /insights | Returns curated insight cards for the Insights Workspace |
 
 ### Data Model Overview
-| Entity           | Description                                                               |
-| ---------------- | ------------------------------------------------------------------------- |
-| Experience       | Career roles and professional positions across the timeline               |
-| Projects         | Key initiatives and deliverables tied to specific experience              |
-| Skills           | Technical, architectural, and leadership capabilities                     |
-| Project_Skills   | Many-to-many relationship mapping projects to skills                      |
-| Feedback         | Structured qualitative signals tied to experience, projects, or education |
-| Role_Preference  | Structured preferences for future role direction and fit                  |
-| Principle        | Personal operating principles used to reinforce insight narrative         |
-| Contact_Info     | Public contact channels for the Human Data Product owner                  |
-| Product_Metadata | Product-level metadata used for status, versioning, and health            |
+| Entity             | Description                                                                                   |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| Experience         | Career roles and professional positions across the timeline                                   |
+| Projects           | Key initiatives and deliverables tied to specific experience                                  |
+| System_Improvement | Delivered lower-grain system changes tied to an experience and optionally to a parent project |
+| Skills             | Technical, architectural, and leadership capabilities                                         |
+| Project_Skills     | Many-to-many relationship mapping projects to skills                                          |
+| Feedback           | Structured qualitative signals tied to experience, projects, or education                     |
+| Role_Preference    | Structured preferences for future role direction and fit                                      |
+| Principle          | Personal operating principles used to reinforce insight narrative                             |
+| Contact_Info       | Public contact channels for the Human Data Product owner                                      |
+| Product_Metadata   | Product-level metadata used for status, versioning, and health                                |
 
 ## GET /health
 Confirms the API service is operational.
@@ -99,16 +109,17 @@ Returns high-level metadata for the Human Data Product, including status,
 type, version, refresh date, owner, and record counts.
 
 ### Response Structure
-| Field                 | Type   | Description                                  |
-| --------------------- | ------ | -------------------------------------------- |
-| status                | string | Product status                               |
-| type                  | string | Product classification                       |
-| version               | string | Current product version                      |
-| last_pipeline_refresh | string | Last refresh date for the data pipeline      |
-| owner                 | string | Human Data Product owner                     |
-| experience_count      | integer| Total number of experience records           |
-| project_count         | integer| Total number of project records              |
-| skill_count           | integer| Total number of skill records                |
+| Field                    | Type   | Description                                  |
+| ------------------------ | ------ | -------------------------------------------- |
+| status                   | string | Product status                               |
+| type                     | string | Product classification                       |
+| version                  | string | Current product version                      |
+| last_pipeline_refresh    | string | Last refresh date for the data pipeline      |
+| owner                    | string | Human Data Product owner                     |
+| experience_count         | integer| Total number of experience records           |
+| project_count            | integer| Total number of project records              |
+| skill_count              | integer| Total number of skill records                |
+| system_improvement_count | integer | Total number of system improvements         |
 
 ### Query Parameters
 None
@@ -162,8 +173,7 @@ None
 Note: Response may contain multiple records.
 
 ## GET /summary
-Returns a high-level summary of the Human Data Product including
-experience count, project count, skill count, and current role.
+Returns a high-level summary of the Human Data Product including counts of experience, projects, skills, and system improvements.
 
 ### Response Structure
 | Field                        | Type          | Description                        |
@@ -179,6 +189,7 @@ experience count, project count, skill count, and current role.
 | skill_categories             | array         | Breakdown of skills by category    |
 | skill_categories.category    | string        | Skill category                     |
 | skill_categories.skill_total | integer       | Number of skills in that category  |
+| system_improvement_count     | integer       | Total number of system improvements|
 
 ### Query Paramters
 None
@@ -343,20 +354,27 @@ GET /projects/1001
 | project_id | integer | Unique identifier of the requested project |
 
 ### Response Structure
-| Field                            | Type        | Description                        |
-| ---------------------------------| ----------- | ---------------------------------- |
-| project                          | object      | Project details                    |
-| project.project_id               | integer     | Project identifier                 |
-| project.experience_id            | integer     | Related experience record          |
-| project.name                     | string      | Project title                      |
-| project.domain                   | string      | Project domain                     |
-| project.value                    | string      | Project description and impact     |
-| project.link                     | string/null | Optional reference link            |
-| associated_skills                | array       | Skills associated with the project |
-| associated_skills.skill_id       | integer     | Skill identifier                   |
-| associated_skills.skill_name     | string      | Skill name                         |
-| associated_skills.category       | string      | Skill category                     |
-| associated_skills.level          | string      | Skill proficiency level            |
+| Field                                      | Type        | Description                               |
+| -------------------------------------------| ----------- | ----------------------------------------- |
+| project                                    | object      | Project details                           |
+| project.project_id                         | integer     | Project identifier                        |
+| project.experience_id                      | integer     | Related experience record                 |
+| project.name                               | string      | Project title                             |
+| project.domain                             | string      | Project domain                            |
+| project.value                              | string      | Project description and impact            |
+| project.link                               | string/null | Optional reference link                   |
+| associated_skills                          | array       | Skills associated with the project        |
+| associated_skills.skill_id                 | integer     | Skill identifier                          |
+| associated_skills.skill_name               | string      | Skill name                                |
+| associated_skills.category                 | string      | Skill category                            |
+| associated_skills.level                    | string      | Skill proficiency level                   |
+| related_system_improvements                | array       | System improvements linked to the project |
+| related_system_improvements.improvement_id | integer     | System improvement identifier             |
+| related_system_improvements.system_layer   | string      | System layer                              |
+| related_system_improvements.problem_type   | string      | Problem category                          |
+| related_system_improvements.solution_type  | string      | Solution category                         |
+| related_system_improvements.impact_type    | string      | Impact category                           |
+| related_system_improvements.delivered_date | string      | Delivery date                             |
 
 ### Query Parameters
 None
@@ -375,6 +393,41 @@ None
 ]
 
 Note: Response may contain multiple records.
+
+## GET /system-improvements
+Returns system improvement records. Supports optional filtering by system layer, problem type, solution type, impact type, experience, or project.
+
+### Response Structure
+| Field          | Type        | Description                                   |
+|----------------|-------------|-----------------------------------------------|
+| improvement_id | integer     | Unique system improvement identifier          |
+| experience_id  | integer     | Associated experience record                  |
+| project_id     | integer/null| Optional associated project                   |
+| system_layer   | string      | Primary system layer affected                 |
+| description    | string      | Normalized description of the delivered change|
+| problem_type   | string      | Problem category                              |
+| solution_type  | string      | Solution category                             |
+| impact_type    | string      | Impact category                               |
+| delivered_date | string(date)| Delivery date                                 |
+| sort_order     | integer     | Ordering field                                |
+
+### Query Parameters
+| Parameter     | Type    | Description                           |
+|---------------|---------|---------------------------------------|
+| system_layer  | string  | Optional filter by system layer       |
+| problem_type  | string  | Optional filter by problem type       |
+| solution_type | string  | Optional filter by solution type      |
+| impact_type   | string  | Optional filter by impact type        |
+| experience_id | integer | Optional filter by experience         |
+| project_id    | integer | Optional filter by project            |
+
+## GET /system-improvements/{improvement_id}
+Returns a specific system improvement record.
+
+### Path Parameters
+| Parameter      | Type    | Description                            |
+|----------------|---------|----------------------------------------|
+| improvement_id | integer | Unique identifier of the requested record |
 
 ## GET /skills
 Returns all skills associated with the Human Data Product.
@@ -693,6 +746,27 @@ Returns co-occurrence counts for the most frequently applied skills, enabling ma
   ]
 }
 
+## GET /analytics/system-improvements-by-layer
+Returns grouped counts of system improvements by `system_layer`.
+
+## GET /analytics/system-improvements-by-problem
+Returns grouped counts of system improvements by `problem_type`.
+
+## GET /analytics/system-improvements-by-solution
+Returns grouped counts of system improvements by `solution_type`.
+
+## GET /analytics/system-improvements-by-impact
+Returns grouped counts of system improvements by `impact_type`.
+
+## GET /analytics/system-improvements-timeline
+Returns grouped counts of system improvements by `year_month` derived from `delivered_date`.
+
+## GET /analytics/project-system-improvements/{project_id}
+Returns all system improvements linked to a specific project.
+
+## GET /analytics/experience-system-improvements/{experience_id}
+Returns all system improvements linked to a specific experience.
+
 ## GET /analytics/skill-projects/{skill_id}
 Returns projects associated with a specific skill to support drilldown
 from skill utilization views.
@@ -820,6 +894,7 @@ None
 
 ### Example Response
 ---------------------
+{
   "theme": "architecture",
   "entries": [
     {
