@@ -470,7 +470,7 @@ body {
 }
 
 .contact-info-card > .section-heading {
-  margin-bottom: 0;
+  margin-bottom: 4;
 }
 
 .contact-info-card > .section-heading h3 {
@@ -1323,7 +1323,7 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: 14px;
+  column-gap: 20px;
   width: 100%;
   min-height: 42px;
   padding: 9px 0;
