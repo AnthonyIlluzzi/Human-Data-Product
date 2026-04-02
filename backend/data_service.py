@@ -16,6 +16,7 @@ def get_connection():
 def rows_to_dicts(rows):
     return [dict(row) for row in rows]
 
+
 def execute_readonly_query(sql: str):
     if not sql or not sql.strip():
         raise ValueError("SQL query is required.")
@@ -122,6 +123,9 @@ def get_summary():
         cursor.execute("SELECT COUNT(*) AS count FROM skill")
         skill_count = cursor.fetchone()["count"]
 
+        cursor.execute("SELECT COUNT(*) AS count FROM system_improvement")
+        system_improvement_count = cursor.fetchone()["count"]
+
         cursor.execute("""
             SELECT category, COUNT(*) AS skill_total
             FROM skill
@@ -136,9 +140,9 @@ def get_summary():
         "experience_count": experience_count,
         "project_count": project_count,
         "skill_count": skill_count,
+        "system_improvement_count": system_improvement_count,
         "skill_categories": skill_categories
     }
-
 
 def get_identity():
     return {
@@ -185,6 +189,90 @@ def get_projects():
         """)
         return rows_to_dicts(cursor.fetchall())
 
+def get_system_improvements(
+    system_layer: str | None = None,
+    problem_type: str | None = None,
+    solution_type: str | None = None,
+    impact_type: str | None = None,
+    experience_id: int | None = None,
+    project_id: int | None = None,
+):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        sql = """
+            SELECT
+                improvement_id,
+                experience_id,
+                project_id,
+                system_layer,
+                description,
+                problem_type,
+                solution_type,
+                impact_type,
+                delivered_date,
+                sort_order
+            FROM system_improvement
+            WHERE 1 = 1
+        """
+        params = []
+
+        if system_layer:
+            sql += " AND system_layer = ?"
+            params.append(system_layer)
+
+        if problem_type:
+            sql += " AND problem_type = ?"
+            params.append(problem_type)
+
+        if solution_type:
+            sql += " AND solution_type = ?"
+            params.append(solution_type)
+
+        if impact_type:
+            sql += " AND impact_type = ?"
+            params.append(impact_type)
+
+        if experience_id is not None:
+            sql += " AND experience_id = ?"
+            params.append(experience_id)
+
+        if project_id is not None:
+            sql += " AND project_id = ?"
+            params.append(project_id)
+
+        sql += """
+            ORDER BY
+                delivered_date DESC,
+                sort_order ASC,
+                improvement_id ASC
+        """
+
+        cursor.execute(sql, params)
+        return rows_to_dicts(cursor.fetchall())
+
+def get_system_improvement_detail(improvement_id: int):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                improvement_id,
+                experience_id,
+                project_id,
+                system_layer,
+                description,
+                problem_type,
+                solution_type,
+                impact_type,
+                delivered_date,
+                sort_order
+            FROM system_improvement
+            WHERE improvement_id = ?
+        """, (improvement_id,))
+        row = cursor.fetchone()
+
+    return dict(row) if row else None
+
 
 def get_project_detail(project_id: int):
     with get_connection() as conn:
@@ -210,9 +298,28 @@ def get_project_detail(project_id: int):
         """, (project_id,))
         associated_skills = rows_to_dicts(cursor.fetchall())
 
+        cursor.execute("""
+            SELECT
+                improvement_id,
+                experience_id,
+                project_id,
+                system_layer,
+                description,
+                problem_type,
+                solution_type,
+                impact_type,
+                delivered_date,
+                sort_order
+            FROM system_improvement
+            WHERE project_id = ?
+            ORDER BY delivered_date DESC, sort_order ASC, improvement_id ASC
+        """, (project_id,))
+        related_system_improvements = rows_to_dicts(cursor.fetchall())
+
     return {
         "project": dict(project),
-        "associated_skills": associated_skills
+        "associated_skills": associated_skills,
+        "related_system_improvements": related_system_improvements,
     }
 
 
@@ -522,6 +629,131 @@ def get_skill_projects(skill_id: int):
     return {
         "skill": dict(skill) if skill else None,
         "projects": projects
+    }
+
+
+def _get_grouped_system_improvement_counts(group_field: str):
+    allowed_fields = {
+        "system_layer",
+        "problem_type",
+        "solution_type",
+        "impact_type",
+    }
+    if group_field not in allowed_fields:
+        raise ValueError(f"Unsupported system improvement grouping: {group_field}")
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"""
+            SELECT
+                {group_field} AS category,
+                COUNT(*) AS improvement_count
+            FROM system_improvement
+            GROUP BY {group_field}
+            ORDER BY improvement_count DESC, category ASC
+            """
+        )
+        return rows_to_dicts(cursor.fetchall())
+
+
+def get_system_improvements_by_layer():
+    return _get_grouped_system_improvement_counts("system_layer")
+
+
+def get_system_improvements_by_problem():
+    return _get_grouped_system_improvement_counts("problem_type")
+
+
+def get_system_improvements_by_solution():
+    return _get_grouped_system_improvement_counts("solution_type")
+
+
+def get_system_improvements_by_impact():
+    return _get_grouped_system_improvement_counts("impact_type")
+
+
+def get_system_improvements_timeline():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                substr(delivered_date, 1, 7) AS year_month,
+                COUNT(*) AS improvement_count
+            FROM system_improvement
+            GROUP BY substr(delivered_date, 1, 7)
+            ORDER BY year_month ASC
+        """)
+        return rows_to_dicts(cursor.fetchall())
+
+
+def get_project_system_improvements(project_id: int):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT project_id, experience_id, name, domain, value, link
+            FROM project
+            WHERE project_id = ?
+        """, (project_id,))
+        project = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT
+                improvement_id,
+                experience_id,
+                project_id,
+                system_layer,
+                description,
+                problem_type,
+                solution_type,
+                impact_type,
+                delivered_date,
+                sort_order
+            FROM system_improvement
+            WHERE project_id = ?
+            ORDER BY delivered_date DESC, sort_order ASC, improvement_id ASC
+        """, (project_id,))
+        improvements = rows_to_dicts(cursor.fetchall())
+
+    return {
+        "project": dict(project) if project else None,
+        "system_improvements": improvements,
+    }
+
+
+def get_experience_system_improvements(experience_id: int):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT experience_id, company, role
+            FROM experience
+            WHERE experience_id = ?
+        """, (experience_id,))
+        experience = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT
+                improvement_id,
+                experience_id,
+                project_id,
+                system_layer,
+                description,
+                problem_type,
+                solution_type,
+                impact_type,
+                delivered_date,
+                sort_order
+            FROM system_improvement
+            WHERE experience_id = ?
+            ORDER BY delivered_date DESC, sort_order ASC, improvement_id ASC
+        """, (experience_id,))
+        improvements = rows_to_dicts(cursor.fetchall())
+
+    return {
+        "experience": dict(experience) if experience else None,
+        "system_improvements": improvements,
     }
 
 
