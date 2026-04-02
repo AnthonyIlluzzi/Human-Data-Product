@@ -466,7 +466,7 @@ body {
 
 .contact-info-card {
   display: grid;
-  gap: 6px;
+  gap: 2px;
 }
 
 .modal-actions-card {
@@ -478,18 +478,21 @@ body {
   overflow: hidden;
 }
 
+.contact-intro {
+  display: grid;
+  gap: 1px;
+  margin-top: 0;
+}
+
 .contact-intro h3 {
-  margin: 0 0 2px;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .contact-intro p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.45;
-}
-
-.contact-intro {
-  margin-top: 0;
+  line-height: 1.35;
 }
 
 .contact-detail-list {
@@ -683,7 +686,6 @@ body {
 
 .tile-top,
 .tile-footer,
-.meta-row,
 .api-input-row {
   display: flex;
   justify-content: space-between;
@@ -1310,10 +1312,11 @@ body {
 
 .meta-row {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  min-height: 42px;
-  padding: 10px 0;
+  min-height: 40px;
+  padding: 8px 0;
   border-bottom: 1px solid var(--border);
   gap: 10px;
 }
@@ -1325,7 +1328,7 @@ body {
 
 .meta-row span {
   color: var(--muted);
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
 }
@@ -3168,7 +3171,7 @@ body {
   }
 
   .contact-info-card {
-    gap: 14px;
+    gap: 6px;
   }
 
   .contact-detail-list {
