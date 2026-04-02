@@ -717,7 +717,7 @@ function openFeedbackDetailModal(themeLabel, entries) {
       ${entries.length > 3 ? `
         <div class="feedback-preview-actions">
           <button type="button" class="btn-secondary" id="feedback-detail-expand-btn">
-            ${expanded ? "Show curated view" : `View all ${entries.length} excerpts`}
+            ${expanded ? "Show curated view" : `View all ${entries.length} records`}
           </button>
         </div>
       ` : ""}
