@@ -470,7 +470,7 @@ body {
 }
 
 .contact-info-card > .section-heading {
-  margin-bottom: 4;
+  margin-bottom: 4px;
 }
 
 .contact-info-card > .section-heading h3 {
@@ -1338,7 +1338,7 @@ body {
 .meta-row span {
   color: var(--muted);
   min-width: 0;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .meta-row strong {
