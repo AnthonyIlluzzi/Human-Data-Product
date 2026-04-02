@@ -1,17 +1,46 @@
 {
   "product_metadata": [
-    { "meta_key": "product_name", "meta_value": "Anthony.Profile" },
-    { "meta_key": "version", "meta_value": "1.0.0" },
-    { "meta_key": "status", "meta_value": "active" },
-    { "meta_key": "data_product_type", "meta_value": "derived" },
-    { "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
-    { "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
-    { "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" },
-    { "meta_key": "api_status", "meta_value": "Operational" },
-    { "meta_key": "schema_validation", "meta_value": "PASS" },
-    { "meta_key": "query_engine", "meta_value": "active" }
+    {
+      "meta_key": "product_name",
+      "meta_value": "Anthony.Profile"
+    },
+    {
+      "meta_key": "version",
+      "meta_value": "1.0.0"
+    },
+    {
+      "meta_key": "status",
+      "meta_value": "active"
+    },
+    {
+      "meta_key": "data_product_type",
+      "meta_value": "derived"
+    },
+    {
+      "meta_key": "owner",
+      "meta_value": "Anthony Illuzzi"
+    },
+    {
+      "meta_key": "description",
+      "meta_value": "Structured data product representing Anthony Illuzzi's professional experience."
+    },
+    {
+      "meta_key": "last_pipeline_refresh",
+      "meta_value": "2026-03-05"
+    },
+    {
+      "meta_key": "api_status",
+      "meta_value": "Operational"
+    },
+    {
+      "meta_key": "schema_validation",
+      "meta_value": "PASS"
+    },
+    {
+      "meta_key": "query_engine",
+      "meta_value": "active"
+    }
   ],
-
   "contact_info": [
     {
       "contact_id": 1,
@@ -38,7 +67,6 @@
       "is_public": true
     }
   ],
-
   "principle": [
     {
       "principle_id": 1,
@@ -61,754 +89,1023 @@
       "sort_order": 4
     }
   ],
-
- "role_preference": [
-  {
-    "preference_id": 1,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Data Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 2,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Analytics Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 3,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Platform Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 4,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Data Platform Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 5,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Data Product Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 6,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Lead Data Architect",
-    "priority": "high"
-  },
-  {
-    "preference_id": 7,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Enterprise Architect",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 8,
-    "dimension": "role_identity",
-    "category": "role_type",
-    "value": "Systems Architect",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 9,
-    "dimension": "career_seniority",
-    "category": "career_level",
-    "value": "Principal",
-    "priority": "high"
-  },
-  {
-    "preference_id": 10,
-    "dimension": "career_seniority",
-    "category": "career_level",
-    "value": "Staff",
-    "priority": "high"
-  },
-  {
-    "preference_id": 11,
-    "dimension": "career_seniority",
-    "category": "career_level",
-    "value": "Lead",
-    "priority": "high"
-  },
-  {
-    "preference_id": 12,
-    "dimension": "work_context",
-    "category": "work_mode",
-    "value": "Remote",
-    "priority": "high"
-  },
-  {
-    "preference_id": 13,
-    "dimension": "work_context",
-    "category": "work_mode",
-    "value": "Hybrid",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 14,
-    "dimension": "work_context",
-    "category": "work_mode",
-    "value": "On-site",
-    "priority": "low"
-  },
-  {
-    "preference_id": 15,
-    "dimension": "location",
-    "category": "preferred_onsite_location",
-    "value": "Chicago, IL",
-    "priority": "high"
-  },
-  {
-    "preference_id": 16,
-    "dimension": "location",
-    "category": "preferred_onsite_location",
-    "value": "Greater Chicago Area",
-    "priority": "high"
-  },
-  {
-    "preference_id": 17,
-    "dimension": "domain_focus",
-    "category": "domain",
-    "value": "Enterprise Data Platforms",
-    "priority": "high"
-  },
-  {
-    "preference_id": 18,
-    "dimension": "domain_focus",
-    "category": "domain",
-    "value": "Analytics & AI Enablement",
-    "priority": "high"
-  },
-  {
-    "preference_id": 19,
-    "dimension": "domain_focus",
-    "category": "platform_focus",
-    "value": "Data Platforms",
-    "priority": "high"
-  },
-  {
-    "preference_id": 20,
-    "dimension": "domain_focus",
-    "category": "platform_focus",
-    "value": "Analytics Platforms",
-    "priority": "high"
-  },
-  {
-    "preference_id": 21,
-    "dimension": "domain_focus",
-    "category": "platform_focus",
-    "value": "AI Enablement Platforms",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 22,
-    "dimension": "industry",
-    "category": "industry",
-    "value": "Technology / Enterprise Software",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 23,
-    "dimension": "industry",
-    "category": "industry",
-    "value": "Tech-adjacent (B2B SaaS)",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 24,
-    "dimension": "impact",
-    "category": "impact_focus",
-    "value": "Data Product Strategy",
-    "priority": "high"
-  },
-  {
-    "preference_id": 25,
-    "dimension": "impact",
-    "category": "impact_focus",
-    "value": "Enterprise Data Strategy",
-    "priority": "high"
-  },
-  {
-    "preference_id": 26,
-    "dimension": "impact",
-    "category": "problem_space",
-    "value": "Data Democratization",
-    "priority": "high"
-  },
-  {
-    "preference_id": 27,
-    "dimension": "impact",
-    "category": "problem_space",
-    "value": "Platform Adoption",
-    "priority": "high"
-  },
-  {
-    "preference_id": 28,
-    "dimension": "impact",
-    "category": "problem_space",
-    "value": "Decision Intelligence",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 29,
-    "dimension": "employment",
-    "category": "employment_type",
-    "value": "Full-time",
-    "priority": "high"
-  },
-  {
-    "preference_id": 30,
-    "dimension": "leadership",
-    "category": "people_leadership",
-    "value": "Strategic IC",
-    "priority": "high"
-  },
-  {
-    "preference_id": 31,
-    "dimension": "leadership",
-    "category": "people_leadership",
-    "value": "Open to small team leadership",
-    "priority": "medium"
-  },
-  {
-    "preference_id": 32,
-    "dimension": "travel",
-    "category": "travel_tolerance",
-    "value": "Low",
-    "priority": "high"
-  },
-  {
-    "preference_id": 33,
-    "dimension": "travel",
-    "category": "travel_percent_max",
-    "value": "10%",
-    "priority": "high"
-  }
-],
-
+  "role_preference": [
+    {
+      "preference_id": 1,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Data Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 2,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Analytics Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 3,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Platform Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 4,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Data Platform Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 5,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Data Product Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 6,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Lead Data Architect",
+      "priority": "high"
+    },
+    {
+      "preference_id": 7,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Enterprise Architect",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 8,
+      "dimension": "role_identity",
+      "category": "role_type",
+      "value": "Systems Architect",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 9,
+      "dimension": "career_seniority",
+      "category": "career_level",
+      "value": "Principal",
+      "priority": "high"
+    },
+    {
+      "preference_id": 10,
+      "dimension": "career_seniority",
+      "category": "career_level",
+      "value": "Staff",
+      "priority": "high"
+    },
+    {
+      "preference_id": 11,
+      "dimension": "career_seniority",
+      "category": "career_level",
+      "value": "Lead",
+      "priority": "high"
+    },
+    {
+      "preference_id": 12,
+      "dimension": "work_context",
+      "category": "work_mode",
+      "value": "Remote",
+      "priority": "high"
+    },
+    {
+      "preference_id": 13,
+      "dimension": "work_context",
+      "category": "work_mode",
+      "value": "Hybrid",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 14,
+      "dimension": "work_context",
+      "category": "work_mode",
+      "value": "On-site",
+      "priority": "low"
+    },
+    {
+      "preference_id": 15,
+      "dimension": "location",
+      "category": "preferred_onsite_location",
+      "value": "Chicago, IL",
+      "priority": "high"
+    },
+    {
+      "preference_id": 16,
+      "dimension": "location",
+      "category": "preferred_onsite_location",
+      "value": "Greater Chicago Area",
+      "priority": "high"
+    },
+    {
+      "preference_id": 17,
+      "dimension": "domain_focus",
+      "category": "domain",
+      "value": "Enterprise Data Platforms",
+      "priority": "high"
+    },
+    {
+      "preference_id": 18,
+      "dimension": "domain_focus",
+      "category": "domain",
+      "value": "Analytics & AI Enablement",
+      "priority": "high"
+    },
+    {
+      "preference_id": 19,
+      "dimension": "domain_focus",
+      "category": "platform_focus",
+      "value": "Data Platforms",
+      "priority": "high"
+    },
+    {
+      "preference_id": 20,
+      "dimension": "domain_focus",
+      "category": "platform_focus",
+      "value": "Analytics Platforms",
+      "priority": "high"
+    },
+    {
+      "preference_id": 21,
+      "dimension": "domain_focus",
+      "category": "platform_focus",
+      "value": "AI Enablement Platforms",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 22,
+      "dimension": "industry",
+      "category": "industry",
+      "value": "Technology / Enterprise Software",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 23,
+      "dimension": "industry",
+      "category": "industry",
+      "value": "Tech-adjacent (B2B SaaS)",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 24,
+      "dimension": "impact",
+      "category": "impact_focus",
+      "value": "Data Product Strategy",
+      "priority": "high"
+    },
+    {
+      "preference_id": 25,
+      "dimension": "impact",
+      "category": "impact_focus",
+      "value": "Enterprise Data Strategy",
+      "priority": "high"
+    },
+    {
+      "preference_id": 26,
+      "dimension": "impact",
+      "category": "problem_space",
+      "value": "Data Democratization",
+      "priority": "high"
+    },
+    {
+      "preference_id": 27,
+      "dimension": "impact",
+      "category": "problem_space",
+      "value": "Platform Adoption",
+      "priority": "high"
+    },
+    {
+      "preference_id": 28,
+      "dimension": "impact",
+      "category": "problem_space",
+      "value": "Decision Intelligence",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 29,
+      "dimension": "employment",
+      "category": "employment_type",
+      "value": "Full-time",
+      "priority": "high"
+    },
+    {
+      "preference_id": 30,
+      "dimension": "leadership",
+      "category": "people_leadership",
+      "value": "Strategic IC",
+      "priority": "high"
+    },
+    {
+      "preference_id": 31,
+      "dimension": "leadership",
+      "category": "people_leadership",
+      "value": "Open to small team leadership",
+      "priority": "medium"
+    },
+    {
+      "preference_id": 32,
+      "dimension": "travel",
+      "category": "travel_tolerance",
+      "value": "Low",
+      "priority": "high"
+    },
+    {
+      "preference_id": 33,
+      "dimension": "travel",
+      "category": "travel_percent_max",
+      "value": "10%",
+      "priority": "high"
+    }
+  ],
   "experience": [
-  {
-    "experience_id": 1,
-    "company": "SAP",
-    "role": "Senior Analytics Architect",
-    "start_date": "2023-08-01",
-    "end_date": null,
-    "domain": "Enterprise Data Platforms",
-    "focus_area": "Analytics architecture, platform enablement, governance, product intelligence",
-    "impact": "Improved scalability and adoption through accelerators, self-service analytics, metadata governance, and data-driven roadmap execution.",
-    "sort_order": 1
-  },
-  {
-    "experience_id": 2,
-    "company": "SAP",
-    "role": "Senior Adoption Consultant",
-    "start_date": "2020-08-01",
-    "end_date": "2023-07-31",
-    "domain": "Customer Adoption / Platform Enablement",
-    "focus_area": "Customer value realization, consultative enablement, program leadership",
-    "impact": "Enabled customer outcomes across large enterprise portfolios through strategic enablement and value realization measurement.",
-    "sort_order": 2
-  },
-  {
-    "experience_id": 3,
-    "company": "SAP",
-    "role": "Adoption Consultant",
-    "start_date": "2018-05-01",
-    "end_date": "2020-07-31",
-    "domain": "Customer Program Optimization",
-    "focus_area": "Change management, operational enablement, stakeholder alignment",
-    "impact": "Supported enterprise workforce programs through analytics-informed operational improvements and advisory.",
-    "sort_order": 3
-  },
-  {
-    "experience_id": 4,
-    "company": "SAP",
-    "role": "Business Analyst",
-    "start_date": "2016-07-01",
-    "end_date": "2018-04-30",
-    "domain": "Enterprise Workforce Management",
-    "focus_area": "Program analytics, customer advisory, platform SME",
-    "impact": "Supported large MSP portfolio programs and operational efficiencies through analysis and platform expertise.",
-    "sort_order": 4
-  },
-  {
-    "experience_id": 5,
-    "company": "Capsim",
-    "role": "Client Relationship Consultant",
-    "start_date": "2012-09-01",
-    "end_date": "2016-07-31",
-    "domain": "Education Technology",
-    "focus_area": "Client success, analytics reporting, implementations, program optimization",
-    "impact": "Delivered client portfolio growth and analytics reporting used for program outcomes and accreditation support.",
-    "sort_order": 5
-  },
-  {
-    "experience_id": 999,
-    "company": "Personal",
-    "role": "Side Projects",
-    "start_date": "2025-01-01",
-    "end_date": null,
-    "domain": "Data Products / Portfolio Engineering",
-    "focus_area": "Building public-facing demonstrations of data platform + product thinking (API, SQL, governance, insights)",
-    "impact": "Created portfolio-grade artifacts that demonstrate end-to-end data product architecture and consumption patterns.",
-    "sort_order": 0
-  }
-],
-
+    {
+      "experience_id": 1,
+      "company": "SAP",
+      "role": "Senior Analytics Architect",
+      "start_date": "2023-08-01",
+      "end_date": null,
+      "domain": "Enterprise Data Platforms",
+      "focus_area": "Analytics architecture, platform enablement, governance, product intelligence",
+      "impact": "Improved scalability and adoption through accelerators, self-service analytics, metadata governance, and data-driven roadmap execution.",
+      "sort_order": 1
+    },
+    {
+      "experience_id": 2,
+      "company": "SAP",
+      "role": "Senior Adoption Consultant",
+      "start_date": "2020-08-01",
+      "end_date": "2023-07-31",
+      "domain": "Customer Adoption / Platform Enablement",
+      "focus_area": "Customer value realization, consultative enablement, program leadership",
+      "impact": "Enabled customer outcomes across large enterprise portfolios through strategic enablement and value realization measurement.",
+      "sort_order": 2
+    },
+    {
+      "experience_id": 3,
+      "company": "SAP",
+      "role": "Adoption Consultant",
+      "start_date": "2018-05-01",
+      "end_date": "2020-07-31",
+      "domain": "Customer Program Optimization",
+      "focus_area": "Change management, operational enablement, stakeholder alignment",
+      "impact": "Supported enterprise workforce programs through analytics-informed operational improvements and advisory.",
+      "sort_order": 3
+    },
+    {
+      "experience_id": 4,
+      "company": "SAP",
+      "role": "Business Analyst",
+      "start_date": "2016-07-01",
+      "end_date": "2018-04-30",
+      "domain": "Enterprise Workforce Management",
+      "focus_area": "Program analytics, customer advisory, platform SME",
+      "impact": "Supported large MSP portfolio programs and operational efficiencies through analysis and platform expertise.",
+      "sort_order": 4
+    },
+    {
+      "experience_id": 5,
+      "company": "Capsim",
+      "role": "Client Relationship Consultant",
+      "start_date": "2012-09-01",
+      "end_date": "2016-07-31",
+      "domain": "Education Technology",
+      "focus_area": "Client success, analytics reporting, implementations, program optimization",
+      "impact": "Delivered client portfolio growth and analytics reporting used for program outcomes and accreditation support.",
+      "sort_order": 5
+    },
+    {
+      "experience_id": 999,
+      "company": "Personal",
+      "role": "Side Projects",
+      "start_date": "2025-01-01",
+      "end_date": null,
+      "domain": "Data Products / Portfolio Engineering",
+      "focus_area": "Building public-facing demonstrations of data platform + product thinking (API, SQL, governance, insights)",
+      "impact": "Created portfolio-grade artifacts that demonstrate end-to-end data product architecture and consumption patterns.",
+      "sort_order": 0
+    }
+  ],
   "project": [
-  {
-    "project_id": 1001,
-    "experience_id": 1,
-    "name": "Deployment Services SKU Separation & Monetization Model",
-    "domain": "Platform Strategy / Monetization",
-    "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
-    "link": null
-  },
-  {
-    "project_id": 1002,
-    "experience_id": 1,
-    "name": "Fieldglass Integration Accelerators & Integration Objects",
-    "domain": "Integration Enablement",
-    "value": "Engineered 7 leading-practice accelerators and introduced 20 integration objects, reducing implementation effort ~10%, saving 50+ hours per deployment, accelerating production migration ~75%, and achieving an 85% usability score.",
-    "link": null
-  },
-  {
-    "project_id": 1003,
-    "experience_id": 1,
-    "name": "Adoption Analytics Reporting Redesign",
-    "domain": "Product Analytics",
-    "value": "Redesigned Adoption Analytics reporting and expanded configuration coverage by 42% to enable scalable self-service insights and reduce reliance on manual analysis.",
-    "link": null
-  },
-  {
-    "project_id": 1004,
-    "experience_id": 1,
-    "name": "Configuration Self-Service Expansion",
-    "domain": "Self-Service Enablement",
-    "value": "Advanced configuration self-service capabilities to 89% coverage, reducing related support case volume by 50% and driving sustained external adoption (>200 monthly interactions).",
-    "link": null
-  },
-  {
-    "project_id": 1005,
-    "experience_id": 1,
-    "name": "Roadmap Business Cases for Self-Service Initiatives",
-    "domain": "Decision Support / Strategy",
-    "value": "Formulated data-driven business cases for additional self-service roadmap initiatives projected to deflect 25%+ of related support cases, reducing development and SME effort.",
-    "link": null
-  },
-  {
-    "project_id": 1006,
-    "experience_id": 1,
-    "name": "SQL-driven Usage Analysis → Solution Enhancements",
-    "domain": "Product Intelligence",
-    "value": "Performed SQL-based analysis of customer usage and configuration data to drive 62 solution enhancements (82% delivered as self-service) to improve scalability and accelerate time-to-value.",
-    "link": null
-  },
-  {
-    "project_id": 1007,
-    "experience_id": 1,
-    "name": "Configuration Metadata Governance Framework",
-    "domain": "Data Governance / Metadata",
-    "value": "Instituted metadata frameworks and governance processes for configuration data, environments, and documentation to support traceability and sustainable platform evolution.",
-    "link": null
-  },
-  {
-    "project_id": 1008,
-    "experience_id": 1,
-    "name": "GA Launch Readiness: Testing Strategy & Defect Resolution",
-    "domain": "Release Readiness",
-    "value": "Supported launch readiness through testing strategy and defect resolution, identifying 33 defects and resolving 97% prior to GA launch.",
-    "link": null
-  },
-  {
-    "project_id": 2001,
-    "experience_id": 2,
-    "name": "Customer Portfolio Value Realization Toolkit",
-    "domain": "Value Realization / KPI Framework",
-    "value": "Partnered with leadership to develop a toolkit to measure value realization of system functionality across customer adoption initiatives.",
-    "link": null
-  },
-  {
-    "project_id": 2002,
-    "experience_id": 2,
-    "name": "Strategic Enablement for Top-Tier Customer Portfolio",
-    "domain": "Customer Strategy",
-    "value": "Enabled satisfaction, retention, and renewal outcomes for a portfolio including three of Fieldglass’s largest feature customers (~$26.87M contract value; ~$1.52B annual spend).",
-    "link": null
-  },
-  {
-    "project_id": 3001,
-    "experience_id": 4,
-    "name": "MSP Portfolio Analytics Support (Allegis Global Services)",
-    "domain": "Program Analytics",
-    "value": "Supported MSP account portfolio of 21 clients totaling ~$2.4B yearly spend through analytical support, platform SME guidance, and change impact assessment.",
-    "link": null
-  },
-  {
-    "project_id": 5001,
-    "experience_id": 5,
-    "name": "Client Portfolio Growth & Performance Insights",
-    "domain": "Client Analytics / Success",
-    "value": "Managed 90+ academic and corporate clients (~$689K annual revenue) and delivered ~25% YoY growth through consultative engagement and solution alignment.",
-    "link": null
-  },
-  {
-    "project_id": 5002,
-    "experience_id": 5,
-    "name": "University Outcome Analytics & Accreditation Reporting",
-    "domain": "Education Analytics",
-    "value": "Produced analytical reports used by universities to evaluate outcomes and support accreditation reviews.",
-    "link": null
-  },
-  {
-    "project_id": 5003,
-    "experience_id": 5,
-    "name": "Global Competition Operations Improvement",
-    "domain": "Operations / Program Enablement",
-    "value": "Coordinated large-scale initiative including a global competition with 1,400+ participants (+37% participation) through process documentation and operational improvements.",
-    "link": null
-  },
-  {
-    "project_id": 9001,
-    "experience_id": 999,
-    "name": "Human Data Product (Portfolio)",
-    "domain": "Data Product / Portfolio Engineering",
-    "value": "Built a public-facing 'data product' version of professional experience: curated dataset → SQLite → API + SQL query console + insight cards.",
-    "link": "https://human-data-product-web.onrender.com/"
-  },
-  {
-    "project_id": 9002,
-    "experience_id": 999,
-    "name": "PRISM (Portfolio / Concept Project)",
-    "domain": "Data / AI Concept",
-    "value": "Placeholder for PRISM side project; intended to demonstrate structured thinking around data/AI enablement and decision systems. (To be detailed by Anthony.)",
-    "link": null
-  }
-],
-
-"skill": [
-  {
-    "skill_id": 1,
-    "category": "data",
-    "skill_name": "SQL",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 2,
-    "category": "data",
-    "skill_name": "Python",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 3,
-    "category": "platform",
-    "skill_name": "SAP Fieldglass",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 4,
-    "category": "architecture",
-    "skill_name": "Analytics Architecture",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 5,
-    "category": "architecture",
-    "skill_name": "Metadata Architecture",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 6,
-    "category": "governance",
-    "skill_name": "Data Governance",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 7,
-    "category": "analytics",
-    "skill_name": "Product Usage Analytics",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 8,
-    "category": "analytics",
-    "skill_name": "KPI / Value Realization Frameworks",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 9,
-    "category": "strategy",
-    "skill_name": "Platform Adoption Strategy",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 10,
-    "category": "integration",
-    "skill_name": "API Testing (Bruno)",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 11,
-    "category": "engineering",
-    "skill_name": "Testing Strategy & Release Readiness",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 12,
-    "category": "data",
-    "skill_name": "Lakehouse Platforms (Databricks)",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 13,
-    "category": "tools",
-    "skill_name": "Jira",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 14,
-    "category": "tools",
-    "skill_name": "Confluence",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 15,
-    "category": "leadership",
-    "skill_name": "Cross-Functional Collaboration",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 16,
-    "category": "leadership",
-    "skill_name": "Executive Communication",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 17,
-    "category": "architecture",
-    "skill_name": "Semantic Modeling",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 18,
-    "category": "platform",
-    "skill_name": "SAP Business Data Cloud",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 19,
-    "category": "platform",
-    "skill_name": "SAP Datasphere",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 20,
-    "category": "platform",
-    "skill_name": "SAP BTP",
-    "level": "intermediate"
-  },
-  {
-    "skill_id": 21,
-    "category": "capability",
-    "skill_name": "Systems Thinking",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 22,
-    "category": "capability",
-    "skill_name": "Analytical Problem Solving",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 23,
-    "category": "capability",
-    "skill_name": "Structured Communication",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 24,
-    "category": "capability",
-    "skill_name": "Conceptual Abstraction",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 25,
-    "category": "capability",
-    "skill_name": "Intellectual Curiosity",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 26,
-    "category": "capability",
-    "skill_name": "Cross-disciplinary Thinking",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 27,
-    "category": "capability",
-    "skill_name": "Strategic Thinking",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 28,
-    "category": "capability",
-    "skill_name": "Stakeholder Alignment",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 29,
-    "category": "capability",
-    "skill_name": "Attention to Detail",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 30,
-    "category": "leadership",
-    "skill_name": "Program & Initiative Leadership",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 31,
-    "category": "leadership",
-    "skill_name": "Change Management",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 32,
-    "category": "capability",
-    "skill_name": "Requirements Analysis & Solution Design",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 33,
-    "category": "leadership",
-    "skill_name": "Mentorship & Capability Building",
-    "level": "advanced"
-  }
-],
-  
+    {
+      "project_id": 1001,
+      "experience_id": 1,
+      "name": "Deployment Services SKU Separation & Monetization Model",
+      "domain": "Platform Strategy / Monetization",
+      "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
+      "link": null
+    },
+    {
+      "project_id": 1002,
+      "experience_id": 1,
+      "name": "Fieldglass Integration Accelerators & Integration Objects",
+      "domain": "Integration Enablement",
+      "value": "Engineered 7 leading-practice accelerators and introduced 20 integration objects, reducing implementation effort ~10%, saving 50+ hours per deployment, accelerating production migration ~75%, and achieving an 85% usability score.",
+      "link": null
+    },
+    {
+      "project_id": 1003,
+      "experience_id": 1,
+      "name": "Adoption Analytics Reporting Redesign",
+      "domain": "Product Analytics",
+      "value": "Redesigned Adoption Analytics reporting and expanded configuration coverage by 42% to enable scalable self-service insights and reduce reliance on manual analysis.",
+      "link": null
+    },
+    {
+      "project_id": 1004,
+      "experience_id": 1,
+      "name": "Configuration Self-Service Expansion",
+      "domain": "Self-Service Enablement",
+      "value": "Advanced configuration self-service capabilities to 89% coverage, reducing related support case volume by 50% and driving sustained external adoption (>200 monthly interactions).",
+      "link": null
+    },
+    {
+      "project_id": 1005,
+      "experience_id": 1,
+      "name": "Roadmap Business Cases for Self-Service Initiatives",
+      "domain": "Decision Support / Strategy",
+      "value": "Formulated data-driven business cases for additional self-service roadmap initiatives projected to deflect 25%+ of related support cases, reducing development and SME effort.",
+      "link": null
+    },
+    {
+      "project_id": 1006,
+      "experience_id": 1,
+      "name": "SQL-driven Usage Analysis \u2192 Solution Enhancements",
+      "domain": "Product Intelligence",
+      "value": "Performed SQL-based analysis of customer usage and configuration data to drive 62 solution enhancements (82% delivered as self-service) to improve scalability and accelerate time-to-value.",
+      "link": null
+    },
+    {
+      "project_id": 1007,
+      "experience_id": 1,
+      "name": "Configuration Metadata Governance Framework",
+      "domain": "Data Governance / Metadata",
+      "value": "Instituted metadata frameworks and governance processes for configuration data, environments, and documentation to support traceability and sustainable platform evolution.",
+      "link": null
+    },
+    {
+      "project_id": 1008,
+      "experience_id": 1,
+      "name": "GA Launch Readiness: Testing Strategy & Defect Resolution",
+      "domain": "Release Readiness",
+      "value": "Supported launch readiness through testing strategy and defect resolution, identifying 33 defects and resolving 97% prior to GA launch.",
+      "link": null
+    },
+    {
+      "project_id": 2001,
+      "experience_id": 2,
+      "name": "Customer Portfolio Value Realization Toolkit",
+      "domain": "Value Realization / KPI Framework",
+      "value": "Partnered with leadership to develop a toolkit to measure value realization of system functionality across customer adoption initiatives.",
+      "link": null
+    },
+    {
+      "project_id": 2002,
+      "experience_id": 2,
+      "name": "Strategic Enablement for Top-Tier Customer Portfolio",
+      "domain": "Customer Strategy",
+      "value": "Enabled satisfaction, retention, and renewal outcomes for a portfolio including three of Fieldglass\u2019s largest feature customers (~$26.87M contract value; ~$1.52B annual spend).",
+      "link": null
+    },
+    {
+      "project_id": 3001,
+      "experience_id": 4,
+      "name": "MSP Portfolio Analytics Support (Allegis Global Services)",
+      "domain": "Program Analytics",
+      "value": "Supported MSP account portfolio of 21 clients totaling ~$2.4B yearly spend through analytical support, platform SME guidance, and change impact assessment.",
+      "link": null
+    },
+    {
+      "project_id": 5001,
+      "experience_id": 5,
+      "name": "Client Portfolio Growth & Performance Insights",
+      "domain": "Client Analytics / Success",
+      "value": "Managed 90+ academic and corporate clients (~$689K annual revenue) and delivered ~25% YoY growth through consultative engagement and solution alignment.",
+      "link": null
+    },
+    {
+      "project_id": 5002,
+      "experience_id": 5,
+      "name": "University Outcome Analytics & Accreditation Reporting",
+      "domain": "Education Analytics",
+      "value": "Produced analytical reports used by universities to evaluate outcomes and support accreditation reviews.",
+      "link": null
+    },
+    {
+      "project_id": 5003,
+      "experience_id": 5,
+      "name": "Global Competition Operations Improvement",
+      "domain": "Operations / Program Enablement",
+      "value": "Coordinated large-scale initiative including a global competition with 1,400+ participants (+37% participation) through process documentation and operational improvements.",
+      "link": null
+    },
+    {
+      "project_id": 9001,
+      "experience_id": 999,
+      "name": "Human Data Product (Portfolio)",
+      "domain": "Data Product / Portfolio Engineering",
+      "value": "Built a public-facing 'data product' version of professional experience: curated dataset \u2192 SQLite \u2192 API + SQL query console + insight cards.",
+      "link": "https://human-data-product-web.onrender.com/"
+    },
+    {
+      "project_id": 9002,
+      "experience_id": 999,
+      "name": "PRISM (Portfolio / Concept Project)",
+      "domain": "Data / AI Concept",
+      "value": "Placeholder for PRISM side project; intended to demonstrate structured thinking around data/AI enablement and decision systems. (To be detailed by Anthony.)",
+      "link": null
+    },
+    {
+      "project_id": 9003,
+      "experience_id": 999,
+      "name": "Capability Model",
+      "domain": "Capability Intelligence / Portfolio Engineering",
+      "value": "Built a public-facing capability model that translates skills, depth, experience, and confidence into an interactive analytical artifact for recruiter and hiring-manager consumption.",
+      "link": "https://capability-model.onrender.com/"
+    }
+  ],
+  "skill": [
+    {
+      "skill_id": 1,
+      "category": "data",
+      "skill_name": "SQL",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 2,
+      "category": "data",
+      "skill_name": "Python",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 3,
+      "category": "platform",
+      "skill_name": "SAP Fieldglass",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 4,
+      "category": "architecture",
+      "skill_name": "Analytics Architecture",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 5,
+      "category": "architecture",
+      "skill_name": "Metadata Architecture",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 6,
+      "category": "governance",
+      "skill_name": "Data Governance",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 7,
+      "category": "analytics",
+      "skill_name": "Product Usage Analytics",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 8,
+      "category": "analytics",
+      "skill_name": "KPI / Value Realization Frameworks",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 9,
+      "category": "strategy",
+      "skill_name": "Platform Adoption Strategy",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 10,
+      "category": "integration",
+      "skill_name": "API Testing (Bruno)",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 11,
+      "category": "engineering",
+      "skill_name": "Testing Strategy & Release Readiness",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 12,
+      "category": "data",
+      "skill_name": "Lakehouse Platforms (Databricks)",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 13,
+      "category": "tools",
+      "skill_name": "Jira",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 14,
+      "category": "tools",
+      "skill_name": "Confluence",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 15,
+      "category": "leadership",
+      "skill_name": "Cross-Functional Collaboration",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 16,
+      "category": "leadership",
+      "skill_name": "Executive Communication",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 17,
+      "category": "architecture",
+      "skill_name": "Semantic Modeling",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 18,
+      "category": "platform",
+      "skill_name": "SAP Business Data Cloud",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 19,
+      "category": "platform",
+      "skill_name": "SAP Datasphere",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 20,
+      "category": "platform",
+      "skill_name": "SAP BTP",
+      "level": "intermediate"
+    },
+    {
+      "skill_id": 21,
+      "category": "capability",
+      "skill_name": "Systems Thinking",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 22,
+      "category": "capability",
+      "skill_name": "Analytical Problem Solving",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 23,
+      "category": "capability",
+      "skill_name": "Structured Communication",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 24,
+      "category": "capability",
+      "skill_name": "Conceptual Abstraction",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 25,
+      "category": "capability",
+      "skill_name": "Intellectual Curiosity",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 26,
+      "category": "capability",
+      "skill_name": "Cross-disciplinary Thinking",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 27,
+      "category": "capability",
+      "skill_name": "Strategic Thinking",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 28,
+      "category": "capability",
+      "skill_name": "Stakeholder Alignment",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 29,
+      "category": "capability",
+      "skill_name": "Attention to Detail",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 30,
+      "category": "leadership",
+      "skill_name": "Program & Initiative Leadership",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 31,
+      "category": "leadership",
+      "skill_name": "Change Management",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 32,
+      "category": "capability",
+      "skill_name": "Requirements Analysis & Solution Design",
+      "level": "advanced"
+    },
+    {
+      "skill_id": 33,
+      "category": "leadership",
+      "skill_name": "Mentorship & Capability Building",
+      "level": "advanced"
+    }
+  ],
   "project_skill": [
-  { "project_id": 1001, "skill_id": 9 },
-  { "project_id": 1001, "skill_id": 16 },
-  { "project_id": 1001, "skill_id": 15 },
-  { "project_id": 1001, "skill_id": 27 },
-  { "project_id": 1001, "skill_id": 23 },
-  { "project_id": 1001, "skill_id": 28 },
-
-  { "project_id": 1002, "skill_id": 3 },
-  { "project_id": 1002, "skill_id": 10 },
-  { "project_id": 1002, "skill_id": 9 },
-  { "project_id": 1002, "skill_id": 21 },
-  { "project_id": 1002, "skill_id": 22 },
-  { "project_id": 1002, "skill_id": 32 },
-  { "project_id": 1002, "skill_id": 29 },
-
-  { "project_id": 1003, "skill_id": 1 },
-  { "project_id": 1003, "skill_id": 4 },
-  { "project_id": 1003, "skill_id": 7 },
-  { "project_id": 1003, "skill_id": 21 },
-  { "project_id": 1003, "skill_id": 22 },
-  { "project_id": 1003, "skill_id": 23 },
-  { "project_id": 1003, "skill_id": 27 },
-
-  { "project_id": 1004, "skill_id": 9 },
-  { "project_id": 1004, "skill_id": 1 },
-  { "project_id": 1004, "skill_id": 7 },
-  { "project_id": 1004, "skill_id": 30 },
-  { "project_id": 1004, "skill_id": 28 },
-  { "project_id": 1004, "skill_id": 29 },
-
-  { "project_id": 1005, "skill_id": 1 },
-  { "project_id": 1005, "skill_id": 8 },
-  { "project_id": 1005, "skill_id": 16 },
-  { "project_id": 1005, "skill_id": 27 },
-  { "project_id": 1005, "skill_id": 23 },
-
-  { "project_id": 1006, "skill_id": 1 },
-  { "project_id": 1006, "skill_id": 7 },
-  { "project_id": 1006, "skill_id": 4 },
-  { "project_id": 1006, "skill_id": 22 },
-  { "project_id": 1006, "skill_id": 29 },
-
-  { "project_id": 1007, "skill_id": 5 },
-  { "project_id": 1007, "skill_id": 6 },
-  { "project_id": 1007, "skill_id": 17 },
-  { "project_id": 1007, "skill_id": 21 },
-  { "project_id": 1007, "skill_id": 27 },
-  { "project_id": 1007, "skill_id": 29 },
-  { "project_id": 1007, "skill_id": 23 },
-
-  { "project_id": 1008, "skill_id": 11 },
-  { "project_id": 1008, "skill_id": 13 },
-  { "project_id": 1008, "skill_id": 15 },
-  { "project_id": 1008, "skill_id": 29 },
-  { "project_id": 1008, "skill_id": 30 },
-
-  { "project_id": 2001, "skill_id": 8 },
-  { "project_id": 2001, "skill_id": 1 },
-  { "project_id": 2001, "skill_id": 16 },
-  { "project_id": 2001, "skill_id": 27 },
-  { "project_id": 2001, "skill_id": 32 },
-
-  { "project_id": 2002, "skill_id": 9 },
-  { "project_id": 2002, "skill_id": 15 },
-  { "project_id": 2002, "skill_id": 16 },
-  { "project_id": 2002, "skill_id": 28 },
-  { "project_id": 2002, "skill_id": 31 },
-  { "project_id": 2002, "skill_id": 30 },
-
-  { "project_id": 3001, "skill_id": 3 },
-  { "project_id": 3001, "skill_id": 1 },
-  { "project_id": 3001, "skill_id": 15 },
-  { "project_id": 3001, "skill_id": 28 },
-  { "project_id": 3001, "skill_id": 31 },
-
-  { "project_id": 5001, "skill_id": 8 },
-  { "project_id": 5001, "skill_id": 16 },
-  { "project_id": 5001, "skill_id": 15 },
-  { "project_id": 5001, "skill_id": 28 },
-  { "project_id": 5001, "skill_id": 23 },
-
-  { "project_id": 5002, "skill_id": 7 },
-  { "project_id": 5002, "skill_id": 1 },
-  { "project_id": 5002, "skill_id": 16 },
-  { "project_id": 5002, "skill_id": 23 },
-  { "project_id": 5002, "skill_id": 22 },
-
-  { "project_id": 5003, "skill_id": 13 },
-  { "project_id": 5003, "skill_id": 15 },
-  { "project_id": 5003, "skill_id": 16 },
-  { "project_id": 5003, "skill_id": 30 },
-  { "project_id": 5003, "skill_id": 29 },
-
-  { "project_id": 9001, "skill_id": 2 },
-  { "project_id": 9001, "skill_id": 1 },
-  { "project_id": 9001, "skill_id": 10 },
-  { "project_id": 9001, "skill_id": 5 },
-  { "project_id": 9001, "skill_id": 21 },
-  { "project_id": 9001, "skill_id": 24 },
-  { "project_id": 9001, "skill_id": 25 },
-  { "project_id": 9001, "skill_id": 26 },
-  { "project_id": 9001, "skill_id": 23 },
-  { "project_id": 9001, "skill_id": 29 },
-
-  { "project_id": 9002, "skill_id": 2 },
-  { "project_id": 9002, "skill_id": 12 },
-  { "project_id": 9002, "skill_id": 4 },
-  { "project_id": 9002, "skill_id": 24 },
-  { "project_id": 9002, "skill_id": 27 }
-],
-  
+    {
+      "project_id": 1001,
+      "skill_id": 9
+    },
+    {
+      "project_id": 1001,
+      "skill_id": 16
+    },
+    {
+      "project_id": 1001,
+      "skill_id": 15
+    },
+    {
+      "project_id": 1001,
+      "skill_id": 27
+    },
+    {
+      "project_id": 1001,
+      "skill_id": 23
+    },
+    {
+      "project_id": 1001,
+      "skill_id": 28
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 3
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 10
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 9
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 21
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 22
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 32
+    },
+    {
+      "project_id": 1002,
+      "skill_id": 29
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 1
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 4
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 7
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 21
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 22
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 23
+    },
+    {
+      "project_id": 1003,
+      "skill_id": 27
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 9
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 1
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 7
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 30
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 28
+    },
+    {
+      "project_id": 1004,
+      "skill_id": 29
+    },
+    {
+      "project_id": 1005,
+      "skill_id": 1
+    },
+    {
+      "project_id": 1005,
+      "skill_id": 8
+    },
+    {
+      "project_id": 1005,
+      "skill_id": 16
+    },
+    {
+      "project_id": 1005,
+      "skill_id": 27
+    },
+    {
+      "project_id": 1005,
+      "skill_id": 23
+    },
+    {
+      "project_id": 1006,
+      "skill_id": 1
+    },
+    {
+      "project_id": 1006,
+      "skill_id": 7
+    },
+    {
+      "project_id": 1006,
+      "skill_id": 4
+    },
+    {
+      "project_id": 1006,
+      "skill_id": 22
+    },
+    {
+      "project_id": 1006,
+      "skill_id": 29
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 5
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 6
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 17
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 21
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 27
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 29
+    },
+    {
+      "project_id": 1007,
+      "skill_id": 23
+    },
+    {
+      "project_id": 1008,
+      "skill_id": 11
+    },
+    {
+      "project_id": 1008,
+      "skill_id": 13
+    },
+    {
+      "project_id": 1008,
+      "skill_id": 15
+    },
+    {
+      "project_id": 1008,
+      "skill_id": 29
+    },
+    {
+      "project_id": 1008,
+      "skill_id": 30
+    },
+    {
+      "project_id": 2001,
+      "skill_id": 8
+    },
+    {
+      "project_id": 2001,
+      "skill_id": 1
+    },
+    {
+      "project_id": 2001,
+      "skill_id": 16
+    },
+    {
+      "project_id": 2001,
+      "skill_id": 27
+    },
+    {
+      "project_id": 2001,
+      "skill_id": 32
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 9
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 15
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 16
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 28
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 31
+    },
+    {
+      "project_id": 2002,
+      "skill_id": 30
+    },
+    {
+      "project_id": 3001,
+      "skill_id": 3
+    },
+    {
+      "project_id": 3001,
+      "skill_id": 1
+    },
+    {
+      "project_id": 3001,
+      "skill_id": 15
+    },
+    {
+      "project_id": 3001,
+      "skill_id": 28
+    },
+    {
+      "project_id": 3001,
+      "skill_id": 31
+    },
+    {
+      "project_id": 5001,
+      "skill_id": 8
+    },
+    {
+      "project_id": 5001,
+      "skill_id": 16
+    },
+    {
+      "project_id": 5001,
+      "skill_id": 15
+    },
+    {
+      "project_id": 5001,
+      "skill_id": 28
+    },
+    {
+      "project_id": 5001,
+      "skill_id": 23
+    },
+    {
+      "project_id": 5002,
+      "skill_id": 7
+    },
+    {
+      "project_id": 5002,
+      "skill_id": 1
+    },
+    {
+      "project_id": 5002,
+      "skill_id": 16
+    },
+    {
+      "project_id": 5002,
+      "skill_id": 23
+    },
+    {
+      "project_id": 5002,
+      "skill_id": 22
+    },
+    {
+      "project_id": 5003,
+      "skill_id": 13
+    },
+    {
+      "project_id": 5003,
+      "skill_id": 15
+    },
+    {
+      "project_id": 5003,
+      "skill_id": 16
+    },
+    {
+      "project_id": 5003,
+      "skill_id": 30
+    },
+    {
+      "project_id": 5003,
+      "skill_id": 29
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 2
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 1
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 10
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 5
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 21
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 24
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 25
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 26
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 23
+    },
+    {
+      "project_id": 9001,
+      "skill_id": 29
+    },
+    {
+      "project_id": 9002,
+      "skill_id": 2
+    },
+    {
+      "project_id": 9002,
+      "skill_id": 12
+    },
+    {
+      "project_id": 9002,
+      "skill_id": 4
+    },
+    {
+      "project_id": 9002,
+      "skill_id": 24
+    },
+    {
+      "project_id": 9002,
+      "skill_id": 27
+    }
+  ],
   "feedback": [
     {
       "feedback_id": 1,
@@ -1988,54 +2285,498 @@
       "viz_display_rank": 3
     }
   ],
-  
   "education": [
-  {
-    "education_id": 1,
-    "institution": "DePaul University",
-    "location": "Chicago, IL",
-    "degree": "MBA",
-    "field_of_study": "Business Strategy & Decision Making; Management Information Systems",
-    "honors_flag": true,
-    "completion_date": "2018-11-01",
-    "sort_order": 1
-  },
-  {
-    "education_id": 2,
-    "institution": "DePaul University",
-    "location": "Chicago, IL",
-    "degree": "B.S.",
-    "field_of_study": "Marketing (Concentration: Sales Leadership); Management (Concentration: Leadership & Change Management) ",
-    "honors_flag": true,
-    "completion_date": "2012-06-01",
-    "sort_order": 2
-  }
-],
-  
+    {
+      "education_id": 1,
+      "institution": "DePaul University",
+      "location": "Chicago, IL",
+      "degree": "MBA",
+      "field_of_study": "Business Strategy & Decision Making; Management Information Systems",
+      "honors_flag": true,
+      "completion_date": "2018-11-01",
+      "sort_order": 1
+    },
+    {
+      "education_id": 2,
+      "institution": "DePaul University",
+      "location": "Chicago, IL",
+      "degree": "B.S.",
+      "field_of_study": "Marketing (Concentration: Sales Leadership); Management (Concentration: Leadership & Change Management) ",
+      "honors_flag": true,
+      "completion_date": "2012-06-01",
+      "sort_order": 2
+    }
+  ],
   "credential": [
-  {
-    "credential_id": 1,
-    "type": "recognition",
-    "title": "SAP Catalyst Nomination",
-    "issuer": "SAP",
-    "issue_date": "2017-01-01",
-    "end_date": "2024-12-31",
-    "status": "nominated",
-    "description": "Companywide distinction awarded annually for individuals demonstrating high performance, accelerating change, and providing simple solutions to complex problems.",
-    "link": null,
-    "sort_order": 1
-  },
-  {
-    "credential_id": 2,
-    "type": "program",
-    "title": "SAP Prepare to Lead Program",
-    "issuer": "SAP",
-    "issue_date": "2021-11-01",
-    "end_date": null,
-    "status": "completed",
-    "description": null,
-    "link": null,
-    "sort_order": 2
-  }
-]
+    {
+      "credential_id": 1,
+      "type": "recognition",
+      "title": "SAP Catalyst Nomination",
+      "issuer": "SAP",
+      "issue_date": "2017-01-01",
+      "end_date": "2024-12-31",
+      "status": "nominated",
+      "description": "Companywide distinction awarded annually for individuals demonstrating high performance, accelerating change, and providing simple solutions to complex problems.",
+      "link": null,
+      "sort_order": 1
+    },
+    {
+      "credential_id": 2,
+      "type": "program",
+      "title": "SAP Prepare to Lead Program",
+      "issuer": "SAP",
+      "issue_date": "2021-11-01",
+      "end_date": null,
+      "status": "completed",
+      "description": null,
+      "link": null,
+      "sort_order": 2
+    }
+  ],
+  "system_improvement": [
+    {
+      "improvement_id": 10001,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "workflow",
+      "description": "Corrected connector pair sequencing for Question and Category. Adjusted Config Mover sequencing so question-related data is processed before dependent category records. Identified and corrected an execution-order dependency that caused category uploads to fail when question-linked records were processed too late.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "reliability",
+      "delivered_date": "2024-08-14",
+      "sort_order": 1
+    },
+    {
+      "improvement_id": 10002,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Expanded SKU-to-logical-product metadata mappings for brownfield migration. Updated SKU product metadata used by Configuration Mover brownfield processes to reflect newly introduced commercial SKUs. Closed gaps in the sku_product_mapping table so Brownfield migration logic could correctly recognize newer commercial entitlements and product-specific offerings.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "governance",
+      "delivered_date": "2025-07-14",
+      "sort_order": 2
+    },
+    {
+      "improvement_id": 10003,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "UI",
+      "description": "Exposed Threshold Alert connector pair in Config Mover UI. Enabled the Threshold Alert connector pair to appear as an available option in the React-based Config Mover interface. Extended the UI and documentation layer so delivered backend connector functionality was visible and usable within the product experience.",
+      "problem_type": "capability_gap",
+      "solution_type": "experience_enhancement",
+      "impact_type": "usability",
+      "delivered_date": "2025-02-18",
+      "sort_order": 3
+    },
+    {
+      "improvement_id": 10004,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Revised company configuration metadata mappings. Applied a new round of company configuration metadata updates to keep logical-product mappings aligned with current platform behavior. Refined the config_logical_product_id_map table so company configuration metadata remained synchronized with newly introduced and revised product mappings.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "governance",
+      "delivered_date": "2025-08-22",
+      "sort_order": 4
+    },
+    {
+      "improvement_id": 10005,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "data",
+      "description": "Introduced logical product definition table. Created a dedicated lookup layer to define logical products explicitly rather than relying on numeric references scattered across dependent tables. Added a foundational metadata structure that made logical products self-describing and reduced ambiguity across multiple interdependent database mappings.",
+      "problem_type": "capability_gap",
+      "solution_type": "data_modeling",
+      "impact_type": "governance",
+      "delivered_date": "2025-06-19",
+      "sort_order": 5
+    },
+    {
+      "improvement_id": 10006,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Rectified contingent-work mappings in configuration metadata. Removed incorrect contingent mappings from company configuration metadata to restore product alignment. Audited and corrected misclassified configuration records so contingent and statement-of-work behavior reflected intended product boundaries.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "reliability",
+      "delivered_date": "2025-07-28",
+      "sort_order": 6
+    },
+    {
+      "improvement_id": 10007,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Closed missing Profile Worker and contractual metadata gaps. Added missing logical-product mappings for Profile Worker and contractual company configurations. Re-audited configuration metadata and filled missing mappings so downstream configuration behavior matched the products and use cases those settings actually support.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "governance",
+      "delivered_date": "2025-07-23",
+      "sort_order": 7
+    },
+    {
+      "improvement_id": 10008,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Updated brownfield company configuration metadata for new releases. Refreshed company configuration metadata used by brownfield migration to include newly introduced and SKU-specific settings. Extended the company configuration mapping layer so newly released and SKU-specific settings were available to brownfield migration scenarios without manual workarounds.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "scalability",
+      "delivered_date": "2025-06-27",
+      "sort_order": 8
+    },
+    {
+      "improvement_id": 10009,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "integration",
+      "description": "Expanded Label Set connector coverage to include default label types. Adjusted Label Set connector behavior so default label set types could be migrated in addition to customized labels. Broadened connector inclusion criteria so Label Set migration reflected real-world deployment needs rather than excluding important default label definitions.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "usability",
+      "delivered_date": "2024-09-20",
+      "sort_order": 9
+    },
+    {
+      "improvement_id": 10010,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "workflow",
+      "description": "Replaced legacy Template Type SQL copy with connector-based migration. Deprecated a legacy SQL-based process and aligned Config Mover to use the newer Template Type connector pair. Modernized migration behavior by replacing an older SQL copy approach with dedicated connectors that fit the product's standardized execution model.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "reliability",
+      "delivered_date": "2024-10-04",
+      "sort_order": 10
+    },
+    {
+      "improvement_id": 10011,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added List View connector pair to Config Mover. Created a new List View JSON connector pair to support test-to-production migration of list views. Introduced a new deployable integration asset that made list view configuration portable across environments for customers, partners, and internal delivery teams.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-06-14",
+      "sort_order": 11
+    },
+    {
+      "improvement_id": 10012,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Threshold Alert SQL copy option to Config Mover. Created a Threshold Alert copy process so alert configuration could be migrated across environments. Extended Config Mover with an additional migration path for threshold alert configuration where no prior upload/download option existed.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-05-15",
+      "sort_order": 12
+    },
+    {
+      "improvement_id": 10013,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "workflow",
+      "description": "Introduced out-of-sequence warnings for connector execution. Added soft warnings when users selected connector pairs without satisfying prerequisite execution order. Improved external usability by surfacing dependency guidance directly in the workflow so users could avoid predictable failures caused by sequencing issues.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "usability",
+      "delivered_date": "2024-04-16",
+      "sort_order": 13
+    },
+    {
+      "improvement_id": 10014,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Label Set connector pair to Config Mover. Created a new Label Set connector pair so label set configuration could be moved between environments. Filled a migration gap that previously forced manual recreation of label sets and caused downstream dependency errors for related connector pairs.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-04-22",
+      "sort_order": 14
+    },
+    {
+      "improvement_id": 10015,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "workflow",
+      "description": "Automated connector-configuration precondition for Config Mover. Removed a manual setup requirement by auto-enabling the prerequisite connector configuration upload process. Simplified Config Mover execution by converting a manual prerequisite into an automated step behind the workflow.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_automation",
+      "impact_type": "usability",
+      "delivered_date": "2024-04-02",
+      "sort_order": 15
+    },
+    {
+      "improvement_id": 10016,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "UI",
+      "description": "Exposed medium- and high-risk company configurations to Config Manager. Expanded Config Manager access so users could manage a broader range of company configuration settings. Extended self-service configuration capabilities beyond low-risk settings so more meaningful company configuration work could be completed without deeper internal intervention.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-10-03",
+      "sort_order": 16
+    },
+    {
+      "improvement_id": 10017,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "UI",
+      "description": "Made Config Mover status details visible in target environments. Ensured copy-job status details were available in the target environment rather than only the source environment. Closed an observability gap so users could verify migration results from the destination context where the copied configuration would actually be consumed.",
+      "problem_type": "visibility_gap",
+      "solution_type": "experience_enhancement",
+      "impact_type": "decision_support",
+      "delivered_date": "2024-04-18",
+      "sort_order": 17
+    },
+    {
+      "improvement_id": 10018,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "workflow",
+      "description": "Added production vs non-production validation to Config Mover. Introduced environment validation and UX controls that distinguish production from non-production execution scenarios. Added validation and environment-aware workflow behavior so the product could safely guide users through the appropriate migration path based on environment type.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "reliability",
+      "delivered_date": "2024-06-28",
+      "sort_order": 18
+    },
+    {
+      "improvement_id": 10019,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Company Site Configuration connector pair. Created a new Company Site Configuration test-to-production connector pair for Config Mover. Expanded the migration surface area of Config Mover by introducing another deployable connector pair for a previously unsupported configuration domain.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-03-29",
+      "sort_order": 19
+    },
+    {
+      "improvement_id": 10020,
+      "experience_id": 2,
+      "project_id": null,
+      "system_layer": "workflow",
+      "description": "Supported enhanced legal entity defaults for decision-form workflow. Implemented support for a client-specific legal-entity handling requirement in decision-form behavior. Addressed a structural workflow requirement where default business-unit and legal-entity values needed a controlled exception path to support the client's services-spend operating model.",
+      "problem_type": "workflow_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "usability",
+      "delivered_date": "2024-03-29",
+      "sort_order": 20
+    },
+    {
+      "improvement_id": 10021,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Updated Pick List Configuration upload to support legal-entity behavior. Enhanced Pick List Configuration upload behavior to support legal-entity-related requirements. Extended an existing connector process so pick-list configuration migration aligned with legal-entity use cases uncovered during implementation and testing.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "reliability",
+      "delivered_date": "2024-03-28",
+      "sort_order": 21
+    },
+    {
+      "improvement_id": 10022,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "UI",
+      "description": "Added leading-practice baseline to comparison tool. Enabled the comparison tool to compare a customer's current configuration against SAP leading-practice baselines. Expanded the comparison experience beyond tenant-to-tenant analysis so users could benchmark their current configuration against a curated leading-practice reference state.",
+      "problem_type": "decision_support_gap",
+      "solution_type": "experience_enhancement",
+      "impact_type": "decision_support",
+      "delivered_date": "2025-08-12",
+      "sort_order": 22
+    },
+    {
+      "improvement_id": 10023,
+      "experience_id": 1,
+      "project_id": 1004,
+      "system_layer": "data",
+      "description": "Corrected SQL-copy timestamp behavior for created and revised times. Adjusted SQL-copy behavior so newly inserted records use transaction-time values instead of carrying over original timestamps. Improved data correctness for SQL-copy-based migration by ensuring temporal metadata reflected the actual time of insertion in the destination environment.",
+      "problem_type": "data_gap",
+      "solution_type": "workflow_optimization",
+      "impact_type": "governance",
+      "delivered_date": "2024-10-29",
+      "sort_order": 23
+    },
+    {
+      "improvement_id": 10024,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Added omitted and newly discovered configuration metadata mappings. Added missing configuration-to-logical-product records identified through follow-up audit. Closed residual metadata gaps by inserting omitted and newly discovered mappings so Configuration Mover logic remained complete as the product evolved.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "governance",
+      "delivered_date": "2025-09-02",
+      "sort_order": 24
+    },
+    {
+      "improvement_id": 10025,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Established quarterly SKU product-mapping update process. Updated SKU product mappings to keep commercial entitlement metadata aligned with the source-of-truth audit process. Formalized and applied recurring SKU mapping maintenance so entitlement-driven migration behavior remained accurate as product packaging changed over time.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "governance",
+      "delivered_date": "2025-12-16",
+      "sort_order": 25
+    },
+    {
+      "improvement_id": 10026,
+      "experience_id": 1,
+      "project_id": 1007,
+      "system_layer": "governance",
+      "description": "Applied Q1 2026 WalkMe SKU mapping changes. Refreshed SKU product mappings to reflect a new WalkMe SKU change identified in the quarterly audit. Executed a targeted metadata update to keep entitlement mappings current and preserve expected behavior for Configuration Mover and related features.",
+      "problem_type": "metadata_gap",
+      "solution_type": "metadata_standardization",
+      "impact_type": "reliability",
+      "delivered_date": "2026-02-18",
+      "sort_order": 26
+    },
+    {
+      "improvement_id": 10027,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added System Variables connector pair to Config Mover. Created upload and download support for System Variables as a new Config Mover connector pair. Introduced a new migration asset for system-variable configuration so environment-to-environment deployments could carry this settings domain without manual recreation.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-10-07",
+      "sort_order": 27
+    },
+    {
+      "improvement_id": 10028,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Expense Type connector pair to Config Mover. Created Expense Type upload and download support within Config Mover. Expanded Config Mover with an additional supported object domain so expense-type configuration could be moved consistently across environments.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-02-08",
+      "sort_order": 28
+    },
+    {
+      "improvement_id": 10029,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Cost Center Legal Entity Association download. Created the missing download process needed to complement the existing upload for Cost Center Legal Entity Association. Closed a one-sided integration gap by adding the download path required for full migration support of cost-center and legal-entity associations.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "reliability",
+      "delivered_date": "2023-11-20",
+      "sort_order": 29
+    },
+    {
+      "improvement_id": 10030,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Purchase Unit download process. Created a Purchase Unit download process to support cross-product integration scenarios inside Config Mover. Extended migration support for a configuration object important to HR and finance cross-product integration scenarios.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "self_service",
+      "delivered_date": "2024-01-22",
+      "sort_order": 30
+    },
+    {
+      "improvement_id": 10031,
+      "experience_id": 1,
+      "project_id": 1002,
+      "system_layer": "integration",
+      "description": "Added Qualification Category download process. Created the missing Qualification Category download needed to complement existing upload support. Closed a migration capability gap by adding the download side of a previously incomplete configuration object workflow.",
+      "problem_type": "capability_gap",
+      "solution_type": "capability_expansion",
+      "impact_type": "reliability",
+      "delivered_date": "2023-11-28",
+      "sort_order": 31
+    },
+    {
+      "improvement_id": 19901,
+      "experience_id": 999,
+      "project_id": 9001,
+      "system_layer": "data",
+      "description": "Added live read-only SQL query workspace to HDP. Introduced a functional SQL workspace backed by a read-only API endpoint and guided starter queries. Moved the Human Data Product from static demonstration to interactive consumption by exposing the underlying SQLite model through a constrained query experience.",
+      "problem_type": "capability_gap",
+      "solution_type": "access_extension",
+      "impact_type": "usability",
+      "delivered_date": "2026-03-16",
+      "sort_order": 32
+    },
+    {
+      "improvement_id": 19902,
+      "experience_id": 999,
+      "project_id": 9001,
+      "system_layer": "integration",
+      "description": "Added structured API workspace and endpoint documentation to HDP. Exposed curated API endpoints and documentation directly in the workspace so users can consume raw and derived HDP data. Extended the product's access layer beyond SQL by pairing a documented REST surface with an interactive API testing experience.",
+      "problem_type": "capability_gap",
+      "solution_type": "access_extension",
+      "impact_type": "interoperability",
+      "delivered_date": "2026-03-17",
+      "sort_order": 33
+    },
+    {
+      "improvement_id": 19903,
+      "experience_id": 999,
+      "project_id": 9001,
+      "system_layer": "UI",
+      "description": "Redesigned HDP insights around derived patterns and drilldowns. Refactored the insights workspace so visualizations, drilldowns, and narrative framing emphasize derived patterns rather than static resume-style cards. Improved the analytical honesty and explanatory power of the Human Data Product by shifting the insight layer toward data-derived signals, interactive drilldowns, and clearer proof structures.",
+      "problem_type": "clarity_gap",
+      "solution_type": "analytical_refinement",
+      "impact_type": "decision_support",
+      "delivered_date": "2026-04-01",
+      "sort_order": 34
+    },
+    {
+      "improvement_id": 19904,
+      "experience_id": 999,
+      "project_id": 9001,
+      "system_layer": "UI",
+      "description": "Added human-context layer and stronger product framing to HDP overview. Extended the overview with human context, product definition, documentation, and clearer catalog framing. Improved information architecture so the site communicates both the product concept and the person behind the data without reducing the experience to a static portfolio page.",
+      "problem_type": "clarity_gap",
+      "solution_type": "experience_enhancement",
+      "impact_type": "usability",
+      "delivered_date": "2026-03-15",
+      "sort_order": 35
+    },
+    {
+      "improvement_id": 19905,
+      "experience_id": 999,
+      "project_id": 9003,
+      "system_layer": "data",
+      "description": "Built capability scoring framework for depth and experience. Introduced a structured capability model that scores skills across depth and experience dimensions for more transparent interpretation. Converted a flat skill list into an interpretable capability framework by defining consistent scoring logic and explanatory metadata for each capability record.",
+      "problem_type": "clarity_gap",
+      "solution_type": "analytical_refinement",
+      "impact_type": "interpretability",
+      "delivered_date": "2026-03-30",
+      "sort_order": 36
+    },
+    {
+      "improvement_id": 19906,
+      "experience_id": 999,
+      "project_id": 9003,
+      "system_layer": "UI",
+      "description": "Added interactive capability visualizations with mobile-aware drilldown behavior. Implemented interactive capability profile, domain distribution, and matrix views with consistent tooltip behavior across desktop and mobile. Expanded the Capability Model from static skill representation to an exploratory interface with multiple analytical views, responsive interactions, and explainable drilldowns.",
+      "problem_type": "capability_gap",
+      "solution_type": "experience_enhancement",
+      "impact_type": "usability",
+      "delivered_date": "2026-04-01",
+      "sort_order": 37
+    }
+  ]
 }
