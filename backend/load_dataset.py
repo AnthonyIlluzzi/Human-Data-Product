@@ -25,6 +25,7 @@ TOP_LEVEL_TABLES = [
     "skill",
     "project_skill",
     "feedback",
+    "system_improvement",
 ]
 
 ALLOWED_FEEDBACK_ENTITY_TYPES = {
@@ -103,6 +104,26 @@ def validate_referential_integrity(data: dict[str, Any]) -> None:
             raise ValueError(f"Duplicate project_skill mapping found: {pair}")
         seen_project_skill_pairs.add(pair)
 
+    seen_system_improvement_ids: set[Any] = set()
+    for record in data["system_improvement"]:
+        improvement_id = record["improvement_id"]
+        experience_id = record["experience_id"]
+        project_id = record["project_id"]
+
+        if improvement_id in seen_system_improvement_ids:
+            raise ValueError(f"Duplicate system_improvement id found: {improvement_id}")
+        seen_system_improvement_ids.add(improvement_id)
+
+        if experience_id not in experience_ids:
+            raise ValueError(
+                f"system_improvement {improvement_id} references missing experience_id {experience_id}"
+            )
+
+        if project_id is not None and project_id not in project_ids:
+            raise ValueError(
+                f"system_improvement {improvement_id} references missing project_id {project_id}"
+            )
+    
     for record in data["feedback"]:
         entity_type = record["entity_type"]
         entity_id = record["entity_id"]
@@ -228,6 +249,22 @@ def validate_dataset(data: dict[str, Any]) -> None:
             "viz_display_rank",
         },
         "feedback",
+    )
+    require_keys(
+        data["system_improvement"],
+        {
+            "improvement_id",
+            "experience_id",
+            "project_id",
+            "system_layer",
+            "description",
+            "problem_type",
+            "solution_type",
+            "impact_type",
+            "delivered_date",
+            "sort_order",
+        },
+        "system_improvement",
     )
 
     validate_referential_integrity(data)
@@ -355,6 +392,21 @@ def create_tables(conn: sqlite3.Connection) -> None:
             viz_display_flag BOOLEAN,
             viz_display_rank INTEGER
         );
+
+        CREATE TABLE IF NOT EXISTS system_improvement (
+            improvement_id INTEGER PRIMARY KEY,
+            experience_id INTEGER NOT NULL,
+            project_id INTEGER,
+            system_layer TEXT,
+            description TEXT,
+            problem_type TEXT,
+            solution_type TEXT,
+            impact_type TEXT,
+            delivered_date DATE,
+            sort_order INTEGER,
+            FOREIGN KEY (experience_id) REFERENCES experience(experience_id),
+            FOREIGN KEY (project_id) REFERENCES project(project_id)
+        );
         """
     )
     conn.commit()
@@ -364,6 +416,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
     # Order matters because of FK constraints.
     delete_order = [
         "project_skill",
+        "system_improvement",
         "feedback",
         "project",
         "skill",
@@ -503,6 +556,23 @@ def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
             "viz_display_rank",
         ],
         data["feedback"],
+    )
+    insert_many(
+        conn,
+        "system_improvement",
+        [
+            "improvement_id",
+            "experience_id",
+            "project_id",
+            "system_layer",
+            "description",
+            "problem_type",
+            "solution_type",
+            "impact_type",
+            "delivered_date",
+            "sort_order",
+        ],
+        data["system_improvement"],
     )
 
     conn.commit()
