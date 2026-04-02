@@ -469,6 +469,15 @@ body {
   gap: 2px;
 }
 
+.contact-info-card > .section-heading {
+  margin-bottom: 0;
+}
+
+.contact-info-card > .section-heading h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
 .modal-actions-card {
   padding-top: 0;
 }
@@ -1311,14 +1320,14 @@ body {
 }
 
 .meta-row {
-  display: flex;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+  column-gap: 14px;
   width: 100%;
-  min-height: 40px;
-  padding: 8px 0;
+  min-height: 42px;
+  padding: 9px 0;
   border-bottom: 1px solid var(--border);
-  gap: 10px;
 }
 
 .meta-row:last-child {
@@ -1328,19 +1337,14 @@ body {
 
 .meta-row span {
   color: var(--muted);
-  flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
 }
 
 .meta-row strong {
-  margin-left: auto;
   text-align: right;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
   white-space: nowrap;
-  flex: 0 0 auto;
+  justify-self: end;
 }
 
 .health-grid {
