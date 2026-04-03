@@ -3421,7 +3421,7 @@ body {
 }
 
 .insights-dashboard-row--wide-right {
-  grid-template-columns: minmax(220px, 0.70fr) minmax(0, 1.90fr);
+  grid-template-columns: minmax(200px, 0.62fr) minmax(0, 1.98fr);
 }
 
 .insights-dashboard-row--trajectory {
@@ -3847,8 +3847,8 @@ body {
 
 .opportunity-treemap-grid {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  grid-auto-rows: 50px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-auto-rows: 44px;
   gap: 6px;
   max-height: none;
   overflow: visible;
@@ -3858,7 +3858,7 @@ body {
   min-width: 0;
   min-height: 0;
   padding: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--tile-border, #d8e4f3);
   background: var(--tile-fill, #eef5fd);
   overflow: hidden;
@@ -3866,13 +3866,8 @@ body {
   appearance: none;
 }
 
-.opportunity-treemap-tile--xl {
-  grid-column: span 4;
-  grid-row: span 2;
-}
-
 .opportunity-treemap-tile--lg {
-  grid-column: span 3;
+  grid-column: span 2;
   grid-row: span 2;
 }
 
@@ -3935,12 +3930,12 @@ body {
 .insights-hover-tooltip {
   position: fixed;
   z-index: 70;
-  width: min(300px, calc(100vw - 28px));
-  padding: 12px 14px;
-  border-radius: 14px;
+  width: min(260px, calc(100vw - 24px));
+  padding: 9px 11px;
+  border-radius: 10px;
   background: #ffffff;
   border: 1px solid var(--primary);
-  box-shadow: 0 14px 30px rgba(19, 37, 63, 0.14);
+  box-shadow: 0 12px 24px rgba(19, 37, 63, 0.14);
   pointer-events: none;
 }
 
@@ -3985,19 +3980,14 @@ body {
     grid-template-columns: 1fr;
   }
 
-   .opportunity-treemap-grid {
+  .opportunity-treemap-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: 46px;
+    grid-auto-rows: 40px;
     max-height: none;
   }
 
-  .opportunity-treemap-tile--xl {
-    grid-column: span 3;
-    grid-row: span 2;
-  }
-
   .opportunity-treemap-tile--lg {
-    grid-column: span 3;
+    grid-column: span 2;
     grid-row: span 2;
   }
 
@@ -4036,13 +4026,20 @@ body {
   }
 
   .opportunity-treemap-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: 44px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 34px;
   }
 
-  .opportunity-treemap-tile--xl,
-  .opportunity-treemap-tile--lg,
-  .opportunity-treemap-tile--md,
+  .opportunity-treemap-tile--lg {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .opportunity-treemap-tile--md {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
   .opportunity-treemap-tile--sm {
     grid-column: span 1;
     grid-row: span 1;
