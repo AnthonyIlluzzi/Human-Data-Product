@@ -4,6 +4,45 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
 
+const DISTRIBUTION_DEFINITIONS = {
+  solution_type: {
+    capability_expansion: "Expands what users or teams can do through new self-service or enablement capabilities.",
+    metadata_standardization: "Introduces structure, taxonomy, and governance to improve consistency and trust.",
+    workflow_optimization: "Reduces friction in delivery, process flow, or operational execution.",
+    experience_enhancement: "Improves usability, clarity, and the experience of consuming product or platform functionality.",
+    access_extension: "Extends access to capabilities, data, or functionality across more users or channels.",
+    analytical_refinement: "Improves insight quality, reporting utility, or analytical usability.",
+    data_modeling: "Strengthens the underlying data model or semantic structure supporting downstream consumption.",
+    workflow_automation: "Automates repetitive execution steps to reduce manual dependency."
+  },
+  problem_type: {
+    capability_gap: "A missing capability prevented users from completing work efficiently.",
+    metadata_gap: "Inconsistent or missing metadata reduced trust, traceability, or scale.",
+    workflow_gap: "A process breakdown or inefficient flow limited delivery or execution.",
+    clarity_gap: "Ambiguity made the system or process harder to understand or use.",
+    visibility_gap: "Lack of visibility reduced oversight, reporting quality, or actionability.",
+    decision_support_gap: "Decision-making lacked the data or framing required for confidence.",
+    data_gap: "Underlying data structure or availability limited downstream use."
+  },
+  system_layer: {
+    integration: "Cross-system connectivity, interfaces, or handoffs.",
+    governance: "Standards, control, metadata, and structural consistency.",
+    UI: "User-facing configuration, workflow, or interaction layer.",
+    workflow: "Operational flow, process execution, and delivery mechanics.",
+    data: "Underlying data model, structure, or semantic layer."
+  },
+  impact_type: {
+    reliability: "Improves consistency, stability, or trustworthiness of delivery or output.",
+    self_service: "Reduces dependency by allowing users to act independently.",
+    usability: "Improves ease of use, clarity, or adoption experience.",
+    governance: "Improves structure, traceability, or control.",
+    decision_support: "Enables better decisions through stronger analytics or framing.",
+    interoperability: "Improves compatibility or coordination across systems.",
+    interpretability: "Makes information easier to understand and act on.",
+    scalability: "Enables broader use, higher volume, or lower-friction growth."
+  }
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
   bindCatalogNavigation();
   bindSideNavigation();
@@ -367,31 +406,47 @@ async function loadVisualizations() {
   renderValueDelivery(data.value_delivery);
   renderValueRealization(data.value_realization);
   bindPatternInfoTooltips();
+  bindInsightHelpPopovers();
 }
 
 function renderTimeline(containerId, items) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  container.innerHTML = "";
+  const compactRole = role => {
+    return (role || "")
+      .replace(", Product Success", "")
+      .replace("Senior ", "")
+      .replace("Client Relationship Consultant / Associate", "Client Relationship Consultant")
+      .replace("Independent / Side Projects", "Side Projects");
+  };
 
-  if (!items || items.length === 0) {
-    container.textContent = "No timeline data available.";
-    return;
-  }
+  const compactCompany = company => {
+    if (company === "Capsim Management Simulations") return "CAPSIM";
+    if (company === "Personal") return "PERSONAL";
+    return company.toUpperCase();
+  };
 
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "timeline-item";
-    div.innerHTML = `
-      <div class="timeline-item-top">
-        <span class="timeline-company">${escapeHtml(item.company)}</span>
-        <span class="timeline-range">${formatMonthYear(item.start_date)} – ${formatMonthYear(item.end_date || "Present")}</span>
-      </div>
-      <h4>${escapeHtml(item.role)}</h4>
-    `;
-    container.appendChild(div);
-  });
+  const formatRange = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = endDate ? new Date(endDate) : null;
+    const startText = start.toLocaleString("en-US", { month: "short", year: "numeric" });
+    const endText = end
+      ? end.toLocaleString("en-US", { month: "short", year: "numeric" })
+      : "Present";
+    return `${startText} – ${endText}`;
+  };
+
+  container.innerHTML = `
+    <div class="timeline-viz-grid">
+      ${(items || []).map(item => `
+        <div class="timeline-role-tile">
+          <div class="timeline-role-meta">${escapeHtml(compactCompany(item.company))} · ${escapeHtml(formatRange(item.start_date, item.end_date))}</div>
+          <div class="timeline-role-title">${escapeHtml(compactRole(item.role))}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
 
 function renderSkillPatternMatrix(containerId, summaryId, data) {
@@ -1441,6 +1496,8 @@ async function loadNextOpportunity() {
     data.role_priorities.observed_copy,
     data.role_priorities.derivation
   );
+
+  bindInsightHelpPopovers();
 }
 
 function setObservedPanel(titleId, copyId, derivationId, title, copy, derivation) {
@@ -1449,8 +1506,24 @@ function setObservedPanel(titleId, copyId, derivationId, title, copy, derivation
   const derivationEl = document.getElementById(derivationId);
 
   if (titleEl) titleEl.textContent = title || "Observed Pattern";
-  if (copyEl) copyEl.textContent = copy || "";
-  if (derivationEl) derivationEl.textContent = derivation || "";
+
+  if (copyEl) {
+    if (Array.isArray(copy)) {
+      copyEl.innerHTML = `
+        <ul>
+          ${copy.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      `;
+    } else if (typeof copy === "string") {
+      copyEl.innerHTML = `<p>${escapeHtml(copy)}</p>`;
+    } else {
+      copyEl.innerHTML = "";
+    }
+  }
+
+  if (derivationEl) {
+    derivationEl.textContent = derivation || "";
+  }
 }
 
 function bindValueDistributionToggles(distributionViews) {
@@ -1495,7 +1568,13 @@ function renderDistributionBar(containerId, view) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const palette = ["#0a6ed1", "#2b82df", "#4f96eb", "#72abf4", "#97c1fa", "#b7d6fd", "#d7ebff"];
+  const paletteMap = {
+    solution_type: ["#0a6ed1", "#267fda", "#438fe3", "#61a0eb", "#7fb1f2", "#9cc2f7", "#b8d4fb", "#d9ecff"],
+    problem_type: ["#0a6ed1", "#2e87df", "#5aa4ee", "#8bc0f8", "#bedcff", "#dceeff"],
+    system_layer: ["#0a6ed1", "#2f85df", "#66abef", "#9acefb", "#d8edff"]
+  };
+
+  const palette = paletteMap[view.dimension] || paletteMap.solution_type;
   const segments = view.segments || [];
 
   container.innerHTML = `
@@ -1509,16 +1588,22 @@ function renderDistributionBar(containerId, view) {
         ></button>
       `).join("")}
     </div>
+    <div class="distribution-hover-hint">Hover each segment for category, share, and definition.</div>
   `;
 
   container.querySelectorAll(".distribution-bar-segment").forEach((node, index) => {
     const segment = segments[index];
+    const definition =
+      DISTRIBUTION_DEFINITIONS?.[view.dimension]?.[segment.key] ||
+      "This category is derived from the structured system-improvement model.";
+
     attachFloatingTooltip(
       node,
       `
         <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
         <span class="insights-hover-tooltip-body">${segment.count} records</span>
         <span class="insights-hover-tooltip-body">${segment.share}% of selected view</span>
+        <span class="insights-hover-tooltip-definition">${escapeHtml(definition)}</span>
       `
     );
   });
@@ -1527,18 +1612,7 @@ function renderDistributionBar(containerId, view) {
 function renderDistributionLegend(containerId, segments) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
-  const palette = ["#0a6ed1", "#2b82df", "#4f96eb", "#72abf4", "#97c1fa", "#b7d6fd", "#d7ebff"];
-  container.innerHTML = `
-    <div class="distribution-legend-row">
-      ${(segments || []).map((segment, index) => `
-        <div class="distribution-legend-item">
-          <span class="distribution-legend-swatch" style="background:${palette[index % palette.length]};"></span>
-          <span class="distribution-legend-label">${escapeHtml(segment.label)}</span>
-        </div>
-      `).join("")}
-    </div>
-  `;
+  container.innerHTML = "";
 }
 
 function renderValueDelivery(payload) {
@@ -1548,7 +1622,10 @@ function renderValueDelivery(payload) {
   if (!list || !grid) return;
 
   list.innerHTML = (payload.insights || []).map(item => `
-    <li><strong>${item.index}.</strong> ${escapeHtml(item.statement)}</li>
+    <li>
+      <span class="insight-pattern-index">${item.index}</span>
+      <span>${escapeHtml(item.statement)}</span>
+    </li>
   `).join("");
 
   if (derivation) {
@@ -1622,6 +1699,77 @@ function openFeedbackEvidenceModal(titleText, items) {
   modal.classList.remove("hidden");
 }
 
+function bindInsightHelpPopovers() {
+  const triggers = document.querySelectorAll(".insight-help-button");
+
+  const closeAll = (exceptId = null) => {
+    document.querySelectorAll(".insight-help-button").forEach(btn => {
+      const popoverId = btn.getAttribute("aria-controls");
+      const popover = popoverId ? document.getElementById(popoverId) : null;
+      const isTarget = popoverId === exceptId;
+
+      btn.classList.toggle("is-active", isTarget);
+      btn.setAttribute("aria-expanded", isTarget ? "true" : "false");
+
+      if (popover) {
+        popover.classList.toggle("is-visible", isTarget);
+        popover.setAttribute("aria-hidden", isTarget ? "false" : "true");
+      }
+    });
+  };
+
+  const positionPopover = (button, popover) => {
+    if (!button || !popover) return;
+
+    const isMobile = window.innerWidth <= 680;
+    popover.classList.remove("is-docked-mobile");
+
+    if (isMobile) {
+      popover.classList.add("is-docked-mobile");
+      return;
+    }
+
+    const rect = button.getBoundingClientRect();
+    const width = Math.min(360, window.innerWidth - 40);
+    const left = Math.max(12, Math.min(rect.right - width, window.innerWidth - width - 12));
+    const top = rect.bottom + 10;
+
+    popover.style.left = `${left}px`;
+    popover.style.top = `${top}px`;
+  };
+
+  triggers.forEach(btn => {
+    btn.addEventListener("click", event => {
+      event.stopPropagation();
+      const popoverId = btn.getAttribute("aria-controls");
+      const popover = popoverId ? document.getElementById(popoverId) : null;
+      if (!popover) return;
+
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        closeAll();
+      } else {
+        closeAll(popoverId);
+        positionPopover(btn, popover);
+      }
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".insight-help-button[aria-expanded='true']").forEach(btn => {
+      const popoverId = btn.getAttribute("aria-controls");
+      const popover = popoverId ? document.getElementById(popoverId) : null;
+      if (popover) positionPopover(btn, popover);
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!event.target.closest(".insight-help")) {
+      closeAll();
+    }
+  });
+}
+
 function renderValueRealization(payload) {
   const container = document.getElementById("value-realization-heatmap");
   if (!container) return;
@@ -1635,6 +1783,16 @@ function renderValueRealization(payload) {
     cells.map(cell => [`${cell.approach_key}__${cell.impact_key}`, cell])
   );
 
+  const intensityFor = score => {
+    if (score <= 0) return "rgba(10,110,209,0.08)";
+    const ratio = score / maxScore;
+    if (ratio >= 0.85) return "rgba(10,110,209,1)";
+    if (ratio >= 0.65) return "rgba(10,110,209,0.82)";
+    if (ratio >= 0.45) return "rgba(10,110,209,0.62)";
+    if (ratio >= 0.25) return "rgba(10,110,209,0.42)";
+    return "rgba(10,110,209,0.22)";
+  };
+
   container.innerHTML = `
     <div class="value-heatmap-grid" style="grid-template-columns: 170px repeat(${cols.length}, minmax(0, 1fr));">
       <div class="value-heatmap-corner">Approach</div>
@@ -1643,7 +1801,6 @@ function renderValueRealization(payload) {
         <div class="value-heatmap-axis value-heatmap-axis--row">${escapeHtml(row.label)}</div>
         ${cols.map(col => {
           const cell = cellMap.get(`${row.key}__${col.key}`) || { score: 0, factual_count: 0, project_inferred: 0, feedback_inferred: 0 };
-          const opacity = Math.max(cell.score / maxScore, 0.08);
           return `
             <button
               type="button"
@@ -1654,7 +1811,7 @@ function renderValueRealization(payload) {
               data-heatmap-project="${cell.project_inferred}"
               data-heatmap-feedback="${cell.feedback_inferred}"
               data-heatmap-score="${cell.score}"
-              style="background: rgba(10,110,209, ${opacity});"
+              style="background:${intensityFor(cell.score)};"
             ></button>
           `;
         }).join("")}
@@ -1669,7 +1826,7 @@ function renderValueRealization(payload) {
         <span class="insights-hover-tooltip-title">${escapeHtml(cell.dataset.heatmapRow)} → ${escapeHtml(cell.dataset.heatmapCol)}</span>
         <span class="insights-hover-tooltip-body">Factual core: ${cell.dataset.heatmapFactual}</span>
         <span class="insights-hover-tooltip-body">Project inference: ${cell.dataset.heatmapProject}</span>
-        <span class="insights-hover-tooltip-body">Feedback inference: ${cell.dataset.heatmapFeedback}</span>
+        <span class="insights-hover-tooltip-body">Feedback reinforcement: ${cell.dataset.heatmapFeedback}</span>
         <span class="insights-hover-tooltip-body">Weighted score: ${cell.dataset.heatmapScore}</span>
       `
     );
@@ -1689,15 +1846,10 @@ function renderOpportunityTreemap(containerId, segments) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const maxWeight = Math.max(...(segments || []).map(item => item.weight || 1), 1);
-
   container.innerHTML = `
     <div class="opportunity-treemap-grid">
       ${(segments || []).map(item => `
-        <div
-          class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight, 3))}"
-          data-priority="${escapeHtml(item.priority || "")}"
-        >
+        <div class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight, 5))}">
           <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
           <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
         </div>

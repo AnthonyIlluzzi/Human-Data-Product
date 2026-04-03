@@ -955,17 +955,40 @@ def _build_distribution_view(rows, dimension: str):
             "share": round((row["count"] / total) * 100, 1),
         })
 
+    if not segments:
+        return {
+            "dimension": dimension,
+            "title": "No distribution available",
+            "total_records": 0,
+            "segments": [],
+            "observed_title": "No distribution available",
+            "observed_copy": [
+                "No records are currently available for this distribution view."
+            ],
+            "derivation": "This view requires structured system improvement records for the selected dimension.",
+        }
+
     top_labels = [segment["label"] for segment in segments[:2]]
+
     if dimension == "solution_type":
-        observed = f"Work is concentrated in {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Work is concentrated in the dominant solution approach."
+        observed = [
+            f"Work is concentrated in {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Work is concentrated in one dominant approach.",
+            "The distribution skews toward scalable enablement and structural system improvements rather than isolated feature work."
+        ]
         derivation = "Based on factual system improvement records grouped by solution_type and shown as share of total records."
-        title = "Solution distribution"
+        title = "Approach distribution"
     elif dimension == "problem_type":
-        observed = f"Most work addresses {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Most work concentrates on a single recurring problem type."
+        observed = [
+            f"Most work addresses {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Most work concentrates on one recurring problem type.",
+            "The system layer is primarily used to reduce friction, ambiguity, and structural gaps."
+        ]
         derivation = "Based on factual system improvement records grouped by problem_type and shown as share of total records."
         title = "Problem distribution"
     else:
-        observed = f"Work is concentrated at the {top_labels[0]} and {top_labels[1]} layers." if len(top_labels) > 1 else "Work is concentrated in one dominant system layer."
+        observed = [
+            f"Work is concentrated at the {top_labels[0]} and {top_labels[1]} layers." if len(top_labels) > 1 else "Work is concentrated in one dominant system layer.",
+            "The pattern suggests value creation is occurring at the level of systems and structural design, not just point execution."
+        ]
         derivation = "Based on factual system improvement records grouped by system_layer and shown as share of total records."
         title = "System layer distribution"
 
@@ -1293,15 +1316,31 @@ def _build_value_realization_payload(conn, top_approaches):
             "observation": row_observation,
         })
 
-    top_row = matrix_rows[0] if matrix_rows else {"label": "This approach", "observation": "Outcome relationships are not available."}
+    row_strength = []
+    for approach in top_approaches:
+        total_score = sum(
+            cell["score"]
+            for cell in cells
+            if cell["approach_key"] == approach["key"]
+        )
+        row_strength.append((approach["key"], total_score))
+
+    strongest_key = max(row_strength, key=lambda item: item[1])[0] if row_strength else None
+    strongest_row = next(
+        (row for row in matrix_rows if row["key"] == strongest_key),
+        {"label": "This approach", "observation": "Outcome relationships are not available."}
+    )
 
     return {
         "approach_labels": [{"key": item["key"], "label": item["label"]} for item in top_approaches],
         "impact_labels": [{"key": key, "label": _display_label("impact_type", key)} for key in impact_keys],
         "cells": cells,
         "max_score": round(max_score or 1, 2),
-        "observed_title": top_row["label"],
-        "observed_copy": top_row["observation"],
+        "observed_title": strongest_row["label"],
+        "observed_copy": [
+            strongest_row["observation"],
+            "Weighted reinforcement from projects and feedback strengthens pattern confidence, but factual system-improvement records remain the dominant signal."
+        ],
         "derivation": "This view is anchored in factual system improvement records. Additional project and feedback signals are normalized to the same approach and impact categories and contribute lower weight than factual records.",
     }
 
@@ -1372,7 +1411,14 @@ def get_opportunity_insights_dashboard():
 
         cursor.execute(
             """
-            SELECT preference_id, dimension, category, value, priority
+            SELECT
+                preference_id,
+                dimension,
+                category,
+                value,
+                priority,
+                COALESCE(dimension_weight, 1.0) AS dimension_weight,
+                COALESCE(value_weight, 1.0) AS value_weight
             FROM role_preference
             ORDER BY
                 CASE priority
@@ -1399,23 +1445,26 @@ def get_opportunity_insights_dashboard():
     for group_label, config in treemap_groups.items():
         for item in preferences:
             if item["category"] in config["categories"]:
-                weight = _priority_weight(item["priority"])
+                priority_weight = _priority_weight(item["priority"])
+                weight = round(priority_weight * float(item.get("dimension_weight", 1.0)) * float(item.get("value_weight", 1.0)))
                 treemap_segments.append({
                     "group": group_label,
                     "label": item["value"],
-                    "weight": weight,
+                    "weight": max(weight, 1),
                     "priority": item["priority"],
                 })
 
-    role_priorities = [
-        {
-            "label": item["value"],
-            "priority": item["priority"],
-            "weight": _priority_weight(item["priority"]),
-        }
-        for item in preferences
-        if item["category"] == "role_type"
-    ]
+    role_priorities = []
+    for item in preferences:
+        if item["category"] == "role_type":
+            priority_weight = _priority_weight(item["priority"])
+            weight = priority_weight * float(item.get("dimension_weight", 1.0)) * float(item.get("value_weight", 1.0))
+            role_priorities.append({
+                "label": item["value"],
+                "priority": item["priority"],
+                "weight": round(weight, 2),
+            })
+
     max_role_weight = max((item["weight"] for item in role_priorities), default=1)
     for item in role_priorities:
         item["normalized"] = round((item["weight"] / max_role_weight) * 100, 1)
@@ -1424,20 +1473,29 @@ def get_opportunity_insights_dashboard():
         "trajectory": {
             "timeline": timeline,
             "observed_title": "Career Trajectory",
-            "observed_copy": "Career progression shows a clear shift from execution-oriented work toward system-level design, enablement, and platform thinking.",
+            "observed_copy": [
+                "Career progression shows a clear shift from execution-oriented work toward system-level design, enablement, and platform thinking.",
+                "Later roles concentrate more heavily on architecture, product-facing analytics, and scalable operating models."
+            ],
             "derivation": "Based on chronological role progression and the increasing concentration of system and platform-oriented work across later experiences.",
         },
         "fit_profile": {
             "segments": treemap_segments,
             "observed_title": "Opportunity Fit Profile",
-            "observed_copy": "Target opportunities prioritize architecture-oriented individual contributor roles with strong flexibility, platform focus, and low-friction operating conditions.",
-            "derivation": "Based on weighted role-preference records using priority as the primary signal. Higher-priority records receive larger treemap share.",
+            "observed_copy": [
+                "Target opportunities prioritize architecture-oriented individual contributor roles with strong flexibility, platform focus, and low-friction operating conditions.",
+                "Relative tile size reflects priority plus weighted role significance across dimensions."
+            ],
+            "derivation": "Based on weighted role-preference records using priority, dimension_weight, and value_weight. Higher combined weight receives larger treemap share.",
         },
         "role_priorities": {
             "roles": role_priorities,
             "observed_title": "Target Role Priorities",
-            "observed_copy": "The strongest stated preference is for architecture-oriented roles spanning data, platform, and analytics contexts, with platform and data architecture leading the mix.",
-            "derivation": "Based on factual role_preference records in the role_type category, normalized by stated priority.",
+            "observed_copy": [
+                "The strongest stated preference is for architecture-oriented roles spanning data, platform, and analytics contexts.",
+                "Role prioritization reflects both stated priority and additional weighting for fit significance."
+            ],
+            "derivation": "Based on role_preference records in the role_type category, normalized by priority, dimension_weight, and value_weight.",
         },
     }
 

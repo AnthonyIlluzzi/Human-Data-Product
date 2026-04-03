@@ -90,238 +90,304 @@
     }
   ],
   "role_preference": [
-    {
-      "preference_id": 1,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Data Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 2,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Analytics Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 3,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Platform Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 4,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Data Platform Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 5,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Data Product Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 6,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Lead Data Architect",
-      "priority": "high"
-    },
-    {
-      "preference_id": 7,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Enterprise Architect",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 8,
-      "dimension": "role_identity",
-      "category": "role_type",
-      "value": "Systems Architect",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 9,
-      "dimension": "career_seniority",
-      "category": "career_level",
-      "value": "Principal",
-      "priority": "high"
-    },
-    {
-      "preference_id": 10,
-      "dimension": "career_seniority",
-      "category": "career_level",
-      "value": "Staff",
-      "priority": "high"
-    },
-    {
-      "preference_id": 11,
-      "dimension": "career_seniority",
-      "category": "career_level",
-      "value": "Lead",
-      "priority": "high"
-    },
-    {
-      "preference_id": 12,
-      "dimension": "work_context",
-      "category": "work_mode",
-      "value": "Remote",
-      "priority": "high"
-    },
-    {
-      "preference_id": 13,
-      "dimension": "work_context",
-      "category": "work_mode",
-      "value": "Hybrid",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 14,
-      "dimension": "work_context",
-      "category": "work_mode",
-      "value": "On-site",
-      "priority": "low"
-    },
-    {
-      "preference_id": 15,
-      "dimension": "location",
-      "category": "preferred_onsite_location",
-      "value": "Chicago, IL",
-      "priority": "high"
-    },
-    {
-      "preference_id": 16,
-      "dimension": "location",
-      "category": "preferred_onsite_location",
-      "value": "Greater Chicago Area",
-      "priority": "high"
-    },
-    {
-      "preference_id": 17,
-      "dimension": "domain_focus",
-      "category": "domain",
-      "value": "Enterprise Data Platforms",
-      "priority": "high"
-    },
-    {
-      "preference_id": 18,
-      "dimension": "domain_focus",
-      "category": "domain",
-      "value": "Analytics & AI Enablement",
-      "priority": "high"
-    },
-    {
-      "preference_id": 19,
-      "dimension": "domain_focus",
-      "category": "platform_focus",
-      "value": "Data Platforms",
-      "priority": "high"
-    },
-    {
-      "preference_id": 20,
-      "dimension": "domain_focus",
-      "category": "platform_focus",
-      "value": "Analytics Platforms",
-      "priority": "high"
-    },
-    {
-      "preference_id": 21,
-      "dimension": "domain_focus",
-      "category": "platform_focus",
-      "value": "AI Enablement Platforms",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 22,
-      "dimension": "industry",
-      "category": "industry",
-      "value": "Technology / Enterprise Software",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 23,
-      "dimension": "industry",
-      "category": "industry",
-      "value": "Tech-adjacent (B2B SaaS)",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 24,
-      "dimension": "impact",
-      "category": "impact_focus",
-      "value": "Data Product Strategy",
-      "priority": "high"
-    },
-    {
-      "preference_id": 25,
-      "dimension": "impact",
-      "category": "impact_focus",
-      "value": "Enterprise Data Strategy",
-      "priority": "high"
-    },
-    {
-      "preference_id": 26,
-      "dimension": "impact",
-      "category": "problem_space",
-      "value": "Data Democratization",
-      "priority": "high"
-    },
-    {
-      "preference_id": 27,
-      "dimension": "impact",
-      "category": "problem_space",
-      "value": "Platform Adoption",
-      "priority": "high"
-    },
-    {
-      "preference_id": 28,
-      "dimension": "impact",
-      "category": "problem_space",
-      "value": "Decision Intelligence",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 29,
-      "dimension": "employment",
-      "category": "employment_type",
-      "value": "Full-time",
-      "priority": "high"
-    },
-    {
-      "preference_id": 30,
-      "dimension": "leadership",
-      "category": "people_leadership",
-      "value": "Strategic IC",
-      "priority": "high"
-    },
-    {
-      "preference_id": 31,
-      "dimension": "leadership",
-      "category": "people_leadership",
-      "value": "Open to small team leadership",
-      "priority": "medium"
-    },
-    {
-      "preference_id": 32,
-      "dimension": "travel",
-      "category": "travel_tolerance",
-      "value": "Low",
-      "priority": "high"
-    },
-    {
-      "preference_id": 33,
-      "dimension": "travel",
-      "category": "travel_percent_max",
-      "value": "10%",
-      "priority": "high"
-    }
-  ],
+  {
+    "preference_id": 1,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.35
+  },
+  {
+    "preference_id": 2,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Analytics Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.18
+  },
+  {
+    "preference_id": 3,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Platform Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.28
+  },
+  {
+    "preference_id": 4,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Platform Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.35
+  },
+  {
+    "preference_id": 5,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Data Product Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.3
+  },
+  {
+    "preference_id": 6,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Lead Data Architect",
+    "priority": "high",
+    "dimension_weight": 1.4,
+    "value_weight": 1.08
+  },
+  {
+    "preference_id": 7,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Enterprise Architect",
+    "priority": "medium",
+    "dimension_weight": 1.4,
+    "value_weight": 0.92
+  },
+  {
+    "preference_id": 8,
+    "dimension": "role_identity",
+    "category": "role_type",
+    "value": "Systems Architect",
+    "priority": "medium",
+    "dimension_weight": 1.4,
+    "value_weight": 0.95
+  },
+  {
+    "preference_id": 9,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Principal",
+    "priority": "high",
+    "dimension_weight": 1.12,
+    "value_weight": 1.2
+  },
+  {
+    "preference_id": 10,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Staff",
+    "priority": "high",
+    "dimension_weight": 1.12,
+    "value_weight": 1.15
+  },
+  {
+    "preference_id": 11,
+    "dimension": "career_seniority",
+    "category": "career_level",
+    "value": "Lead",
+    "priority": "high",
+    "dimension_weight": 1.12,
+    "value_weight": 1.05
+  },
+  {
+    "preference_id": 12,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "Remote",
+    "priority": "high",
+    "dimension_weight": 1.16,
+    "value_weight": 1.25
+  },
+  {
+    "preference_id": 13,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "Hybrid",
+    "priority": "medium",
+    "dimension_weight": 1.16,
+    "value_weight": 1.0
+  },
+  {
+    "preference_id": 14,
+    "dimension": "work_context",
+    "category": "work_mode",
+    "value": "On-site",
+    "priority": "low",
+    "dimension_weight": 1.16,
+    "value_weight": 0.85
+  },
+  {
+    "preference_id": 15,
+    "dimension": "location",
+    "category": "preferred_onsite_location",
+    "value": "Chicago, IL",
+    "priority": "high",
+    "dimension_weight": 0.95,
+    "value_weight": 1.05
+  },
+  {
+    "preference_id": 16,
+    "dimension": "location",
+    "category": "preferred_onsite_location",
+    "value": "Greater Chicago Area",
+    "priority": "high",
+    "dimension_weight": 0.95,
+    "value_weight": 1.0
+  },
+  {
+    "preference_id": 17,
+    "dimension": "domain_focus",
+    "category": "domain",
+    "value": "Enterprise Data Platforms",
+    "priority": "high",
+    "dimension_weight": 1.3,
+    "value_weight": 1.35
+  },
+  {
+    "preference_id": 18,
+    "dimension": "domain_focus",
+    "category": "domain",
+    "value": "Analytics & AI Enablement",
+    "priority": "high",
+    "dimension_weight": 1.3,
+    "value_weight": 1.22
+  },
+  {
+    "preference_id": 19,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "Data Platforms",
+    "priority": "high",
+    "dimension_weight": 1.3,
+    "value_weight": 1.28
+  },
+  {
+    "preference_id": 20,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "Analytics Platforms",
+    "priority": "high",
+    "dimension_weight": 1.3,
+    "value_weight": 1.12
+  },
+  {
+    "preference_id": 21,
+    "dimension": "domain_focus",
+    "category": "platform_focus",
+    "value": "AI Enablement Platforms",
+    "priority": "medium",
+    "dimension_weight": 1.3,
+    "value_weight": 1.05
+  },
+  {
+    "preference_id": 22,
+    "dimension": "industry",
+    "category": "industry",
+    "value": "Technology / Enterprise Software",
+    "priority": "medium",
+    "dimension_weight": 0.94,
+    "value_weight": 1.08
+  },
+  {
+    "preference_id": 23,
+    "dimension": "industry",
+    "category": "industry",
+    "value": "Tech-adjacent (B2B SaaS)",
+    "priority": "medium",
+    "dimension_weight": 0.94,
+    "value_weight": 1.0
+  },
+  {
+    "preference_id": 24,
+    "dimension": "impact",
+    "category": "impact_focus",
+    "value": "Data Product Strategy",
+    "priority": "high",
+    "dimension_weight": 1.26,
+    "value_weight": 1.3
+  },
+  {
+    "preference_id": 25,
+    "dimension": "impact",
+    "category": "impact_focus",
+    "value": "Enterprise Data Strategy",
+    "priority": "high",
+    "dimension_weight": 1.26,
+    "value_weight": 1.22
+  },
+  {
+    "preference_id": 26,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Data Democratization",
+    "priority": "high",
+    "dimension_weight": 1.26,
+    "value_weight": 1.22
+  },
+  {
+    "preference_id": 27,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Platform Adoption",
+    "priority": "high",
+    "dimension_weight": 1.26,
+    "value_weight": 1.18
+  },
+  {
+    "preference_id": 28,
+    "dimension": "impact",
+    "category": "problem_space",
+    "value": "Decision Intelligence",
+    "priority": "medium",
+    "dimension_weight": 1.26,
+    "value_weight": 1.02
+  },
+  {
+    "preference_id": 29,
+    "dimension": "employment",
+    "category": "employment_type",
+    "value": "Full-time",
+    "priority": "high",
+    "dimension_weight": 1.0,
+    "value_weight": 1.12
+  },
+  {
+    "preference_id": 30,
+    "dimension": "leadership",
+    "category": "people_leadership",
+    "value": "Strategic IC",
+    "priority": "high",
+    "dimension_weight": 1.18,
+    "value_weight": 1.32
+  },
+  {
+    "preference_id": 31,
+    "dimension": "leadership",
+    "category": "people_leadership",
+    "value": "Open to small team leadership",
+    "priority": "medium",
+    "dimension_weight": 1.18,
+    "value_weight": 1.0
+  },
+  {
+    "preference_id": 32,
+    "dimension": "travel",
+    "category": "travel_tolerance",
+    "value": "Low",
+    "priority": "high",
+    "dimension_weight": 0.9,
+    "value_weight": 1.12
+  },
+  {
+    "preference_id": 33,
+    "dimension": "travel",
+    "category": "travel_percent_max",
+    "value": "10%",
+    "priority": "high",
+    "dimension_weight": 0.9,
+    "value_weight": 1.05
+  }
+],
   "experience": [
     {
       "experience_id": 1,
@@ -1321,7 +1387,7 @@
       "entity_type": "experience",
       "entity_id": 1,
       "source_type": "peer",
-      "quote": "Thank you for your teamwork and guidance during this past year! It is great to have a colleague like you, who is always willing to help whenever needed. and.",
+      "quote": "Thank you for your teamwork and guidance during this past year! It is great to have a colleague like you, who is always willing to help whenever needed.",
       "theme": "mentorship",
       "year": 2025,
       "viz_display_flag": false,
@@ -1376,7 +1442,7 @@
       "entity_type": "experience",
       "entity_id": 1,
       "source_type": "peer",
-      "quote": "Thank you you, Your help on getting the data for the a customer project really helped to calm down the loudness from support. We were able to show that only a small amount of clients are impacted. Thank you for always being so helpful.",
+      "quote": "Thank you for your help on getting the data for the a customer project really helped to calm down the loudness from support. We were able to show that only a small amount of clients are impacted. Thank you for always being so helpful.",
       "theme": "impact",
       "year": 2025,
       "viz_display_flag": false,
@@ -1486,7 +1552,7 @@
       "entity_type": "experience",
       "entity_id": 1,
       "source_type": "peer",
-      "quote": "Thank you so much for taking the time to help me better understand the analytics architecture role and for allowing me to get involved where possible. Exploring this role has been a significant part of my personal development journey this year, and I truly appreciate your generosity in sharing your time despite your busy schedules. Your kindness, openness, and willingness to collaborate mean a great deal to me, and.",
+      "quote": "Thank you so much for taking the time to help me better understand the analytics architecture role and for allowing me to get involved where possible. Exploring this role has been a significant part of my personal development journey this year, and I truly appreciate your generosity in sharing your time despite your busy schedules. Your kindness, openness, and willingness to collaborate mean a great deal to me.",
       "theme": "mentorship",
       "year": 2024,
       "viz_display_flag": true,
@@ -1574,7 +1640,7 @@
       "entity_type": "experience",
       "entity_id": 1,
       "source_type": "peer",
-      "quote": "I wanted to thank you you for this years working together. You always go the extra mile even when I give you a week to do something, you normally pick it up then and there. Your work and help over the past 15 months has been outstanding! And you make it fun!!!",
+      "quote": "I wanted to thank you for this years working together. You always go the extra mile even when I give you a week to do something, you normally pick it up then and there. Your work and help over the past 15 months has been outstanding! And you make it fun!!!",
       "theme": "collaboration",
       "year": 2024,
       "viz_display_flag": false,
@@ -1607,7 +1673,7 @@
       "entity_type": "experience",
       "entity_id": 1,
       "source_type": "peer",
-      "quote": "Thank you you for all your help in the past 7 months. Working with you has been so much fun. challenging me and others on the project. It has made a world of a difference in the outcome. You are awesome and I can't wait to see what we can get done this year.",
+      "quote": "Thank you for all your help in the past 7 months. Working with you has been so much fun. challenging me and others on the project. It has made a world of a difference in the outcome. You are awesome and I can't wait to see what we can get done this year.",
       "theme": "collaboration",
       "year": 2024,
       "viz_display_flag": false,

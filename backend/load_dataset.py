@@ -175,6 +175,11 @@ def validate_dataset(data: dict[str, Any]) -> None:
         {"preference_id", "dimension", "category", "value", "priority"},
         "role_preference",
     )
+
+    for record in data["role_preference"]:
+        record.setdefault("dimension_weight", 1.0)
+        record.setdefault("value_weight", 1.0)
+        
     require_keys(
         data["experience"],
         {
@@ -317,7 +322,9 @@ def create_tables(conn: sqlite3.Connection) -> None:
             dimension TEXT,
             category TEXT,
             value TEXT,
-            priority TEXT
+            priority TEXT,
+            dimension_weight REAL,
+            value_weight REAL
         );
 
         CREATE TABLE IF NOT EXISTS experience (
@@ -472,7 +479,7 @@ def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
     insert_many(
         conn,
         "role_preference",
-        ["preference_id", "dimension", "category", "value", "priority"],
+        ["preference_id", "dimension", "category", "value", "priority", "dimension_weight", "value_weight"],
         data["role_preference"],
     )
     insert_many(
