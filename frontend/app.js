@@ -440,10 +440,11 @@ function renderTimeline(containerId, items) {
   container.innerHTML = `
     <div class="timeline-viz-grid">
       ${(items || []).map(item => `
-        <div class="timeline-role-tile">
-          <div class="timeline-role-meta">${escapeHtml(compactCompany(item.company))} · ${escapeHtml(formatRange(item.start_date, item.end_date))}</div>
+        <article class="timeline-role-tile">
+          <div class="timeline-role-company">${escapeHtml(compactCompany(item.company))}</div>
+          <div class="timeline-role-range">${escapeHtml(formatRange(item.start_date, item.end_date))}</div>
           <div class="timeline-role-title">${escapeHtml(compactRole(item.role))}</div>
-        </div>
+        </article>
       `).join("")}
     </div>
   `;
@@ -1720,45 +1721,45 @@ function bindInsightHelpPopovers() {
   };
 
   const positionPopover = (button, popover) => {
-    if (!button || !popover) return;
-
-    const isMobile = window.innerWidth <= 680;
-    popover.classList.remove("is-docked-mobile");
-
-    if (isMobile) {
-      popover.classList.add("is-docked-mobile");
-      popover.style.left = "";
-      popover.style.top = "";
-      return;
-    }
-
-    const buttonRect = button.getBoundingClientRect();
-    const popoverRect = popover.getBoundingClientRect();
-    const gap = 10;
-    const viewportPadding = 12;
-
-    let left = buttonRect.right - popoverRect.width;
-    let top = buttonRect.bottom + gap;
-
-    if (left < viewportPadding) {
-      left = viewportPadding;
-    }
-
-    if (left + popoverRect.width > window.innerWidth - viewportPadding) {
-      left = window.innerWidth - popoverRect.width - viewportPadding;
-    }
-
-    if (top + popoverRect.height > window.innerHeight - viewportPadding) {
-      top = buttonRect.top - popoverRect.height - gap;
-    }
-
-    if (top < viewportPadding) {
-      top = viewportPadding;
-    }
-
-    popover.style.left = `${left}px`;
-    popover.style.top = `${top}px`;
-  };
+	  if (!button || !popover) return;
+	
+	  const isMobile = window.innerWidth <= 680;
+	  popover.classList.remove("is-docked-mobile");
+	
+	  if (isMobile) {
+	    popover.classList.add("is-docked-mobile");
+	    popover.style.left = "";
+	    popover.style.top = "";
+	    return;
+	  }
+	
+	  const buttonRect = button.getBoundingClientRect();
+	  const popoverRect = popover.getBoundingClientRect();
+	  const gap = 10;
+	  const viewportPadding = 12;
+	
+	  let left = buttonRect.left + (buttonRect.width / 2) - (popoverRect.width / 2);
+	  let top = buttonRect.bottom + gap;
+	
+	  if (left < viewportPadding) {
+	    left = viewportPadding;
+	  }
+	
+	  if (left + popoverRect.width > window.innerWidth - viewportPadding) {
+	    left = window.innerWidth - popoverRect.width - viewportPadding;
+	  }
+	
+	  if (top + popoverRect.height > window.innerHeight - viewportPadding) {
+	    top = buttonRect.top - popoverRect.height - gap;
+	  }
+	
+	  if (top < viewportPadding) {
+	    top = viewportPadding;
+	  }
+	
+	  popover.style.left = `${left}px`;
+	  popover.style.top = `${top}px`;
+	};
 
   triggers.forEach(btn => {
     if (btn.dataset.helpPopoverBound === "true") return;
@@ -1890,22 +1891,45 @@ function renderOpportunityTreemap(containerId, segments) {
   if (!container) return;
 
   const items = Array.isArray(segments) ? [...segments] : [];
-  items.sort((a, b) => (b.combined_weight || b.weight || 0) - (a.combined_weight || a.weight || 0));
+  items.sort((a, b) => (b.combined_weight || 0) - (a.combined_weight || 0));
+
+  const weights = items.map(item => Number(item.combined_weight || 0));
+  const maxWeight = Math.max(...weights, 1);
+  const minWeight = Math.min(...weights, maxWeight);
+
+  const ratioFor = value => {
+    if (maxWeight === minWeight) return 1;
+    return (Number(value || 0) - minWeight) / (maxWeight - minWeight);
+  };
+
+  const fillFor = value => {
+    const ratio = ratioFor(value);
+    const alpha = 0.10 + (ratio * 0.30);
+    return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
+  };
+
+  const borderFor = value => {
+    const ratio = ratioFor(value);
+    const alpha = 0.18 + (ratio * 0.26);
+    return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
+  };
 
   container.innerHTML = `
     <div class="opportunity-treemap-grid">
       ${items.map(item => `
         <button
           type="button"
-          class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight_band || item.weight || 1, 5))}"
+          class="opportunity-treemap-tile"
           aria-label="${escapeHtml(item.label)}"
+          style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
         >
           <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
           <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
           <div class="opportunity-treemap-meta">
-            <span>${escapeHtml(item.priority || "")}</span>
-            <span>${escapeHtml(item.category_label || "")}</span>
+            <span>${escapeHtml(capitalize(item.priority || ""))}</span>
+            <span>${Number(item.combined_weight || 0).toFixed(2)}</span>
           </div>
+          <div class="opportunity-treemap-submeta">${escapeHtml(item.category_label || "")}</div>
         </button>
       `).join("")}
     </div>
@@ -1922,12 +1946,11 @@ function renderOpportunityTreemap(containerId, segments) {
         <span class="insights-hover-tooltip-body">Priority: ${escapeHtml(capitalize(item.priority || ""))}</span>
         <span class="insights-hover-tooltip-body">Dimension weight: ${Number(item.dimension_weight || 1).toFixed(2)}</span>
         <span class="insights-hover-tooltip-body">Value weight: ${Number(item.value_weight || 1).toFixed(2)}</span>
-        <span class="insights-hover-tooltip-body">Combined weight: ${Number(item.combined_weight || item.weight || 0).toFixed(2)}</span>
+        <span class="insights-hover-tooltip-body">Combined weight: ${Number(item.combined_weight || 0).toFixed(2)}</span>
       `
     );
   });
 }
-
 function renderRolePriorities(containerId, roles) {
   const container = document.getElementById(containerId);
   if (!container) return;
