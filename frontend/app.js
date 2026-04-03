@@ -438,11 +438,13 @@ function renderTimeline(containerId, items) {
   };
 
   container.innerHTML = `
-    <div class="timeline-viz-grid">
+    <div class="timeline-viz-grid timeline-viz-grid--dense">
       ${(items || []).map(item => `
-        <article class="timeline-role-tile">
-          <div class="timeline-role-company">${escapeHtml(compactCompany(item.company))}</div>
-          <div class="timeline-role-range">${escapeHtml(formatRange(item.start_date, item.end_date))}</div>
+        <article class="timeline-role-tile timeline-role-tile--dense">
+          <div class="timeline-role-meta-row">
+            <span class="timeline-role-company">${escapeHtml(compactCompany(item.company))}</span>
+            <span class="timeline-role-range">${escapeHtml(formatRange(item.start_date, item.end_date))}</span>
+          </div>
           <div class="timeline-role-title">${escapeHtml(compactRole(item.role))}</div>
         </article>
       `).join("")}
@@ -1902,15 +1904,23 @@ function renderOpportunityTreemap(containerId, segments) {
     return (Number(value || 0) - minWeight) / (maxWeight - minWeight);
   };
 
+  const sizeBandFor = value => {
+    const ratio = ratioFor(value);
+    if (ratio >= 0.88) return "xl";
+    if (ratio >= 0.68) return "lg";
+    if (ratio >= 0.46) return "md";
+    return "sm";
+  };
+
   const fillFor = value => {
     const ratio = ratioFor(value);
-    const alpha = 0.10 + (ratio * 0.30);
+    const alpha = 0.08 + (ratio * 0.62);
     return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
   };
 
   const borderFor = value => {
     const ratio = ratioFor(value);
-    const alpha = 0.18 + (ratio * 0.26);
+    const alpha = 0.18 + (ratio * 0.42);
     return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
   };
 
@@ -1919,17 +1929,13 @@ function renderOpportunityTreemap(containerId, segments) {
       ${items.map(item => `
         <button
           type="button"
-          class="opportunity-treemap-tile"
+          class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
           aria-label="${escapeHtml(item.label)}"
           style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
         >
           <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
           <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
-          <div class="opportunity-treemap-meta">
-            <span>${escapeHtml(capitalize(item.priority || ""))}</span>
-            <span>${Number(item.combined_weight || 0).toFixed(2)}</span>
-          </div>
-          <div class="opportunity-treemap-submeta">${escapeHtml(item.category_label || "")}</div>
+          <div class="opportunity-treemap-score">${Number(item.combined_weight || 0).toFixed(2)}</div>
         </button>
       `).join("")}
     </div>
@@ -1951,6 +1957,7 @@ function renderOpportunityTreemap(containerId, segments) {
     );
   });
 }
+
 function renderRolePriorities(containerId, roles) {
   const container = document.getElementById(containerId);
   if (!container) return;
