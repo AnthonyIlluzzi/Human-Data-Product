@@ -827,6 +827,15 @@ function splitSkillLabel(skillName) {
 }
 
 function attachFloatingTooltip(element, html) {
+  if (!element) return;
+
+  const showFromElement = () => {
+    const rect = element.getBoundingClientRect();
+    const clientX = rect.left + (rect.width / 2);
+    const clientY = rect.top + (rect.height / 2);
+    showFloatingInsightsTooltip(html, clientX, clientY);
+  };
+
   element.addEventListener("mouseenter", event => {
     showFloatingInsightsTooltip(html, event.clientX, event.clientY);
   });
@@ -838,6 +847,23 @@ function attachFloatingTooltip(element, html) {
   element.addEventListener("mouseleave", () => {
     hideFloatingInsightsTooltip();
   });
+
+  element.addEventListener("focus", () => {
+    showFromElement();
+  });
+
+  element.addEventListener("blur", () => {
+    hideFloatingInsightsTooltip();
+  });
+
+  element.addEventListener("click", event => {
+    event.preventDefault();
+    showFromElement();
+  });
+
+  element.addEventListener("touchstart", () => {
+    showFromElement();
+  }, { passive: true });
 }
 
 function showFloatingInsightsTooltip(html, clientX, clientY) {
@@ -865,15 +891,15 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   const padding = 14;
   const tooltipRect = tooltip.getBoundingClientRect();
 
-  let left = clientX + 16;
-  let top = clientY + 16;
+  let left = clientX + 14;
+  let top = clientY + 14;
 
   if (left + tooltipRect.width > window.innerWidth - padding) {
-    left = clientX - tooltipRect.width - 16;
+    left = clientX - tooltipRect.width - 14;
   }
 
   if (top + tooltipRect.height > window.innerHeight - padding) {
-    top = clientY - tooltipRect.height - 16;
+    top = clientY - tooltipRect.height - 14;
   }
 
   left = Math.max(padding, left);
