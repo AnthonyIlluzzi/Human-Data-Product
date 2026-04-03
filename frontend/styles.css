@@ -365,7 +365,7 @@ body {
 
 .modal-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 18px 22px 10px;
