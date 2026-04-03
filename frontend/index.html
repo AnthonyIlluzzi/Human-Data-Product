@@ -868,33 +868,83 @@ LIMIT 1;"
         </div>
 
         <aside class="card compact-card insight-observed-card">
-          <div class="insight-observed-eyebrow">Observed Pattern</div>
-          <h3 id="value-distribution-observed-title">Loading…</h3>
-          <p id="value-distribution-observed-copy" class="insight-observed-copy">Loading value distribution insight…</p>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="value-distribution-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+		  <div class="insight-observed-eyebrow">Observed Pattern</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3 id="value-distribution-observed-title">Loading…</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="value-distribution-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="value-distribution-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="value-distribution-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="value-distribution-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div id="value-distribution-observed-copy" class="insight-observed-copy">
+		    Loading value distribution insight…
+		  </div>
+		</aside>
       </div>
 
       <!-- Row 2 -->
       <div class="insights-dashboard-row insights-dashboard-row--wide-right">
         <aside class="card compact-card insight-observed-card insight-observed-card--numbered">
-          <div class="insight-observed-eyebrow">Observed Patterns</div>
-          <h3>How Value Is Delivered</h3>
-          <p class="insight-observed-copy">Capability composition behind each approach.</p>
-
-          <ol id="value-delivery-insight-list" class="insight-numbered-list">
-            <li>Loading capability patterns…</li>
-          </ol>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="value-delivery-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+		  <div class="insight-observed-eyebrow">Observed Patterns</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3>How Value Is Delivered</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="value-delivery-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="value-delivery-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="value-delivery-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="value-delivery-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <p class="insight-observed-copy">Capability composition behind each approach.</p>
+		
+		  <ol id="value-delivery-insight-list" class="insight-numbered-list">
+		    <li>Loading capability patterns…</li>
+		  </ol>
+		</aside>
 
         <div class="card compact-card insight-surface-card">
           <div class="viz-card-header">
@@ -919,16 +969,42 @@ LIMIT 1;"
           <div id="value-realization-heatmap" class="value-heatmap-shell"></div>
         </div>
 
-        <aside class="card compact-card insight-observed-card">
-          <div class="insight-observed-eyebrow">Observed Pattern</div>
-          <h3 id="value-realization-observed-title">Loading…</h3>
-          <p id="value-realization-observed-copy" class="insight-observed-copy">Loading value realization insight…</p>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="value-realization-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+       <aside class="card compact-card insight-observed-card">
+		  <div class="insight-observed-eyebrow">Observed Pattern</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3 id="value-realization-observed-title">Loading…</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="value-realization-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="value-realization-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="value-realization-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="value-realization-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div id="value-realization-observed-copy" class="insight-observed-copy">
+		    Loading value realization insight…
+		  </div>
+		</aside>
       </div>
     </div>
 
@@ -938,7 +1014,7 @@ LIMIT 1;"
   <div id="next-opportunity-tab" class="tab-panel">
     <div class="insights-dashboard-page">
       <!-- Row 1 -->
-      <div class="insights-dashboard-row insights-dashboard-row--wide-left">
+      <div class="insights-dashboard-row insights-dashboard-row--trajectory">
         <div class="card compact-card insight-surface-card">
           <div class="viz-card-header">
             <h3>Career Trajectory</h3>
@@ -949,29 +1025,81 @@ LIMIT 1;"
         </div>
 
         <aside class="card compact-card insight-observed-card">
-          <div class="insight-observed-eyebrow">Observed Pattern</div>
-          <h3 id="opportunity-trajectory-title">Loading…</h3>
-          <p id="opportunity-trajectory-copy" class="insight-observed-copy">Loading trajectory insight…</p>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="opportunity-trajectory-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+		  <div class="insight-observed-eyebrow">Observed Pattern</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3 id="opportunity-trajectory-title">Loading…</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="opportunity-trajectory-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="opportunity-trajectory-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="opportunity-trajectory-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="opportunity-trajectory-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div id="opportunity-trajectory-copy" class="insight-observed-copy">
+		    Loading trajectory insight…
+		  </div>
+		</aside>
       </div>
 
       <!-- Row 2 -->
       <div class="insights-dashboard-row insights-dashboard-row--wide-right">
         <aside class="card compact-card insight-observed-card">
-          <div class="insight-observed-eyebrow">Observed Pattern</div>
-          <h3 id="opportunity-fit-title">Loading…</h3>
-          <p id="opportunity-fit-copy" class="insight-observed-copy">Loading opportunity fit insight…</p>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="opportunity-fit-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+		  <div class="insight-observed-eyebrow">Observed Pattern</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3 id="opportunity-fit-title">Loading…</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="opportunity-fit-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="opportunity-fit-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="opportunity-fit-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="opportunity-fit-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div id="opportunity-fit-copy" class="insight-observed-copy">
+		    Loading opportunity fit insight…
+		  </div>
+		</aside>
 
         <div class="card compact-card insight-surface-card">
           <div class="viz-card-header">
@@ -989,21 +1117,48 @@ LIMIT 1;"
           <div class="viz-card-header">
             <h3>Target Role Priorities</h3>
             <p class="viz-card-subtitle">Priority-weighted view of the roles Anthony is most interested in.</p>
+			<p class="viz-card-meta-line">Weighted by priority, dimension importance, and role-specific preference weight.</p>
           </div>
 
           <div id="opportunity-role-priorities" class="role-priority-shell"></div>
         </div>
 
         <aside class="card compact-card insight-observed-card">
-          <div class="insight-observed-eyebrow">Observed Pattern</div>
-          <h3 id="opportunity-role-title">Loading…</h3>
-          <p id="opportunity-role-copy" class="insight-observed-copy">Loading role-priority insight…</p>
-
-          <div class="insight-derivation-block">
-            <div class="insight-derivation-label">ⓘ How this was calculated</div>
-            <p id="opportunity-role-derivation" class="insight-derivation-copy">Loading derivation details…</p>
-          </div>
-        </aside>
+		  <div class="insight-observed-eyebrow">Observed Pattern</div>
+		
+		  <div class="insight-observed-title-row">
+		    <h3 id="opportunity-role-title">Loading…</h3>
+		
+		    <div class="insight-help">
+		      <button
+		        id="opportunity-role-help-button"
+		        class="insight-help-button"
+		        type="button"
+		        aria-label="How this was calculated"
+		        aria-expanded="false"
+		        aria-controls="opportunity-role-help-popover"
+		      >
+		        ?
+		      </button>
+		
+		      <div
+		        id="opportunity-role-help-popover"
+		        class="insight-help-popover"
+		        role="dialog"
+		        aria-hidden="true"
+		      >
+		        <p class="insight-help-title">How this was calculated</p>
+		        <div id="opportunity-role-derivation" class="insight-help-body">
+		          Loading derivation details…
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <div id="opportunity-role-copy" class="insight-observed-copy">
+		    Loading role-priority insight…
+		  </div>
+		</aside>
       </div>
     </div>
   </div>
