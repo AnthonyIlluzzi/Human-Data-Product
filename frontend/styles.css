@@ -459,6 +459,10 @@ body {
 .about-modal-action-btn {
   width: fit-content;
   min-width: 220px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .section-header h1,
