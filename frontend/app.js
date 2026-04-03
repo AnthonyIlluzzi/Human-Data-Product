@@ -888,18 +888,18 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   const tooltip = document.getElementById("insights-hover-tooltip");
   if (!tooltip || tooltip.classList.contains("hidden")) return;
 
-  const padding = 14;
+  const padding = 12;
   const tooltipRect = tooltip.getBoundingClientRect();
 
-  let left = clientX + 14;
-  let top = clientY + 14;
+  let left = clientX + 12;
+  let top = clientY + 12;
 
   if (left + tooltipRect.width > window.innerWidth - padding) {
-    left = clientX - tooltipRect.width - 14;
+    left = clientX - tooltipRect.width - 12;
   }
 
   if (top + tooltipRect.height > window.innerHeight - padding) {
-    top = clientY - tooltipRect.height - 14;
+    top = clientY - tooltipRect.height - 12;
   }
 
   left = Math.max(padding, left);
@@ -907,85 +907,6 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
-}
-
-function renderSkillUtilization(containerId, items) {
-  const container = document.getElementById(containerId);
-  const drilldown = document.getElementById("skill-drilldown");
-  if (!container || !drilldown) return;
-
-  container.innerHTML = "";
-  renderEmptyDetailState(
-    drilldown,
-    "Skill Drilldown",
-    "Select a skill",
-    "Click a bar to view the projects where that skill was applied."
-  );
-
-  if (!items || items.length === 0) {
-    container.textContent = "No skill utilization data available.";
-    return;
-  }
-
-  const sorted = [...items].sort((a, b) => (b.project_count || 0) - (a.project_count || 0));
-  const maxValue = Math.max(...sorted.map(item => item.project_count || 0), 1);
-
-  sorted.forEach(item => {
-    const button = document.createElement("button");
-    button.className = "viz-row-button";
-    button.type = "button";
-
-    const pct = (item.project_count / maxValue) * 100;
-    button.innerHTML = `
-      <div class="viz-item">
-        <div class="viz-label-row">
-          <div class="viz-label-main">
-            <strong>${escapeHtml(item.skill_name)}</strong>
-            <div class="viz-label-subtext">${escapeHtml(capitalize(item.category || "skill"))} • ${escapeHtml(capitalize(item.level || "applied"))}</div>
-          </div>
-          <span class="viz-count-pill">${item.project_count}</span>
-        </div>
-        <div class="viz-bar">
-          <div class="viz-bar-fill" style="width:${pct}%"></div>
-        </div>
-      </div>
-    `;
-
-    button.addEventListener("click", async () => {
-      container.querySelectorAll(".viz-row-button").forEach(el => el.classList.remove("is-active"));
-      button.classList.add("is-active");
-      renderLoadingDetailState(drilldown, "Loading related projects...");
-
-      try {
-	  const data = await fetchJson(`/analytics/skill-projects/${item.skill_id}`);
-	  const skill = data.skill || null;
-	  const projects = data.projects || [];
-
-	  renderProjectDrilldown(
-		drilldown,
-		{
-		  eyebrow: "Skill Drilldown",
-		  title: skill?.skill_name || item.skill_name,
-		  meta: `${projects.length} linked project${projects.length === 1 ? "" : "s"}`,
-		  chips: [
-			capitalize(skill?.category || item.category || "skill"),
-			capitalize(skill?.level || item.level || "applied")
-		  ],
-		  projects
-		}
-	  );
-	} catch (error) {
-	  renderEmptyDetailState(
-		drilldown,
-		"Skill Drilldown",
-		"Unable to load projects",
-		"There was a problem loading the selected skill detail."
-	  );
-	}
-    });
-
-    container.appendChild(button);
-  });
 }
 
 function renderProjectsByExperience(containerId, items) {
@@ -1933,9 +1854,8 @@ function renderOpportunityTreemap(containerId, segments) {
   const sizeBandFor = value => {
     const ratio = ratioFor(value);
 
-    if (ratio >= 0.90) return "xl";
-    if (ratio >= 0.72) return "lg";
-    if (ratio >= 0.48) return "md";
+    if (ratio >= 0.88) return "lg";
+    if (ratio >= 0.58) return "md";
     return "sm";
   };
 
@@ -1944,10 +1864,10 @@ function renderOpportunityTreemap(containerId, segments) {
 
     if (ratio >= 0.88) return "#0a6ed1";
     if (ratio >= 0.72) return "#2f85df";
-    if (ratio >= 0.56) return "#5d9fe8";
-    if (ratio >= 0.40) return "#86baef";
-    if (ratio >= 0.24) return "#add2f6";
-    return "#d7e9fb";
+    if (ratio >= 0.56) return "#4b93df";
+    if (ratio >= 0.40) return "#76afe8";
+    if (ratio >= 0.24) return "#9fcaf2";
+    return "#c2def8";
   };
 
   const borderFor = value => {
@@ -1967,27 +1887,85 @@ function renderOpportunityTreemap(containerId, segments) {
         <button
           type="button"
           class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
-          aria-label="${escapeHtml(item.label)}"
           style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
+          data-tooltip-title="${escapeHtml(item.label)}"
+          data-tooltip-body="${escapeHtml(`${item.group} · ${item.category_label || item.category || ""}`)}"
+          data-tooltip-priority="${escapeHtml(capitalize(item.priority || ""))}"
+          data-tooltip-dimension="${Number(item.dimension_weight || 1).toFixed(2)}"
+          data-tooltip-value="${Number(item.value_weight || 1).toFixed(2)}"
+          data-tooltip-score="${Number(item.combined_weight || 0).toFixed(2)}"
+          aria-label="${escapeHtml(item.label)}"
         ></button>
       `).join("")}
     </div>
   `;
 
-  container.querySelectorAll(".opportunity-treemap-tile").forEach((node, index) => {
-    const item = items[index];
+  bindOpportunityTreemapTooltips(container);
+}
 
-    attachFloatingTooltip(
-      node,
-      `
-        <span class="insights-hover-tooltip-title">${escapeHtml(item.label)}</span>
-        <span class="insights-hover-tooltip-body">${escapeHtml(item.group)} · ${escapeHtml(item.category_label || item.category || "")}</span>
-        <span class="insights-hover-tooltip-body">Priority: ${escapeHtml(capitalize(item.priority || ""))}</span>
-        <span class="insights-hover-tooltip-body">Dimension weight: ${Number(item.dimension_weight || 1).toFixed(2)}</span>
-        <span class="insights-hover-tooltip-body">Value weight: ${Number(item.value_weight || 1).toFixed(2)}</span>
-        <span class="insights-hover-tooltip-body">Combined weight: ${Number(item.combined_weight || 0).toFixed(2)}</span>
-      `
-    );
+function bindOpportunityTreemapTooltips(container) {
+  if (!container) return;
+
+  const tiles = container.querySelectorAll(".opportunity-treemap-tile");
+  if (!tiles.length) return;
+
+  const showForTile = tile => {
+    const rect = tile.getBoundingClientRect();
+    const clientX = rect.left + rect.width / 2;
+    const clientY = rect.top + rect.height / 2;
+
+    const html = `
+      <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
+      <span class="insights-hover-tooltip-body">${tile.dataset.tooltipBody || ""}</span>
+      <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
+      <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
+      <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
+      <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
+    `;
+
+    showFloatingInsightsTooltip(html, clientX, clientY);
+  };
+
+  tiles.forEach(tile => {
+    tile.addEventListener("mouseenter", event => {
+      showFloatingInsightsTooltip(
+        `
+          <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
+          <span class="insights-hover-tooltip-body">${tile.dataset.tooltipBody || ""}</span>
+          <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
+          <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
+          <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
+          <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
+        `,
+        event.clientX,
+        event.clientY
+      );
+    });
+
+    tile.addEventListener("mousemove", event => {
+      positionFloatingInsightsTooltip(event.clientX, event.clientY);
+    });
+
+    tile.addEventListener("mouseleave", () => {
+      hideFloatingInsightsTooltip();
+    });
+
+    tile.addEventListener("focus", () => {
+      showForTile(tile);
+    });
+
+    tile.addEventListener("blur", () => {
+      hideFloatingInsightsTooltip();
+    });
+
+    tile.addEventListener("click", event => {
+      event.preventDefault();
+      showForTile(tile);
+    });
+
+    tile.addEventListener("touchstart", () => {
+      showForTile(tile);
+    }, { passive: true });
   });
 }
 
