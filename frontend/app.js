@@ -1906,22 +1906,33 @@ function renderOpportunityTreemap(containerId, segments) {
 
   const sizeBandFor = value => {
     const ratio = ratioFor(value);
-    if (ratio >= 0.88) return "xl";
-    if (ratio >= 0.68) return "lg";
-    if (ratio >= 0.46) return "md";
+
+    if (ratio >= 0.90) return "xl";
+    if (ratio >= 0.72) return "lg";
+    if (ratio >= 0.48) return "md";
     return "sm";
   };
 
   const fillFor = value => {
     const ratio = ratioFor(value);
-    const alpha = 0.08 + (ratio * 0.62);
-    return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
+
+    if (ratio >= 0.88) return "#0a6ed1";
+    if (ratio >= 0.72) return "#2f85df";
+    if (ratio >= 0.56) return "#5d9fe8";
+    if (ratio >= 0.40) return "#86baef";
+    if (ratio >= 0.24) return "#add2f6";
+    return "#d7e9fb";
   };
 
   const borderFor = value => {
     const ratio = ratioFor(value);
-    const alpha = 0.18 + (ratio * 0.42);
-    return `rgba(10, 110, 209, ${alpha.toFixed(3)})`;
+
+    if (ratio >= 0.88) return "#0854a0";
+    if (ratio >= 0.72) return "#1f6fc2";
+    if (ratio >= 0.56) return "#4b93df";
+    if (ratio >= 0.40) return "#76afe8";
+    if (ratio >= 0.24) return "#9fcaf2";
+    return "#c2def8";
   };
 
   container.innerHTML = `
@@ -1932,11 +1943,7 @@ function renderOpportunityTreemap(containerId, segments) {
           class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
           aria-label="${escapeHtml(item.label)}"
           style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
-        >
-          <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
-          <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
-          <div class="opportunity-treemap-score">${Number(item.combined_weight || 0).toFixed(2)}</div>
-        </button>
+        ></button>
       `).join("")}
     </div>
   `;
