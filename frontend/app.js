@@ -889,17 +889,18 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   if (!tooltip || tooltip.classList.contains("hidden")) return;
 
   const padding = 12;
+  const gap = 12;
   const tooltipRect = tooltip.getBoundingClientRect();
 
-  let left = clientX + 12;
-  let top = clientY + 12;
+  let left = clientX + gap;
+  let top = clientY + gap;
 
   if (left + tooltipRect.width > window.innerWidth - padding) {
-    left = clientX - tooltipRect.width - 12;
+    left = clientX - tooltipRect.width - gap;
   }
 
   if (top + tooltipRect.height > window.innerHeight - padding) {
-    top = clientY - tooltipRect.height - 12;
+    top = clientY - tooltipRect.height - gap;
   }
 
   left = Math.max(padding, left);
@@ -1854,8 +1855,8 @@ function renderOpportunityTreemap(containerId, segments) {
   const sizeBandFor = value => {
     const ratio = ratioFor(value);
 
-    if (ratio >= 0.88) return "lg";
-    if (ratio >= 0.58) return "md";
+    if (ratio >= 0.84) return "lg";
+    if (ratio >= 0.48) return "md";
     return "sm";
   };
 
@@ -1882,91 +1883,104 @@ function renderOpportunityTreemap(containerId, segments) {
   };
 
   container.innerHTML = `
-    <div class="opportunity-treemap-grid">
+    <div class="opportunity-treemap-grid" id="${containerId}-grid">
       ${items.map(item => `
         <button
           type="button"
           class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
           style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
           data-tooltip-title="${escapeHtml(item.label)}"
-          data-tooltip-body="${escapeHtml(`${item.group} · ${item.category_label || item.category || ""}`)}"
+          data-tooltip-group="${escapeHtml(item.group)}"
+          data-tooltip-category="${escapeHtml(item.category_label || item.category || "")}"
           data-tooltip-priority="${escapeHtml(capitalize(item.priority || ""))}"
           data-tooltip-dimension="${Number(item.dimension_weight || 1).toFixed(2)}"
           data-tooltip-value="${Number(item.value_weight || 1).toFixed(2)}"
           data-tooltip-score="${Number(item.combined_weight || 0).toFixed(2)}"
           aria-label="${escapeHtml(item.label)}"
+          title="${escapeHtml(item.label)}"
         ></button>
       `).join("")}
     </div>
   `;
 
-  bindOpportunityTreemapTooltips(container);
+  bindOpportunityTreemapTooltipDelegation(container);
 }
 
-function bindOpportunityTreemapTooltips(container) {
-  if (!container) return;
+function bindOpportunityTreemapTooltipDelegation(container) {
+  if (!container || container.dataset.treemapTooltipBound === "true") return;
 
-  const tiles = container.querySelectorAll(".opportunity-treemap-tile");
-  if (!tiles.length) return;
+  const renderTooltipHtml = tile => `
+    <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
+    <span class="insights-hover-tooltip-body">${tile.dataset.tooltipGroup || ""} · ${tile.dataset.tooltipCategory || ""}</span>
+    <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
+    <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
+    <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
+    <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
+  `;
 
-  const showForTile = tile => {
-    const rect = tile.getBoundingClientRect();
-    const clientX = rect.left + rect.width / 2;
-    const clientY = rect.top + rect.height / 2;
+  const getTile = target => target?.closest?.(".opportunity-treemap-tile");
 
-    const html = `
-      <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
-      <span class="insights-hover-tooltip-body">${tile.dataset.tooltipBody || ""}</span>
-      <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
-      <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
-      <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
-      <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
-    `;
+  container.addEventListener("pointerover", event => {
+    const tile = getTile(event.target);
+    if (!tile || !container.contains(tile)) return;
 
-    showFloatingInsightsTooltip(html, clientX, clientY);
-  };
-
-  tiles.forEach(tile => {
-    tile.addEventListener("mouseenter", event => {
-      showFloatingInsightsTooltip(
-        `
-          <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
-          <span class="insights-hover-tooltip-body">${tile.dataset.tooltipBody || ""}</span>
-          <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
-          <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
-          <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
-          <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
-        `,
-        event.clientX,
-        event.clientY
-      );
-    });
-
-    tile.addEventListener("mousemove", event => {
-      positionFloatingInsightsTooltip(event.clientX, event.clientY);
-    });
-
-    tile.addEventListener("mouseleave", () => {
-      hideFloatingInsightsTooltip();
-    });
-
-    tile.addEventListener("focus", () => {
-      showForTile(tile);
-    });
-
-    tile.addEventListener("blur", () => {
-      hideFloatingInsightsTooltip();
-    });
-
-    tile.addEventListener("click", event => {
-      event.preventDefault();
-      showForTile(tile);
-    });
-
-    tile.addEventListener("touchstart", () => {
-      showForTile(tile);
-    }, { passive: true });
+    showFloatingInsightsTooltip(
+      renderTooltipHtml(tile),
+      event.clientX,
+      event.clientY
+    );
   });
+
+  container.addEventListener("pointermove", event => {
+    const tile = getTile(event.target);
+    if (!tile || !container.contains(tile)) return;
+
+    positionFloatingInsightsTooltip(event.clientX, event.clientY);
+  });
+
+  container.addEventListener("pointerout", event => {
+    const fromTile = getTile(event.target);
+    const toTile = getTile(event.relatedTarget);
+
+    if (!fromTile) return;
+    if (fromTile === toTile) return;
+
+    hideFloatingInsightsTooltip();
+  });
+
+  container.addEventListener("focusin", event => {
+    const tile = getTile(event.target);
+    if (!tile) return;
+
+    const rect = tile.getBoundingClientRect();
+    showFloatingInsightsTooltip(
+      renderTooltipHtml(tile),
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2
+    );
+  });
+
+  container.addEventListener("focusout", event => {
+    const tile = getTile(event.target);
+    if (!tile) return;
+    hideFloatingInsightsTooltip();
+  });
+
+  container.addEventListener("click", event => {
+    const tile = getTile(event.target);
+    if (!tile) return;
+
+    event.preventDefault();
+
+    const rect = tile.getBoundingClientRect();
+    showFloatingInsightsTooltip(
+      renderTooltipHtml(tile),
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2
+    );
+  });
+
+  container.dataset.treemapTooltipBound = "true";
 }
 
 function renderRolePriorities(containerId, roles) {
