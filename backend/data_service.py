@@ -1466,17 +1466,24 @@ def get_opportunity_insights_dashboard():
                 })
 
     max_segment_weight = max((item["combined_weight"] for item in treemap_segments), default=1)
+    min_segment_weight = min((item["combined_weight"] for item in treemap_segments), default=0)
 
     for item in treemap_segments:
-        normalized = item["combined_weight"] / max_segment_weight if max_segment_weight else 0
+        if max_segment_weight == min_segment_weight:
+            normalized = 1.0
+        else:
+            normalized = (
+                (item["combined_weight"] - min_segment_weight)
+                / (max_segment_weight - min_segment_weight)
+            )
 
-        if normalized >= 0.9:
-            weight_band = 5
-        elif normalized >= 0.72:
+        item["normalized_weight"] = round(normalized, 4)
+
+        if normalized >= 0.88:
             weight_band = 4
-        elif normalized >= 0.54:
+        elif normalized >= 0.68:
             weight_band = 3
-        elif normalized >= 0.36:
+        elif normalized >= 0.46:
             weight_band = 2
         else:
             weight_band = 1
