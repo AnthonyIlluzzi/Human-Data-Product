@@ -403,6 +403,11 @@ body {
   transform: translateY(-1px);
 }
 
+#about-modal .modal-close,
+#feedback-detail-modal .modal-close {
+  padding-bottom: 2px;
+}
+
 .modal-body {
   padding: 14px 22px 22px;
 }
