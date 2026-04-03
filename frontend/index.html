@@ -137,33 +137,46 @@
 
 <!-- Landing Modals -->
 <div id="about-modal" class="modal-overlay hidden">
-  <div class="modal-card">
-    <div class="modal-header">
-      <h2>About HDP Project</h2>
-      <button class="modal-close" data-close-modal="about-modal">×</button>
+  <div class="modal-card modal-card-about">
+    <div class="modal-header modal-header-about">
+      <div class="modal-header-copy">
+        <h2>About HDP Project</h2>
+      </div>
+      <button class="modal-close" data-close-modal="about-modal" aria-label="Close About HDP Project modal">×</button>
     </div>
-    <div class="modal-body">
-      <p>
-        A traditional resume is static, fragmented, and difficult to interrogate. This project explores a different idea:
-      </p>
-      <p style="font-style: italic; margin: 10px 0 16px 0;">
-        What if my professional experience was treated as structured data, designed to be discoverable and explored via insights?
-      </p>
-      <p>
-        The Human Data Product transforms my career history into a <strong>curated, governed dataset</strong> with defined access methods and analytical capabilities.
-        This enables a deeper understanding of the individual than a resume can offer.
-      </p>
-      <p>
-        This project was also built to demonstrate data product thinking across
-        modeling, transformation, API exposure, documentation, analytics,
-        opportunity targeting, and frontend consumption with the consumer in mind.
-      </p>
-      <p>
-        Take a look under the hood:
-        <a href="https://github.com/AnthonyIlluzzi/Human-Data-Product" target="_blank" rel="noopener noreferrer">
-          View GitHub Repository
-        </a>
-      </p>
+
+    <div class="modal-body modal-body-about">
+      <div class="about-modal-content">
+        <p class="about-modal-intro">
+          A traditional resume is static, fragmented, and difficult to interrogate. This project explores a different idea:
+        </p>
+
+        <p class="about-modal-question">
+          What if my professional experience was treated as structured data, designed to be discoverable and explored via insights?
+        </p>
+
+        <div class="about-modal-divider"></div>
+
+        <p class="about-modal-body-text">
+          The Human Data Product transforms my career history into a <strong>curated, governed dataset</strong> with defined access methods and analytical capabilities. This enables a deeper understanding of the individual than a resume can offer.
+        </p>
+
+        <p class="about-modal-body-text">
+          This project was also built to demonstrate data product thinking across modeling, transformation, API exposure, documentation, analytics, opportunity targeting, and frontend consumption with the consumer in mind.
+        </p>
+
+        <div class="about-modal-action-block">
+          <p class="about-modal-action-label">Take a look under the hood:</p>
+          <a
+            class="btn-primary link-btn about-modal-action-btn"
+            href="https://github.com/AnthonyIlluzzi/Human-Data-Product"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View GitHub Repository
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
