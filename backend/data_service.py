@@ -1437,22 +1437,54 @@ def get_opportunity_insights_dashboard():
         "Role Types": {"categories": {"role_type"}},
         "Career Level": {"categories": {"career_level"}},
         "Work Model": {"categories": {"work_mode", "people_leadership", "employment_type"}},
-        "Focus Areas": {"categories": {"domain", "platform_focus", "impact_focus", "problem_space"}},
+        "Focus Areas": {"categories": {"domain", "platform_focus", "impact_focus", "problem_space", "industry"}},
         "Environment": {"categories": {"preferred_onsite_location", "travel_tolerance", "travel_percent_max"}},
     }
+
+    def _category_label(category: str) -> str:
+        return str(category or "").replace("_", " ").title()
 
     treemap_segments = []
     for group_label, config in treemap_groups.items():
         for item in preferences:
             if item["category"] in config["categories"]:
                 priority_weight = _priority_weight(item["priority"])
-                weight = round(priority_weight * float(item.get("dimension_weight", 1.0)) * float(item.get("value_weight", 1.0)))
+                dimension_weight = float(item.get("dimension_weight", 1.0))
+                value_weight = float(item.get("value_weight", 1.0))
+                combined_weight = priority_weight * dimension_weight * value_weight
+
                 treemap_segments.append({
                     "group": group_label,
                     "label": item["value"],
-                    "weight": max(weight, 1),
+                    "category": item["category"],
+                    "category_label": _category_label(item["category"]),
+                    "dimension": item["dimension"],
                     "priority": item["priority"],
+                    "dimension_weight": round(dimension_weight, 2),
+                    "value_weight": round(value_weight, 2),
+                    "combined_weight": round(combined_weight, 2),
                 })
+
+    max_segment_weight = max((item["combined_weight"] for item in treemap_segments), default=1)
+
+    for item in treemap_segments:
+        normalized = item["combined_weight"] / max_segment_weight if max_segment_weight else 0
+
+        if normalized >= 0.9:
+            weight_band = 5
+        elif normalized >= 0.72:
+            weight_band = 4
+        elif normalized >= 0.54:
+            weight_band = 3
+        elif normalized >= 0.36:
+            weight_band = 2
+        else:
+            weight_band = 1
+
+        item["weight"] = weight_band
+        item["weight_band"] = weight_band
+
+    treemap_segments.sort(key=lambda x: (-x["combined_weight"], x["group"], x["label"]))
 
     role_priorities = []
     for item in preferences:

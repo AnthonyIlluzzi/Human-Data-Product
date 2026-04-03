@@ -1570,7 +1570,7 @@ function renderDistributionBar(containerId, view) {
 
   const paletteMap = {
     solution_type: ["#0a6ed1", "#267fda", "#438fe3", "#61a0eb", "#7fb1f2", "#9cc2f7", "#b8d4fb", "#d9ecff"],
-    problem_type: ["#0a6ed1", "#2e87df", "#5aa4ee", "#8bc0f8", "#bedcff", "#dceeff"],
+    problem_type: ["#0a6ed1", "#267fda", "#438fe3", "#61a0eb", "#7fb1f2", "#9cc2f7", "#c5ddfb"],
     system_layer: ["#0a6ed1", "#2f85df", "#66abef", "#9acefb", "#d8edff"]
   };
 
@@ -1701,6 +1701,7 @@ function openFeedbackEvidenceModal(titleText, items) {
 
 function bindInsightHelpPopovers() {
   const triggers = document.querySelectorAll(".insight-help-button");
+  if (!triggers.length) return;
 
   const closeAll = (exceptId = null) => {
     document.querySelectorAll(".insight-help-button").forEach(btn => {
@@ -1726,48 +1727,90 @@ function bindInsightHelpPopovers() {
 
     if (isMobile) {
       popover.classList.add("is-docked-mobile");
+      popover.style.left = "";
+      popover.style.top = "";
       return;
     }
 
-    const rect = button.getBoundingClientRect();
-    const width = Math.min(360, window.innerWidth - 40);
-    const left = Math.max(12, Math.min(rect.right - width, window.innerWidth - width - 12));
-    const top = rect.bottom + 10;
+    const buttonRect = button.getBoundingClientRect();
+    const popoverRect = popover.getBoundingClientRect();
+    const gap = 10;
+    const viewportPadding = 12;
+
+    let left = buttonRect.right - popoverRect.width;
+    let top = buttonRect.bottom + gap;
+
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    }
+
+    if (left + popoverRect.width > window.innerWidth - viewportPadding) {
+      left = window.innerWidth - popoverRect.width - viewportPadding;
+    }
+
+    if (top + popoverRect.height > window.innerHeight - viewportPadding) {
+      top = buttonRect.top - popoverRect.height - gap;
+    }
+
+    if (top < viewportPadding) {
+      top = viewportPadding;
+    }
 
     popover.style.left = `${left}px`;
     popover.style.top = `${top}px`;
   };
 
   triggers.forEach(btn => {
+    if (btn.dataset.helpPopoverBound === "true") return;
+
+    btn.dataset.helpPopoverBound = "true";
+
     btn.addEventListener("click", event => {
+      event.preventDefault();
       event.stopPropagation();
+
       const popoverId = btn.getAttribute("aria-controls");
       const popover = popoverId ? document.getElementById(popoverId) : null;
       if (!popover) return;
 
       const isOpen = btn.getAttribute("aria-expanded") === "true";
+
       if (isOpen) {
         closeAll();
-      } else {
-        closeAll(popoverId);
+        return;
+      }
+
+      closeAll(popoverId);
+
+      requestAnimationFrame(() => {
         positionPopover(btn, popover);
+      });
+    });
+  });
+
+  if (document.body.dataset.insightHelpResizeBound !== "true") {
+    document.body.dataset.insightHelpResizeBound = "true";
+
+    window.addEventListener("resize", () => {
+      document.querySelectorAll(".insight-help-button[aria-expanded='true']").forEach(btn => {
+        const popoverId = btn.getAttribute("aria-controls");
+        const popover = popoverId ? document.getElementById(popoverId) : null;
+        if (popover) positionPopover(btn, popover);
+      });
+    });
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".insight-help")) {
+        closeAll();
       }
     });
-  });
 
-  window.addEventListener("resize", () => {
-    document.querySelectorAll(".insight-help-button[aria-expanded='true']").forEach(btn => {
-      const popoverId = btn.getAttribute("aria-controls");
-      const popover = popoverId ? document.getElementById(popoverId) : null;
-      if (popover) positionPopover(btn, popover);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeAll();
+      }
     });
-  });
-
-  document.addEventListener("click", event => {
-    if (!event.target.closest(".insight-help")) {
-      closeAll();
-    }
-  });
+  }
 }
 
 function renderValueRealization(payload) {
@@ -1846,16 +1889,43 @@ function renderOpportunityTreemap(containerId, segments) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  const items = Array.isArray(segments) ? [...segments] : [];
+  items.sort((a, b) => (b.combined_weight || b.weight || 0) - (a.combined_weight || a.weight || 0));
+
   container.innerHTML = `
     <div class="opportunity-treemap-grid">
-      ${(segments || []).map(item => `
-        <div class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight, 5))}">
+      ${items.map(item => `
+        <button
+          type="button"
+          class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight_band || item.weight || 1, 5))}"
+          aria-label="${escapeHtml(item.label)}"
+        >
           <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
           <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
-        </div>
+          <div class="opportunity-treemap-meta">
+            <span>${escapeHtml(item.priority || "")}</span>
+            <span>${escapeHtml(item.category_label || "")}</span>
+          </div>
+        </button>
       `).join("")}
     </div>
   `;
+
+  container.querySelectorAll(".opportunity-treemap-tile").forEach((node, index) => {
+    const item = items[index];
+
+    attachFloatingTooltip(
+      node,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(item.label)}</span>
+        <span class="insights-hover-tooltip-body">${escapeHtml(item.group)} · ${escapeHtml(item.category_label || item.category || "")}</span>
+        <span class="insights-hover-tooltip-body">Priority: ${escapeHtml(capitalize(item.priority || ""))}</span>
+        <span class="insights-hover-tooltip-body">Dimension weight: ${Number(item.dimension_weight || 1).toFixed(2)}</span>
+        <span class="insights-hover-tooltip-body">Value weight: ${Number(item.value_weight || 1).toFixed(2)}</span>
+        <span class="insights-hover-tooltip-body">Combined weight: ${Number(item.combined_weight || item.weight || 0).toFixed(2)}</span>
+      `
+    );
+  });
 }
 
 function renderRolePriorities(containerId, roles) {
