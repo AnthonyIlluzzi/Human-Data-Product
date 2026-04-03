@@ -1,5 +1,7 @@
 from pathlib import Path
+from collections import Counter, defaultdict
 import sqlite3
+import re
 
 
 DB_PATH = Path(__file__).resolve().parent / "human_data_product.db"
@@ -877,6 +879,566 @@ def get_experience_projects(experience_id: int):
     return {
         "experience": dict(experience) if experience else None,
         "projects": projects
+    }
+
+
+DISPLAY_LABELS = {
+    "solution_type": {
+        "capability_expansion": "Capability Expansion",
+        "metadata_standardization": "Metadata Standardization",
+        "workflow_optimization": "Workflow Optimization",
+        "experience_enhancement": "Experience Enhancement",
+        "access_extension": "Access Extension",
+        "analytical_refinement": "Analytical Refinement",
+        "data_modeling": "Data Modeling",
+        "workflow_automation": "Workflow Automation",
+    },
+    "problem_type": {
+        "capability_gap": "Capability Gap",
+        "metadata_gap": "Metadata Gap",
+        "workflow_gap": "Workflow Gap",
+        "clarity_gap": "Clarity Gap",
+        "visibility_gap": "Visibility Gap",
+        "decision_support_gap": "Decision Support Gap",
+        "data_gap": "Data Gap",
+    },
+    "system_layer": {
+        "integration": "Integration",
+        "governance": "Governance",
+        "UI": "UI",
+        "workflow": "Workflow",
+        "data": "Data",
+    },
+    "impact_type": {
+        "reliability": "Reliability",
+        "usability": "Usability",
+        "self_service": "Self-Service",
+        "governance": "Governance",
+        "decision_support": "Decision Support",
+        "scalability": "Scalability",
+        "interoperability": "Interoperability",
+        "interpretability": "Interpretability",
+    },
+    "priority": {
+        "high": 3,
+        "medium": 2,
+        "low": 1,
+    },
+}
+
+
+def _display_label(group: str, value: str | None) -> str:
+    if value is None:
+        return "Unknown"
+    mapped = DISPLAY_LABELS.get(group, {}).get(value)
+    if mapped:
+        return mapped
+    return str(value).replace("_", " ").title()
+
+
+def _priority_weight(priority: str | None) -> int:
+    return DISPLAY_LABELS["priority"].get((priority or "").lower(), 1)
+
+
+def _slugify(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", (value or "").lower()).strip("-")
+
+
+def _build_distribution_view(rows, dimension: str):
+    total = sum(row["count"] for row in rows) or 1
+    segments = []
+    for row in rows:
+        segments.append({
+            "key": row["key"],
+            "label": _display_label(dimension, row["key"]),
+            "count": row["count"],
+            "share": round((row["count"] / total) * 100, 1),
+        })
+
+    top_labels = [segment["label"] for segment in segments[:2]]
+    if dimension == "solution_type":
+        observed = f"Work is concentrated in {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Work is concentrated in the dominant solution approach."
+        derivation = "Based on factual system improvement records grouped by solution_type and shown as share of total records."
+        title = "Solution distribution"
+    elif dimension == "problem_type":
+        observed = f"Most work addresses {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Most work concentrates on a single recurring problem type."
+        derivation = "Based on factual system improvement records grouped by problem_type and shown as share of total records."
+        title = "Problem distribution"
+    else:
+        observed = f"Work is concentrated at the {top_labels[0]} and {top_labels[1]} layers." if len(top_labels) > 1 else "Work is concentrated in one dominant system layer."
+        derivation = "Based on factual system improvement records grouped by system_layer and shown as share of total records."
+        title = "System layer distribution"
+
+    return {
+        "dimension": dimension,
+        "title": title,
+        "total_records": total,
+        "segments": segments,
+        "observed_title": title,
+        "observed_copy": observed,
+        "derivation": derivation,
+    }
+
+
+def _infer_project_solution(project):
+    text = " ".join([
+        project.get("name", "") or "",
+        project.get("domain", "") or "",
+        project.get("value", "") or "",
+    ]).lower()
+
+    rules = [
+        ("metadata_standardization", r"metadata|governance|taxonomy|semantic|standard"),
+        ("workflow_automation", r"automation"),
+        ("workflow_optimization", r"workflow|process|delivery|defect|readiness|operational"),
+        ("experience_enhancement", r"experience|ui|dashboard|reporting|analytics|visibility|insight"),
+        ("capability_expansion", r"self-service|integration|capability|enablement|access|extension|object"),
+        ("analytical_refinement", r"analysis|analytical|usage"),
+        ("data_modeling", r"data model|modeling|model"),
+    ]
+
+    for solution_type, pattern in rules:
+        if re.search(pattern, text):
+            return solution_type
+    return None
+
+
+def _infer_project_impact(project):
+    text = " ".join([
+        project.get("name", "") or "",
+        project.get("domain", "") or "",
+        project.get("value", "") or "",
+    ]).lower()
+
+    rules = [
+        ("self_service", r"self-service|independ|configure|enablement"),
+        ("usability", r"usability|experience|ease|adoption|clear|simpl"),
+        ("governance", r"governance|metadata|traceability|standard"),
+        ("decision_support", r"decision|reporting|analytics|insight|business case"),
+        ("reliability", r"reliability|quality|defect|readiness|stability|consisten"),
+        ("scalability", r"scale|scalable|scalability"),
+        ("interoperability", r"interoperability|integration"),
+        ("interpretability", r"interpretability|semantic"),
+    ]
+
+    for impact_type, pattern in rules:
+        if re.search(pattern, text):
+            return impact_type
+    return None
+
+
+def _build_value_delivery_payload(conn, top_approaches):
+    cursor = conn.cursor()
+    payload = []
+    insight_list = []
+
+    for index, approach in enumerate(top_approaches, start=1):
+        cursor.execute(
+            """
+            SELECT
+                s.skill_name,
+                COUNT(*) AS score
+            FROM system_improvement si
+            JOIN project_skill ps
+              ON si.project_id = ps.project_id
+            JOIN skill s
+              ON s.skill_id = ps.skill_id
+            WHERE si.solution_type = ?
+            GROUP BY s.skill_id, s.skill_name
+            ORDER BY score DESC, s.skill_name ASC
+            LIMIT 3
+            """,
+            (approach["key"],),
+        )
+        skill_rows = rows_to_dicts(cursor.fetchall())
+        max_score = max((row["score"] for row in skill_rows), default=1)
+
+        cursor.execute(
+            """
+            SELECT DISTINCT project_id
+            FROM system_improvement
+            WHERE solution_type = ?
+              AND project_id IS NOT NULL
+            """,
+            (approach["key"],),
+        )
+        project_ids = [row["project_id"] for row in cursor.fetchall()]
+
+        cursor.execute(
+            """
+            SELECT DISTINCT experience_id
+            FROM system_improvement
+            WHERE solution_type = ?
+              AND experience_id IS NOT NULL
+            """,
+            (approach["key"],),
+        )
+        experience_ids = [row["experience_id"] for row in cursor.fetchall()]
+
+        feedback_entries = []
+        if project_ids or experience_ids:
+            project_placeholders = ", ".join("?" for _ in project_ids) or "NULL"
+            experience_placeholders = ", ".join("?" for _ in experience_ids) or "NULL"
+            params = [*project_ids, *experience_ids]
+
+            cursor.execute(
+                f"""
+                SELECT
+                    feedback_id,
+                    source_type,
+                    quote,
+                    theme,
+                    year,
+                    viz_display_flag,
+                    viz_display_rank
+                FROM feedback
+                WHERE (
+                    entity_type = 'project'
+                    AND entity_id IN ({project_placeholders})
+                )
+                OR (
+                    entity_type = 'experience'
+                    AND entity_id IN ({experience_placeholders})
+                )
+                ORDER BY
+                    COALESCE(viz_display_flag, 0) DESC,
+                    CASE
+                        WHEN COALESCE(viz_display_flag, 0) = 1 THEN COALESCE(viz_display_rank, 999)
+                        ELSE 999
+                    END ASC,
+                    year DESC,
+                    feedback_id DESC
+                LIMIT 4
+                """,
+                params,
+            )
+            feedback_entries = rows_to_dicts(cursor.fetchall())
+
+        display_skills = [{
+            "skill_name": row["skill_name"],
+            "score": row["score"],
+            "normalized": round((row["score"] / max_score) * 100, 1),
+        } for row in skill_rows]
+
+        top_skill_names = [row["skill_name"] for row in skill_rows[:2]]
+        if len(top_skill_names) >= 2:
+            insight_copy = f"{top_skill_names[0]} and {top_skill_names[1]} most often support this approach."
+        elif top_skill_names:
+            insight_copy = f"{top_skill_names[0]} is the strongest capability signal behind this approach."
+        else:
+            insight_copy = "Capability composition is not available for this approach."
+
+        payload.append({
+            "index": index,
+            "key": approach["key"],
+            "label": approach["label"],
+            "count": approach["count"],
+            "skills": display_skills,
+            "feedback_examples": feedback_entries,
+            "feedback_modal_title": f"{approach['label']} — Feedback Evidence",
+            "feedback_link_label": "How does this show up in feedback?",
+        })
+
+        insight_list.append({
+            "index": index,
+            "key": approach["key"],
+            "statement": insight_copy,
+        })
+
+    return {
+        "approaches": payload,
+        "insights": insight_list,
+        "derivation": "Capability bars are based on skills linked to projects associated with each approach. Feedback evidence is curated from related project and experience feedback records.",
+    }
+
+
+def _build_value_realization_payload(conn, top_approaches):
+    cursor = conn.cursor()
+    approach_keys = [item["key"] for item in top_approaches]
+
+    cursor.execute(
+        """
+        SELECT
+            impact_type,
+            COUNT(*) AS count
+        FROM system_improvement
+        GROUP BY impact_type
+        ORDER BY count DESC, impact_type ASC
+        """
+    )
+    impact_rows = rows_to_dicts(cursor.fetchall())
+    impact_keys = [row["impact_type"] for row in impact_rows]
+
+    factual_counts = defaultdict(int)
+    cursor.execute(
+        """
+        SELECT
+            solution_type,
+            impact_type,
+            COUNT(*) AS count
+        FROM system_improvement
+        GROUP BY solution_type, impact_type
+        """
+    )
+    for row in rows_to_dicts(cursor.fetchall()):
+        factual_counts[(row["solution_type"], row["impact_type"])] = row["count"]
+
+    project_inferred = defaultdict(float)
+    cursor.execute(
+        """
+        SELECT project_id, experience_id, name, domain, value, link
+        FROM project
+        ORDER BY project_id ASC
+        """
+    )
+    all_projects = rows_to_dicts(cursor.fetchall())
+
+    for project in all_projects:
+        inferred_solution = _infer_project_solution(project)
+        inferred_impact = _infer_project_impact(project)
+        if inferred_solution in approach_keys and inferred_impact in impact_keys:
+            project_inferred[(inferred_solution, inferred_impact)] += 0.5
+
+    experience_primary_solution = {}
+    experience_primary_impact = {}
+    cursor.execute(
+        """
+        SELECT
+            experience_id,
+            solution_type,
+            impact_type,
+            COUNT(*) AS count
+        FROM system_improvement
+        GROUP BY experience_id, solution_type, impact_type
+        ORDER BY experience_id ASC, count DESC, solution_type ASC
+        """
+    )
+    for row in rows_to_dicts(cursor.fetchall()):
+        experience_primary_solution.setdefault(row["experience_id"], row["solution_type"])
+        experience_primary_impact.setdefault(row["experience_id"], row["impact_type"])
+
+    project_primary_solution = {}
+    project_primary_impact = {}
+    cursor.execute(
+        """
+        SELECT
+            project_id,
+            solution_type,
+            impact_type,
+            COUNT(*) AS count
+        FROM system_improvement
+        GROUP BY project_id, solution_type, impact_type
+        ORDER BY project_id ASC, count DESC, solution_type ASC
+        """
+    )
+    for row in rows_to_dicts(cursor.fetchall()):
+        project_primary_solution.setdefault(row["project_id"], row["solution_type"])
+        project_primary_impact.setdefault(row["project_id"], row["impact_type"])
+
+    feedback_inferred = defaultdict(float)
+    cursor.execute(
+        """
+        SELECT entity_type, entity_id
+        FROM feedback
+        """
+    )
+    for row in rows_to_dicts(cursor.fetchall()):
+        solution = None
+        impact = None
+
+        if row["entity_type"] == "project":
+            solution = project_primary_solution.get(row["entity_id"])
+            impact = project_primary_impact.get(row["entity_id"])
+        elif row["entity_type"] == "experience":
+            solution = experience_primary_solution.get(row["entity_id"])
+            impact = experience_primary_impact.get(row["entity_id"])
+
+        if solution in approach_keys and impact in impact_keys:
+            feedback_inferred[(solution, impact)] += 0.25
+
+    cells = []
+    max_score = 0.0
+    for approach in approach_keys:
+        for impact in impact_keys:
+            score = (
+                factual_counts[(approach, impact)] * 1.0
+                + project_inferred[(approach, impact)]
+                + feedback_inferred[(approach, impact)]
+            )
+            max_score = max(max_score, score)
+            cells.append({
+                "approach_key": approach,
+                "impact_key": impact,
+                "factual_count": factual_counts[(approach, impact)],
+                "project_inferred": round(project_inferred[(approach, impact)], 2),
+                "feedback_inferred": round(feedback_inferred[(approach, impact)], 2),
+                "score": round(score, 2),
+            })
+
+    matrix_rows = []
+    for approach in top_approaches:
+        row_cells = [cell for cell in cells if cell["approach_key"] == approach["key"]]
+        strongest = sorted(row_cells, key=lambda item: item["score"], reverse=True)[:2]
+        strongest_labels = [_display_label("impact_type", item["impact_key"]) for item in strongest if item["score"] > 0]
+        if len(strongest_labels) >= 2:
+            row_observation = f"{approach['label']} most often realizes value through {strongest_labels[0]} and {strongest_labels[1]}."
+        elif strongest_labels:
+            row_observation = f"{approach['label']} most often realizes value through {strongest_labels[0]}."
+        else:
+            row_observation = f"{approach['label']} does not yet show a strong outcome pattern."
+
+        matrix_rows.append({
+            "key": approach["key"],
+            "label": approach["label"],
+            "observation": row_observation,
+        })
+
+    top_row = matrix_rows[0] if matrix_rows else {"label": "This approach", "observation": "Outcome relationships are not available."}
+
+    return {
+        "approach_labels": [{"key": item["key"], "label": item["label"]} for item in top_approaches],
+        "impact_labels": [{"key": key, "label": _display_label("impact_type", key)} for key in impact_keys],
+        "cells": cells,
+        "max_score": round(max_score or 1, 2),
+        "observed_title": top_row["label"],
+        "observed_copy": top_row["observation"],
+        "derivation": "This view is anchored in factual system improvement records. Additional project and feedback signals are normalized to the same approach and impact categories and contribute lower weight than factual records.",
+    }
+
+
+def get_value_insights_dashboard():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT solution_type AS key, COUNT(*) AS count
+            FROM system_improvement
+            GROUP BY solution_type
+            ORDER BY count DESC, solution_type ASC
+            """
+        )
+        solution_rows = rows_to_dicts(cursor.fetchall())
+
+        cursor.execute(
+            """
+            SELECT problem_type AS key, COUNT(*) AS count
+            FROM system_improvement
+            GROUP BY problem_type
+            ORDER BY count DESC, problem_type ASC
+            """
+        )
+        problem_rows = rows_to_dicts(cursor.fetchall())
+
+        cursor.execute(
+            """
+            SELECT system_layer AS key, COUNT(*) AS count
+            FROM system_improvement
+            GROUP BY system_layer
+            ORDER BY count DESC, system_layer ASC
+            """
+        )
+        layer_rows = rows_to_dicts(cursor.fetchall())
+
+        top_approaches = [{
+            "key": row["key"],
+            "label": _display_label("solution_type", row["key"]),
+            "count": row["count"],
+        } for row in solution_rows[:4]]
+
+        return {
+            "distribution_views": {
+                "solution_type": _build_distribution_view(solution_rows, "solution_type"),
+                "problem_type": _build_distribution_view(problem_rows, "problem_type"),
+                "system_layer": _build_distribution_view(layer_rows, "system_layer"),
+            },
+            "value_delivery": _build_value_delivery_payload(conn, top_approaches),
+            "value_realization": _build_value_realization_payload(conn, top_approaches),
+        }
+
+
+def get_opportunity_insights_dashboard():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT experience_id, company, role, start_date, end_date, sort_order
+            FROM experience
+            ORDER BY sort_order ASC
+            """
+        )
+        timeline = rows_to_dicts(cursor.fetchall())
+
+        cursor.execute(
+            """
+            SELECT preference_id, dimension, category, value, priority
+            FROM role_preference
+            ORDER BY
+                CASE priority
+                    WHEN 'high' THEN 1
+                    WHEN 'medium' THEN 2
+                    WHEN 'low' THEN 3
+                    ELSE 4
+                END,
+                category,
+                preference_id
+            """
+        )
+        preferences = rows_to_dicts(cursor.fetchall())
+
+    treemap_groups = {
+        "Role Types": {"categories": {"role_type"}},
+        "Career Level": {"categories": {"career_level"}},
+        "Work Model": {"categories": {"work_mode", "people_leadership", "employment_type"}},
+        "Focus Areas": {"categories": {"domain", "platform_focus", "impact_focus", "problem_space"}},
+        "Environment": {"categories": {"preferred_onsite_location", "travel_tolerance", "travel_percent_max"}},
+    }
+
+    treemap_segments = []
+    for group_label, config in treemap_groups.items():
+        for item in preferences:
+            if item["category"] in config["categories"]:
+                weight = _priority_weight(item["priority"])
+                treemap_segments.append({
+                    "group": group_label,
+                    "label": item["value"],
+                    "weight": weight,
+                    "priority": item["priority"],
+                })
+
+    role_priorities = [
+        {
+            "label": item["value"],
+            "priority": item["priority"],
+            "weight": _priority_weight(item["priority"]),
+        }
+        for item in preferences
+        if item["category"] == "role_type"
+    ]
+    max_role_weight = max((item["weight"] for item in role_priorities), default=1)
+    for item in role_priorities:
+        item["normalized"] = round((item["weight"] / max_role_weight) * 100, 1)
+
+    return {
+        "trajectory": {
+            "timeline": timeline,
+            "observed_title": "Career Trajectory",
+            "observed_copy": "Career progression shows a clear shift from execution-oriented work toward system-level design, enablement, and platform thinking.",
+            "derivation": "Based on chronological role progression and the increasing concentration of system and platform-oriented work across later experiences.",
+        },
+        "fit_profile": {
+            "segments": treemap_segments,
+            "observed_title": "Opportunity Fit Profile",
+            "observed_copy": "Target opportunities prioritize architecture-oriented individual contributor roles with strong flexibility, platform focus, and low-friction operating conditions.",
+            "derivation": "Based on weighted role-preference records using priority as the primary signal. Higher-priority records receive larger treemap share.",
+        },
+        "role_priorities": {
+            "roles": role_priorities,
+            "observed_title": "Target Role Priorities",
+            "observed_copy": "The strongest stated preference is for architecture-oriented roles spanning data, platform, and analytics contexts, with platform and data architecture leading the mix.",
+            "derivation": "Based on factual role_preference records in the role_type category, normalized by stated priority.",
+        },
     }
 
 

@@ -34,6 +34,8 @@ from data_service import (
     get_experience_system_improvements,
     get_skill_projects,
     get_insights,
+    get_value_insights_dashboard,
+    get_opportunity_insights_dashboard,
     execute_readonly_query,
 )
 
@@ -238,6 +240,16 @@ def project_system_improvements(project_id: int):
 @app.get("/analytics/experience-system-improvements/{experience_id}")
 def experience_system_improvements(experience_id: int):
     return get_experience_system_improvements(experience_id)
+
+
+@app.get("/analytics/value-insights-dashboard")
+def value_insights_dashboard():
+    return get_value_insights_dashboard()
+
+
+@app.get("/analytics/opportunity-insights-dashboard")
+def opportunity_insights_dashboard():
+    return get_opportunity_insights_dashboard()
 
 
 @app.get("/insights")

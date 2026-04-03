@@ -360,25 +360,12 @@ async function loadOverview() {
   }
 }
 
-async function loadInsights() {
-  const grid = document.getElementById("insight-cards-grid");
-  if (!grid) return;
-  grid.innerHTML = "";
-}
-
 async function loadVisualizations() {
-  const [timeline, skillMatrix, projectsByExperience, projects, feedbackThemes] = await Promise.all([
-    fetchJson("/analytics/career-timeline"),
-    fetchJson("/analytics/skill-cooccurrence?limit=6"),
-    fetchJson("/analytics/projects-by-experience"),
-    fetchJson("/projects"),
-    fetchJson("/analytics/feedback-themes")
-  ]);
+  const data = await fetchJson("/analytics/value-insights-dashboard");
 
-  renderTimeline("career-timeline-viz", timeline);
-  renderSkillPatternMatrix("skill-pattern-matrix", "skill-pattern-summary", skillMatrix);
-  renderFeedbackValidation("feedback-themes-viz", feedbackThemes);
-  renderProjectPatternBlocks("project-pattern-blocks", projectsByExperience, projects);
+  bindValueDistributionToggles(data.distribution_views);
+  renderValueDelivery(data.value_delivery);
+  renderValueRealization(data.value_realization);
   bindPatternInfoTooltips();
 }
 
@@ -1423,70 +1410,315 @@ async function loadContactInfo() {
 }
 
 async function loadNextOpportunity() {
-  try {
-    const [targetOpportunity, projects] = await Promise.all([
-      fetchJson("/target-opportunity"),
-      fetchJson("/projects")
-    ]);
+  const data = await fetchJson("/analytics/opportunity-insights-dashboard");
 
-    const summaryEl = document.getElementById("target-opportunity-summary");
-    if (summaryEl) {
-      summaryEl.textContent = targetOpportunity.summary || "No summary available.";
+  renderTimeline("opportunity-career-timeline", data.trajectory.timeline);
+  setObservedPanel(
+    "opportunity-trajectory-title",
+    "opportunity-trajectory-copy",
+    "opportunity-trajectory-derivation",
+    data.trajectory.observed_title,
+    data.trajectory.observed_copy,
+    data.trajectory.derivation
+  );
+
+  renderOpportunityTreemap("opportunity-fit-treemap", data.fit_profile.segments);
+  setObservedPanel(
+    "opportunity-fit-title",
+    "opportunity-fit-copy",
+    "opportunity-fit-derivation",
+    data.fit_profile.observed_title,
+    data.fit_profile.observed_copy,
+    data.fit_profile.derivation
+  );
+
+  renderRolePriorities("opportunity-role-priorities", data.role_priorities.roles);
+  setObservedPanel(
+    "opportunity-role-title",
+    "opportunity-role-copy",
+    "opportunity-role-derivation",
+    data.role_priorities.observed_title,
+    data.role_priorities.observed_copy,
+    data.role_priorities.derivation
+  );
+}
+
+function setObservedPanel(titleId, copyId, derivationId, title, copy, derivation) {
+  const titleEl = document.getElementById(titleId);
+  const copyEl = document.getElementById(copyId);
+  const derivationEl = document.getElementById(derivationId);
+
+  if (titleEl) titleEl.textContent = title || "Observed Pattern";
+  if (copyEl) copyEl.textContent = copy || "";
+  if (derivationEl) derivationEl.textContent = derivation || "";
+}
+
+function bindValueDistributionToggles(distributionViews) {
+  const buttons = document.querySelectorAll("[data-distribution-dimension]");
+  if (!buttons.length) return;
+
+  const renderDimension = dimension => {
+    buttons.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.distributionDimension === dimension);
+    });
+
+    const view = distributionViews?.[dimension];
+    if (!view) return;
+
+    renderDistributionBar("value-distribution-chart", view);
+    renderDistributionLegend("value-distribution-legend", view.segments);
+    const context = document.getElementById("value-distribution-context");
+    if (context) {
+      context.textContent = `Based on ${view.total_records} factual system-improvement records.`;
     }
 
-    const highlightSignals = uniqueItems([
-      targetOpportunity.target_role_types?.[0],
-      (targetOpportunity.target_career_levels || []).slice(0, 2).join(" / "),
-      (targetOpportunity.preferred_work_modes || []).slice(0, 2).join(" / "),
-      targetOpportunity.leadership_preference?.[0],
-      targetOpportunity.travel_max ? `Travel ≤ ${targetOpportunity.travel_max}` : null
-    ]);
+    setObservedPanel(
+      "value-distribution-observed-title",
+      "value-distribution-observed-copy",
+      "value-distribution-derivation",
+      view.observed_title,
+      view.observed_copy,
+      view.derivation
+    );
+  };
 
-    renderChipList("opportunity-highlight-chips", highlightSignals, { emphasis: true });
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      renderDimension(btn.dataset.distributionDimension);
+    });
+  });
 
-    const roles = uniqueItems((targetOpportunity.target_role_types || []).slice(0, 3));
-    const focus = uniqueItems((targetOpportunity.focus_areas || []).slice(0, 3));
-    const operating = uniqueItems((targetOpportunity.leadership_preference || []).slice(0, 2));
-    const environment = uniqueItems([
-      ...(targetOpportunity.preferred_work_modes || []).slice(0, 2),
-      ...(targetOpportunity.preferred_locations || []).slice(0, 1),
-      targetOpportunity.travel_max ? `Travel ≤ ${targetOpportunity.travel_max}` : null
-    ]);
+  renderDimension("solution_type");
+}
 
-    renderChipList("opportunity-core-roles", roles);
-    renderChipList("opportunity-core-focus", focus);
-    renderChipList("opportunity-core-operating", operating);
-    renderChipList("opportunity-core-environment", environment);
+function renderDistributionBar(containerId, view) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
-    const careerBrief = document.getElementById("target-career-level-brief");
-    if (careerBrief) {
-      careerBrief.textContent = (targetOpportunity.target_career_levels || []).slice(0, 2).join(" / ") || "Not specified";
-    }
+  const palette = ["#0a6ed1", "#2b82df", "#4f96eb", "#72abf4", "#97c1fa", "#b7d6fd", "#d7ebff"];
+  const segments = view.segments || [];
 
-    const workModeBrief = document.getElementById("target-work-mode-brief");
-    if (workModeBrief) {
-      workModeBrief.textContent = (targetOpportunity.preferred_work_modes || []).slice(0, 2).join(" / ") || "Not specified";
-    }
+  container.innerHTML = `
+    <div class="distribution-bar-track">
+      ${segments.map((segment, index) => `
+        <button
+          type="button"
+          class="distribution-bar-segment"
+          style="width:${Math.max(segment.share, 3)}%; background:${palette[index % palette.length]};"
+          aria-label="${escapeHtml(segment.label)}"
+        ></button>
+      `).join("")}
+    </div>
+  `;
 
-    const locationBrief = document.getElementById("target-location-brief");
-    if (locationBrief) {
-      locationBrief.textContent = (targetOpportunity.preferred_locations || []).slice(0, 2).join(" / ") || "Not specified";
-    }
+  container.querySelectorAll(".distribution-bar-segment").forEach((node, index) => {
+    const segment = segments[index];
+    attachFloatingTooltip(
+      node,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+        <span class="insights-hover-tooltip-body">${segment.count} records</span>
+        <span class="insights-hover-tooltip-body">${segment.share}% of selected view</span>
+      `
+    );
+  });
+}
 
-    const travelEl = document.getElementById("target-travel-max");
-    if (travelEl) {
-      travelEl.textContent = targetOpportunity.travel_max || "Not specified";
-    }
+function renderDistributionLegend(containerId, segments) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
-    renderOpportunityEvidenceRedesign(projects || []);
-  } catch (error) {
-    console.error("Failed to load next opportunity:", error);
+  const palette = ["#0a6ed1", "#2b82df", "#4f96eb", "#72abf4", "#97c1fa", "#b7d6fd", "#d7ebff"];
+  container.innerHTML = `
+    <div class="distribution-legend-row">
+      ${(segments || []).map((segment, index) => `
+        <div class="distribution-legend-item">
+          <span class="distribution-legend-swatch" style="background:${palette[index % palette.length]};"></span>
+          <span class="distribution-legend-label">${escapeHtml(segment.label)}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
 
-    const summaryEl = document.getElementById("target-opportunity-summary");
-    if (summaryEl) {
-      summaryEl.textContent = "Unable to load target opportunity insight.";
-    }
+function renderValueDelivery(payload) {
+  const list = document.getElementById("value-delivery-insight-list");
+  const grid = document.getElementById("value-delivery-grid");
+  const derivation = document.getElementById("value-delivery-derivation");
+  if (!list || !grid) return;
+
+  list.innerHTML = (payload.insights || []).map(item => `
+    <li><strong>${item.index}.</strong> ${escapeHtml(item.statement)}</li>
+  `).join("");
+
+  if (derivation) {
+    derivation.textContent = payload.derivation || "";
   }
+
+  grid.innerHTML = (payload.approaches || []).map(card => `
+    <article class="composition-card">
+      <div class="composition-card-top">
+        <div class="composition-card-index">${card.index}</div>
+        <div>
+          <h4>${escapeHtml(card.label)}</h4>
+          <div class="composition-card-meta">${card.count} linked system improvements</div>
+        </div>
+      </div>
+
+      <div class="composition-skill-stack">
+        ${(card.skills || []).map(skill => `
+          <div class="composition-skill-row">
+            <div class="composition-skill-label">${escapeHtml(skill.skill_name)}</div>
+            <div class="composition-skill-bar">
+              <span style="width:${Math.max(skill.normalized, 10)}%"></span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+
+      <button
+        type="button"
+        class="composition-feedback-link"
+        data-feedback-title="${escapeHtml(card.feedback_modal_title)}"
+        data-feedback-items='${escapeHtml(JSON.stringify(card.feedback_examples || []))}'
+      >
+        ${escapeHtml(card.feedback_link_label)}
+      </button>
+    </article>
+  `).join("");
+
+  grid.querySelectorAll(".composition-feedback-link").forEach(button => {
+    button.addEventListener("click", () => {
+      const title = button.dataset.feedbackTitle || "Feedback Evidence";
+      const items = JSON.parse(button.dataset.feedbackItems || "[]");
+      openFeedbackEvidenceModal(title, items);
+    });
+  });
+}
+
+function openFeedbackEvidenceModal(titleText, items) {
+  const modal = document.getElementById("feedback-detail-modal");
+  const title = document.getElementById("feedback-detail-modal-title");
+  const body = document.getElementById("feedback-detail-modal-body");
+  if (!modal || !title || !body) return;
+
+  title.textContent = titleText;
+
+  body.innerHTML = items.length ? `
+    <div class="detail-card-list">
+      ${items.slice(0, 4).map(entry => `
+        <div class="feedback-quote-card">
+          <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+          <p>${escapeHtml(entry.quote || "")}</p>
+        </div>
+      `).join("")}
+    </div>
+  ` : `
+    <div class="detail-empty-state">
+      <p>No curated feedback examples are available for this approach.</p>
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
+}
+
+function renderValueRealization(payload) {
+  const container = document.getElementById("value-realization-heatmap");
+  if (!container) return;
+
+  const rows = payload.approach_labels || [];
+  const cols = payload.impact_labels || [];
+  const cells = payload.cells || [];
+  const maxScore = payload.max_score || 1;
+
+  const cellMap = new Map(
+    cells.map(cell => [`${cell.approach_key}__${cell.impact_key}`, cell])
+  );
+
+  container.innerHTML = `
+    <div class="value-heatmap-grid" style="grid-template-columns: 170px repeat(${cols.length}, minmax(0, 1fr));">
+      <div class="value-heatmap-corner">Approach</div>
+      ${cols.map(col => `<div class="value-heatmap-axis value-heatmap-axis--column">${escapeHtml(col.label)}</div>`).join("")}
+      ${rows.map(row => `
+        <div class="value-heatmap-axis value-heatmap-axis--row">${escapeHtml(row.label)}</div>
+        ${cols.map(col => {
+          const cell = cellMap.get(`${row.key}__${col.key}`) || { score: 0, factual_count: 0, project_inferred: 0, feedback_inferred: 0 };
+          const opacity = Math.max(cell.score / maxScore, 0.08);
+          return `
+            <button
+              type="button"
+              class="value-heatmap-cell"
+              data-heatmap-row="${escapeHtml(row.label)}"
+              data-heatmap-col="${escapeHtml(col.label)}"
+              data-heatmap-factual="${cell.factual_count}"
+              data-heatmap-project="${cell.project_inferred}"
+              data-heatmap-feedback="${cell.feedback_inferred}"
+              data-heatmap-score="${cell.score}"
+              style="background: rgba(10,110,209, ${opacity});"
+            ></button>
+          `;
+        }).join("")}
+      `).join("")}
+    </div>
+  `;
+
+  container.querySelectorAll(".value-heatmap-cell").forEach(cell => {
+    attachFloatingTooltip(
+      cell,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(cell.dataset.heatmapRow)} → ${escapeHtml(cell.dataset.heatmapCol)}</span>
+        <span class="insights-hover-tooltip-body">Factual core: ${cell.dataset.heatmapFactual}</span>
+        <span class="insights-hover-tooltip-body">Project inference: ${cell.dataset.heatmapProject}</span>
+        <span class="insights-hover-tooltip-body">Feedback inference: ${cell.dataset.heatmapFeedback}</span>
+        <span class="insights-hover-tooltip-body">Weighted score: ${cell.dataset.heatmapScore}</span>
+      `
+    );
+  });
+
+  setObservedPanel(
+    "value-realization-observed-title",
+    "value-realization-observed-copy",
+    "value-realization-derivation",
+    payload.observed_title,
+    payload.observed_copy,
+    payload.derivation
+  );
+}
+
+function renderOpportunityTreemap(containerId, segments) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const maxWeight = Math.max(...(segments || []).map(item => item.weight || 1), 1);
+
+  container.innerHTML = `
+    <div class="opportunity-treemap-grid">
+      ${(segments || []).map(item => `
+        <div
+          class="opportunity-treemap-tile weight-${Math.max(1, Math.min(item.weight, 3))}"
+          data-priority="${escapeHtml(item.priority || "")}"
+        >
+          <div class="opportunity-treemap-group">${escapeHtml(item.group)}</div>
+          <div class="opportunity-treemap-label">${escapeHtml(item.label)}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderRolePriorities(containerId, roles) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = (roles || []).map(role => `
+    <div class="role-priority-row">
+      <div class="role-priority-label">${escapeHtml(role.label)}</div>
+      <div class="role-priority-bar">
+        <span style="width:${Math.max(role.normalized, 12)}%"></span>
+      </div>
+      <div class="role-priority-meta">${escapeHtml(capitalize(role.priority || ""))}</div>
+    </div>
+  `).join("");
 }
 
 function renderOpportunityEvidenceRedesign(projects) {
