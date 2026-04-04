@@ -3394,7 +3394,7 @@ body {
 }
 
 .insights-dashboard-row--wide-right {
-  grid-template-columns: minmax(160px, 0.44fr) minmax(0, 2.18fr);
+  grid-template-columns: minmax(170px, 0.48fr) minmax(0, 2.14fr);
 }
 
 .insights-dashboard-row--trajectory {
