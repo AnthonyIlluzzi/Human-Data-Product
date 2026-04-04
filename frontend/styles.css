@@ -1138,6 +1138,15 @@ body {
   margin: 0;
 }
 
+/* Insights workspace spacing rhythm */
+#insights-panel.workspace-panel.active {
+  gap: 18px;
+}
+
+#insights-panel .tabs {
+  margin-bottom: 0;
+}
+
 /* Cards / Panels */
 
 .card {
@@ -3375,7 +3384,7 @@ body {
 
 .insights-dashboard-page {
   display: grid;
-  row-gap: 24px;
+  row-gap: 18px;
 }
 
 .insights-dashboard-row {
@@ -3383,10 +3392,6 @@ body {
   column-gap: 18px;
   row-gap: 18px;
   align-items: stretch;
-}
-
-.insights-dashboard-row + .insights-dashboard-row {
-  margin-top: 2px;
 }
 
 .insights-dashboard-row--wide-left {
