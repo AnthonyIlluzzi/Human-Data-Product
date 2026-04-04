@@ -3380,7 +3380,8 @@ body {
 
 .insights-dashboard-row {
   display: grid;
-  gap: 16px;
+  column-gap: 18px;
+  row-gap: 18px;
   align-items: stretch;
 }
 
@@ -3393,12 +3394,11 @@ body {
 }
 
 .insights-dashboard-row--wide-right {
-  grid-template-columns: minmax(200px, 0.62fr) minmax(0, 1.98fr);
+  grid-template-columns: minmax(160px, 0.44fr) minmax(0, 2.18fr);
 }
 
 .insights-dashboard-row--trajectory {
-  grid-template-columns: minmax(0, 1.9fr) minmax(250px, 0.75fr);
-  gap: 16px;
+  grid-template-columns: minmax(0, 1.82fr) minmax(260px, 0.78fr);
 }
 
 .insight-surface-card,
@@ -3669,26 +3669,41 @@ body {
 .composition-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
   margin-top: 4px;
 }
 
 .composition-card {
   display: flex;
   flex-direction: column;
-  min-height: 210px;
-  padding: 14px 14px 12px;
+  min-height: 168px;
+  padding: 11px 14px 10px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: linear-gradient(180deg, #fbfdff 0%, #f6f9fd 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.composition-card-top {
+.composition-card-header-row {
   display: flex;
-  gap: 12px;
   align-items: flex-start;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.composition-card-heading-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.composition-card-heading {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
 }
 
 .composition-card-index {
@@ -3713,15 +3728,15 @@ body {
 }
 
 .composition-card-meta {
-  margin-top: 3px;
+  margin-top: 0;
   font-size: 12px;
   color: var(--muted);
 }
 
 .composition-skill-stack {
   display: grid;
-  gap: 11px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 2px;
 }
 
 .composition-skill-row {
@@ -3754,15 +3769,18 @@ body {
 }
 
 .composition-feedback-link {
-  margin-top: 14px;
+  margin-top: 0;
   padding: 0;
   border: none;
   background: transparent;
   color: var(--primary);
   font-size: 13px;
   font-weight: 600;
-  text-align: left;
+  text-align: right;
   cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  align-self: flex-start;
 }
 
 .composition-feedback-link:hover {
@@ -3998,6 +4016,82 @@ body {
     padding: 14px 14px 12px;
   }
 
+    .composition-card {
+    min-height: 0;
+    padding: 11px 12px 10px;
+  }
+
+  .composition-card-header-row {
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .composition-card-heading-main {
+    gap: 8px;
+  }
+
+  .composition-card h4 {
+    font-size: 14px;
+  }
+
+  .composition-card-meta {
+    font-size: 11px;
+  }
+
+  .composition-feedback-link {
+    font-size: 12px;
+  }
+
+  .composition-skill-stack {
+    gap: 7px;
+  }
+
+  .composition-skill-label {
+    font-size: 11px;
+  }
+
+  .timeline-role-tile {
+    padding: 9px 11px;
+  }
+
+  .timeline-role-meta-row {
+    gap: 8px;
+  }
+
+  .timeline-role-company,
+  .timeline-role-range {
+    font-size: 11px;
+  }
+
+  .timeline-role-title {
+    font-size: 14px;
+    line-height: 1.22;
+  }
+
+    .insight-observed-title-row {
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .insight-observed-copy {
+    gap: 8px;
+  }
+
+  .insight-observed-copy,
+  .insight-observed-copy li {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .insight-surface-card .viz-card-header {
+    margin-bottom: 6px;
+  }
+
+  .viz-card-subtitle {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  
   .timeline-viz-grid {
     grid-template-columns: 1fr;
   }
