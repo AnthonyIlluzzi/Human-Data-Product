@@ -3388,7 +3388,7 @@ body {
 
 .insights-dashboard-page {
   display: grid;
-  row-gap: 18px;
+  row-gap: 22px;
 }
 
 .insights-dashboard-row {
@@ -4029,7 +4029,7 @@ body {
 
 @media (max-width: 680px) {
   .insights-dashboard-page {
-    row-gap: 18px;
+    row-gap: 22px;
   }
 
   .insight-observed-card,
