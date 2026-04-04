@@ -1583,25 +1583,15 @@ function renderValueDelivery(payload) {
     derivation.textContent = payload.derivation || "";
   }
 
-  grid.innerHTML = (payload.approaches || []).map(card => `
-    <article class="composition-card">
-      <div class="composition-card-top">
+ grid.innerHTML = (payload.approaches || []).map(card => `
+  <article class="composition-card">
+    <div class="composition-card-header-row">
+      <div class="composition-card-heading-main">
         <div class="composition-card-index">${card.index}</div>
-        <div>
+        <div class="composition-card-heading">
           <h4>${escapeHtml(card.label)}</h4>
           <div class="composition-card-meta">${card.count} linked system improvements</div>
         </div>
-      </div>
-
-      <div class="composition-skill-stack">
-        ${(card.skills || []).map(skill => `
-          <div class="composition-skill-row">
-            <div class="composition-skill-label">${escapeHtml(skill.skill_name)}</div>
-            <div class="composition-skill-bar">
-              <span style="width:${Math.max(skill.normalized, 10)}%"></span>
-            </div>
-          </div>
-        `).join("")}
       </div>
 
       <button
@@ -1612,8 +1602,20 @@ function renderValueDelivery(payload) {
       >
         ${escapeHtml(card.feedback_link_label)}
       </button>
-    </article>
-  `).join("");
+    </div>
+
+    <div class="composition-skill-stack">
+      ${(card.skills || []).map(skill => `
+        <div class="composition-skill-row">
+          <div class="composition-skill-label">${escapeHtml(skill.skill_name)}</div>
+          <div class="composition-skill-bar">
+            <span style="width:${Math.max(skill.normalized, 10)}%"></span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </article>
+`).join("");
 
   grid.querySelectorAll(".composition-feedback-link").forEach(button => {
     button.addEventListener("click", () => {
@@ -1982,7 +1984,6 @@ function bindOpportunityTreemapTooltipDelegation(container) {
 
   container.dataset.treemapTooltipBound = "true";
 }
-
 function renderRolePriorities(containerId, roles) {
   const container = document.getElementById(containerId);
   if (!container) return;
