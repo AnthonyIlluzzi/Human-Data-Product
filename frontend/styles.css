@@ -3388,13 +3388,13 @@ body {
 
 .insights-dashboard-page {
   display: grid;
-  row-gap: 22px;
+  row-gap: 18px;
 }
 
 .insights-dashboard-row {
   display: grid;
   column-gap: 18px;
-  row-gap: 22px;
+  row-gap: 18px;
   align-items: start;
 }
 
@@ -3424,14 +3424,14 @@ body {
 }
 
 .insight-surface-card {
-  padding: 16px 18px 14px;
+  padding: 14px 16px 12px;
 }
 
 .insight-observed-card {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 16px 18px 14px;
+  padding: 14px 16px 12px;
   background: linear-gradient(180deg, #fbfdff 0%, #f5f9fe 100%);
 }
 
@@ -4029,7 +4029,7 @@ body {
 
 @media (max-width: 680px) {
   .insights-dashboard-page {
-    row-gap: 22px;
+    row-gap: 18px;
   }
 
   .insight-observed-card,
