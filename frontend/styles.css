@@ -3394,7 +3394,7 @@ body {
 .insights-dashboard-row {
   display: grid;
   column-gap: 18px;
-  row-gap: 18px;
+  row-gap: 22px;
   align-items: start;
 }
 
