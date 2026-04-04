@@ -1132,19 +1132,23 @@ body {
   gap: 8px;
 }
 
-#overview-panel .overview-main > .card,
-#overview-panel .overview-side > .card,
-#overview-panel .overview-main > .overview-dual-grid {
-  margin: 0;
-}
-
-/* Insights workspace spacing rhythm */
+/* Insights page spacing override */
 #insights-panel.workspace-panel.active {
   gap: 18px;
 }
 
+#insights-panel .panel-header {
+  margin-bottom: 0;
+}
+
 #insights-panel .tabs {
   margin-bottom: 0;
+}
+
+#overview-panel .overview-main > .card,
+#overview-panel .overview-side > .card,
+#overview-panel .overview-main > .overview-dual-grid {
+  margin: 0;
 }
 
 /* Cards / Panels */
@@ -3391,7 +3395,7 @@ body {
   display: grid;
   column-gap: 18px;
   row-gap: 18px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .insights-dashboard-row--wide-left {
@@ -3399,7 +3403,7 @@ body {
 }
 
 .insights-dashboard-row--wide-right {
-  grid-template-columns: minmax(170px, 0.48fr) minmax(0, 2.14fr);
+  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 2.14fr);
 }
 
 .insights-dashboard-row--trajectory {
@@ -3690,25 +3694,25 @@ body {
 }
 
 .composition-card-header-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 10px;
   margin-bottom: 6px;
 }
 
 .composition-card-heading-main {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  flex: 1 1 auto;
 }
 
 .composition-card-heading {
   display: grid;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .composition-card-index {
@@ -3728,14 +3732,17 @@ body {
 
 .composition-card h4 {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.25;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .composition-card-meta {
   margin-top: 0;
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1.2;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .composition-skill-stack {
@@ -3779,13 +3786,14 @@ body {
   border: none;
   background: transparent;
   color: var(--primary);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.15;
   font-weight: 600;
   text-align: right;
   cursor: pointer;
   white-space: nowrap;
-  flex: 0 0 auto;
-  align-self: flex-start;
+  justify-self: end;
+  align-self: start;
 }
 
 .composition-feedback-link:hover {
@@ -4013,7 +4021,7 @@ body {
 
 @media (max-width: 680px) {
   .insights-dashboard-page {
-    row-gap: 16px;
+    row-gap: 18px;
   }
 
   .insight-observed-card,
