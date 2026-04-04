@@ -3406,6 +3406,14 @@ body {
   grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2.14fr);
 }
 
+.insights-dashboard-row--wide-right {
+  align-items: stretch;
+}
+
+.insights-dashboard-row--wide-right > .insight-observed-card {
+  height: 100%;
+}
+
 .insights-dashboard-row--trajectory {
   grid-template-columns: minmax(0, 1.82fr) minmax(260px, 0.78fr);
 }
