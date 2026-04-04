@@ -3399,7 +3399,7 @@ body {
 }
 
 .insights-dashboard-row--wide-left {
-  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.95fr);
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.95fr);
 }
 
 .insights-dashboard-row--wide-right {
