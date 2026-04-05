@@ -3588,8 +3588,9 @@ body {
   grid-template-columns: 28px minmax(0, 1fr);
   align-items: start;
   gap: 10px;
-  line-height: 1.45;
-  color: var(--text);
+  line-height: 1.5;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .insight-pattern-index {
@@ -4105,7 +4106,8 @@ body {
   }
 
   .insight-observed-copy,
-  .insight-observed-copy li {
+  .insight-observed-copy li,
+  .insight-numbered-list li {
     font-size: 13px;
     line-height: 1.45;
   }
