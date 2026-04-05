@@ -826,44 +826,105 @@ function splitSkillLabel(skillName) {
   return [parts.slice(0, midpoint).join(" "), parts.slice(midpoint).join(" ")];
 }
 
+let activeInsightsTooltipTrigger = null;
+let insightsTooltipDismissBound = false;
+
+function usesClickOnlyInsightsTooltips() {
+  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+function bindGlobalInsightsTooltipDismiss() {
+  if (insightsTooltipDismissBound) return;
+
+  document.addEventListener("click", event => {
+    const tooltip = document.getElementById("insights-hover-tooltip");
+    if (!tooltip || tooltip.classList.contains("hidden")) return;
+
+    if (activeInsightsTooltipTrigger && activeInsightsTooltipTrigger.contains(event.target)) {
+      return;
+    }
+
+    hideFloatingInsightsTooltip();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      hideFloatingInsightsTooltip();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    hideFloatingInsightsTooltip();
+  });
+
+  window.addEventListener("scroll", () => {
+    if (usesClickOnlyInsightsTooltips()) {
+      hideFloatingInsightsTooltip();
+    }
+  }, true);
+
+  insightsTooltipDismissBound = true;
+}
+
 function attachFloatingTooltip(element, html) {
   if (!element) return;
+
+  bindGlobalInsightsTooltipDismiss();
 
   const showFromElement = () => {
     const rect = element.getBoundingClientRect();
     const clientX = rect.left + (rect.width / 2);
     const clientY = rect.top + (rect.height / 2);
+    activeInsightsTooltipTrigger = element;
     showFloatingInsightsTooltip(html, clientX, clientY);
   };
 
-  element.addEventListener("mouseenter", event => {
-    showFloatingInsightsTooltip(html, event.clientX, event.clientY);
-  });
+  if (!usesClickOnlyInsightsTooltips()) {
+    element.addEventListener("mouseenter", event => {
+      activeInsightsTooltipTrigger = element;
+      showFloatingInsightsTooltip(html, event.clientX, event.clientY);
+    });
 
-  element.addEventListener("mousemove", event => {
-    positionFloatingInsightsTooltip(event.clientX, event.clientY);
-  });
+    element.addEventListener("mousemove", event => {
+      positionFloatingInsightsTooltip(event.clientX, event.clientY);
+    });
 
-  element.addEventListener("mouseleave", () => {
-    hideFloatingInsightsTooltip();
-  });
+    element.addEventListener("mouseleave", () => {
+      if (activeInsightsTooltipTrigger === element) {
+        hideFloatingInsightsTooltip();
+      }
+    });
+  }
 
   element.addEventListener("focus", () => {
     showFromElement();
   });
 
   element.addEventListener("blur", () => {
-    hideFloatingInsightsTooltip();
+    if (activeInsightsTooltipTrigger === element) {
+      hideFloatingInsightsTooltip();
+    }
   });
 
   element.addEventListener("click", event => {
+    if (!usesClickOnlyInsightsTooltips()) return;
+
     event.preventDefault();
+    event.stopPropagation();
+
+    const tooltip = document.getElementById("insights-hover-tooltip");
+    const isSameTriggerOpen =
+      activeInsightsTooltipTrigger === element &&
+      tooltip &&
+      !tooltip.classList.contains("hidden");
+
+    if (isSameTriggerOpen) {
+      hideFloatingInsightsTooltip();
+      return;
+    }
+
     showFromElement();
   });
-
-  element.addEventListener("touchstart", () => {
-    showFromElement();
-  }, { passive: true });
 }
 
 function showFloatingInsightsTooltip(html, clientX, clientY) {
@@ -882,6 +943,7 @@ function hideFloatingInsightsTooltip() {
 
   tooltip.classList.add("hidden");
   tooltip.setAttribute("aria-hidden", "true");
+  activeInsightsTooltipTrigger = null;
 }
 
 function positionFloatingInsightsTooltip(clientX, clientY) {
@@ -1113,17 +1175,34 @@ function renderDonutView({
     : `<div class="detail-empty-state"><p>No chart data available.</p></div>`;
 
   const svg = chart.querySelector("svg");
-  if (svg) {
-    svg.querySelectorAll("[data-segment-index]").forEach(node => {
-      const idx = Number(node.getAttribute("data-segment-index"));
-      const segment = safeSegments[idx];
-
-      node.setAttribute("title", `${segment.label}: ${segment.value}`);
-      node.addEventListener("click", () => {
-        onSelect?.(segment, idx);
-      });
-    });
-  }
+    if (svg) {
+	    svg.querySelectorAll("title").forEach(node => node.remove());
+	
+	    svg.querySelectorAll("[data-segment-index]").forEach(node => {
+	      const idx = Number(node.getAttribute("data-segment-index"));
+	      const segment = safeSegments[idx];
+	
+	      attachFloatingTooltip(
+	        node,
+	        `
+	          <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+	          <span class="insights-hover-tooltip-body">${segment.value} record${segment.value === 1 ? "" : "s"}</span>
+	        `
+	      );
+	
+	      node.addEventListener("click", event => {
+	        if (usesClickOnlyInsightsTooltips()) return;
+	        onSelect?.(segment, idx);
+	      });
+	
+	      if (usesClickOnlyInsightsTooltips()) {
+	        node.addEventListener("dblclick", event => {
+	          event.preventDefault();
+	          onSelect?.(segment, idx);
+	        });
+	      }
+	    });
+	  }
 
   legend.innerHTML = "";
 
@@ -1884,106 +1963,43 @@ function renderOpportunityTreemap(containerId, segments) {
     return "#c2def8";
   };
 
-  container.innerHTML = `
-    <div class="opportunity-treemap-grid" id="${containerId}-grid">
-      ${items.map(item => `
-        <button
-          type="button"
-          class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
-          style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
-          data-tooltip-title="${escapeHtml(item.label)}"
-          data-tooltip-group="${escapeHtml(item.group)}"
-          data-tooltip-category="${escapeHtml(item.category_label || item.category || "")}"
-          data-tooltip-priority="${escapeHtml(capitalize(item.priority || ""))}"
-          data-tooltip-dimension="${Number(item.dimension_weight || 1).toFixed(2)}"
-          data-tooltip-value="${Number(item.value_weight || 1).toFixed(2)}"
-          data-tooltip-score="${Number(item.combined_weight || 0).toFixed(2)}"
-          aria-label="${escapeHtml(item.label)}"
-          title="${escapeHtml(item.label)}"
-        ></button>
-      `).join("")}
-    </div>
-  `;
+      container.innerHTML = `
+	    <div class="opportunity-treemap-grid" id="${containerId}-grid">
+	      ${items.map(item => `
+	        <button
+	          type="button"
+	          class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
+	          style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
+	          data-tooltip-title="${escapeHtml(item.label)}"
+	          data-tooltip-group="${escapeHtml(item.group)}"
+	          data-tooltip-dimension-label="${escapeHtml(titleCase(String(item.dimension || "").replaceAll("_", " ")))}"
+	          data-tooltip-category="${escapeHtml(item.category_label || item.category || "")}"
+	          data-tooltip-priority="${escapeHtml(capitalize(item.priority || ""))}"
+	          data-tooltip-dimension="${Number(item.dimension_weight || 1).toFixed(2)}"
+	          data-tooltip-value="${Number(item.value_weight || 1).toFixed(2)}"
+	          data-tooltip-score="${Number(item.combined_weight || 0).toFixed(2)}"
+	          aria-label="${escapeHtml(item.label)}"
+	        ></button>
+	      `).join("")}
+	    </div>
+	  `;
+	
+	  container.querySelectorAll(".opportunity-treemap-tile").forEach(tile => {
+	    attachFloatingTooltip(
+	      tile,
+	      `
+	        <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
+	        <span class="insights-hover-tooltip-body">${tile.dataset.tooltipGroup || ""} · ${tile.dataset.tooltipCategory || ""}</span>
+	        <span class="insights-hover-tooltip-body">Dimension: ${tile.dataset.tooltipDimensionLabel || ""}</span>
+	        <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
+	        <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
+	        <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
+	        <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
+	      `
+	    );
+	  });
+	}
 
-  bindOpportunityTreemapTooltipDelegation(container);
-}
-
-function bindOpportunityTreemapTooltipDelegation(container) {
-  if (!container || container.dataset.treemapTooltipBound === "true") return;
-
-  const renderTooltipHtml = tile => `
-    <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
-    <span class="insights-hover-tooltip-body">${tile.dataset.tooltipGroup || ""} · ${tile.dataset.tooltipCategory || ""}</span>
-    <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
-    <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
-    <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
-    <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
-  `;
-
-  const getTile = target => target?.closest?.(".opportunity-treemap-tile");
-
-  container.addEventListener("pointerover", event => {
-    const tile = getTile(event.target);
-    if (!tile || !container.contains(tile)) return;
-
-    showFloatingInsightsTooltip(
-      renderTooltipHtml(tile),
-      event.clientX,
-      event.clientY
-    );
-  });
-
-  container.addEventListener("pointermove", event => {
-    const tile = getTile(event.target);
-    if (!tile || !container.contains(tile)) return;
-
-    positionFloatingInsightsTooltip(event.clientX, event.clientY);
-  });
-
-  container.addEventListener("pointerout", event => {
-    const fromTile = getTile(event.target);
-    const toTile = getTile(event.relatedTarget);
-
-    if (!fromTile) return;
-    if (fromTile === toTile) return;
-
-    hideFloatingInsightsTooltip();
-  });
-
-  container.addEventListener("focusin", event => {
-    const tile = getTile(event.target);
-    if (!tile) return;
-
-    const rect = tile.getBoundingClientRect();
-    showFloatingInsightsTooltip(
-      renderTooltipHtml(tile),
-      rect.left + rect.width / 2,
-      rect.top + rect.height / 2
-    );
-  });
-
-  container.addEventListener("focusout", event => {
-    const tile = getTile(event.target);
-    if (!tile) return;
-    hideFloatingInsightsTooltip();
-  });
-
-  container.addEventListener("click", event => {
-    const tile = getTile(event.target);
-    if (!tile) return;
-
-    event.preventDefault();
-
-    const rect = tile.getBoundingClientRect();
-    showFloatingInsightsTooltip(
-      renderTooltipHtml(tile),
-      rect.left + rect.width / 2,
-      rect.top + rect.height / 2
-    );
-  });
-
-  container.dataset.treemapTooltipBound = "true";
-}
 function renderRolePriorities(containerId, roles) {
   const container = document.getElementById(containerId);
   if (!container) return;
