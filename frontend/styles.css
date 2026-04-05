@@ -3404,6 +3404,8 @@ body {
 
 .insights-dashboard-row--wide-right {
   grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2.14fr);
+  margin-top: 18px;
+  margin-bottom: 18px;
 }
 
 .insights-dashboard-row--wide-right {
