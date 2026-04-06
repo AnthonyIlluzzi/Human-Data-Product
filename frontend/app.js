@@ -437,10 +437,16 @@ function renderTimeline(containerId, items) {
     return `${startText} – ${endText}`;
   };
 
+  const toneClassFor = index => {
+    if (index <= 1) return "timeline-role-tile--current";
+    if (index <= 3) return "timeline-role-tile--recent";
+    return "timeline-role-tile--foundation";
+  };
+
   container.innerHTML = `
     <div class="timeline-viz-grid timeline-viz-grid--dense">
-      ${(items || []).map(item => `
-        <article class="timeline-role-tile timeline-role-tile--dense">
+      ${(items || []).map((item, index) => `
+        <article class="timeline-role-tile timeline-role-tile--dense ${toneClassFor(index)}">
           <div class="timeline-role-meta-row">
             <span class="timeline-role-company">${escapeHtml(compactCompany(item.company))}</span>
             <span class="timeline-role-range">${escapeHtml(formatRange(item.start_date, item.end_date))}</span>
@@ -825,7 +831,7 @@ function splitSkillLabel(skillName) {
   const midpoint = Math.ceil(parts.length / 2);
   return [parts.slice(0, midpoint).join(" "), parts.slice(midpoint).join(" ")];
 }
-
+let valueDeliveryFeedbackGroups = [];
 let activeInsightsTooltipTrigger = null;
 let insightsTooltipDismissBound = false;
 
@@ -1416,6 +1422,13 @@ function titleCase(value) {
     .join(" ");
 }
 
+function feedbackGroupKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function truncateText(value, maxLength = 160) {
   const str = String(value || "");
   if (str.length <= maxLength) return str;
@@ -1649,6 +1662,8 @@ function renderValueDelivery(payload) {
   const list = document.getElementById("value-delivery-insight-list");
   const grid = document.getElementById("value-delivery-grid");
   const derivation = document.getElementById("value-delivery-derivation");
+  const feedbackTrigger = document.getElementById("value-delivery-feedback-trigger");
+
   if (!list || !grid) return;
 
   list.innerHTML = (payload.insights || []).map(item => `
@@ -1662,71 +1677,145 @@ function renderValueDelivery(payload) {
     derivation.textContent = payload.derivation || "";
   }
 
- grid.innerHTML = (payload.approaches || []).map(card => `
-  <article class="composition-card">
-    <div class="composition-card-header-row">
-      <div class="composition-card-heading-main">
-        <div class="composition-card-index">${card.index}</div>
-        <div class="composition-card-heading">
-          <h4>${escapeHtml(card.label)}</h4>
-          <div class="composition-card-meta">${card.count} linked system improvements</div>
+  const approaches = payload.approaches || [];
+
+  valueDeliveryFeedbackGroups = approaches.map(card => ({
+    key: feedbackGroupKey(card.label),
+    index: card.index,
+    label: card.label,
+    count: card.count,
+    items: card.feedback_examples || []
+  }));
+
+  if (feedbackTrigger) {
+    const hasFeedback = valueDeliveryFeedbackGroups.some(group => group.items.length);
+
+    feedbackTrigger.disabled = !hasFeedback;
+    feedbackTrigger.classList.toggle("is-disabled", !hasFeedback);
+    feedbackTrigger.onclick = () => {
+      if (!hasFeedback) return;
+      openFeedbackEvidenceModal(valueDeliveryFeedbackGroups);
+    };
+  }
+
+  grid.innerHTML = approaches.map(card => `
+    <article class="composition-card">
+      <div class="composition-card-header-row">
+        <div class="composition-card-heading-main">
+          <div class="composition-card-index">${card.index}</div>
+          <div class="composition-card-heading">
+            <h4>${escapeHtml(card.label)}</h4>
+            <div class="composition-card-meta">${card.count} linked system improvements</div>
+          </div>
         </div>
       </div>
 
-      <button
-        type="button"
-        class="composition-feedback-link"
-        data-feedback-title="${escapeHtml(card.feedback_modal_title)}"
-        data-feedback-items='${escapeHtml(JSON.stringify(card.feedback_examples || []))}'
-      >
-        ${escapeHtml(card.feedback_link_label)}
-      </button>
-    </div>
-
-    <div class="composition-skill-stack">
-      ${(card.skills || []).map(skill => `
-        <div class="composition-skill-row">
-          <div class="composition-skill-label">${escapeHtml(skill.skill_name)}</div>
-          <div class="composition-skill-bar">
-            <span style="width:${Math.max(skill.normalized, 10)}%"></span>
+      <div class="composition-skill-stack">
+        ${(card.skills || []).map((skill, skillIndex) => `
+          <div class="composition-skill-row ${skillIndex === 0 ? "is-primary" : skillIndex === 1 ? "is-secondary" : "is-supporting"}">
+            <div class="composition-skill-label">${escapeHtml(skill.skill_name)}</div>
+            <div class="composition-skill-bar">
+              <span style="width:${Math.max(skill.normalized, skillIndex === 0 ? 22 : 12)}%"></span>
+            </div>
           </div>
-        </div>
-      `).join("")}
-    </div>
-  </article>
-`).join("");
-
-  grid.querySelectorAll(".composition-feedback-link").forEach(button => {
-    button.addEventListener("click", () => {
-      const title = button.dataset.feedbackTitle || "Feedback Evidence";
-      const items = JSON.parse(button.dataset.feedbackItems || "[]");
-      openFeedbackEvidenceModal(title, items);
-    });
-  });
+        `).join("")}
+      </div>
+    </article>
+  `).join("");
 }
 
-function openFeedbackEvidenceModal(titleText, items) {
+function openFeedbackEvidenceModal(groups, activeKey = null) {
   const modal = document.getElementById("feedback-detail-modal");
   const title = document.getElementById("feedback-detail-modal-title");
   const body = document.getElementById("feedback-detail-modal-body");
   if (!modal || !title || !body) return;
 
-  title.textContent = titleText;
+  const safeGroups = (groups || []).map(group => ({
+    key: group.key,
+    index: group.index,
+    label: group.label,
+    count: group.count,
+    items: group.items || []
+  }));
 
-  body.innerHTML = items.length ? `
-    <div class="detail-card-list">
-      ${items.slice(0, 4).map(entry => `
-        <div class="feedback-quote-card">
-          <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
-          <p>${escapeHtml(entry.quote || "")}</p>
+  const activeGroup =
+    safeGroups.find(group => group.key === activeKey) ||
+    safeGroups.find(group => group.items.length > 0) ||
+    safeGroups[0];
+
+  title.textContent = "Feedback Evidence";
+
+  if (!activeGroup) {
+    body.innerHTML = `
+      <div class="detail-empty-state">
+        <h4>No feedback evidence available</h4>
+        <p>No curated feedback examples are available right now.</p>
+      </div>
+    `;
+    modal.classList.remove("hidden");
+    return;
+  }
+
+  body.innerHTML = `
+    <div class="feedback-evidence-modal">
+      <div class="feedback-evidence-intro">
+        <div class="detail-eyebrow">Curated Feedback by Approach</div>
+        <p class="detail-note">Review curated feedback evidence for each delivery approach.</p>
+      </div>
+
+      <div class="feedback-approach-toggle-row">
+        ${safeGroups.map(group => `
+          <button
+            type="button"
+            class="feedback-approach-toggle ${group.key === activeGroup.key ? "is-active" : ""}"
+            data-feedback-key="${group.key}"
+          >
+            <span class="composition-card-index">${group.index}</span>
+            <span class="feedback-approach-toggle-copy">
+              <span class="feedback-approach-toggle-label">${escapeHtml(group.label)}</span>
+              <span class="feedback-approach-toggle-meta">${group.count} linked system improvements</span>
+            </span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="feedback-evidence-active">
+        <div class="feedback-evidence-active-header">
+          <div class="feedback-evidence-active-main">
+            <span class="composition-card-index">${activeGroup.index}</span>
+            <div>
+              <h4>${escapeHtml(activeGroup.label)}</h4>
+              <p class="feedback-evidence-active-meta">Curated feedback: ${activeGroup.items.length} excerpt${activeGroup.items.length === 1 ? "" : "s"}</p>
+            </div>
+          </div>
         </div>
-      `).join("")}
-    </div>
-  ` : `
-    <div class="detail-empty-state">
-      <p>No curated feedback examples are available for this approach.</p>
+
+        ${activeGroup.items.length ? `
+          <div class="detail-card-list">
+            ${activeGroup.items.slice(0, 4).map(entry => `
+              <div class="feedback-quote-card">
+                <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+                <p>${escapeHtml(entry.quote || "")}</p>
+              </div>
+            `).join("")}
+          </div>
+        ` : `
+          <div class="detail-empty-state">
+            <h4>No curated feedback available</h4>
+            <p>No curated feedback examples are available for this approach.</p>
+          </div>
+        `}
+      </div>
     </div>
   `;
+
+  body.scrollTop = 0;
+
+  body.querySelectorAll(".feedback-approach-toggle").forEach(button => {
+    button.addEventListener("click", () => {
+      openFeedbackEvidenceModal(safeGroups, button.dataset.feedbackKey);
+    });
+  });
 
   modal.classList.remove("hidden");
 }
@@ -1858,14 +1947,36 @@ function renderValueRealization(payload) {
     cells.map(cell => [`${cell.approach_key}__${cell.impact_key}`, cell])
   );
 
+  const rowMaxScores = new Map(
+    rows.map(row => {
+      const rowScores = cols.map(col => {
+        const cell = cellMap.get(`${row.key}__${col.key}`);
+        return Number(cell?.score || 0);
+      });
+      return [row.key, Math.max(...rowScores, 0)];
+    })
+  );
+
   const intensityFor = score => {
-    if (score <= 0) return "rgba(10,110,209,0.08)";
+    if (score <= 0) return "#f3f7fc";
     const ratio = score / maxScore;
-    if (ratio >= 0.85) return "rgba(10,110,209,1)";
-    if (ratio >= 0.65) return "rgba(10,110,209,0.82)";
-    if (ratio >= 0.45) return "rgba(10,110,209,0.62)";
-    if (ratio >= 0.25) return "rgba(10,110,209,0.42)";
-    return "rgba(10,110,209,0.22)";
+    if (ratio >= 0.88) return "rgba(10,110,209,1)";
+    if (ratio >= 0.72) return "rgba(10,110,209,0.88)";
+    if (ratio >= 0.56) return "rgba(47,133,223,0.78)";
+    if (ratio >= 0.40) return "rgba(91,166,240,0.64)";
+    if (ratio >= 0.24) return "rgba(124,185,245,0.5)";
+    return "rgba(188,220,251,0.44)";
+  };
+
+  const borderFor = score => {
+    if (score <= 0) return "rgba(10,110,209,0.10)";
+    const ratio = score / maxScore;
+    if (ratio >= 0.88) return "rgba(8,84,160,0.9)";
+    if (ratio >= 0.72) return "rgba(10,110,209,0.72)";
+    if (ratio >= 0.56) return "rgba(47,133,223,0.56)";
+    if (ratio >= 0.40) return "rgba(91,166,240,0.46)";
+    if (ratio >= 0.24) return "rgba(124,185,245,0.38)";
+    return "rgba(188,220,251,0.34)";
   };
 
   container.innerHTML = `
@@ -1873,20 +1984,32 @@ function renderValueRealization(payload) {
       <div class="value-heatmap-corner">Approach</div>
       ${cols.map(col => `<div class="value-heatmap-axis value-heatmap-axis--column">${escapeHtml(col.label)}</div>`).join("")}
       ${rows.map(row => `
-        <div class="value-heatmap-axis value-heatmap-axis--row">${escapeHtml(row.label)}</div>
+        <div class="value-heatmap-axis value-heatmap-axis--row${rowMaxScores.get(row.key) > 0 ? " value-heatmap-axis--row-has-dominant" : ""}">
+          ${escapeHtml(row.label)}
+        </div>
         ${cols.map(col => {
-          const cell = cellMap.get(`${row.key}__${col.key}`) || { score: 0, factual_count: 0, project_inferred: 0, feedback_inferred: 0 };
+          const cell = cellMap.get(`${row.key}__${col.key}`) || {
+            score: 0,
+            factual_count: 0,
+            project_inferred: 0,
+            feedback_inferred: 0
+          };
+
+          const score = Number(cell.score || 0);
+          const isDominant = rowMaxScores.get(row.key) > 0 && score === rowMaxScores.get(row.key);
+
           return `
             <button
               type="button"
-              class="value-heatmap-cell"
+              class="value-heatmap-cell${isDominant ? " is-row-dominant" : ""}"
               data-heatmap-row="${escapeHtml(row.label)}"
               data-heatmap-col="${escapeHtml(col.label)}"
               data-heatmap-factual="${cell.factual_count}"
               data-heatmap-project="${cell.project_inferred}"
               data-heatmap-feedback="${cell.feedback_inferred}"
               data-heatmap-score="${cell.score}"
-              style="background:${intensityFor(cell.score)};"
+              data-heatmap-dominant="${isDominant ? "true" : "false"}"
+              style="background:${intensityFor(score)}; border-color:${borderFor(score)};"
             ></button>
           `;
         }).join("")}
@@ -1895,10 +2018,15 @@ function renderValueRealization(payload) {
   `;
 
   container.querySelectorAll(".value-heatmap-cell").forEach(cell => {
+    const dominantLine = cell.dataset.heatmapDominant === "true"
+      ? `<span class="insights-hover-tooltip-body">Primary outcome for this approach</span>`
+      : "";
+
     attachFloatingTooltip(
       cell,
       `
-        <span class="insights-hover-tooltip-title">${escapeHtml(cell.dataset.heatmapRow)} → ${escapeHtml(cell.dataset.heatmapCol)}</span>
+        <span class="insights-hover-tooltip-title">${escapeHtml(cell.dataset.heatmapRow)}: ${escapeHtml(cell.dataset.heatmapCol)}</span>
+        ${dominantLine}
         <span class="insights-hover-tooltip-body">Factual core: ${cell.dataset.heatmapFactual}</span>
         <span class="insights-hover-tooltip-body">Project inference: ${cell.dataset.heatmapProject}</span>
         <span class="insights-hover-tooltip-body">Feedback reinforcement: ${cell.dataset.heatmapFeedback}</span>
