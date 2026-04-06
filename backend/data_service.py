@@ -1049,11 +1049,142 @@ def _infer_project_impact(project):
             return impact_type
     return None
 
+SOLUTION_FEEDBACK_KEYWORDS = {
+    "capability_expansion": [
+        (3.0, r"\bself[- ]?service\b"),
+        (2.5, r"\benablement\b|\benable\b|\bempower"),
+        (2.0, r"\baccess\b|\bextension\b|\bexpand"),
+        (1.8, r"\bconfigure\b|\bconfiguration\b"),
+        (1.5, r"\bcapability\b"),
+        (1.2, r"\badoption\b"),
+    ],
+    "metadata_standardization": [
+        (3.0, r"\bmetadata\b"),
+        (2.8, r"\bgovernance\b"),
+        (2.5, r"\bsemantic\b|\btaxonomy\b"),
+        (2.2, r"\bstandard\b|\bstandardization\b|\bconsistent\b|\bconsistency\b"),
+        (2.0, r"\bschema\b|\bmodel\b|\bmodeling\b|\bstructure\b|\bstructured\b"),
+        (1.5, r"\btraceability\b|\bdefinition\b|\bnaming\b"),
+    ],
+    "workflow_optimization": [
+        (2.8, r"\bworkflow\b|\bprocess\b"),
+        (2.4, r"\bstreamlin"),
+        (2.2, r"\befficien"),
+        (2.0, r"\bdelivery\b|\boperational\b|\boperations\b"),
+        (1.8, r"\bturnaround\b|\bfriction\b"),
+        (1.5, r"\bimprove\b|\boptimization\b"),
+    ],
+    "experience_enhancement": [
+        (3.0, r"\buser experience\b|\bcustomer experience\b|\bux\b"),
+        (2.8, r"\bcustomer\b|\bclient\b|\bend user\b"),
+        (2.4, r"\busability\b|\bintuitive\b|\beasier\b|\bsimpl"),
+        (2.2, r"\bclarity\b|\bclear\b|\bvisibility\b"),
+        (2.0, r"\bdashboard\b|\breporting\b|\binsight\b|\banalytics\b"),
+        (1.6, r"\badoption\b|\bconsumption\b|\bconsumer\b"),
+    ],
+}
+
+def _linked_entity_text(conn, entity_type: str, entity_id: int) -> str:
+    cursor = conn.cursor()
+
+    if entity_type == "project":
+        cursor.execute(
+            """
+            SELECT
+                p.name,
+                p.domain,
+                p.value,
+                e.company,
+                e.role,
+                e.focus_area,
+                e.impact
+            FROM project p
+            LEFT JOIN experience e
+              ON p.experience_id = e.experience_id
+            WHERE p.project_id = ?
+            """,
+            (entity_id,),
+        )
+        row = cursor.fetchone()
+        if not row:
+            return ""
+        return " ".join([
+            row["name"] or "",
+            row["domain"] or "",
+            row["value"] or "",
+            row["company"] or "",
+            row["role"] or "",
+            row["focus_area"] or "",
+            row["impact"] or "",
+        ]).strip().lower()
+
+    if entity_type == "experience":
+        cursor.execute(
+            """
+            SELECT
+                company,
+                role,
+                domain,
+                focus_area,
+                impact
+            FROM experience
+            WHERE experience_id = ?
+            """,
+            (entity_id,),
+        )
+        row = cursor.fetchone()
+        if not row:
+            return ""
+        return " ".join([
+            row["company"] or "",
+            row["role"] or "",
+            row["domain"] or "",
+            row["focus_area"] or "",
+            row["impact"] or "",
+        ]).strip().lower()
+
+    return ""
+
+def _score_feedback_for_solution(
+    approach_key: str,
+    entry: dict,
+    linked_text: str,
+    already_used: bool = False,
+) -> float:
+    text = " ".join([
+        entry.get("quote", "") or "",
+        entry.get("theme", "") or "",
+        entry.get("source_type", "") or "",
+        linked_text or "",
+    ]).lower()
+
+    score = 0.0
+
+    for weight, pattern in SOLUTION_FEEDBACK_KEYWORDS.get(approach_key, []):
+        if re.search(pattern, text):
+            score += weight
+
+    if entry.get("viz_display_flag"):
+        score += 1.0
+
+    rank = entry.get("viz_display_rank")
+    if rank is not None:
+        score += max(0.0, 1.2 - (min(rank, 6) * 0.15))
+
+    if entry.get("entity_type") == "project":
+        score += 0.4
+
+    if already_used:
+        score -= 2.0
+
+    return round(score, 3)
+
 
 def _build_value_delivery_payload(conn, top_approaches):
     cursor = conn.cursor()
     payload = []
     insight_list = []
+    used_feedback_ids_global = set()
 
     for index, approach in enumerate(top_approaches, start=1):
         cursor.execute(
@@ -1145,7 +1276,7 @@ def _build_value_delivery_payload(conn, top_approaches):
         ]
 
         feedback_entries = []
-        if project_ids or experience_ids:
+        if raw_project_ids or raw_experience_ids:
             def ranked_feedback_query(entity_type, ids):
                 if not ids:
                     return []
@@ -1179,8 +1310,8 @@ def _build_value_delivery_payload(conn, top_approaches):
                 )
                 return rows_to_dicts(cursor.fetchall())
 
-            project_feedback = ranked_feedback_query("project", project_ids)
-            experience_feedback = ranked_feedback_query("experience", experience_ids)
+            strict_project_feedback = ranked_feedback_query("project", project_ids)
+            strict_experience_feedback = ranked_feedback_query("experience", experience_ids)
 
             seen_feedback_ids = set()
             seen_quotes = set()
@@ -1203,21 +1334,68 @@ def _build_value_delivery_payload(conn, top_approaches):
                     if len(feedback_entries) >= limit:
                         break
 
-            append_unique(project_feedback, limit=4)
+            # Tier 1: strict dominant-entity evidence first
+            append_unique(strict_project_feedback, limit=4)
 
             if len(feedback_entries) < 4:
-                append_unique(experience_feedback, limit=4)
+                append_unique(strict_experience_feedback, limit=4)
 
-            if not feedback_entries:
-                fallback_project_feedback = ranked_feedback_query("project", raw_project_ids)
-                fallback_experience_feedback = ranked_feedback_query("experience", raw_experience_ids)
+            # Tier 2: scored fallback top-up from the broader solution-linked pool
+            if len(feedback_entries) < 4:
+                fallback_candidates = (
+                    ranked_feedback_query("project", raw_project_ids)
+                    + ranked_feedback_query("experience", raw_experience_ids)
+                )
 
-                append_unique(fallback_project_feedback, limit=4)
+                scored_candidates = []
+                for entry in fallback_candidates:
+                    feedback_id = entry.get("feedback_id")
+                    quote_key = (entry.get("quote") or "").strip().lower()
 
-                if len(feedback_entries) < 4:
-                    append_unique(fallback_experience_feedback, limit=4)
+                    if feedback_id in seen_feedback_ids:
+                        continue
+                    if quote_key and quote_key in seen_quotes:
+                        continue
+
+                    linked_text = _linked_entity_text(
+                        conn,
+                        entry.get("entity_type", ""),
+                        entry.get("entity_id"),
+                    )
+
+                    relevance_score = _score_feedback_for_solution(
+                        approach["key"],
+                        entry,
+                        linked_text,
+                        already_used=feedback_id in used_feedback_ids_global,
+                    )
+
+                    if relevance_score <= 0:
+                        continue
+
+                    scored_candidates.append({
+                        **entry,
+                        "_relevance_score": relevance_score,
+                    })
+
+                scored_candidates.sort(
+                    key=lambda item: (
+                        -item["_relevance_score"],
+                        -(item.get("viz_display_flag") or 0),
+                        item.get("viz_display_rank") if item.get("viz_display_rank") is not None else 999,
+                        -(item.get("year") or 0),
+                        -(item.get("feedback_id") or 0),
+                    )
+                )
+
+                append_unique(scored_candidates, limit=4)
 
             feedback_entries = feedback_entries[:4]
+
+            for entry in feedback_entries:
+                feedback_id = entry.get("feedback_id")
+                if feedback_id is not None:
+                    used_feedback_ids_global.add(feedback_id)
 
         display_skills = [{
             "skill_name": row["skill_name"],
