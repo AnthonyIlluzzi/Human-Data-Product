@@ -992,29 +992,14 @@ body {
   flex: 0 0 auto;
 }
 
-.meta-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid #d7e7fb;
-  background: #eef4fb;
+.meta-value {
+  display: inline-block;
   color: var(--primary-dark);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-}
-
-.meta-pill::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #7ea9db;
-  flex: 0 0 auto;
 }
 
 .inline-status {
@@ -1458,7 +1443,6 @@ body {
   height: 100%;
 }
 
-.overview-main > .card:last-child,
 .overview-side > .card:last-child {
   display: flex;
   flex-direction: column;
@@ -1466,8 +1450,14 @@ body {
   height: 100%;
 }
 
+.output-port-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 #overview-panel .port-card-mini {
-  height: 100%;
+  height: auto;
 }
 
 .overview-side {
@@ -3366,6 +3356,10 @@ body {
 
   .doc-link-btn {
     width: 100%;
+  }
+
+  .output-port-grid {
+    grid-template-columns: 1fr;
   }
 }
 
