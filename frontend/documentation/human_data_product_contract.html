@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HDP Data Contract</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #f7f9fc 0%, #f2f6fb 100%);
+      color: #16202d;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #dfe7f1;
+      box-shadow: 0 8px 24px rgba(20, 38, 63, 0.08);
+    }
+
+    .doc-eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef4fb;
+      border: 1px solid #d7e7fb;
+      color: #1c4e86;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .doc-description {
+      margin: 8px 0 0;
+      color: #5c6f82;
+    }
+
+    .section-divider {
+      height: 1px;
+      margin: 28px 0 24px;
+      background: linear-gradient(90deg, rgba(44, 109, 184, 0) 0%, rgba(44, 109, 184, 0.35) 50%, rgba(44, 109, 184, 0) 100%);
+    }
+
+    h1, h2, h3 {
+      color: #1c4e86;
+    }
+
+    h1 {
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    pre {
+      background: #0f1722;
+      color: #e9f1fb;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    code {
+      background: #eef4fb;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    a {
+      color: #2c6db8;
+    }
+
+    ul {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+
+    th, td {
+      border: 1px solid #dfe7f1;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #eef4fb;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="doc-eyebrow">Overview Documentation</div>
+    <h1 id="human-data-product-contract">Human Data Product Contract</h1>
+    <p class="doc-description">Defines the structure, semantics, and guarantees of the Human Data Product across ingestion, transformation, exposure, and consumption.</p>
+
+    <div class="section-divider"></div>
+
+    <h2 id="purpose">Purpose</h2>
+    <p>Defines the structure, semantics, and guarantees of the Human Data Product.</p>
+    <p>This contract ensures consistency across:</p>
+    <ul>
+      <li>ingestion</li>
+      <li>modeling</li>
+      <li>API exposure</li>
+      <li>frontend consumption</li>
+    </ul>
+
+    <h2 id="product-overview">Product Overview</h2>
+    <p>The Human Data Product transforms structured professional signals into a set of analytical insight views representing experience patterns, platform exposure, and capability signals.</p>
+
+    <h2 id="inputs">Inputs</h2>
+    <ul>
+      <li>Structured dataset (JSON)</li>
+      <li>Platform exposure metadata</li>
+      <li>Career timeline attributes</li>
+      <li>Domain tags</li>
+    </ul>
+
+    <h2 id="transformations">Transformations</h2>
+    <ul>
+      <li>Signal aggregation</li>
+      <li>Domain normalization</li>
+      <li>Platform classification</li>
+      <li>Experience weighting</li>
+    </ul>
+
+    <h2 id="output-ports">Output Ports</h2>
+    <ul>
+      <li>Insight views</li>
+      <li>Capability signals</li>
+      <li>Operational health indicators</li>
+      <li>Platform exposure summaries</li>
+    </ul>
+
+    <h2 id="access-methods">Access Methods</h2>
+    <ul>
+      <li>REST API endpoints</li>
+      <li>Frontend dashboard</li>
+    </ul>
+
+    <h2 id="update-model">Update Model</h2>
+    <p>Manual ingestion through dataset loader.</p>
+
+    <h2 id="data-guarantees">Data Guarantees</h2>
+    <ul>
+      <li>Schema validation</li>
+      <li>Deterministic transformation logic</li>
+      <li>Stable API contract</li>
+    </ul>
+  </div>
+</body>
+</html>

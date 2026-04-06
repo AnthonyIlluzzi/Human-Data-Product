@@ -1,0 +1,2447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HDP API Documentation</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #f7f9fc 0%, #f2f6fb 100%);
+      color: #16202d;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #dfe7f1;
+      box-shadow: 0 8px 24px rgba(20, 38, 63, 0.08);
+    }
+
+    .doc-eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef4fb;
+      border: 1px solid #d7e7fb;
+      color: #1c4e86;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .doc-description {
+      margin: 8px 0 0;
+      color: #5c6f82;
+    }
+
+    .doc-meta {
+      margin: 18px 0 24px;
+      padding: 14px 16px;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .doc-meta p {
+      margin: 6px 0;
+    }
+
+    .section-divider {
+      height: 1px;
+      margin: 28px 0 24px;
+      background: linear-gradient(90deg, rgba(44, 109, 184, 0) 0%, rgba(44, 109, 184, 0.35) 50%, rgba(44, 109, 184, 0) 100%);
+    }
+
+    h1, h2, h3, h4 {
+      color: #1c4e86;
+    }
+
+    h1 {
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    pre {
+      background: #0f1722;
+      color: #e9f1fb;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+    }
+
+    code {
+      background: #eef4fb;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+    }
+
+    a {
+      color: #2c6db8;
+    }
+
+    ul {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 22px;
+    }
+
+    th, td {
+      border: 1px solid #dfe7f1;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef4fb;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="doc-eyebrow">API Workspace Documentation</div>
+    <h1>API Specifications</h1>
+    <p class="doc-description">Human Data Product – REST interface documentation for curated entities, derived analytics, and frontend consumption patterns.</p>
+
+    <div class="doc-meta">
+      <p><strong>API Docs:</strong> <a href="https://human-data-product-api.onrender.com/docs" target="_blank" rel="noopener noreferrer">View Swagger Interface</a></p>
+      <p><strong>Production Base URL:</strong> <a href="https://human-data-product-api.onrender.com" target="_blank" rel="noopener noreferrer">https://human-data-product-api.onrender.com</a></p>
+      <p><strong>Environment:</strong> Live backend service hosted on Render.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <h2 id="overview">Overview</h2>
+    <p>This API exposes curated professional data representing Anthony Illuzzi's Human Data Product. It allows consumers to query experience, projects, skills, and architectural identity through structured endpoints.</p>
+
+    <h2 id="endpoint-list">Endpoint List</h2>
+
+    <h3 id="system">System</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/health</td>
+          <td>Health check for the API service</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/product-metadata</td>
+          <td>Returns Human Data Product metadata including status, owner, and record counts</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/contact-info</td>
+          <td>Returns contact channels for the Human Data Product owner</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/summary</td>
+          <td>Returns a high-level summary of the Human Data Product including counts of experience, projects, and skills</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/identity</td>
+          <td>Returns identity information describing the Human Data Product owner</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="core-data-retrieval">Core Data Retrieval</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/experiences</td>
+          <td>Returns all experience records</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/projects</td>
+          <td>Returns all project records</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/projects/{project_id}</td>
+          <td>Returns detailed information for a specific project</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/system-improvements</td>
+          <td>Returns all system improvement records with optional filters</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/system-improvements/{improvement_id}</td>
+          <td>Returns a specific system improvement record</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/skills</td>
+          <td>Returns all skill records</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="search">Search</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/search/projects</td>
+          <td>Search projects by keyword</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="role-intelligence">Role Intelligence</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/role-preferences</td>
+          <td>Returns structured role preferences for future opportunities</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/target-opportunity</td>
+          <td>Returns synthesized target opportunity profile</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="analytics">Analytics</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/projects-by-domain</td>
+          <td>Returns project distribution by domain</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/projects-by-experience</td>
+          <td>Returns project distribution by experience</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/career-timeline</td>
+          <td>Returns career timeline data for visualization</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/skill-utilization</td>
+          <td>Returns skill utilization statistics</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/skill-cooccurrence</td>
+          <td>Returns co-occurrence counts for the most frequently applied skills</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/system-improvements-by-layer</td>
+          <td>Returns system improvement counts grouped by system layer</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/system-improvements-by-problem</td>
+          <td>Returns system improvement counts grouped by problem type</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/system-improvements-by-solution</td>
+          <td>Returns system improvement counts grouped by solution type</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/system-improvements-by-impact</td>
+          <td>Returns system improvement counts grouped by impact type</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/system-improvements-timeline</td>
+          <td>Returns system improvement counts grouped by year-month</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/project-system-improvements/{project_id}</td>
+          <td>Returns system improvements associated with a specific project</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/experience-system-improvements/{experience_id}</td>
+          <td>Returns system improvements associated with a specific experience</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/feedback-themes</td>
+          <td>Returns aggregated feedback themes</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/skill-projects/{skill_id}</td>
+          <td>Returns projects associated with a specific skill</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/experience-projects/{experience_id}</td>
+          <td>Returns projects associated with a specific experience</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/analytics/feedback-theme-details/{theme}</td>
+          <td>Returns detailed feedback entries for a feedback theme</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="insights">Insights</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>/insights</td>
+          <td>Returns curated insight cards for the Insights Workspace</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="data-model-overview">Data Model Overview</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Entity</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Experience</td>
+          <td>Career roles and professional positions across the timeline</td>
+        </tr>
+        <tr>
+          <td>Projects</td>
+          <td>Key initiatives and deliverables tied to specific experience</td>
+        </tr>
+        <tr>
+          <td>System_Improvement</td>
+          <td>Delivered lower-grain system changes tied to an experience and optionally to a parent project</td>
+        </tr>
+        <tr>
+          <td>Skills</td>
+          <td>Technical, architectural, and leadership capabilities</td>
+        </tr>
+        <tr>
+          <td>Project_Skills</td>
+          <td>Many-to-many relationship mapping projects to skills</td>
+        </tr>
+        <tr>
+          <td>Feedback</td>
+          <td>Structured qualitative signals tied to experience, projects, or education</td>
+        </tr>
+        <tr>
+          <td>Role_Preference</td>
+          <td>Structured preferences for future role direction and fit</td>
+        </tr>
+        <tr>
+          <td>Principle</td>
+          <td>Personal operating principles used to reinforce insight narrative</td>
+        </tr>
+        <tr>
+          <td>Contact_Info</td>
+          <td>Public contact channels for the Human Data Product owner</td>
+        </tr>
+        <tr>
+          <td>Product_Metadata</td>
+          <td>Product-level metadata used for status, versioning, and health</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="get-health">GET /health</h2>
+    <p>Confirms the API service is operational.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>status</td>
+          <td>string</td>
+          <td>Indicates API operational status</td>
+        </tr>
+        <tr>
+          <td>service</td>
+          <td>string</td>
+          <td>Name of the running API service</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "status": "ok",
+  "service": "human-data-product-api"
+}</code></pre>
+
+    <h2 id="get-product-metadata">GET /product-metadata</h2>
+    <p>Returns high-level metadata for the Human Data Product, including status, type, version, refresh date, owner, and record counts.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>status</td>
+          <td>string</td>
+          <td>Product status</td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>string</td>
+          <td>Product classification</td>
+        </tr>
+        <tr>
+          <td>version</td>
+          <td>string</td>
+          <td>Current product version</td>
+        </tr>
+        <tr>
+          <td>last_pipeline_refresh</td>
+          <td>string</td>
+          <td>Last refresh date for the data pipeline</td>
+        </tr>
+        <tr>
+          <td>owner</td>
+          <td>string</td>
+          <td>Human Data Product owner</td>
+        </tr>
+        <tr>
+          <td>experience_count</td>
+          <td>integer</td>
+          <td>Total number of experience records</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Total number of project records</td>
+        </tr>
+        <tr>
+          <td>skill_count</td>
+          <td>integer</td>
+          <td>Total number of skill records</td>
+        </tr>
+        <tr>
+          <td>system_improvement_count</td>
+          <td>integer</td>
+          <td>Total number of system improvements</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "status": "active",
+  "type": "Human Data Product",
+  "version": "1.0",
+  "last_pipeline_refresh": "2026-03-05",
+  "owner": "Anthony Illuzzi",
+  "experience_count": 6,
+  "project_count": 16,
+  "skill_count": 33
+}</code></pre>
+
+    <h2 id="get-contact-info">GET /contact-info</h2>
+    <p>Returns contact channels associated with the Human Data Product owner.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Contact channel type</td>
+        </tr>
+        <tr>
+          <td>value</td>
+          <td>string</td>
+          <td>Contact value for the specified channel</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "category": "email",
+    "value": "Anthony.Illuzzi@yahoo.com"
+  },
+  {
+    "category": "phone",
+    "value": "6304858225"
+  },
+  {
+    "category": "linkedin",
+    "value": "https://linkedin.com/in/anthonyilluzzi"
+  },
+  {
+    "category": "location",
+    "value": "Libertyville, Illinois (Chicago Area)"
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-summary">GET /summary</h2>
+    <p>Returns a high-level summary of the Human Data Product including counts of experience, projects, skills, and system improvements.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>owner</td>
+          <td>string</td>
+          <td>Owner of the Human Data Product</td>
+        </tr>
+        <tr>
+          <td>current_role</td>
+          <td>object</td>
+          <td>Current professional role</td>
+        </tr>
+        <tr>
+          <td>current_role.company</td>
+          <td>string</td>
+          <td>Current employer</td>
+        </tr>
+        <tr>
+          <td>current_role.role</td>
+          <td>string</td>
+          <td>Current role title</td>
+        </tr>
+        <tr>
+          <td>current_role.start_date</td>
+          <td>string (date)</td>
+          <td>Start date of current role</td>
+        </tr>
+        <tr>
+          <td>experience_count</td>
+          <td>integer</td>
+          <td>Total number of experience records</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Total number of projects</td>
+        </tr>
+        <tr>
+          <td>skill_count</td>
+          <td>integer</td>
+          <td>Total number of skills</td>
+        </tr>
+        <tr>
+          <td>skill_categories</td>
+          <td>array</td>
+          <td>Breakdown of skills by category</td>
+        </tr>
+        <tr>
+          <td>skill_categories.category</td>
+          <td>string</td>
+          <td>Skill category</td>
+        </tr>
+        <tr>
+          <td>skill_categories.skill_total</td>
+          <td>integer</td>
+          <td>Number of skills in that category</td>
+        </tr>
+        <tr>
+          <td>system_improvement_count</td>
+          <td>integer</td>
+          <td>Total number of system improvements</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "owner": "Anthony Illuzzi",
+  "current_role": {
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "start_date": "2023-08-01"
+  },
+  "experience_count": 6,
+  "project_count": 16,
+  "skill_count": 33,
+  "skill_categories": [
+    {
+      "category": "capability",
+      "skill_total": 10
+    },
+    {
+      "category": "leadership",
+      "skill_total": 5
+    }
+  ]
+}</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-identity">GET /identity</h2>
+    <p>Returns the architectural identity of the Human Data Product owner.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>specialization</td>
+          <td>string</td>
+          <td>Primary professional specialization</td>
+        </tr>
+        <tr>
+          <td>core_focus_areas</td>
+          <td>array</td>
+          <td>Key professional focus areas</td>
+        </tr>
+        <tr>
+          <td>architectural_pattern</td>
+          <td>string</td>
+          <td>Conceptual pattern describing work approach</td>
+        </tr>
+        <tr>
+          <td>primary_strength</td>
+          <td>string</td>
+          <td>Key professional differentiator</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "specialization": "Enterprise Data Platforms & Analytics Enablement",
+  "core_focus_areas": [
+    "Data Platform Architecture",
+    "Analytics Enablement",
+    "Self-Service Analytics",
+    "Data Product Thinking",
+    "Metadata Modeling",
+    "Data Governance",
+    "Platform Adoption",
+    "Value Realization"
+  ],
+  "architectural_pattern": "Transform fragmented operational data into structured, trusted data products that enable scalable insight, decision intelligence, and enterprise adoption.",
+  "primary_strength": "Bridging technical architecture, analytics intelligence, and organizational platform adoption to maximize value from enterprise data ecosystems."
+}</code></pre>
+
+    <h2 id="get-experiences">GET /experiences</h2>
+    <p>Returns structured career experience entries.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Unique experience identifier</td>
+        </tr>
+        <tr>
+          <td>company</td>
+          <td>string</td>
+          <td>Organization name</td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td>string</td>
+          <td>Job title</td>
+        </tr>
+        <tr>
+          <td>start_date</td>
+          <td>string (date)</td>
+          <td>Role start date</td>
+        </tr>
+        <tr>
+          <td>end_date</td>
+          <td>string/null</td>
+          <td>Role end date (null if current)</td>
+        </tr>
+        <tr>
+          <td>domain</td>
+          <td>string</td>
+          <td>Professional domain</td>
+        </tr>
+        <tr>
+          <td>focus_area</td>
+          <td>string</td>
+          <td>Primary focus areas</td>
+        </tr>
+        <tr>
+          <td>impact</td>
+          <td>string</td>
+          <td>Summary of professional impact</td>
+        </tr>
+        <tr>
+          <td>sort_order</td>
+          <td>integer</td>
+          <td>Ordering for career chronology</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "start_date": "2025-01-01",
+    "end_date": null,
+    "domain": "Data Products / Portfolio Engineering",
+    "focus_area": "Building public-facing demonstrations of data platform + product thinking (API, SQL, governance, insights)",
+    "impact": "Created portfolio-grade artifacts that demonstrate end-to-end data product architecture and consumption patterns.",
+    "sort_order": 0
+  },
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "start_date": "2023-08-01",
+    "end_date": null,
+    "domain": "Enterprise Data Platforms",
+    "focus_area": "Analytics architecture, platform enablement, governance, product intelligence",
+    "impact": "Improved scalability and adoption through accelerators, self-service analytics, metadata governance, and data-driven roadmap execution.",
+    "sort_order": 1
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-projects">GET /projects</h2>
+    <p>Returns all projects associated with the Human Data Product.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>project_id</td>
+          <td>integer</td>
+          <td>Unique project identifier</td>
+        </tr>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Associated experience record</td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>string</td>
+          <td>Project title</td>
+        </tr>
+        <tr>
+          <td>domain</td>
+          <td>string</td>
+          <td>Project domain or category</td>
+        </tr>
+        <tr>
+          <td>value</td>
+          <td>string</td>
+          <td>Business or technical impact</td>
+        </tr>
+        <tr>
+          <td>link</td>
+          <td>string/null</td>
+          <td>Optional project reference link</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "project_id": 1001,
+    "experience_id": 1,
+    "name": "Deployment Services SKU Separation & Monetization Model",
+    "domain": "Platform Strategy / Monetization",
+    "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
+    "link": null
+  },
+  {
+    "project_id": 1002,
+    "experience_id": 1,
+    "name": "Fieldglass Integration Accelerators & Integration Objects",
+    "domain": "Integration Enablement",
+    "value": "Engineered 7 leading-practice accelerators and introduced 20 integration objects, reducing implementation effort ~10%, saving 50+ hours per deployment, accelerating production migration ~75%, and achieving an 85% usability score.",
+    "link": null
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-projects-project_id">GET /projects/{project_id}</h2>
+    <p>Returns detailed information about a specific project including associated skills.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /projects/1001</code></pre>
+
+    <h3>Path Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>project_id</td>
+          <td>integer</td>
+          <td>Unique identifier of the requested project</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>project</td>
+          <td>object</td>
+          <td>Project details</td>
+        </tr>
+        <tr>
+          <td>project.project_id</td>
+          <td>integer</td>
+          <td>Project identifier</td>
+        </tr>
+        <tr>
+          <td>project.experience_id</td>
+          <td>integer</td>
+          <td>Related experience record</td>
+        </tr>
+        <tr>
+          <td>project.name</td>
+          <td>string</td>
+          <td>Project title</td>
+        </tr>
+        <tr>
+          <td>project.domain</td>
+          <td>string</td>
+          <td>Project domain</td>
+        </tr>
+        <tr>
+          <td>project.value</td>
+          <td>string</td>
+          <td>Project description and impact</td>
+        </tr>
+        <tr>
+          <td>project.link</td>
+          <td>string/null</td>
+          <td>Optional reference link</td>
+        </tr>
+        <tr>
+          <td>associated_skills</td>
+          <td>array</td>
+          <td>Skills associated with the project</td>
+        </tr>
+        <tr>
+          <td>associated_skills.skill_id</td>
+          <td>integer</td>
+          <td>Skill identifier</td>
+        </tr>
+        <tr>
+          <td>associated_skills.skill_name</td>
+          <td>string</td>
+          <td>Skill name</td>
+        </tr>
+        <tr>
+          <td>associated_skills.category</td>
+          <td>string</td>
+          <td>Skill category</td>
+        </tr>
+        <tr>
+          <td>associated_skills.level</td>
+          <td>string</td>
+          <td>Skill proficiency level</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements</td>
+          <td>array</td>
+          <td>System improvements linked to the project</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.improvement_id</td>
+          <td>integer</td>
+          <td>System improvement identifier</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.system_layer</td>
+          <td>string</td>
+          <td>System layer</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.problem_type</td>
+          <td>string</td>
+          <td>Problem category</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.solution_type</td>
+          <td>string</td>
+          <td>Solution category</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.impact_type</td>
+          <td>string</td>
+          <td>Impact category</td>
+        </tr>
+        <tr>
+          <td>related_system_improvements.delivered_date</td>
+          <td>string</td>
+          <td>Delivery date</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "project_id": 1001,
+    "experience_id": 1,
+    "name": "Deployment Services SKU Separation & Monetization Model",
+    "domain": "Platform Strategy / Monetization",
+    "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
+    "link": null
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-system-improvements">GET /system-improvements</h2>
+    <p>Returns system improvement records. Supports optional filtering by system layer, problem type, solution type, impact type, experience, or project.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>improvement_id</td>
+          <td>integer</td>
+          <td>Unique system improvement identifier</td>
+        </tr>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Associated experience record</td>
+        </tr>
+        <tr>
+          <td>project_id</td>
+          <td>integer/null</td>
+          <td>Optional associated project</td>
+        </tr>
+        <tr>
+          <td>system_layer</td>
+          <td>string</td>
+          <td>Primary system layer affected</td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>string</td>
+          <td>Normalized description of the delivered change</td>
+        </tr>
+        <tr>
+          <td>problem_type</td>
+          <td>string</td>
+          <td>Problem category</td>
+        </tr>
+        <tr>
+          <td>solution_type</td>
+          <td>string</td>
+          <td>Solution category</td>
+        </tr>
+        <tr>
+          <td>impact_type</td>
+          <td>string</td>
+          <td>Impact category</td>
+        </tr>
+        <tr>
+          <td>delivered_date</td>
+          <td>string(date)</td>
+          <td>Delivery date</td>
+        </tr>
+        <tr>
+          <td>sort_order</td>
+          <td>integer</td>
+          <td>Ordering field</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>system_layer</td>
+          <td>string</td>
+          <td>Optional filter by system layer</td>
+        </tr>
+        <tr>
+          <td>problem_type</td>
+          <td>string</td>
+          <td>Optional filter by problem type</td>
+        </tr>
+        <tr>
+          <td>solution_type</td>
+          <td>string</td>
+          <td>Optional filter by solution type</td>
+        </tr>
+        <tr>
+          <td>impact_type</td>
+          <td>string</td>
+          <td>Optional filter by impact type</td>
+        </tr>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Optional filter by experience</td>
+        </tr>
+        <tr>
+          <td>project_id</td>
+          <td>integer</td>
+          <td>Optional filter by project</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="get-system-improvements-improvement_id">GET /system-improvements/{improvement_id}</h2>
+    <p>Returns a specific system improvement record.</p>
+
+    <h3>Path Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>improvement_id</td>
+          <td>integer</td>
+          <td>Unique identifier of the requested record</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="get-skills">GET /skills</h2>
+    <p>Returns all skills associated with the Human Data Product.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /skills?category=architecture</code></pre>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>skill_id</td>
+          <td>integer</td>
+          <td>Unique skill identifier</td>
+        </tr>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Skill classification category</td>
+        </tr>
+        <tr>
+          <td>skill_name</td>
+          <td>string</td>
+          <td>Skill name</td>
+        </tr>
+        <tr>
+          <td>level</td>
+          <td>string</td>
+          <td>Skill proficiency level</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Optional filter returning skills within a specific category</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "skill_id": 5,
+    "category": "architecture",
+    "skill_name": "Metadata Architecture",
+    "level": "advanced"
+  },
+  {
+    "skill_id": 17,
+    "category": "architecture",
+    "skill_name": "Semantic Modeling",
+    "level": "advanced"
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-search-projects-q-keyword">GET /search/projects?q={keyword}</h2>
+    <p>Searches projects by keyword.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /search/projects?q=analytics</code></pre>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>project_id</td>
+          <td>integer</td>
+          <td>Unique project identifier</td>
+        </tr>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Related experience entry</td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>string</td>
+          <td>Project title</td>
+        </tr>
+        <tr>
+          <td>domain</td>
+          <td>string</td>
+          <td>Project domain</td>
+        </tr>
+        <tr>
+          <td>value</td>
+          <td>string</td>
+          <td>Project impact description</td>
+        </tr>
+        <tr>
+          <td>link</td>
+          <td>string/null</td>
+          <td>Optional reference link</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>q</td>
+          <td>string</td>
+          <td>Yes</td>
+          <td>Keyword used to search project name, domain, or value</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "project_id": 1001,
+    "experience_id": 1,
+    "name": "Deployment Services SKU Separation & Monetization Model",
+    "domain": "Platform Strategy / Monetization",
+    "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model (~$10M annual revenue potential, internal projection).",
+    "link": null
+  },
+  {
+    "project_id": 1002,
+    "experience_id": 1,
+    "name": "Fieldglass Integration Accelerators & Integration Objects",
+    "domain": "Integration Enablement",
+    "value": "Engineered 7 leading-practice accelerators and introduced 20 integration objects, reducing implementation effort ~10%, saving 50+ hours per deployment, accelerating production migration ~75%, and achieving an 85% usability score.",
+    "link": null
+  },
+  {
+    "project_id": 1003,
+    "experience_id": 1,
+    "name": "Adoption Analytics Reporting Redesign",
+    "domain": "Product Analytics",
+    "value": "Redesigned Adoption Analytics reporting and expanded configuration coverage by 42% to enable scalable self-service insights and reduce reliance on manual analysis.",
+    "link": null
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-role-preferences">GET /role-preferences</h2>
+    <p>Returns structured role preferences for future opportunities, including dimension, category, value, and priority.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>preference_id</td>
+          <td>integer</td>
+          <td>Unique role preference identifier</td>
+        </tr>
+        <tr>
+          <td>dimension</td>
+          <td>string</td>
+          <td>Preference dimension</td>
+        </tr>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Preference grouping within the dimension</td>
+        </tr>
+        <tr>
+          <td>value</td>
+          <td>string</td>
+          <td>Preferred value</td>
+        </tr>
+        <tr>
+          <td>priority</td>
+          <td>string</td>
+          <td>Preference priority level</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>dimension</td>
+          <td>string</td>
+          <td>Optional filter for a specific preference dimension</td>
+        </tr>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Optional filter for a specific preference category</td>
+        </tr>
+        <tr>
+          <td>priority</td>
+          <td>string</td>
+          <td>Optional filter for a specific priority level</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "preference_id": 1,
+    "dimension": "work_mode",
+    "category": "flexibility",
+    "value": "Remote",
+    "priority": "high"
+  },
+  {
+    "preference_id": 2,
+    "dimension": "compensation",
+    "category": "target_range",
+    "value": "$200K+",
+    "priority": "high"
+  }
+]</code></pre>
+    <p>Note: Response may contain multiple records.</p>
+
+    <h2 id="get-target-opportunity">GET /target-opportunity</h2>
+    <p>Returns the synthesized target opportunity profile for the next best-fit role.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>summary</td>
+          <td>string</td>
+          <td>Narrative summary of target opportunity</td>
+        </tr>
+        <tr>
+          <td>target_role_types</td>
+          <td>array</td>
+          <td>Preferred role types</td>
+        </tr>
+        <tr>
+          <td>target_career_levels</td>
+          <td>array</td>
+          <td>Preferred career levels</td>
+        </tr>
+        <tr>
+          <td>preferred_work_modes</td>
+          <td>array</td>
+          <td>Preferred work arrangements</td>
+        </tr>
+        <tr>
+          <td>focus_areas</td>
+          <td>array</td>
+          <td>Preferred functional or domain focus areas</td>
+        </tr>
+        <tr>
+          <td>preferred_locations</td>
+          <td>array</td>
+          <td>Preferred geographies</td>
+        </tr>
+        <tr>
+          <td>leadership_preference</td>
+          <td>array</td>
+          <td>Leadership preference statements</td>
+        </tr>
+        <tr>
+          <td>travel_max</td>
+          <td>string</td>
+          <td>Maximum desired travel expectation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "summary": "Targeting senior platform, analytics, or data architecture roles with strong flexibility, high compensation, and manageable workload.",
+  "target_role_types": [
+    "Data Platform Architect",
+    "Analytics Architect",
+    "Solution Data Architect"
+  ],
+  "target_career_levels": [
+    "Senior",
+    "Principal",
+    "Staff"
+  ],
+  "preferred_work_modes": [
+    "Remote",
+    "Hybrid"
+  ],
+  "focus_areas": [
+    "Platform",
+    "Analytics",
+    "Data"
+  ],
+  "preferred_locations": [
+    "Remote",
+    "Chicago"
+  ],
+  "leadership_preference": [
+    "Strategic individual contributor",
+    "Small team leadership"
+  ],
+  "travel_max": "Low to moderate"
+}</code></pre>
+
+    <h2 id="get-analytics-career-timeline">GET /analytics/career-timeline</h2>
+    <p>Returns structured experience records formatted for timeline-style visualization of career progression.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Unique experience identifier</td>
+        </tr>
+        <tr>
+          <td>company</td>
+          <td>string</td>
+          <td>Organization name</td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td>string</td>
+          <td>Role title</td>
+        </tr>
+        <tr>
+          <td>start_date</td>
+          <td>string (date)</td>
+          <td>Role start date</td>
+        </tr>
+        <tr>
+          <td>end_date</td>
+          <td>string/null</td>
+          <td>Role end date, null if current</td>
+        </tr>
+        <tr>
+          <td>sort_order</td>
+          <td>integer</td>
+          <td>Ordered career sequence</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "start_date": "2025-01-01",
+    "end_date": null,
+    "sort_order": 0
+  },
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "start_date": "2023-08-01",
+    "end_date": null,
+    "sort_order": 1
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Intended for timeline or career progression visualizations.</li>
+      <li>Ordered by sort_order ascending.</li>
+    </ul>
+
+    <h2 id="get-analytics-skill-utilization">GET /analytics/skill-utilization</h2>
+    <p>Returns skill usage metrics showing how frequently each skill is associated with projects.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>skill_id</td>
+          <td>integer</td>
+          <td>Unique skill identifier</td>
+        </tr>
+        <tr>
+          <td>skill_name</td>
+          <td>string</td>
+          <td>Skill name</td>
+        </tr>
+        <tr>
+          <td>category</td>
+          <td>string</td>
+          <td>Skill category</td>
+        </tr>
+        <tr>
+          <td>level</td>
+          <td>string</td>
+          <td>Skill proficiency level</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Number of linked projects using the skill</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "skill_id": 1,
+    "skill_name": "SQL",
+    "category": "data",
+    "level": "advanced",
+    "project_count": 6
+  },
+  {
+    "skill_id": 21,
+    "skill_name": "Systems Thinking",
+    "category": "capability",
+    "level": "advanced",
+    "project_count": 4
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Useful for bar charts, ranking tables, or “most applied skills” cards.</li>
+      <li>project_count is derived from project_skill relationships.</li>
+    </ul>
+
+    <h2 id="get-analytics-skill-cooccurrence">GET /analytics/skill-cooccurrence</h2>
+    <p>Returns co-occurrence counts for the most frequently applied skills, enabling matrix-style visualization of how capabilities appear together across projects.</p>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>limit</td>
+          <td>integer</td>
+          <td>Optional number of top skills to include (default 6)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>skills</td>
+          <td>array</td>
+          <td>Top skills included in the matrix</td>
+        </tr>
+        <tr>
+          <td>skills.skill_id</td>
+          <td>integer</td>
+          <td>Skill identifier</td>
+        </tr>
+        <tr>
+          <td>skills.skill_name</td>
+          <td>string</td>
+          <td>Skill name</td>
+        </tr>
+        <tr>
+          <td>skills.category</td>
+          <td>string</td>
+          <td>Skill category</td>
+        </tr>
+        <tr>
+          <td>skills.level</td>
+          <td>string</td>
+          <td>Skill level</td>
+        </tr>
+        <tr>
+          <td>skills.project_count</td>
+          <td>integer</td>
+          <td>Number of linked projects for the skill</td>
+        </tr>
+        <tr>
+          <td>pairs</td>
+          <td>array</td>
+          <td>Pairwise co-occurrence counts between included skills</td>
+        </tr>
+        <tr>
+          <td>pairs.skill_a_id</td>
+          <td>integer</td>
+          <td>First skill identifier</td>
+        </tr>
+        <tr>
+          <td>pairs.skill_b_id</td>
+          <td>integer</td>
+          <td>Second skill identifier</td>
+        </tr>
+        <tr>
+          <td>pairs.pair_count</td>
+          <td>integer</td>
+          <td>Number of projects where both skills co-occur</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "skills": [
+    {
+      "skill_id": 1,
+      "skill_name": "SQL",
+      "category": "data",
+      "level": "advanced",
+      "project_count": 8
+    },
+    {
+      "skill_id": 16,
+      "skill_name": "Executive Communication",
+      "category": "leadership",
+      "level": "advanced",
+      "project_count": 7
+    }
+  ],
+  "pairs": [
+    {
+      "skill_a_id": 1,
+      "skill_b_id": 16,
+      "pair_count": 6
+    }
+  ]
+}</code></pre>
+
+    <h2 id="get-analytics-system-improvements-by-layer">GET /analytics/system-improvements-by-layer</h2>
+    <p>Returns grouped counts of system improvements by <code>system_layer</code>.</p>
+
+    <h2 id="get-analytics-system-improvements-by-problem">GET /analytics/system-improvements-by-problem</h2>
+    <p>Returns grouped counts of system improvements by <code>problem_type</code>.</p>
+
+    <h2 id="get-analytics-system-improvements-by-solution">GET /analytics/system-improvements-by-solution</h2>
+    <p>Returns grouped counts of system improvements by <code>solution_type</code>.</p>
+
+    <h2 id="get-analytics-system-improvements-by-impact">GET /analytics/system-improvements-by-impact</h2>
+    <p>Returns grouped counts of system improvements by <code>impact_type</code>.</p>
+
+    <h2 id="get-analytics-system-improvements-timeline">GET /analytics/system-improvements-timeline</h2>
+    <p>Returns grouped counts of system improvements by <code>year_month</code> derived from <code>delivered_date</code>.</p>
+
+    <h2 id="get-analytics-project-system-improvements-project_id">GET /analytics/project-system-improvements/{project_id}</h2>
+    <p>Returns all system improvements linked to a specific project.</p>
+
+    <h2 id="get-analytics-experience-system-improvements-experience_id">GET /analytics/experience-system-improvements/{experience_id}</h2>
+    <p>Returns all system improvements linked to a specific experience.</p>
+
+    <h2 id="get-analytics-skill-projects-skill_id">GET /analytics/skill-projects/{skill_id}</h2>
+    <p>Returns projects associated with a specific skill to support drilldown from skill utilization views.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /analytics/skill-projects/5</code></pre>
+
+    <h3>Path Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>skill_id</td>
+          <td>integer</td>
+          <td>Unique identifier of the requested skill</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>skill_id</td>
+          <td>integer</td>
+          <td>Skill identifier</td>
+        </tr>
+        <tr>
+          <td>skill_name</td>
+          <td>string</td>
+          <td>Skill name</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Total number of related projects</td>
+        </tr>
+        <tr>
+          <td>projects</td>
+          <td>array</td>
+          <td>Projects associated with the skill</td>
+        </tr>
+        <tr>
+          <td>projects.project_id</td>
+          <td>integer</td>
+          <td>Unique project identifier</td>
+        </tr>
+        <tr>
+          <td>projects.name</td>
+          <td>string</td>
+          <td>Project title</td>
+        </tr>
+        <tr>
+          <td>projects.domain</td>
+          <td>string</td>
+          <td>Project domain</td>
+        </tr>
+        <tr>
+          <td>projects.value</td>
+          <td>string</td>
+          <td>Project impact description</td>
+        </tr>
+        <tr>
+          <td>projects.experience_id</td>
+          <td>integer</td>
+          <td>Related experience record</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "skill_id": 5,
+  "skill_name": "Metadata Architecture",
+  "project_count": 2,
+  "projects": [
+    {
+      "project_id": 1003,
+      "name": "Metadata Governance Framework",
+      "domain": "Governance / Architecture",
+      "value": "Defined metadata structures and governance patterns to improve analytics scalability and consistency.",
+      "experience_id": 1
+    },
+    {
+      "project_id": 1011,
+      "name": "Semantic Model Enablement",
+      "domain": "Analytics Architecture",
+      "value": "Improved downstream reporting and trust through structured semantic modeling patterns.",
+      "experience_id": 2
+    }
+  ]
+}</code></pre>
+
+    <h2 id="get-analytics-feedback-themes">GET /analytics/feedback-themes</h2>
+    <p>Returns grouped feedback theme counts for qualitative pattern analysis.</p>
+
+    <h3>Example</h3>
+    <ul>
+      <li>GET /analytics/feedback-themes</li>
+      <li>GET /analytics/feedback-themes?source_type=manager</li>
+      <li>GET /analytics/feedback-themes?entity_type=experience</li>
+      <li>GET /analytics/feedback-themes?source_type=peer&amp;entity_type=experience</li>
+    </ul>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>theme</td>
+          <td>string</td>
+          <td>Feedback theme</td>
+        </tr>
+        <tr>
+          <td>feedback_count</td>
+          <td>integer</td>
+          <td>Number of feedback entries in that theme</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>source_type</td>
+          <td>string</td>
+          <td>No</td>
+          <td>Optional filter for feedback source, such as <code>peer</code>, <code>manager</code>, or <code>linkedin</code></td>
+        </tr>
+        <tr>
+          <td>entity_type</td>
+          <td>string</td>
+          <td>No</td>
+          <td>Optional filter for related entity type, such as <code>experience</code> or <code>education</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "theme": "collaboration",
+    "feedback_count": 3
+  },
+  {
+    "theme": "leadership",
+    "feedback_count": 3
+  },
+  {
+    "theme": "execution",
+    "feedback_count": 2
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Useful for bar charts, donut charts, or filterable feedback analysis.</li>
+      <li>Supports optional filtering by source_type and entity_type.</li>
+    </ul>
+
+    <h2 id="get-analytics-feedback-theme-details-theme">GET /analytics/feedback-theme-details/{theme}</h2>
+    <p>Returns detailed feedback entries for a specific feedback theme.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /analytics/feedback-theme-details/architecture</code></pre>
+
+    <h3>Path Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>theme</td>
+          <td>string</td>
+          <td>Feedback theme to retrieve in detail</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>theme</td>
+          <td>string</td>
+          <td>Requested feedback theme</td>
+        </tr>
+        <tr>
+          <td>entries</td>
+          <td>array</td>
+          <td>Matching feedback entries</td>
+        </tr>
+        <tr>
+          <td>entries.entity_type</td>
+          <td>string</td>
+          <td>Entity type associated with the feedback</td>
+        </tr>
+        <tr>
+          <td>entries.entity_id</td>
+          <td>integer</td>
+          <td>Identifier of the associated entity</td>
+        </tr>
+        <tr>
+          <td>entries.source_type</td>
+          <td>string</td>
+          <td>Source classification for the feedback entry</td>
+        </tr>
+        <tr>
+          <td>entries.quote</td>
+          <td>string</td>
+          <td>Detailed feedback quote or statement</td>
+        </tr>
+        <tr>
+          <td>entries.year</td>
+          <td>string</td>
+          <td>Feedback year</td>
+        </tr>
+        <tr>
+          <td>entries.viz_display_flag</td>
+          <td>boolean</td>
+          <td>Indicates whether the record is included in the curated default drilldown view</td>
+        </tr>
+        <tr>
+          <td>entries.viz_display_rank</td>
+          <td>string</td>
+          <td>Rank order within the curated subset; null for non-curated records</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "theme": "architecture",
+  "entries": [
+    {
+      "feedback_id": 40,
+      "entity_type": "experience",
+      "entity_id": 1,
+      "source_type": "manager",
+      "quote": "Your contributions in the pursuit of...",
+      "theme": "architecture",
+      "year": 2024,
+      "viz_display_flag": 1,
+      "viz_display_rank": 1
+    },
+    {
+      "feedback_id": 106,
+      "entity_type": "experience",
+      "entity_id": 4,
+      "source_type": "customer",
+      "quote": "My colleague and I have worked with your organization...",
+      "theme": "architecture",
+      "year": 2017,
+      "viz_display_flag": 1,
+      "viz_display_rank": 2
+    }
+  ]
+}</code></pre>
+
+    <h3>Notes</h3>
+    <h4 id="curated-drilldown-behavior">Curated drilldown behavior</h4>
+    <p>Theme detail responses now include presentation metadata used by the frontend.</p>
+    <ul>
+      <li>Records marked with <code>viz_display_flag = 1</code> are intended for default drilldown display</li>
+      <li><code>viz_display_rank</code> determines curated ordering</li>
+      <li>The API still returns the full set of records for the selected theme</li>
+      <li>Records are returned curated-first to support the default UI experience</li>
+    </ul>
+
+    <h2 id="get-analytics-projects-by-domain">GET /analytics/projects-by-domain</h2>
+    <p>Returns project counts grouped by domain for domain concentration analysis.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>domain</td>
+          <td>string</td>
+          <td>Project domain or category</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Number of projects in that domain</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "domain": "Platform Strategy / Monetization",
+    "project_count": 1
+  },
+  {
+    "domain": "Integration Enablement",
+    "project_count": 1
+  },
+  {
+    "domain": "Product Analytics",
+    "project_count": 1
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Useful for domain distribution charts.</li>
+      <li>Helps identify concentration of work across project areas.</li>
+    </ul>
+
+    <h2 id="get-analytics-projects-by-experience">GET /analytics/projects-by-experience</h2>
+    <p>Returns project counts grouped by experience record to show how project activity maps across career roles.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Unique experience identifier</td>
+        </tr>
+        <tr>
+          <td>company</td>
+          <td>string</td>
+          <td>Organization name</td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td>string</td>
+          <td>Role title</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Number of projects tied to that experience record</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "experience_id": 999,
+    "company": "Personal",
+    "role": "Independent / Side Projects",
+    "project_count": 2
+  },
+  {
+    "experience_id": 1,
+    "company": "SAP",
+    "role": "Senior Analytics Architect, Product Success",
+    "project_count": 8
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Useful for comparing project density across roles.</li>
+      <li>Supports “projects by role” or “experience contribution” visualizations.</li>
+    </ul>
+
+    <h2 id="get-analytics-experience-projects-experience_id">GET /analytics/experience-projects/{experience_id}</h2>
+    <p>Returns projects associated with a specific experience record to support drilldown from projects-by-experience views.</p>
+
+    <h3>Example</h3>
+    <pre><code>GET /analytics/experience-projects/1</code></pre>
+
+    <h3>Path Parameters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Unique identifier of the requested experience</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>experience_id</td>
+          <td>integer</td>
+          <td>Experience identifier</td>
+        </tr>
+        <tr>
+          <td>company</td>
+          <td>string</td>
+          <td>Organization name</td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td>string</td>
+          <td>Role title</td>
+        </tr>
+        <tr>
+          <td>project_count</td>
+          <td>integer</td>
+          <td>Total number of related projects</td>
+        </tr>
+        <tr>
+          <td>projects</td>
+          <td>array</td>
+          <td>Projects associated with the experience</td>
+        </tr>
+        <tr>
+          <td>projects.project_id</td>
+          <td>integer</td>
+          <td>Unique project identifier</td>
+        </tr>
+        <tr>
+          <td>projects.name</td>
+          <td>string</td>
+          <td>Project title</td>
+        </tr>
+        <tr>
+          <td>projects.domain</td>
+          <td>string</td>
+          <td>Project domain</td>
+        </tr>
+        <tr>
+          <td>projects.value</td>
+          <td>string</td>
+          <td>Project impact description</td>
+        </tr>
+        <tr>
+          <td>projects.link</td>
+          <td>string/null</td>
+          <td>Optional reference link</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>{
+  "experience_id": 1,
+  "company": "SAP",
+  "role": "Senior Analytics Architect, Product Success",
+  "project_count": 3,
+  "projects": [
+    {
+      "project_id": 1001,
+      "name": "Deployment Services SKU Separation & Monetization Model",
+      "domain": "Platform Strategy / Monetization",
+      "value": "Enabled separation of embedded deployment services from product SKUs to unlock scalable partner-led delivery and a new internal monetization model.",
+      "link": null
+    },
+    {
+      "project_id": 1002,
+      "name": "Fieldglass Integration Accelerators & Integration Objects",
+      "domain": "Integration Enablement",
+      "value": "Engineered accelerators and integration objects to reduce implementation effort and speed deployment migration.",
+      "link": null
+    }
+  ]
+}</code></pre>
+
+    <h2 id="get-insights">GET /insights</h2>
+    <p>Returns curated analytics and narrative insight cards derived from the Human Data Product.</p>
+
+    <h3>Response Structure</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>id</td>
+          <td>string</td>
+          <td>Unique insight identifier</td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>string</td>
+          <td>Insight card title</td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>string</td>
+          <td>Insight classification</td>
+        </tr>
+        <tr>
+          <td>summary</td>
+          <td>string</td>
+          <td>Short high-level insight statement</td>
+        </tr>
+        <tr>
+          <td>detail</td>
+          <td>string</td>
+          <td>Expanded explanation of the insight</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Query Parameters</h3>
+    <p>None</p>
+
+    <h3>Example Response</h3>
+    <pre><code>[
+  {
+    "id": "architect_operator",
+    "title": "Architect + Operator",
+    "type": "insight",
+    "summary": "Combines architectural thinking with practical execution and delivery.",
+    "detail": "Project history and capability mix show repeated platform design, enablement, analytics, and execution-oriented outcomes rather than abstract architecture alone."
+  },
+  {
+    "id": "complexity_translator",
+    "title": "Complexity Translator",
+    "type": "insight",
+    "summary": "Strength lies in turning complex systems, requests, and data into structured, understandable paths.",
+    "detail": "Architecture, systems thinking, semantic modeling, and stakeholder-oriented capabilities collectively point to an ability to translate ambiguity into action."
+  }
+]</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Intended for insight cards in the frontend.</li>
+      <li>Cards are currently curated/derived in the transformation layer and exposed through the API.</li>
+      <li>This endpoint is designed for human-friendly consumption rather than raw entity retrieval.</li>
+    </ul>
+  </div>
+</body>
+</html>

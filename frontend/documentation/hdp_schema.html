@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HDP Schema Documentation</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Inter, system-ui, sans-serif;
+      background: linear-gradient(180deg, #f7f9fc 0%, #f2f6fb 100%);
+      color: #16202d;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #dfe7f1;
+      box-shadow: 0 8px 24px rgba(20, 38, 63, 0.08);
+    }
+
+    .doc-eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef4fb;
+      border: 1px solid #d7e7fb;
+      color: #1c4e86;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .doc-description {
+      margin: 8px 0 0;
+      color: #5c6f82;
+    }
+
+    .section-divider {
+      height: 1px;
+      margin: 28px 0 24px;
+      background: linear-gradient(90deg, rgba(44, 109, 184, 0) 0%, rgba(44, 109, 184, 0.35) 50%, rgba(44, 109, 184, 0) 100%);
+    }
+
+    .doc-note {
+      margin: 16px 0 20px;
+      padding: 14px 16px;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      background: #f8fbff;
+      color: #32485f;
+    }
+
+    h1, h2, h3, h4 {
+      color: #1c4e86;
+    }
+
+    h1 {
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    pre {
+      background: #0f1722;
+      color: #e9f1fb;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+    }
+
+    code {
+      background: #eef4fb;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+    }
+
+    a {
+      color: #2c6db8;
+    }
+
+    ul {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 22px;
+    }
+
+    th, td {
+      border: 1px solid #dfe7f1;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef4fb;
+    }
+
+    .schema-image-wrap {
+      margin: 18px 0 24px;
+      padding: 12px;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      background: #fbfdff;
+    }
+
+    .schema-image-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .schema-caption {
+      margin: 10px 4px 0;
+      font-size: 13px;
+      color: #5c6f82;
+    }
+
+    .entity-intro {
+      margin-bottom: 10px;
+      color: #32485f;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="doc-eyebrow">SQL Workspace Documentation</div>
+    <h1>Human Data Product Schema</h1>
+    <p class="doc-description">Entity design, relationships, and structural patterns that model professional experience as a consumable data product.</p>
+
+    <div class="section-divider"></div>
+
+    <p>This schema models professional experience as a structured data product.</p>
+    <p><strong>Key design principles:</strong></p>
+    <ul>
+      <li>Experience represents roles held over time</li>
+      <li>Projects capture key initiatives within each role</li>
+      <li>Skills are normalized and mapped through a join table</li>
+      <li>Feedback and principles support insight generation</li>
+      <li>Metadata enables the site to behave like a real data product catalog</li>
+      <li>System improvements capture delivered lower-grain changes that show how systems were expanded, stabilized, or made easier to consume over time</li>
+    </ul>
+
+    <h2 id="modeling-approach">Modeling Approach</h2>
+    <ul>
+      <li>Normalized relational structure using SQLite</li>
+      <li>Entity-based modeling (experience, projects, skills)</li>
+      <li>Derived analytical views created via SQL</li>
+      <li>Designed for both API access and analytical querying</li>
+    </ul>
+
+    <h3 id="key-relationships">Key Relationships</h3>
+    <ul>
+      <li>experience → project</li>
+      <li>project → project_skill → skill</li>
+      <li>experience → feedback</li>
+      <li>education → feedback</li>
+      <li>project → feedback</li>
+      <li>experience → system_improvement</li>
+      <li>project → system_improvement (optional reference)</li>
+    </ul>
+    <p>Projects belong to an experience, and each project can reference multiple skills through the <code>project_skill</code> join table. System improvements belong to an experience and can optionally reference a parent project when the delivered change was part of a larger initiative.</p>
+
+    <div class="section-divider"></div>
+
+    <h2 id="entity-relationship-diagrams">Entity Relationship Diagrams</h2>
+    <p>The schema centers on professional experience as the primary domain entity. Projects and skills describe technical work, while feedback and preferences provide signals to the insight layer of the data product.</p>
+
+    <h3 id="inline-erd-mermaid">Inline ERD (Mermaid)</h3>
+    <p>The diagram below provides a lightweight, embedded view of the core relationships in the schema for quick reference within the documentation.</p>
+
+    <pre><code>%%{init: {'theme':'neutral'}}%%
+erDiagram
+  EXPERIENCE ||--o{ PROJECT : contains
+  EXPERIENCE ||--o{ SYSTEM_IMPROVEMENT : contains
+  PROJECT ||--o{ SYSTEM_IMPROVEMENT : may_reference
+  PROJECT ||--o{ PROJECT_SKILL : maps
+  SKILL ||--o{ PROJECT_SKILL : maps
+
+  %% Polymorphic feedback (enforced by loader, not DB FK constraints)
+  EXPERIENCE ||--o{ FEEDBACK : references
+  EDUCATION ||--o{ FEEDBACK : references
+  PROJECT ||--o{ FEEDBACK : references
+
+  EXPERIENCE {
+    int    experience_id PK
+    string company
+    string role
+    date   start_date
+    date   end_date
+    string domain
+    string focus_area
+    string impact
+    int    sort_order
+  }
+
+  EDUCATION {
+    int    education_id PK
+    string institution
+    string location
+    string degree
+    string field_of_study
+    string domain
+    boolean honors_flag
+    date   completion_date
+    int    sort_order
+  }
+
+  PROJECT {
+    int    project_id PK
+    int    experience_id FK
+    string name
+    string domain
+    string value
+    string link
+  }
+
+  SYSTEM_IMPROVEMENT {
+    int    improvement_id PK
+    int    experience_id FK
+    int    project_id FK
+    string system_layer
+    string description
+    string problem_type
+    string solution_type
+    string impact_type
+    date   delivered_date
+    int    sort_order
+  }
+
+  SKILL {
+    int    skill_id PK
+    string category
+    string skill_name
+    string level
+  }
+
+  CREDENTIAL {
+    int    credential_id PK
+    string type
+    string title
+    string issuer
+    date   issue_date
+    date   end_date
+    string status
+    string description
+    string link
+    int    sort_order
+  }
+
+  PROJECT_SKILL {
+    int    project_id PK, FK
+    int    skill_id PK, FK
+  }
+
+  FEEDBACK {
+    int    feedback_id PK
+    string entity_type
+    int    entity_id
+    string source_type
+    string quote
+    string theme
+    int    year
+    boolean viz_display_flag
+    int    viz_display_rank
+  }
+
+  ROLE_PREFERENCE {
+    int    preference_id PK
+    string dimension
+    string category
+    string value
+    string priority
+  }
+
+  PRINCIPLE {
+    int    principle_id PK
+    string principle_desc
+    int    sort_order
+  }
+
+  CONTACT_INFO {
+    int    contact_id PK
+    string category
+    string value
+    boolean is_public
+  }
+
+  PRODUCT_METADATA {
+    string meta_key PK
+    string meta_value
+  }</code></pre>
+
+    <h3 id="full-erd-dbdiagram">Full ERD (dbdiagram.io)</h3>
+    <p>The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid. This diagram is the authoritative visual reference for the Human Data Product schema.</p>
+
+    <div class="schema-image-wrap">
+      <img src="images/Human_Data_Product_ERD_v4.svg" alt="Human Data Product ERD" />
+      <p class="schema-caption">Full entity relationship diagram for the Human Data Product schema.</p>
+    </div>
+
+    <h2 id="database-architecture">Database Architecture</h2>
+
+    <h3 id="experience">experience</h3>
+    <p class="entity-intro">Primary domain entity representing roles over time.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>experience_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier for experience</td></tr>
+        <tr><td>company</td><td>TEXT</td><td></td><td>Company name</td></tr>
+        <tr><td>role</td><td>TEXT</td><td></td><td>Role title</td></tr>
+        <tr><td>start_date</td><td>DATE</td><td></td><td>Start date ISO YYYY-MM-DD format</td></tr>
+        <tr><td>end_date</td><td>DATE</td><td></td><td>End date (NULL if current) ISO YYYY-MM-DD format</td></tr>
+        <tr><td>domain</td><td>TEXT</td><td></td><td>Business or technology domain</td></tr>
+        <tr><td>focus_area</td><td>TEXT</td><td></td><td>Primary focus area of the role</td></tr>
+        <tr><td>impact</td><td>TEXT</td><td></td><td>Summary of impact or achievements</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Controls display order</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="education">education</h3>
+    <p class="entity-intro">Formal education history.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>education_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>institution</td><td>TEXT</td><td></td><td>School / institution name</td></tr>
+        <tr><td>location</td><td>TEXT</td><td></td><td>City, State (or Country)</td></tr>
+        <tr><td>degree</td><td>TEXT</td><td></td><td>Degree earned (e.g., BS, BA, MS)</td></tr>
+        <tr><td>field_of_study</td><td>TEXT</td><td></td><td>Major / concentration</td></tr>
+        <tr><td>domain</td><td>TEXT</td><td></td><td>Optional thematic domain (e.g., Business, Analytics)</td></tr>
+        <tr><td>honors_flag</td><td>BOOLEAN</td><td></td><td>TRUE if honors/distinction applies</td></tr>
+        <tr><td>completion_date</td><td>DATE</td><td></td><td>Graduation / completion date (use NULL if in progress) ISO YYYY-MM-DD format</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Controls display order</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="project">project</h3>
+    <p class="entity-intro">Key initiatives or work performed during an experience.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>project_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier for project</td></tr>
+        <tr><td>experience_id</td><td>INTEGER</td><td>FK</td><td>References <code>experience.experience_id</code></td></tr>
+        <tr><td>name</td><td>TEXT</td><td></td><td>Project name</td></tr>
+        <tr><td>domain</td><td>TEXT</td><td></td><td>Domain or subject area</td></tr>
+        <tr><td>value</td><td>TEXT</td><td></td><td>Description of value delivered</td></tr>
+        <tr><td>link</td><td>TEXT</td><td></td><td>Optional external reference</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="system_improvement">system_improvement</h3>
+    <p class="entity-intro">Delivered system-level changes performed within an experience, optionally linked to a larger project.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>improvement_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier for system improvement</td></tr>
+        <tr><td>experience_id</td><td>INTEGER</td><td>FK</td><td>References <code>experience.experience_id</code></td></tr>
+        <tr><td>project_id</td><td>INTEGER</td><td>FK</td><td>Optional reference to <code>project.project_id</code></td></tr>
+        <tr><td>system_layer</td><td>TEXT</td><td></td><td>Primary system layer affected (<code>data</code>, <code>workflow</code>, <code>integration</code>, <code>UI</code>, <code>governance</code>)</td></tr>
+        <tr><td>description</td><td>TEXT</td><td></td><td>Normalized description of the delivered change</td></tr>
+        <tr><td>problem_type</td><td>TEXT</td><td></td><td>Normalized problem category</td></tr>
+        <tr><td>solution_type</td><td>TEXT</td><td></td><td>Normalized solution category</td></tr>
+        <tr><td>impact_type</td><td>TEXT</td><td></td><td>Normalized impact category</td></tr>
+        <tr><td>delivered_date</td><td>DATE</td><td></td><td>Delivery date in ISO YYYY-MM-DD format</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Deterministic display / load order</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="role_preference">role_preference</h3>
+    <p class="entity-intro">Preferences describing ideal future roles.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>preference_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>dimension</td><td>TEXT</td><td></td><td>Categorical grouping axes</td></tr>
+        <tr><td>category</td><td>TEXT</td><td></td><td>Preference category (location, work_mode, domain, etc.)</td></tr>
+        <tr><td>value</td><td>TEXT</td><td></td><td>Preference value</td></tr>
+        <tr><td>priority</td><td>TEXT</td><td></td><td>Importance level (high, medium, low)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="skill">skill</h3>
+    <p class="entity-intro">Normalized skill catalog.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>skill_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>category</td><td>TEXT</td><td></td><td>Skill category (data, platform, architecture, etc.)</td></tr>
+        <tr><td>skill_name</td><td>TEXT</td><td></td><td>Skill name</td></tr>
+        <tr><td>level</td><td>TEXT</td><td></td><td>Proficiency level (beginner, intermediate, advanced, expert)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="credential">credential</h3>
+    <p class="entity-intro">Professional certifications, courses, or credentials.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>credential_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>type</td><td>TEXT</td><td></td><td>Credential type (certification, course, badge, license)</td></tr>
+        <tr><td>title</td><td>TEXT</td><td></td><td>Credential name/title</td></tr>
+        <tr><td>issuer</td><td>TEXT</td><td></td><td>Issuing organization (SAP, Microsoft, etc.)</td></tr>
+        <tr><td>issue_date</td><td>DATE</td><td></td><td>Date issued (NULL if in progress) ISO YYYY-MM-DD format</td></tr>
+        <tr><td>end_date</td><td>DATE</td><td></td><td>Expiration/end date (NULL if none) ISO YYYY-MM-DD format</td></tr>
+        <tr><td>status</td><td>TEXT</td><td></td><td>Status (active, in_progress, expired)</td></tr>
+        <tr><td>description</td><td>TEXT</td><td></td><td>Optional short description of relevance</td></tr>
+        <tr><td>link</td><td>TEXT</td><td></td><td>Optional URL (credential verification, course page, etc.)</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Controls display order</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="project_skill">project_skill</h3>
+    <p class="entity-intro">Join table mapping projects to skills.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>project_id</td><td>INTEGER</td><td>PK / FK</td><td>References <code>project.project_id</code></td></tr>
+        <tr><td>skill_id</td><td>INTEGER</td><td>PK / FK</td><td>References <code>skill.skill_id</code></td></tr>
+      </tbody>
+    </table>
+    <p><strong>Composite Primary Key:</strong> (<code>project_id</code>, <code>skill_id</code>)</p>
+    <p>This table represents a <strong>many-to-many relationship</strong> between projects and skills.</p>
+
+    <h3 id="principle">principle</h3>
+    <p class="entity-intro">Architecture or professional principles.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>principle_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>principle_desc</td><td>TEXT</td><td></td><td>Architecture or philosophy principle</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Controls display order</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="contact_info">contact_info</h3>
+    <p class="entity-intro">Contact information exposed through API.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>contact_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>category</td><td>TEXT</td><td></td><td>Contact type (email, linkedin, website)</td></tr>
+        <tr><td>value</td><td>TEXT</td><td></td><td>Contact value</td></tr>
+        <tr><td>is_public</td><td>BOOLEAN</td><td></td><td>Determines whether field is exposed in API</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="feedback">feedback</h3>
+    <p class="entity-intro">Peer or leadership feedback tied to a specific experience.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>feedback_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
+        <tr><td>entity_type</td><td>TEXT</td><td></td><td>Target entity type (experience, education, project, credential)</td></tr>
+        <tr><td>entity_id</td><td>INTEGER</td><td></td><td>Target entity id (validated by loader; not a DB-enforced FK)</td></tr>
+        <tr><td>source_type</td><td>TEXT</td><td></td><td>Source of feedback (manager, peer, stakeholder, linkedin)</td></tr>
+        <tr><td>quote</td><td>TEXT</td><td></td><td>Feedback quote (consider trimming names/private details)</td></tr>
+        <tr><td>theme</td><td>TEXT</td><td></td><td>Theme (architecture, execution, leadership, collaboration, growth, strategy)</td></tr>
+        <tr><td>year</td><td>INTEGER</td><td></td><td>Year feedback was given</td></tr>
+        <tr><td>viz_display_flag</td><td>INTEGER / BOOLEAN</td><td></td><td>Indicates whether the record is included in the curated default drilldown view</td></tr>
+        <tr><td>viz_display_rank</td><td>INTEGER</td><td></td><td>Rank order within the curated subset; null for non-curated records</td></tr>
+      </tbody>
+    </table>
+
+    <div class="doc-note">
+      <p><strong>Entity validation note</strong></p>
+      <p><code>entity_type</code> should be one of: <code>experience</code>, <code>education</code>, <code>project</code>, <code>credential</code>.</p>
+      <p><code>entity_id</code> must exist in the corresponding table. This is enforced in the <code>load_data.py</code> validation step rather than through DB-level foreign key constraints.</p>
+    </div>
+
+    <h4 id="curated-feedback-presentation-metadata">Curated feedback presentation metadata</h4>
+    <p>The feedback entity includes optional presentation metadata used by the frontend drilldown experience.</p>
+    <ul>
+      <li><code>viz_display_flag = 1</code> identifies records shown by default in theme drilldowns</li>
+      <li><code>viz_display_rank</code> controls the order of curated records</li>
+      <li>All feedback records still participate in aggregate theme counts and analytics</li>
+    </ul>
+
+    <h3 id="product_metadata">product_metadata</h3>
+    <p class="entity-intro">Metadata describing the Human Data Product.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>meta_key</td><td>TEXT</td><td>PK</td><td>Metadata key (version, product status, last refresh timestamp)</td></tr>
+        <tr><td>meta_value</td><td>TEXT</td><td></td><td>Metadata value</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

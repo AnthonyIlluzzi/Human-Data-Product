@@ -969,6 +969,11 @@ body {
   border: 1px solid #a6d9b9;
   display: inline-flex;
   align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .status-pill.muted {
@@ -981,9 +986,35 @@ body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background: var(--success);
+  background: currentColor;
   border-radius: 50%;
-  margin-right: 6px;
+  margin-right: 0;
+  flex: 0 0 auto;
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #d7e7fb;
+  background: #eef4fb;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.meta-pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7ea9db;
+  flex: 0 0 auto;
 }
 
 .inline-status {
@@ -1264,6 +1295,43 @@ body {
   justify-content: flex-start;
 }
 
+.documentation-links {
+  display: grid;
+  gap: 10px;
+}
+
+.doc-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid #d7e7fb;
+  background: linear-gradient(180deg, #fbfdff 0%, #f3f7fc 100%);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, color 0.18s ease;
+}
+
+.doc-link-btn:hover {
+  background: #eef4fb;
+  border-color: #c7d8ef;
+  color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.doc-link-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
 .section-subtext {
   margin: 0;
   color: var(--muted);
@@ -1432,16 +1500,18 @@ body {
   padding-bottom: 0;
 }
 
-.meta-row span {
+.meta-row span:first-child {
   color: var(--muted);
   min-width: 0;
   white-space: normal;
 }
 
 .meta-row strong {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
   text-align: right;
   white-space: nowrap;
-  justify-self: end;
 }
 
 .health-grid {
@@ -1450,11 +1520,12 @@ body {
 }
 
 .health-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  padding: 3px 0;
+  min-height: 42px;
+  padding: 9px 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -3291,6 +3362,10 @@ body {
 
   .catalog-grid {
     grid-template-columns: 1fr;
+  }
+
+  .doc-link-btn {
+    width: 100%;
   }
 }
 
