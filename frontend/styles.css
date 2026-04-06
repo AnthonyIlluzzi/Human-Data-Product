@@ -1972,7 +1972,7 @@ body {
 }
 
 .timeline-role-tile--current .timeline-role-title {
-  color: var(--primary-dark);
+  color: var(--text);
 }
 
 .timeline-item {
@@ -3493,8 +3493,6 @@ body {
 
 .insights-dashboard-row--wide-right {
   grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2.14fr);
-  margin-top: 18px;
-  margin-bottom: 18px;
 }
 
 .insights-dashboard-row--wide-left,
@@ -3737,13 +3735,14 @@ body {
   border: none;
   background: transparent;
   color: var(--primary);
-  font-size: 12px;
-  line-height: 1.2;
+  font-size: 13px;
+  line-height: 1.25;
   font-weight: 700;
   text-align: right;
   white-space: nowrap;
   cursor: pointer;
   transition: color 0.18s ease, opacity 0.18s ease;
+  flex: 0 0 auto;
 }
 
 .insight-header-action:hover {
