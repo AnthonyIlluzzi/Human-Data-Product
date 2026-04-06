@@ -1098,73 +1098,71 @@ def _build_value_delivery_payload(conn, top_approaches):
         )
         experience_ids = [row["experience_id"] for row in cursor.fetchall()]
 
-                feedback_entries = []
-                if project_ids or experience_ids:
-                    def ranked_feedback_query(entity_type, ids):
-                        if not ids:
-                            return []
-        
-                        placeholders = ", ".join("?" for _ in ids)
-                        cursor.execute(
-                            f"""
-                            SELECT
-                                feedback_id,
-                                source_type,
-                                quote,
-                                theme,
-                                year,
-                                viz_display_flag,
-                                viz_display_rank,
-                                entity_type,
-                                entity_id
-                            FROM feedback
-                            WHERE entity_type = ?
-                              AND entity_id IN ({placeholders})
-                            ORDER BY
-                                COALESCE(viz_display_flag, 0) DESC,
-                                CASE
-                                    WHEN COALESCE(viz_display_flag, 0) = 1 THEN COALESCE(viz_display_rank, 999)
-                                    ELSE 999
-                                END ASC,
-                                year DESC,
-                                feedback_id DESC
-                            """,
-                            [entity_type, *ids],
-                        )
-                        return rows_to_dicts(cursor.fetchall())
-        
-                    project_feedback = ranked_feedback_query("project", project_ids)
-                    experience_feedback = ranked_feedback_query("experience", experience_ids)
-        
-                    seen_feedback_ids = set()
-                    seen_quotes = set()
-        
-                    def append_unique(entries, limit=4):
-                        for entry in entries:
-                            feedback_id = entry.get("feedback_id")
-                            quote_key = (entry.get("quote") or "").strip().lower()
-        
-                            if feedback_id in seen_feedback_ids:
-                                continue
-                            if quote_key and quote_key in seen_quotes:
-                                continue
-        
-                            feedback_entries.append(entry)
-                            seen_feedback_ids.add(feedback_id)
-                            if quote_key:
-                                seen_quotes.add(quote_key)
-        
-                            if len(feedback_entries) >= limit:
-                                break
-        
-                    # Prioritize narrower, project-linked evidence first.
-                    append_unique(project_feedback, limit=4)
-        
-                    # Top up with broader experience feedback only if needed.
-                    if len(feedback_entries) < 4:
-                        append_unique(experience_feedback, limit=4)
-        
-                    feedback_entries = feedback_entries[:4]
+        feedback_entries = []
+        if project_ids or experience_ids:
+            def ranked_feedback_query(entity_type, ids):
+                if not ids:
+                    return []
+
+                placeholders = ", ".join("?" for _ in ids)
+                cursor.execute(
+                    f"""
+                    SELECT
+                        feedback_id,
+                        source_type,
+                        quote,
+                        theme,
+                        year,
+                        viz_display_flag,
+                        viz_display_rank,
+                        entity_type,
+                        entity_id
+                    FROM feedback
+                    WHERE entity_type = ?
+                      AND entity_id IN ({placeholders})
+                    ORDER BY
+                        COALESCE(viz_display_flag, 0) DESC,
+                        CASE
+                            WHEN COALESCE(viz_display_flag, 0) = 1 THEN COALESCE(viz_display_rank, 999)
+                            ELSE 999
+                        END ASC,
+                        year DESC,
+                        feedback_id DESC
+                    """,
+                    [entity_type, *ids],
+                )
+                return rows_to_dicts(cursor.fetchall())
+
+            project_feedback = ranked_feedback_query("project", project_ids)
+            experience_feedback = ranked_feedback_query("experience", experience_ids)
+
+            seen_feedback_ids = set()
+            seen_quotes = set()
+
+            def append_unique(entries, limit=4):
+                for entry in entries:
+                    feedback_id = entry.get("feedback_id")
+                    quote_key = (entry.get("quote") or "").strip().lower()
+
+                    if feedback_id in seen_feedback_ids:
+                        continue
+                    if quote_key and quote_key in seen_quotes:
+                        continue
+
+                    feedback_entries.append(entry)
+                    seen_feedback_ids.add(feedback_id)
+                    if quote_key:
+                        seen_quotes.add(quote_key)
+
+                    if len(feedback_entries) >= limit:
+                        break
+
+            append_unique(project_feedback, limit=4)
+
+            if len(feedback_entries) < 4:
+                append_unique(experience_feedback, limit=4)
+
+            feedback_entries = feedback_entries[:4]
 
         display_skills = [{
             "skill_name": row["skill_name"],
