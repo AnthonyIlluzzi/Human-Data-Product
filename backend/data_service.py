@@ -1078,6 +1078,42 @@ def _build_value_delivery_payload(conn, top_approaches):
 
         cursor.execute(
             """
+            SELECT
+                project_id,
+                solution_type,
+                COUNT(*) AS solution_count
+            FROM system_improvement
+            WHERE project_id IS NOT NULL
+            GROUP BY project_id, solution_type
+            ORDER BY project_id ASC, solution_count DESC, solution_type ASC
+            """
+        )
+        project_solution_rows = rows_to_dicts(cursor.fetchall())
+
+        dominant_project_solution = {}
+        for row in project_solution_rows:
+            dominant_project_solution.setdefault(row["project_id"], row["solution_type"])
+
+        cursor.execute(
+            """
+            SELECT
+                experience_id,
+                solution_type,
+                COUNT(*) AS solution_count
+            FROM system_improvement
+            WHERE experience_id IS NOT NULL
+            GROUP BY experience_id, solution_type
+            ORDER BY experience_id ASC, solution_count DESC, solution_type ASC
+            """
+        )
+        experience_solution_rows = rows_to_dicts(cursor.fetchall())
+
+        dominant_experience_solution = {}
+        for row in experience_solution_rows:
+            dominant_experience_solution.setdefault(row["experience_id"], row["solution_type"])
+
+        cursor.execute(
+            """
             SELECT DISTINCT project_id
             FROM system_improvement
             WHERE solution_type = ?
@@ -1085,7 +1121,12 @@ def _build_value_delivery_payload(conn, top_approaches):
             """,
             (approach["key"],),
         )
-        project_ids = [row["project_id"] for row in cursor.fetchall()]
+        raw_project_ids = [row["project_id"] for row in cursor.fetchall()]
+        project_ids = [
+            project_id
+            for project_id in raw_project_ids
+            if dominant_project_solution.get(project_id) == approach["key"]
+        ]
 
         cursor.execute(
             """
@@ -1096,7 +1137,12 @@ def _build_value_delivery_payload(conn, top_approaches):
             """,
             (approach["key"],),
         )
-        experience_ids = [row["experience_id"] for row in cursor.fetchall()]
+        raw_experience_ids = [row["experience_id"] for row in cursor.fetchall()]
+        experience_ids = [
+            experience_id
+            for experience_id in raw_experience_ids
+            if dominant_experience_solution.get(experience_id) == approach["key"]
+        ]
 
         feedback_entries = []
         if project_ids or experience_ids:
