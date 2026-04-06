@@ -2321,9 +2321,10 @@ body {
   color: var(--text);
 }
 
-.feedback-approach-toggle-meta {
-  font-size: 11px;
-  line-height: 1.2;
+.feedback-evidence-active-meta {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.42;
   color: var(--muted);
 }
 
