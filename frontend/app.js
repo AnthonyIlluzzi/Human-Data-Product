@@ -1773,7 +1773,6 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
             <span class="composition-card-index">${group.index}</span>
             <span class="feedback-approach-toggle-copy">
               <span class="feedback-approach-toggle-label">${escapeHtml(group.label)}</span>
-              <span class="feedback-approach-toggle-meta">${group.count} linked system improvements</span>
             </span>
           </button>
         `).join("")}
@@ -1785,7 +1784,6 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
             <span class="composition-card-index">${activeGroup.index}</span>
             <div>
               <h4>${escapeHtml(activeGroup.label)}</h4>
-              <p class="feedback-evidence-active-meta">Curated feedback: ${activeGroup.items.length} excerpt${activeGroup.items.length === 1 ? "" : "s"}</p>
             </div>
           </div>
         </div>
