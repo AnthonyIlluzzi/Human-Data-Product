@@ -15,6 +15,10 @@
   --radius: 16px;
   --radius-sm: 12px;
   --max-content: 1450px;
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
 }
 
 * {
@@ -290,7 +294,7 @@ body {
 .definition-catalog-grid {
   display: grid;
   grid-template-columns: minmax(280px, 30%) minmax(0, 70%);
-  gap: 18px;
+  gap: var(--space-3);
   align-items: stretch;
 }
 
@@ -430,7 +434,7 @@ body {
 
 .about-modal-content {
   display: grid;
-  gap: 18px;
+  gap: var(--space-3);
 }
 
 .about-modal-intro,
@@ -479,7 +483,7 @@ body {
 
 .contact-modal-layout {
   display: grid;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .contact-modal-card {
@@ -673,7 +677,7 @@ body {
 .viz-grid,
 .insight-grid {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .catalog-section-shell {
@@ -1116,7 +1120,7 @@ body {
 
 .workspace-panel.active {
   display: grid;
-  gap: 8px;
+  gap: var(--space-3);
   align-content: start;
 }
 
@@ -1127,14 +1131,10 @@ body {
   min-width: 0;
 }
 
-/* Overview page spacing override */
-#overview-panel.workspace-panel.active {
-  gap: 8px;
-}
-
-/* Insights page spacing override */
+/* Workspace panels inherit global spacing rhythm */
+#overview-panel.workspace-panel.active,
 #insights-panel.workspace-panel.active {
-  gap: 18px;
+  gap: var(--space-3);
 }
 
 #insights-panel .panel-header {
@@ -1379,14 +1379,14 @@ body {
 .overview-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 290px;
-  gap: 16px;
+  gap: var(--space-3);
   align-items: stretch;
 }
 
 .overview-main,
 .overview-side {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
   height: 100%;
 }
 
@@ -1756,7 +1756,7 @@ body {
 .viz-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .viz-card {
@@ -1775,7 +1775,7 @@ body {
 .viz-split-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(380px, 1.18fr);
-  gap: 14px;
+  gap: var(--space-3);
   align-items: stretch;
   min-height: 360px;
 }
@@ -1783,7 +1783,7 @@ body {
 .viz-feedback-layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  gap: 16px;
+  gap: var(--space-3);
   align-items: start;
 }
 
@@ -2273,7 +2273,7 @@ body {
 
 .feedback-evidence-modal {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .feedback-evidence-intro {
@@ -2321,9 +2321,10 @@ body {
   color: var(--text);
 }
 
-.feedback-approach-toggle-meta {
-  font-size: 11px;
-  line-height: 1.2;
+.feedback-evidence-active-meta {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.42;
   color: var(--muted);
 }
 
@@ -3477,13 +3478,13 @@ body {
 
 .insights-dashboard-page {
   display: grid;
-  row-gap: 18px;
+  row-gap: var(--space-3);
 }
 
 .insights-dashboard-row {
   display: grid;
-  column-gap: 18px;
-  row-gap: 18px;
+  column-gap: var(--space-3);
+  row-gap: var(--space-3);
   align-items: start;
 }
 
@@ -4217,7 +4218,7 @@ body {
 
 @media (max-width: 680px) {
   .insights-dashboard-page {
-    row-gap: 18px;
+    row-gap: var(--space-3);
   }
 
   .insight-observed-card,
