@@ -305,6 +305,20 @@ function bindApiWorkspace() {
   });
 }
 
+function setTextValue(elementId, value) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.textContent = value;
+}
+
+function setStatusPill(elementId, value, isMuted = false) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  el.classList.toggle("muted", isMuted);
+  el.innerHTML = `<span class="status-dot"></span>${escapeHtml(String(value))}`;
+}
+
 async function loadMetadata() {
   try {
     const metadata = await fetchJson("/product-metadata");
@@ -321,37 +335,20 @@ async function loadMetadata() {
     const versionText = document.getElementById("catalog-version-text");
     if (versionText) versionText.textContent = `Version ${version}`;
 
-    const metaStatus = document.getElementById("meta-status");
-	if (metaStatus) metaStatus.textContent = status;
-
-    const metaRefresh = document.getElementById("meta-refresh");
-    if (metaRefresh) metaRefresh.textContent = refresh;
-
-    const metaType = document.getElementById("meta-type");
-    if (metaType) metaType.textContent = type;
-
-    const metaVersion = document.getElementById("meta-version");
-    if (metaVersion) metaVersion.textContent = version;
-
-    const metaOwner = document.getElementById("meta-owner");
-    if (metaOwner) metaOwner.textContent = owner;
+    setStatusPill("meta-status", status, false);
+    setTextValue("meta-refresh", refresh);
+    setTextValue("meta-type", type);
+    setTextValue("meta-version", version);
+    setTextValue("meta-owner", owner);
 
     function applyHealthStatus(elementId, value) {
-      const el = document.getElementById(elementId);
-      if (!el) return;
-
-      el.textContent = value;
-
-      const normalized = value.toLowerCase();
-      if (
+      const normalized = String(value).toLowerCase();
+      const isHealthy =
         normalized.includes("pass") ||
         normalized.includes("active") ||
-        normalized.includes("operational")
-      ) {
-        el.classList.remove("muted");
-      } else {
-        el.classList.add("muted");
-      }
+        normalized.includes("operational");
+
+      setStatusPill(elementId, value, !isHealthy);
     }
 
     applyHealthStatus("health-schema", getMeta("schema_validation", "Pass"));
@@ -361,7 +358,6 @@ async function loadMetadata() {
     console.error("Failed to load metadata:", error);
   }
 }
-
 async function loadOverview() {
   const [summary, identity] = await Promise.all([
     fetchJson("/summary"),
