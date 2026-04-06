@@ -1208,6 +1208,15 @@ def _build_value_delivery_payload(conn, top_approaches):
             if len(feedback_entries) < 4:
                 append_unique(experience_feedback, limit=4)
 
+            if not feedback_entries:
+                fallback_project_feedback = ranked_feedback_query("project", raw_project_ids)
+                fallback_experience_feedback = ranked_feedback_query("experience", raw_experience_ids)
+
+                append_unique(fallback_project_feedback, limit=4)
+
+                if len(feedback_entries) < 4:
+                    append_unique(fallback_experience_feedback, limit=4)
+
             feedback_entries = feedback_entries[:4]
 
         display_skills = [{
