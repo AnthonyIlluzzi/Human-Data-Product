@@ -282,12 +282,12 @@
       </div>
 
       <nav class="side-nav">
-        <button class="nav-btn active" data-panel="overview-panel">Overview</button>
-        <button class="nav-btn" data-panel="sql-panel">SQL Query</button>
-        <button class="nav-btn" data-panel="api-panel">API Access</button>
-        <button class="nav-btn" data-panel="insights-panel">Insights</button>
-        <button class="nav-btn nav-modal-btn" data-modal-target="contact-modal">About the Human</button>
-      </nav>
+	    <button class="nav-btn active" data-panel="overview-panel">Overview</button>
+	    <button class="nav-btn" data-panel="insights-panel">Insights</button>
+	    <button class="nav-btn" data-panel="sql-panel">SQL Query</button>
+	    <button class="nav-btn" data-panel="api-panel">API Access</button>
+	    <button class="nav-btn nav-modal-btn" data-modal-target="contact-modal">About the Human</button>
+	  </nav>
 
       <div class="sidebar-footer">
         <button id="back-to-catalog-btn" class="btn-secondary full-width">Back to Catalog</button>
@@ -472,21 +472,21 @@
     <p class="section-subtext">Interact with the data product through its available access ports.</p>
   </div>
 
-  <div class="ports-grid">
+  <div class="output-port-grid">
+    <button class="port-card-mini interactive-port" data-panel-target="insights-panel" data-tab-target="visualizations-tab">
+      <strong>Insights</strong>
+      <p>Explore analytical views and data-derived patterns.</p>
+    </button>
+
     <button class="port-card-mini interactive-port" data-panel-target="sql-panel">
       <strong>SQL</strong>
-      <p>Explore predefined queries and schema guidance.</p>
+      <p>Query curated structures through read-only SQL.</p>
     </button>
 
     <button class="port-card-mini interactive-port" data-panel-target="api-panel">
       <strong>API</strong>
       <p>Consume raw and derived data through REST endpoints.</p>
     </button>
-
-    <button class="port-card-mini interactive-port" data-panel-target="insights-panel" data-tab-target="visualizations-tab">
-  	  <strong>Insights</strong>
-  	  <p>Explore analytical views and data-derived patterns.</p>
-	</button>
   </div>
 </div>
           </div>
@@ -498,48 +498,64 @@
               </div>
 
               <div class="metadata-grid">
-                <div class="meta-row">
-                  <span>Status</span>
-                  <strong>
-                    <span id="meta-status" class="status-pill">Loading...</span>
-                  </strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Type</span>
-                  <strong id="meta-type">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Version</span>
-                  <strong id="meta-version">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Last Pipeline Refresh</span>
-                  <strong id="meta-refresh">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Owner</span>
-                  <strong id="meta-owner">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Experience Records</span>
-                  <strong id="meta-experience-count">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Projects</span>
-                  <strong id="meta-project-count">Loading...</strong>
-                </div>
-
-                <div class="meta-row">
-                  <span>Skills</span>
-                  <strong id="meta-skill-count">Loading...</strong>
-                </div>
-              </div>
+				  <div class="meta-row">
+				    <span>Status</span>
+				    <strong>
+				      <span id="meta-status" class="status-pill">
+				        <span class="status-dot"></span>Loading...
+				      </span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Type</span>
+				    <strong>
+				      <span id="meta-type" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Version</span>
+				    <strong>
+				      <span id="meta-version" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Last Pipeline Refresh</span>
+				    <strong>
+				      <span id="meta-refresh" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Owner</span>
+				    <strong>
+				      <span id="meta-owner" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Experience Records</span>
+				    <strong>
+				      <span id="meta-experience-count" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Projects</span>
+				    <strong>
+				      <span id="meta-project-count" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				
+				  <div class="meta-row">
+				    <span>Skills</span>
+				    <strong>
+				      <span id="meta-skill-count" class="meta-pill">Loading...</span>
+				    </strong>
+				  </div>
+				</div>
             </div>
 
             <div class="card metadata-card metadata-card-compact section-card">
@@ -548,19 +564,27 @@
               </div>
 
               <div class="health-grid">
-                <div class="health-row">
-                  <span>Schema Validation</span>
-                  <span id="health-schema" class="status-pill">Loading...</span>
-                </div>
-                <div class="health-row">
-                  <span>Query Engine</span>
-                  <span id="health-query" class="status-pill">Loading...</span>
-                </div>
-                <div class="health-row">
-                  <span>API Status</span>
-                  <span id="health-api" class="status-pill">Loading...</span>
-                </div>
-              </div>
+				  <div class="health-row">
+				    <span>Schema Validation</span>
+				    <span id="health-schema" class="status-pill">
+				      <span class="status-dot"></span>Loading...
+				    </span>
+				  </div>
+				
+				  <div class="health-row">
+				    <span>Query Engine</span>
+				    <span id="health-query" class="status-pill">
+				      <span class="status-dot"></span>Loading...
+				    </span>
+				  </div>
+				
+				  <div class="health-row">
+				    <span>API Status</span>
+				    <span id="health-api" class="status-pill">
+				      <span class="status-dot"></span>Loading...
+				    </span>
+				  </div>
+				</div>
             </div>
 
 <div class="card compact-card section-card documentation-card-sidebar">
@@ -568,11 +592,22 @@
     <h3>Documentation</h3>
   </div>
 
-  <p>
-    <a href="https://raw.githubusercontent.com/AnthonyIlluzzi/Human-Data-Product/main/documentation/human_data_product_contract.md" target="_blank" rel="noopener noreferrer">
-      Data Product Contract
+  <div class="documentation-links">
+    <a
+      class="doc-link-btn"
+      href="documentation/human_data_product_contract.html"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg viewBox="0 0 24 24" class="doc-link-icon" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+        <path d="M14 3v5h5"></path>
+        <path d="M9 13h6"></path>
+        <path d="M9 17h4"></path>
+      </svg>
+      <span>View Data Contract</span>
     </a>
-  </p>
+  </div>
 </div>
           </aside>
 </div>
@@ -729,19 +764,27 @@ LIMIT 1;"
 </div>
 
         <div class="card compact-card section-card">
-          <div class="section-heading">
-            <h3>Documentation</h3>
-          </div>
-          <p>
-            <a 
-				href="https://raw.githubusercontent.com/AnthonyIlluzzi/Human-Data-Product/main/documentation/hdp_schema.md"
-				target="_blank" 
-				rel="noopener noreferrer"
-			>
-              Database Schema
-            </a>
-          </p>
-        </div>
+		  <div class="section-heading">
+		    <h3>Documentation</h3>
+		  </div>
+		
+		  <div class="documentation-links">
+		    <a
+		      class="doc-link-btn"
+		      href="documentation/hdp_schema.html"
+		      target="_blank"
+		      rel="noopener noreferrer"
+		    >
+		      <svg viewBox="0 0 24 24" class="doc-link-icon" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+		        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+		        <path d="M14 3v5h5"></path>
+		        <path d="M9 13h6"></path>
+		        <path d="M9 17h4"></path>
+		      </svg>
+		      <span>Explore Schema</span>
+		    </a>
+		  </div>
+		</div>
 
         <div class="card compact-card section-card">
           <div class="section-heading">
@@ -813,18 +856,27 @@ LIMIT 1;"
         </div>
 
         <div class="card compact-card section-card">
-          <div class="section-heading">
-            <h3>Documentation</h3>
-          </div>
-          <p>
-            <a 
-			  href="https://raw.githubusercontent.com/AnthonyIlluzzi/Human-Data-Product/main/documentation/hdp_api_specs.md"
-			  target="_blank"
-			  rel="noopener noreferrer">
-			  API Specifications
-			</a>
-          </p>
-        </div>
+		  <div class="section-heading">
+		    <h3>Documentation</h3>
+		  </div>
+		
+		  <div class="documentation-links">
+		    <a
+		      class="doc-link-btn"
+		      href="documentation/hdp_api_specs.html"
+		      target="_blank"
+		      rel="noopener noreferrer"
+		    >
+		      <svg viewBox="0 0 24 24" class="doc-link-icon" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+		        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+		        <path d="M14 3v5h5"></path>
+		        <path d="M9 13h6"></path>
+		        <path d="M9 17h4"></path>
+		      </svg>
+		      <span>View API Specs</span>
+		    </a>
+		  </div>
+		</div>
 
         <div class="card compact-card section-card">
           <div class="section-heading">
