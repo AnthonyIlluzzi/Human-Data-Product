@@ -2289,7 +2289,7 @@ body {
 
 .feedback-approach-toggle {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   width: 100%;
   padding: 10px 12px;
@@ -2309,8 +2309,8 @@ body {
 }
 
 .feedback-approach-toggle-copy {
-  display: grid;
-  gap: 2px;
+  display: flex;
+  align-items: center;
   min-width: 0;
 }
 
