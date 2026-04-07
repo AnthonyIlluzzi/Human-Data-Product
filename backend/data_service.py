@@ -18,6 +18,22 @@ def get_connection():
 def rows_to_dicts(rows):
     return [dict(row) for row in rows]
 
+def depth_label(depth: int) -> str:
+    if depth >= 4:
+        return "Expertise"
+    if depth == 3:
+        return "Emerging"
+    return "Foundational"
+
+
+def experience_label(experience: int) -> str:
+    if experience >= 3:
+        return "Extensive"
+    if experience == 2:
+        return "Applied"
+    if experience == 1:
+        return "Exposure"
+    return "Awareness"
 
 def execute_readonly_query(sql: str):
     if not sql or not sql.strip():
@@ -291,12 +307,26 @@ def get_project_detail(project_id: int):
             return None
 
         cursor.execute("""
-            SELECT s.skill_id, s.skill_name, s.category, s.level
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
+                s.notes,
+                s.source_origin
             FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
             JOIN project_skill ps
               ON s.skill_id = ps.skill_id
             WHERE ps.project_id = ?
-            ORDER BY s.skill_name
+            ORDER BY d.sort_order ASC, s.display_order ASC, s.skill_name ASC
         """, (project_id,))
         associated_skills = rows_to_dicts(cursor.fetchall())
 
@@ -325,25 +355,132 @@ def get_project_detail(project_id: int):
     }
 
 
-def get_skills(category: str | None = None):
+def get_skills(domain_id: int | None = None):
     with get_connection() as conn:
         cursor = conn.cursor()
 
-        if category:
-            cursor.execute("""
-                SELECT skill_id, category, skill_name, level
-                FROM skill
-                WHERE category = ?
-                ORDER BY skill_name
-            """, (category,))
-        else:
-            cursor.execute("""
-                SELECT skill_id, category, skill_name, level
-                FROM skill
-                ORDER BY category, skill_name
-            """)
+        sql = """
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                d.summary AS domain_summary,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
+                s.notes,
+                s.source_origin
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            WHERE 1 = 1
+        """
+        params = []
 
+        if domain_id is not None:
+            sql += " AND s.domain_id = ?"
+            params.append(domain_id)
+
+        sql += """
+            ORDER BY d.sort_order ASC, s.display_order ASC, s.skill_name ASC
+        """
+
+        cursor.execute(sql, params)
         return rows_to_dicts(cursor.fetchall())
+
+def get_skill_domains():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                d.domain_id,
+                d.domain,
+                d.sort_order,
+                d.summary,
+                COUNT(s.skill_id) AS skill_count
+            FROM skills_domain d
+            LEFT JOIN skill s
+              ON d.domain_id = s.domain_id
+            GROUP BY d.domain_id, d.domain, d.sort_order, d.summary
+            ORDER BY d.sort_order ASC, d.domain ASC
+        """)
+        return rows_to_dicts(cursor.fetchall())
+
+
+def get_capability_insights_dashboard():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                d.summary AS domain_summary,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
+                s.notes,
+                s.source_origin,
+                COUNT(ps.project_id) AS project_count
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            LEFT JOIN project_skill ps
+              ON s.skill_id = ps.skill_id
+            GROUP BY
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order,
+                d.summary,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
+                s.notes,
+                s.source_origin
+            ORDER BY d.sort_order ASC, s.display_order ASC, s.skill_name ASC
+        """)
+        skills = rows_to_dicts(cursor.fetchall())
+
+    domains_map: dict[int, dict] = {}
+
+    for skill in skills:
+        domain_id = skill["domain_id"]
+        domain_entry = domains_map.setdefault(
+            domain_id,
+            {
+                "domain_id": domain_id,
+                "domain": skill["domain"],
+                "sort_order": skill["domain_sort_order"],
+                "summary": skill["domain_summary"],
+                "skill_count": 0,
+            },
+        )
+        domain_entry["skill_count"] += 1
+        skill["depth_label"] = depth_label(skill["depth"])
+        skill["experience_label"] = experience_label(skill["experience"])
+
+    domains = sorted(
+        domains_map.values(),
+        key=lambda item: (item["sort_order"], item["domain"]),
+    )
+
+    return {
+        "domains": domains,
+        "skills": skills,
+    }
 
 
 def search_projects(query: str):
@@ -563,14 +700,32 @@ def get_skill_cooccurrence(limit: int = 6):
             SELECT
                 s.skill_id,
                 s.skill_name,
-                s.category,
-                s.level,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
                 COUNT(ps.project_id) AS project_count
             FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
             JOIN project_skill ps
               ON s.skill_id = ps.skill_id
-            GROUP BY s.skill_id, s.skill_name, s.category, s.level
-            ORDER BY project_count DESC, s.skill_name ASC
+            GROUP BY
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence
+            ORDER BY project_count DESC, d.sort_order ASC, s.display_order ASC, s.skill_name ASC
             LIMIT ?
             """,
             (limit,),
@@ -601,7 +756,9 @@ def get_skill_cooccurrence(limit: int = 6):
             (*skill_ids, *skill_ids),
         )
         pairs = rows_to_dicts(cursor.fetchall())
-
+    for row in skills:
+        row["depth_label"] = depth_label(row["depth"])
+        row["experience_label"] = experience_label(row["experience"])
     return {
         "skills": skills,
         "pairs": pairs,
@@ -612,9 +769,23 @@ def get_skill_projects(skill_id: int):
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT skill_id, skill_name, category, level
-            FROM skill
-            WHERE skill_id = ?
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
+                s.notes,
+                s.source_origin
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            WHERE s.skill_id = ?
         """, (skill_id,))
         skill = cursor.fetchone()
 
