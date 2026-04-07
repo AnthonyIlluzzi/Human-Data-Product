@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Human Data Product</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="capability-insights.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 </head>
 <body>
   <!-- Landing / Catalog Page -->
@@ -242,16 +244,6 @@
     rel="noopener noreferrer"
   >
     Download Resume
-  </a>
-
-  <a
-    class="btn-secondary link-btn"
-    href="https://capability-model.onrender.com/"
-    id="capability-model-link"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Explore Capability Model
   </a>
 
   <a
@@ -927,6 +919,7 @@ LIMIT 1;"
 
   <div class="tabs insights-tabs">
     <button class="tab-btn active" data-tab="visualizations-tab">Value Insights</button>
+    <button class="tab-btn" data-tab="capability-insights-tab">Capability Insights</button>
     <button class="tab-btn" data-tab="next-opportunity-tab">Opportunity Insights</button>
   </div>
 
@@ -1103,6 +1096,234 @@ LIMIT 1;"
     </div>
   </div>
 
+    <div id="capability-insights-tab" class="tab-panel">
+    <div class="capability-insights-page">
+      <div class="card compact-card capability-insights-intro-card">
+        <p class="eyebrow">Capability Insights</p>
+        <h3>This isn't a list of skills. It's a capability model.</h3>
+        <p class="capability-insights-intro-copy">
+          This view shows where capability is most concentrated across domains, depth, and experience.
+        </p>
+        <p class="capability-insights-intro-copy">
+          <strong>Instructions:</strong> Start with the Capability Profile to see where strengths are most concentrated. Then switch to Domain Distribution to view the full range of skills, and click any domain or chart segment to open the underlying skill matrix.
+        </p>
+      </div>
+
+      <div id="capability-orientation-overlay" class="orientation-overlay" aria-hidden="true">
+        <div class="orientation-overlay-card">
+          <p class="orientation-overlay-eyebrow">Mobile Experience</p>
+          <h2>Best viewed in landscape</h2>
+          <p>
+            Capability Insights is designed for a wider view. Rotate your phone to landscape
+            for the best interactive experience.
+          </p>
+        </div>
+      </div>
+
+      <div class="capability-workspace">
+        <section class="chart-panel capability-chart-panel">
+          <div class="chart-card capability-chart-card">
+            <div class="chart-toolbar">
+              <div class="chart-toolbar-left">
+                <button
+                  id="capability-chart-back-button"
+                  class="chart-back-button"
+                  type="button"
+                  aria-label="Back to domain overview"
+                >
+                  ← Back to Overview
+                </button>
+
+                <div class="chart-toolbar-copy">
+                  <div class="chart-title-row">
+                    <h2 id="capability-chart-title">Capability Profile by Domain</h2>
+
+                    <div class="chart-help">
+                      <button
+                        id="capability-chart-help-button"
+                        class="chart-help-button"
+                        type="button"
+                        aria-label="How to interpret this chart"
+                        aria-expanded="false"
+                        aria-controls="capability-chart-help-popover"
+                      >
+                        ?
+                      </button>
+
+                      <div
+                        id="capability-chart-help-popover"
+                        class="chart-help-popover"
+                        role="dialog"
+                        aria-hidden="true"
+                      >
+                        <p id="capability-chart-help-title" class="chart-help-title">How to read this chart</p>
+                        <div id="capability-chart-help-body" class="chart-help-body"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="capability-chart-instruction">
+                    Hover for detail. On touch devices, tap once to inspect and tap again to open the domain skill matrix.
+                  </p>
+                </div>
+              </div>
+
+              <div class="chart-toolbar-actions">
+                <div id="capability-chart-view-toggle-wrap" class="chart-view-toggle-wrap">
+                  <span class="chart-view-toggle-label">Top-Level View</span>
+                  <div id="capability-chart-view-toggle" class="chart-view-toggle"></div>
+                </div>
+
+                <div id="capability-quadrant-controls-wrap" class="quadrant-controls-wrap">
+                  <span class="quadrant-controls-label">Focus View</span>
+                  <div id="capability-quadrant-controls" class="quadrant-controls"></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="capability-chart"></div>
+            <div id="capability-chart-tooltip" class="chart-tooltip" role="dialog" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <aside class="control-panel capability-control-panel">
+          <div class="panel-card explorer-card">
+            <div class="panel-header">
+              <h2>Explore Domains</h2>
+              <p>
+                Select any domain below, or drill down directly from either top-level chart, to inspect the underlying skill matrix.
+              </p>
+            </div>
+
+            <div id="capability-explorer" class="capability-explorer"></div>
+          </div>
+
+          <div class="panel-card inventory-card">
+            <div class="panel-header panel-header-compact">
+              <h2>Skill Inventory Table</h2>
+              <p>Open a simple table view of all skills from the underlying source data.</p>
+            </div>
+
+            <button
+              id="capability-inventory-modal-open"
+              class="inventory-link-btn"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="capability-inventory-modal"
+              aria-expanded="false"
+            >
+              Open Quick Scan Table
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div
+      id="capability-inventory-modal"
+      class="inventory-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="capability-inventory-modal-title"
+      aria-hidden="true"
+    >
+      <div id="capability-inventory-modal-backdrop" class="inventory-modal-backdrop"></div>
+
+      <div class="inventory-modal-dialog">
+        <div class="inventory-modal-header">
+          <div class="inventory-modal-header-copy">
+            <p class="inventory-modal-eyebrow">Reference View</p>
+            <h2 id="capability-inventory-modal-title">Skill Inventory Table</h2>
+
+            <p class="inventory-modal-description">
+              A simple reference view of all capability records pulled directly from the Human Data Product source.
+            </p>
+
+            <div class="inventory-methodology">
+              <button
+                id="capability-scoring-help-button"
+                class="inventory-methodology-trigger"
+                type="button"
+                aria-label="How scoring works"
+                aria-expanded="false"
+                aria-controls="capability-scoring-help-popover"
+              >
+                How scoring works
+              </button>
+
+              <div
+                id="capability-scoring-help-popover"
+                class="chart-help-popover scoring-help-popover"
+                role="dialog"
+                aria-hidden="true"
+              >
+                <p class="chart-help-title">How scoring works</p>
+
+                <div class="chart-help-body scoring-help-body">
+                  <div class="scoring-help-columns">
+                    <div class="scoring-help-column">
+                      <div class="chart-help-section">
+                        <strong>Depth (1–4)</strong>
+                        <ul>
+                          <li><span class="help-number">1</span> Awareness</li>
+                          <li><span class="help-number">2</span> Foundational</li>
+                          <li><span class="help-number">3</span> Applied</li>
+                          <li><span class="help-number">4</span> Expertise</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="scoring-help-column">
+                      <div class="chart-help-section">
+                        <strong>Experience (0–3)</strong>
+                        <ul>
+                          <li><span class="help-number">0</span> Awareness only</li>
+                          <li><span class="help-number">1</span> Limited exposure</li>
+                          <li><span class="help-number">2</span> Applied repeatedly</li>
+                          <li><span class="help-number">3</span> Extensive repeated use</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="chart-help-section scoring-help-footer">
+                    Confidence reflects how strongly the score is supported by resume and portfolio evidence.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="inventory-recency">Data Snapshot: March 2026</p>
+          </div>
+
+          <button
+            id="capability-inventory-modal-close"
+            class="inventory-modal-close"
+            type="button"
+            aria-label="Close skill inventory table"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="inventory-table-wrap">
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>Skill</th>
+                <th>Depth</th>
+                <th>Experience</th>
+                <th>Confidence</th>
+              </tr>
+            </thead>
+            <tbody id="capability-inventory-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="next-opportunity-tab" class="tab-panel">
     <div class="insights-dashboard-page">
       <!-- Row 1 -->
@@ -1274,6 +1495,7 @@ LIMIT 1;"
 
   <div id="insights-hover-tooltip" class="insights-hover-tooltip hidden" aria-hidden="true"></div>
 		
+  <script src="capability-insights.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
