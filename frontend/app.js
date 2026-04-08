@@ -223,7 +223,7 @@ function activateTab(tabId) {
   document.querySelectorAll(".tab-panel").forEach(panel => {
     panel.classList.toggle("active", panel.id === tabId);
   });
-}
+
   if (tabId === "capability-insights-tab" && typeof window.refreshCapabilityInsights === "function") {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -231,6 +231,7 @@ function activateTab(tabId) {
       });
     });
   }
+}
 
 function bindOutputPorts() {
   document.querySelectorAll(".interactive-port").forEach(btn => {
@@ -842,6 +843,7 @@ function splitSkillLabel(skillName) {
 }
 let valueDeliveryFeedbackGroups = [];
 let activeInsightsTooltipTrigger = null;
+let activeInsightsTooltipBounds = null;
 let insightsTooltipDismissBound = false;
 
 function usesClickOnlyInsightsTooltips() {
@@ -881,6 +883,16 @@ function bindGlobalInsightsTooltipDismiss() {
   insightsTooltipDismissBound = true;
 }
 
+function getInsightsTooltipBounds(element) {
+  const boundedSurface =
+    element.closest(".insight-surface-card") ||
+    element.closest(".insight-observed-card") ||
+    element.closest(".card") ||
+    element.closest(".tab-panel");
+
+  return boundedSurface?.getBoundingClientRect() || null;
+}
+
 function attachFloatingTooltip(element, html) {
   if (!element) return;
 
@@ -891,16 +903,19 @@ function attachFloatingTooltip(element, html) {
     const clientX = rect.left + (rect.width / 2);
     const clientY = rect.top + (rect.height / 2);
     activeInsightsTooltipTrigger = element;
-    showFloatingInsightsTooltip(html, clientX, clientY);
+    activeInsightsTooltipBounds = getInsightsTooltipBounds(element);
+    showFloatingInsightsTooltip(html, clientX, clientY, activeInsightsTooltipBounds);
   };
 
   if (!usesClickOnlyInsightsTooltips()) {
     element.addEventListener("mouseenter", event => {
       activeInsightsTooltipTrigger = element;
-      showFloatingInsightsTooltip(html, event.clientX, event.clientY);
+      activeInsightsTooltipBounds = getInsightsTooltipBounds(element);
+      showFloatingInsightsTooltip(html, event.clientX, event.clientY, activeInsightsTooltipBounds);
     });
 
     element.addEventListener("mousemove", event => {
+      activeInsightsTooltipBounds = getInsightsTooltipBounds(element);
       positionFloatingInsightsTooltip(event.clientX, event.clientY);
     });
 
@@ -942,7 +957,7 @@ function attachFloatingTooltip(element, html) {
   });
 }
 
-function showFloatingInsightsTooltip(html, clientX, clientY) {
+function showFloatingInsightsTooltip(html, clientX, clientY, bounds = null) {
   const tooltip = document.getElementById("insights-hover-tooltip");
   if (!tooltip) return;
 
@@ -950,6 +965,8 @@ function showFloatingInsightsTooltip(html, clientX, clientY) {
   tooltip.classList.remove("hidden");
   tooltip.classList.add("is-visible");
   tooltip.setAttribute("aria-hidden", "false");
+
+  activeInsightsTooltipBounds = bounds || activeInsightsTooltipBounds;
   positionFloatingInsightsTooltip(clientX, clientY);
 }
 
@@ -961,6 +978,7 @@ function hideFloatingInsightsTooltip() {
   tooltip.classList.remove("is-visible");
   tooltip.setAttribute("aria-hidden", "true");
   activeInsightsTooltipTrigger = null;
+  activeInsightsTooltipBounds = null;
 }
 
 function positionFloatingInsightsTooltip(clientX, clientY) {
@@ -971,19 +989,31 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   const gap = 12;
   const tooltipRect = tooltip.getBoundingClientRect();
 
+  const bounds = activeInsightsTooltipBounds || {
+    left: padding,
+    top: padding,
+    right: window.innerWidth - padding,
+    bottom: window.innerHeight - padding
+  };
+
   let left = clientX + gap;
   let top = clientY + gap;
 
-  if (left + tooltipRect.width > window.innerWidth - padding) {
+  if (left + tooltipRect.width > bounds.right - 8) {
     left = clientX - tooltipRect.width - gap;
   }
 
-  if (top + tooltipRect.height > window.innerHeight - padding) {
+  if (top + tooltipRect.height > bounds.bottom - 8) {
     top = clientY - tooltipRect.height - gap;
   }
 
-  left = Math.max(padding, left);
-  top = Math.max(padding, top);
+  const minLeft = bounds.left + 8;
+  const maxLeft = Math.max(minLeft, bounds.right - tooltipRect.width - 8);
+  const minTop = bounds.top + 8;
+  const maxTop = Math.max(minTop, bounds.bottom - tooltipRect.height - 8);
+
+  left = Math.max(minLeft, Math.min(left, maxLeft));
+  top = Math.max(minTop, Math.min(top, maxTop));
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;

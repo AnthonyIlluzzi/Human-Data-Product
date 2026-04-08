@@ -9,6 +9,16 @@
     { key: "confidence", label: "High Confidence" }
   ];
 
+  const MATRIX_POINT_COLOR = "#6fa3e6";
+  const MATRIX_SELECTED_COLOR = "#0a6ed1";
+
+  const QUADRANT_RANGES = {
+    all: { x: [0.5, 4.28], y: [-0.08, 3.15] },
+    expertise: { x: [2.65, 4.15], y: [1.65, 3.1] },
+    applied: { x: [0.75, 4.15], y: [1.65, 3.1] },
+    confidence: { x: [0.75, 4.15], y: [-0.08, 3.15] }
+  };
+
   let skills = [];
   let domains = [];
   let topLevelView = VIEW_PROFILE;
@@ -290,14 +300,16 @@
 
   function getTierColor(key) {
     if (key === "high") return "#0a6ed1";
-    if (key === "moderate") return "#b4cae8";
-    return "#d7dee8";
+    if (key === "moderate") return "#c6dcfb";
+    return "#e3eaf3";
   }
 
-  function getHighlightedTierColor(key) {
-    if (key === "high") return "#0757a9";
-    if (key === "moderate") return "#8db1de";
-    return "#c6d0dc";
+  function getHighlightedTierColor() {
+    return "#0854a0";
+  }
+
+  function requiresTouchDoubleTap() {
+    return isTouchLikeDevice() && window.innerWidth <= 920;
   }
 
   function rgba(hex, alpha) {
@@ -824,48 +836,63 @@
   function positionTooltip(clientX, clientY) {
     if (!els.chartTooltip) return;
 
-    const tooltipRect = els.chartTooltip.getBoundingClientRect();
+    const chartCard = els.chart?.closest(".capability-chart-card");
     const chartRect = els.chart?.getBoundingClientRect();
+    const cardRect = chartCard?.getBoundingClientRect();
 
-    if (!chartRect) return;
+    if (!chartRect || !cardRect) return;
 
-    const isMobile = window.innerWidth <= 720;
-    const docked = isMobile || isTouchLikeDevice();
+    const tooltipRect = els.chartTooltip.getBoundingClientRect();
+    const gap = 14;
+    const padding = 12;
+    const desktopMinTop = 86;
 
-    els.chartTooltip.classList.toggle("is-docked", docked && !isMobile);
-    els.chartTooltip.classList.toggle("is-docked-mobile", isMobile);
-    els.chartTooltip.classList.toggle("is-mobile-fixed", isMobile);
+    els.chartTooltip.classList.remove("is-docked", "is-docked-mobile", "is-mobile-fixed");
+    els.chartTooltip.style.bottom = "auto";
 
-    if (isMobile) {
+    if (window.innerWidth <= 720) {
+      const mobileTop = Math.max(
+        desktopMinTop,
+        chartRect.bottom - cardRect.top - tooltipRect.height - padding
+      );
+
       els.chartTooltip.style.left = "12px";
-      els.chartTooltip.style.top = "auto";
-      els.chartTooltip.style.bottom = "12px";
+      els.chartTooltip.style.top = `${mobileTop}px`;
       return;
     }
 
-    els.chartTooltip.style.bottom = "auto";
+    const useDockedMode = requiresTouchDoubleTap() || (isTouchLikeDevice() && window.innerWidth > 720);
 
-    let left;
-    let top;
+    if (useDockedMode) {
+      const dockedTop = Math.max(
+        desktopMinTop,
+        chartRect.bottom - cardRect.top - tooltipRect.height - padding
+      );
 
-    if (docked) {
-      left = chartRect.left + 16;
-      top = chartRect.bottom - tooltipRect.height - 16;
-    } else {
-      left = clientX + 14;
-      top = clientY + 14;
-
-      if (left + tooltipRect.width > window.innerWidth - 12) {
-        left = clientX - tooltipRect.width - 14;
-      }
-
-      if (top + tooltipRect.height > window.innerHeight - 12) {
-        top = clientY - tooltipRect.height - 14;
-      }
-
-      left = clamp(left, 12, window.innerWidth - tooltipRect.width - 12);
-      top = clamp(top, 12, window.innerHeight - tooltipRect.height - 12);
+      els.chartTooltip.classList.add("is-docked");
+      els.chartTooltip.style.left = "12px";
+      els.chartTooltip.style.top = `${dockedTop}px`;
+      return;
     }
+
+    let left = clientX - cardRect.left + gap;
+    let top = clientY - cardRect.top + gap;
+
+    const minLeft = padding;
+    const maxLeft = Math.max(minLeft, cardRect.width - tooltipRect.width - padding);
+    const minTop = desktopMinTop;
+    const maxTop = Math.max(minTop, chartRect.bottom - cardRect.top - tooltipRect.height - padding);
+
+    if (left > maxLeft) {
+      left = clientX - cardRect.left - tooltipRect.width - gap;
+    }
+
+    if (top > maxTop) {
+      top = clientY - cardRect.top - tooltipRect.height - gap;
+    }
+
+    left = Math.max(minLeft, Math.min(left, maxLeft));
+    top = Math.max(minTop, Math.min(top, maxTop));
 
     els.chartTooltip.style.left = `${left}px`;
     els.chartTooltip.style.top = `${top}px`;
@@ -1040,32 +1067,63 @@
   }
 
   function renderDomainChart() {
-    const rows = [...domains];
-    const trace = {
-      type: "bar",
-      orientation: "h",
-      x: rows.map((row) => row.skill_count),
-      y: rows.map((row) => row.domain),
-      marker: {
-        color: rows.map(() => rgba("#0a6ed1", 0.92)),
-        line: {
-          color: rows.map(() => rgba("#0a6ed1", 1)),
-          width: 1
+    const rows = getDomainSummaries();
+
+    const sharedCustomData = rows.map((row) => ({
+      pointType: "distribution-domain",
+      payload: row
+    }));
+
+    const traces = [
+      {
+        type: "bar",
+        orientation: "h",
+        name: "Foundational",
+        x: rows.map((row) => row.lowCount),
+        y: rows.map((row) => row.domain),
+        customdata: sharedCustomData,
+        hoverinfo: "none",
+        marker: {
+          color: getTierColor("low"),
+          line: { width: 1, color: "#ffffff" }
         }
       },
-      customdata: rows.map((row) => ({
-        pointType: "distribution-domain",
-        payload: row
-      })),
-      hovertemplate: "<extra></extra>"
-    };
+      {
+        type: "bar",
+        orientation: "h",
+        name: "Applied",
+        x: rows.map((row) => row.moderateCount),
+        y: rows.map((row) => row.domain),
+        customdata: sharedCustomData,
+        hoverinfo: "none",
+        marker: {
+          color: getTierColor("moderate"),
+          line: { width: 1, color: "#ffffff" }
+        }
+      },
+      {
+        type: "bar",
+        orientation: "h",
+        name: "Expertise",
+        x: rows.map((row) => row.highCount),
+        y: rows.map((row) => row.domain),
+        customdata: sharedCustomData,
+        hoverinfo: "none",
+        marker: {
+          color: getTierColor("high"),
+          line: { width: 1, color: "#ffffff" }
+        }
+      }
+    ];
 
     const layout = {
+      barmode: "stack",
       height: getPlotHeight(),
-      margin: { t: 12, r: 18, b: 40, l: 170 },
+      margin: { t: 18, r: 18, b: 34, l: 170 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
+      hovermode: "closest",
       xaxis: {
         title: { text: "Number of Skills" },
         gridcolor: "rgba(19,37,63,0.08)",
@@ -1075,10 +1133,23 @@
         autorange: "reversed",
         tickfont: { size: 13 },
         automargin: true
-      }
+      },
+      annotations: [
+        {
+          xref: "paper",
+          yref: "paper",
+          x: 0,
+          y: 1.08,
+          text: "<b>Foundational</b> = depth 1–2&nbsp;&nbsp;&nbsp;<b>Applied</b> = depth 3&nbsp;&nbsp;&nbsp;<b>Expertise</b> = depth 4",
+          showarrow: false,
+          xanchor: "left",
+          yanchor: "bottom",
+          font: { size: 12, color: "#5f7289" }
+        }
+      ]
     };
 
-    Plotly.newPlot(els.chart, [trace], layout, {
+    Plotly.newPlot(els.chart, traces, layout, {
       displayModeBar: false,
       responsive: true
     }).then((graphDiv) => {
@@ -1091,12 +1162,6 @@
     const domain = getDomainById(activeDomain);
     const items = getSkillsForDomain(activeDomain);
 
-    const markerSizes = items.map((item) => (selectedPointKey === item.id ? 18 : 14));
-    const markerColors = items.map((item) => {
-      const color = getTierColor(item.profileTierKey);
-      return selectedPointKey === item.id ? getHighlightedTierColor(item.profileTierKey) : color;
-    });
-
     const trace = {
       type: "scatter",
       mode: "markers",
@@ -1107,48 +1172,113 @@
         pointType: "skill",
         payload: item
       })),
+      hoverinfo: "none",
       marker: {
-        size: markerSizes,
-        color: markerColors,
-        opacity: 0.95,
+        size: items.map((item) => (selectedPointKey === item.id ? 18 : 14)),
+        color: items.map((item) => (selectedPointKey === item.id ? MATRIX_SELECTED_COLOR : MATRIX_POINT_COLOR)),
+        opacity: 0.92,
         line: {
-          width: 1.5,
-          color: items.map((item) => rgba(getTierColor(item.profileTierKey), 0.22))
+          width: items.map((item) => (selectedPointKey === item.id ? 6 : 1.2)),
+          color: items.map((item) => (selectedPointKey === item.id ? "rgba(10, 110, 209, 0.20)" : "#ffffff"))
         }
-      },
-      hovertemplate: "<extra></extra>"
+      }
     };
+
+    const showQuadrantScaffold = activeQuadrant === "all";
 
     const layout = {
       height: getPlotHeight(),
-      margin: { t: 16, r: 22, b: 60, l: 60 },
+      margin: { t: 12, r: 22, b: 58, l: 60 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       hovermode: "closest",
+      hoverdistance: 30,
+      spikedistance: -1,
+      clickmode: "event+select",
       showlegend: false,
       xaxis: {
-        range: [0.75, 4.25],
+        range: QUADRANT_RANGES.all.x,
         tickvals: [1, 2, 3, 4],
         ticktext: ["1", "2", "3", "4"],
         title: {
-          text: "Depth",
+          text: "Depth of Understanding",
           standoff: 10
         },
+        showspikes: false,
         zeroline: false,
         gridcolor: "rgba(19,37,63,0.08)"
       },
       yaxis: {
-        range: [-0.15, 3.15],
+        range: QUADRANT_RANGES.all.y,
         tickvals: [0, 1, 2, 3],
         ticktext: ["0", "1", "2", "3"],
         title: {
-          text: "Experience",
+          text: "Practical Experience",
           standoff: 10
         },
+        showspikes: false,
         zeroline: false,
         gridcolor: "rgba(19,37,63,0.08)"
       },
-      annotations: getQuadrantAnnotations(domain)
+      shapes: showQuadrantScaffold ? [
+        {
+          type: "rect",
+          xref: "x",
+          yref: "y",
+          x0: 0.5, x1: 2.5,
+          y0: 1.5, y1: 3.15,
+          fillcolor: "rgba(95,114,137,0.035)",
+          line: { width: 0 },
+          layer: "below"
+        },
+        {
+          type: "rect",
+          xref: "x",
+          yref: "y",
+          x0: 2.5, x1: 4.28,
+          y0: 1.5, y1: 3.15,
+          fillcolor: "rgba(95,114,137,0.035)",
+          line: { width: 0 },
+          layer: "below"
+        },
+        {
+          type: "rect",
+          xref: "x",
+          yref: "y",
+          x0: 0.5, x1: 2.5,
+          y0: -0.08, y1: 1.5,
+          fillcolor: "rgba(95,114,137,0.02)",
+          line: { width: 0 },
+          layer: "below"
+        },
+        {
+          type: "rect",
+          xref: "x",
+          yref: "y",
+          x0: 2.5, x1: 4.28,
+          y0: -0.08, y1: 1.5,
+          fillcolor: "rgba(95,114,137,0.02)",
+          line: { width: 0 },
+          layer: "below"
+        },
+        {
+          type: "line",
+          xref: "x",
+          yref: "y",
+          x0: 2.5, x1: 2.5,
+          y0: -0.08, y1: 3.15,
+          line: { color: "#d2dbe7", width: 2 }
+        },
+        {
+          type: "line",
+          xref: "x",
+          yref: "y",
+          x0: 0.5, x1: 4.28,
+          y0: 1.5, y1: 1.5,
+          line: { color: "#d2dbe7", width: 2 }
+        }
+      ] : [],
+      annotations: getQuadrantAnnotations(domain, showQuadrantScaffold)
     };
 
     Plotly.newPlot(els.chart, [trace], layout, {
@@ -1159,82 +1289,93 @@
       bindSkillChartEvents(graphDiv);
     });
   }
+  function getQuadrantAnnotations(domain, showQuadrants = true) {
+    if (!showQuadrants) return [];
 
-  function getQuadrantAnnotations(domain) {
-    const title = domain ? domain.domain : "Domain";
     return [
       {
-        x: 1.15,
-        y: 3.02,
+        x: 1.5,
+        y: 2.3,
         xref: "x",
         yref: "y",
-        text: "Conceptual Strength",
+        text: "<b>Passive</b>",
         showarrow: false,
-        font: { size: 11, color: "#6a7a90" },
-        xanchor: "left",
-        yanchor: "bottom"
+        xanchor: "center",
+        yanchor: "middle",
+        font: { size: 18, color: "rgba(95,114,137,0.32)" }
       },
       {
-        x: 4.02,
-        y: 3.02,
+        x: 3.39,
+        y: 2.3,
         xref: "x",
         yref: "y",
-        text: "High-Ownership Capability",
+        text: "<b>Expertise</b>",
         showarrow: false,
-        font: { size: 11, color: "#6a7a90" },
-        xanchor: "right",
-        yanchor: "bottom"
+        xanchor: "center",
+        yanchor: "middle",
+        font: { size: 18, color: "rgba(95,114,137,0.32)" }
       },
       {
-        x: 4.02,
-        y: -0.08,
+        x: 1.5,
+        y: 0.7,
         xref: "x",
         yref: "y",
-        text: `${escapeHtml(title)} skill distribution`,
+        text: "<b>Foundational</b>",
         showarrow: false,
-        font: { size: 11, color: "#6a7a90" },
-        xanchor: "right",
-        yanchor: "top"
+        xanchor: "center",
+        yanchor: "middle",
+        font: { size: 18, color: "rgba(95,114,137,0.32)" }
+      },
+      {
+        x: 3.39,
+        y: 0.7,
+        xref: "x",
+        yref: "y",
+        text: `<b>${escapeHtml(domain?.domain || "Domain")} Distribution</b>`,
+        showarrow: false,
+        xanchor: "center",
+        yanchor: "middle",
+        font: { size: 16, color: "rgba(95,114,137,0.28)" }
       }
     ];
   }
-
+  
   /* =========================
      CHART EVENTS
   ========================= */
 
-  function bindTopLevelChartEvents(graphDiv, mode) {
+    function bindTopLevelChartEvents(graphDiv, mode) {
     graphDiv.on("plotly_hover", (eventData) => {
       if (!eventData?.points?.length) return;
+      if (requiresTouchDoubleTap()) return;
+
       const point = eventData.points[0];
       const custom = point.customdata;
       const event = eventData.event || {};
       showTooltip(custom, event.clientX ?? window.innerWidth / 2, event.clientY ?? 120);
-
-      if (!isTouchLikeDevice()) {
-        applyDomainBarEmphasis(point);
-      }
     });
 
     graphDiv.on("plotly_unhover", () => {
-      if (!isTouchLikeDevice()) {
+      if (!requiresTouchDoubleTap()) {
         hideTooltip();
-        clearDomainBarEmphasis();
       }
     });
 
     graphDiv.on("plotly_click", (eventData) => {
       if (!eventData?.points?.length) return;
+
       const point = eventData.points[0];
       const custom = point.customdata;
       const event = eventData.event || {};
       const domainId = Number(custom?.payload?.domain_id);
       const pointKey = `${mode}-${domainId}`;
 
-      if (isTouchLikeDevice()) {
+      if (requiresTouchDoubleTap()) {
         showTooltip(custom, event.clientX ?? window.innerWidth / 2, event.clientY ?? 120);
+
         const now = Date.now();
         const isRepeat = touchState.lastTapKey === pointKey && now - touchState.lastTapAt < 1200;
+
         touchState.lastTapKey = pointKey;
         touchState.lastTapAt = now;
         applySelectedPoint(pointKey);
@@ -1248,7 +1389,7 @@
       openDomain(domainId);
     });
   }
-
+  
   function bindSkillChartEvents(graphDiv) {
     graphDiv.on("plotly_hover", (eventData) => {
       if (!eventData?.points?.length) return;
