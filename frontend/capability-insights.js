@@ -475,15 +475,15 @@
         ? `${domain.domain} · Skill Matrix`
         : "Skill Matrix";
       els.chartInstruction.textContent =
-        "Hover or tap any point to inspect the underlying skill. Use Focus View to isolate a quadrant.";
+        "Hover or tap any point to inspect the underlying skill.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
-        "Hover for detail. On touch devices, tap once to inspect and tap again to open the domain skill matrix.";
+        "Hover for detail. On touch devices, tap once to inspect and tap again to view the matrix.";
     } else {
       els.chartTitle.textContent = "Domain Distribution";
       els.chartInstruction.textContent =
-        "This view shows the relative size of each domain in the capability dataset. Click any bar to open the domain skill matrix.";
+        "Hover for detail. On touch devices, tap once to inspect and tap again to view the matrix.";
     }
 
     updateChartHelpContent();
