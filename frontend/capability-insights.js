@@ -418,37 +418,25 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   }
 
 function getPlotHeight() {
-  const isMobile = window.innerWidth <= 720;
-  const isTablet = window.innerWidth <= 920 && !isMobile;
-
-  if (isMobile) {
-    return 440;
+  if (activeDomain) {
+    if (window.innerWidth <= 720) return 440;
+    if (window.innerWidth <= 920) return 500;
+    return 620;
   }
 
-  if (isTablet) {
-    return activeDomain ? 520 : 560;
+  const rows = domains.length;
+
+  if (window.innerWidth <= 720) {
+    return Math.max(420, rows * 40 + 90);
   }
 
-  const chartCard = els.chart?.closest(".capability-chart-card");
-  const toolbar = chartCard?.querySelector(".chart-toolbar");
-  const workspace = chartCard?.closest(".capability-workspace");
-  const controlPanel = workspace?.querySelector(".capability-control-panel");
-
-  if (chartCard && toolbar && controlPanel) {
-    const cardStyles = window.getComputedStyle(chartCard);
-    const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
-    const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
-    const availableHeight =
-      controlPanel.offsetHeight - toolbar.offsetHeight - paddingTop - paddingBottom - 10;
-
-    if (Number.isFinite(availableHeight) && availableHeight > 0) {
-      return Math.max(activeDomain ? 720 : 720, Math.round(availableHeight));
-    }
+  if (window.innerWidth <= 920) {
+    return Math.max(460, rows * 46 + 100);
   }
 
-  return 720;
+  return Math.max(560, rows * 50 + 105);
 }
-
+  
   function getOrientationShouldShow() {
     if (!els.tab?.classList.contains("active")) return false;
     if (window.innerWidth > 920) return false;
@@ -974,9 +962,11 @@ function getPlotHeight() {
       const segment = point.payload;
       return `
         <div class="chart-tooltip-title">${escapeHtml(segment.domain)}</div>
-        <div class="chart-tooltip-domain">${segment.skill_count} skills in domain</div>
+        <div class="chart-tooltip-domain">${segment.skill_count} skills in Domain</div>
         <div class="chart-tooltip-meta">
-          <div>${escapeHtml(segment.segmentLabel)} skills: <strong>${Math.round(segment.segmentPct)}%</strong></div>
+          <div>Segment: <strong>${escapeHtml(segment.segmentLabel)}</strong></div>
+          <div>${escapeHtml(segment.segmentLabel)} Skills: <strong>${Math.round(segment.segmentPct)}%</strong></div>
+          <div>Average Confidence: <strong>${segment.avg_confidence}</strong></div>
         </div>
         <div class="chart-tooltip-evidence">${escapeHtml(segment.summary || "Capability concentration within this domain.")}</div>
       `;
@@ -986,10 +976,11 @@ function getPlotHeight() {
       const segment = point.payload;
       return `
         <div class="chart-tooltip-title">${escapeHtml(segment.domain)}</div>
-        <div class="chart-tooltip-domain">${segment.skill_count} total skills</div>
+        <div class="chart-tooltip-domain">${segment.skill_count} skills in Domain</div>
         <div class="chart-tooltip-meta">
-          <div>${escapeHtml(segment.segmentLabel)} skills: <strong>${segment.segmentCount}</strong></div>
-          <div>Average confidence: <strong>${segment.segmentAvgConfidence}</strong></div>
+          <div>Segment: <strong>${escapeHtml(segment.segmentLabel)}</strong></div>
+          <div>${escapeHtml(segment.segmentLabel)} Skills: <strong>${segment.segmentCount}</strong></div>
+          <div>Average Confidence: <strong>${segment.avg_confidence}</strong></div>
         </div>
         <div class="chart-tooltip-evidence">${escapeHtml(segment.summary || "Capability distribution across this domain.")}</div>
       `;
@@ -1185,7 +1176,7 @@ function getPlotHeight() {
       {
         type: "bar",
         orientation: "h",
-        name: "Applied",
+        name: "Moderate",
         marker: {
           color: getTierColor("moderate"),
           line: { width: 1, color: "#ffffff" }
@@ -1197,7 +1188,7 @@ function getPlotHeight() {
           payload: {
             ...row,
             segmentKey: "moderate",
-            segmentLabel: "Applied",
+            segmentLabel: "Moderate",
             segmentPct: row.moderatePct
           }
         })),
@@ -1292,7 +1283,7 @@ function getPlotHeight() {
       {
         type: "bar",
         orientation: "h",
-        name: "Applied",
+        name: "Moderate",
         x: rows.map((row) => row.moderateCount),
         y: rows.map((row) => row.domain),
         customdata: rows.map((row) => ({
@@ -1300,7 +1291,7 @@ function getPlotHeight() {
           payload: {
             ...row,
             segmentKey: "moderate",
-            segmentLabel: "Applied",
+            segmentLabel: "Moderate",
             segmentCount: row.moderateCount,
             segmentAvgConfidence: row.moderateAvgConfidence
           }
