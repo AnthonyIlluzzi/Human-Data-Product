@@ -225,12 +225,24 @@ function activateTab(tabId) {
   });
 
   if (tabId === "capability-insights-tab" && typeof window.refreshCapabilityInsights === "function") {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.refreshCapabilityInsights();
-      });
-    });
+    scheduleCapabilityInsightsRefresh();
   }
+}
+
+function scheduleCapabilityInsightsRefresh() {
+  const refreshPasses = [0, 90, 220];
+
+  refreshPasses.forEach(delay => {
+    window.setTimeout(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (typeof window.refreshCapabilityInsights === "function") {
+            window.refreshCapabilityInsights();
+          }
+        });
+      });
+    }, delay);
+  });
 }
 
 function bindOutputPorts() {
