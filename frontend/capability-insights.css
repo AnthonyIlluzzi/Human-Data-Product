@@ -34,21 +34,19 @@
 }
 
 .capability-control-panel {
-  display: grid;
-  grid-template-rows: 1fr auto;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   height: 100%;
+  min-height: 100%;
   align-self: stretch;
 }
 
 .capability-chart-panel {
-  min-height: 100%;
-}
-
-.capability-chart-panel {
-  min-height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+  height: 100%;
 }
 
 .panel-card,
@@ -68,6 +66,7 @@
   display: grid;
   gap: 8px;
   align-content: start;
+  min-height: 0;
 }
 
 .explorer-domain {
@@ -167,22 +166,15 @@
 }
 
 .explorer-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
   max-height: none;
 }
 
 .inventory-card {
-  padding-top: 14px;
-  padding-bottom: 14px;
-  background: #fbfdff;
-}
-
-.explorer-card {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.inventory-card {
+  flex: 0 0 auto;
   padding-top: 14px;
   padding-bottom: 14px;
   background: #fbfdff;
@@ -529,6 +521,7 @@ body.modal-open {
   height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   isolation: isolate;
 }
 
@@ -866,7 +859,7 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 620px;
+  min-height: 660px;
   height: 100%;
   flex: 1 1 auto;
 }
