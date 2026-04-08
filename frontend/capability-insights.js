@@ -418,30 +418,40 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   }
 
 function getPlotHeight() {
-  if (activeDomain) {
-    if (window.innerWidth <= 720) return 440;
-    if (window.innerWidth <= 920) return 500;
-    return 620;
+  const isMobile = window.innerWidth <= 720;
+  const isTablet = window.innerWidth <= 920 && !isMobile;
+
+  // Mobile: keep controlled heights
+  if (isMobile) return 440;
+  if (isTablet) return activeDomain ? 520 : 560;
+
+  // Desktop: dynamic height based on layout
+  const chartCard = els.chart?.closest(".capability-chart-card");
+  const toolbar = chartCard?.querySelector(".chart-toolbar");
+  const workspace = chartCard?.closest(".capability-workspace");
+  const controlPanel = workspace?.querySelector(".capability-control-panel");
+
+  if (chartCard && toolbar && controlPanel) {
+    const cardStyles = window.getComputedStyle(chartCard);
+
+    const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
+    const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
+
+    const availableHeight =
+      controlPanel.offsetHeight -
+      toolbar.offsetHeight -
+      paddingTop -
+      paddingBottom -
+      12; // small buffer
+
+    if (Number.isFinite(availableHeight) && availableHeight > 0) {
+      return Math.max(620, Math.round(availableHeight));
+    }
   }
 
-  const rows = domains.length;
-
-  if (window.innerWidth <= 720) {
-    return Math.max(420, rows * 40 + 90);
-  }
-
-  if (window.innerWidth <= 920) {
-    return Math.max(460, rows * 46 + 100);
-  }
-
-  return Math.max(560, rows * 50 + 105);
+  // fallback
+  return 720;
 }
-  
-  function getOrientationShouldShow() {
-    if (!els.tab?.classList.contains("active")) return false;
-    if (window.innerWidth > 920) return false;
-    return window.innerHeight > window.innerWidth;
-  }
 
   /* =========================
      TOOLBAR / TOGGLES
