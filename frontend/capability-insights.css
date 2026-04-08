@@ -858,7 +858,7 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 620px;
+  min-height: 560px;
   height: auto;
   flex: 0 0 auto;
 }
@@ -1037,7 +1037,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 520px;
+    min-height: 500px;
   }
 
   .capability-explorer {
@@ -1164,7 +1164,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 420px;
+    min-height: 400px;
   }
 
   .inventory-modal-dialog {
