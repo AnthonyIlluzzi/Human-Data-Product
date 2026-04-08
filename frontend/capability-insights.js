@@ -15,9 +15,10 @@
 
   const QUADRANT_RANGES = {
     all: { x: [0.5, 4.28], y: [-0.08, 3.15] },
-    expertise: { x: [2.65, 4.15], y: [1.65, 3.1] },
-    applied: { x: [0.75, 4.15], y: [1.65, 3.1] },
-    confidence: { x: [0.75, 4.15], y: [-0.08, 3.15] }
+    expertise: { x: [2.72, 4.12], y: [1.72, 3.08] },
+    emerging: { x: [2.72, 4.12], y: [-0.02, 1.18] },
+    foundational: { x: [0.88, 2.18], y: [-0.02, 1.18] },
+    passive: { x: [0.88, 2.18], y: [1.72, 3.08] }
   };
 
   let skills = [];
@@ -269,7 +270,7 @@
     return Math.max(min + 0.04, Math.min(max - 0.04, next));
   }
 
-  function spreadSkillPoints(items) {
+    function spreadSkillPoints(items, quadrantKey = "all") {
     const grouped = new Map();
 
     items.forEach((item) => {
@@ -278,6 +279,7 @@
       grouped.get(key).push(item);
     });
 
+    const range = QUADRANT_RANGES[quadrantKey] || QUADRANT_RANGES.all;
     const spreadItems = [];
 
     grouped.forEach((groupItems) => {
@@ -286,8 +288,8 @@
       if (count === 1) {
         spreadItems.push({
           ...groupItems[0],
-          jitteredDepth: groupItems[0].depth,
-          jitteredExperience: groupItems[0].experience
+          jitteredDepth: clamp(groupItems[0].depth, range.x[0] + 0.03, range.x[1] - 0.03),
+          jitteredExperience: clamp(groupItems[0].experience, range.y[0] + 0.03, range.y[1] - 0.03)
         });
         return;
       }
@@ -295,8 +297,8 @@
       const columns = Math.ceil(Math.sqrt(count));
       const rows = Math.ceil(count / columns);
 
-      const xStep = count <= 2 ? 0.06 : count <= 4 ? 0.07 : 0.075;
-      const yStep = count <= 2 ? 0.06 : count <= 4 ? 0.07 : 0.075;
+      const xStep = count <= 4 ? 0.09 : 0.12;
+      const yStep = count <= 4 ? 0.09 : 0.12;
 
       const xOffsetBase = ((columns - 1) * xStep) / 2;
       const yOffsetBase = ((rows - 1) * yStep) / 2;
@@ -305,8 +307,17 @@
         const col = index % columns;
         const row = Math.floor(index / columns);
 
-        const nextDepth = clamp(item.depth + (col * xStep) - xOffsetBase, 0.62, 3.98);
-        const nextExperience = clamp(item.experience + (row * yStep) - yOffsetBase, 0.04, 2.96);
+        const nextDepth = clamp(
+          item.depth + (col * xStep) - xOffsetBase,
+          range.x[0] + 0.04,
+          range.x[1] - 0.04
+        );
+
+        const nextExperience = clamp(
+          item.experience + (row * yStep) - yOffsetBase,
+          range.y[0] + 0.04,
+          range.y[1] - 0.04
+        );
 
         spreadItems.push({
           ...item,
@@ -646,8 +657,8 @@
           </div>
 
           <div class="chart-help-section">
-            <strong>Focus View filters</strong>
-            <p>Use the controls to isolate expertise-heavy, applied, or high-confidence skills.</p>
+            <strong>Focus View</strong>
+            <p>Use the controls to zoom into a single quadrant of the matrix: Expertise, Emerging, Foundational, or Passive.</p>
           </div>
         `
       };
@@ -1361,7 +1372,9 @@
 
   function renderSkillChart() {
     const domain = getDomainById(activeDomain);
-    const items = spreadSkillPoints(getSkillsForDomain(activeDomain));
+    const activeRange = QUADRANT_RANGES[activeQuadrant] || QUADRANT_RANGES.all;
+    const items = spreadSkillPoints(getSkillsForDomain(activeDomain), activeQuadrant);
+    const showQuadrantScaffold = activeQuadrant === "all";
 
     const trace = {
       type: "scatter",
@@ -1385,8 +1398,6 @@
       }
     };
 
-    const showQuadrantScaffold = activeQuadrant === "all";
-
     const layout = {
       height: getPlotHeight(),
       margin: { t: 12, r: 22, b: 58, l: 60 },
@@ -1398,7 +1409,7 @@
       clickmode: "event+select",
       showlegend: false,
       xaxis: {
-        range: QUADRANT_RANGES.all.x,
+        range: activeRange.x,
         tickvals: [1, 2, 3, 4],
         ticktext: ["1", "2", "3", "4"],
         title: {
@@ -1410,7 +1421,7 @@
         gridcolor: "rgba(19,37,63,0.08)"
       },
       yaxis: {
-        range: QUADRANT_RANGES.all.y,
+        range: activeRange.y,
         tickvals: [0, 1, 2, 3],
         ticktext: ["0", "1", "2", "3"],
         title: {
