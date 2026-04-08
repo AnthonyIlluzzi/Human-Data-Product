@@ -35,7 +35,7 @@
 
 .capability-control-panel {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: 1fr auto;
   gap: 16px;
   height: 100%;
   align-self: stretch;
@@ -43,6 +43,12 @@
 
 .capability-chart-panel {
   min-height: 100%;
+}
+
+.capability-chart-panel {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel-card,
@@ -860,7 +866,7 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 720px;
+  min-height: 620px;
   height: 100%;
   flex: 1 1 auto;
 }
