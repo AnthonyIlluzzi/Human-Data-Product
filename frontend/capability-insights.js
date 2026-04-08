@@ -62,6 +62,7 @@
     buildQuadrantControls();
     buildChartToolbar();
     buildInventoryTable();
+    setScoringHelpContent();
     setInventoryRecency();
     bindInventoryModalEvents();
     bindCapabilityEvents();
@@ -354,10 +355,16 @@
     }
 
     const rows = domains.length;
-    const base = rows * 78 + 120;
 
-    if (window.innerWidth <= 720) return Math.max(460, rows * 54 + 110);
-    return Math.max(520, base);
+    if (window.innerWidth <= 720) {
+      return Math.max(420, rows * 40 + 90);
+    }
+
+    if (window.innerWidth <= 920) {
+      return Math.max(460, rows * 46 + 100);
+    }
+
+    return Math.max(560, rows * 50 + 105);
   }
 
   function getOrientationShouldShow() {
@@ -738,6 +745,50 @@
       .join("");
   }
 
+  function setScoringHelpContent() {
+    if (!els.scoringHelpPopover) return;
+
+    els.scoringHelpPopover.innerHTML = `
+      <p class="chart-help-title">How scoring works</p>
+
+      <div class="chart-help-body scoring-help-body">
+        <div class="chart-help-section">
+          <strong>Depth</strong> reflects level of understanding (1–4):
+        </div>
+
+        <div class="chart-help-section">
+          <ul>
+            <li><span class="help-number">1</span> - <strong>Awareness:</strong> understands concepts and terminology</li>
+            <li><span class="help-number">2</span> - <strong>Conceptual:</strong> understands how it works and where it applies</li>
+            <li><span class="help-number">3</span> - <strong>Applied:</strong> has used in real work or design contexts</li>
+            <li><span class="help-number">4</span> - <strong>Expert:</strong> core strength used to shape systems or outcomes</li>
+          </ul>
+        </div>
+
+        <div class="chart-help-section">
+          <strong>Experience</strong> reflects real-world application (0–3):
+        </div>
+
+        <div class="chart-help-section">
+          <ul>
+            <li><span class="help-number">0</span> - <strong>None:</strong> no applied experience</li>
+            <li><span class="help-number">1</span> - <strong>Exposure:</strong> limited hands-on use or learning</li>
+            <li><span class="help-number">2</span> - <strong>Applied:</strong> used in real work with meaningful contribution</li>
+            <li><span class="help-number">3</span> - <strong>Owned:</strong> repeated ownership and decision responsibility</li>
+          </ul>
+        </div>
+
+        <div class="chart-help-section scoring-help-footer">
+          Scores are derived from resume evidence, portfolio artifacts, and supported inference where direct evidence is limited.
+        </div>
+
+        <div class="chart-help-section scoring-help-footer">
+          <strong>Depth and experience are intentionally separated</strong> to distinguish conceptual strength from applied ownership.
+        </div>
+      </div>
+    `;
+  }
+  
   function setInventoryRecency() {
     if (!els.inventoryRecency) return;
 
