@@ -14,6 +14,11 @@
   margin-bottom: 6px;
 }
 
+.capability-instructions-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
 .capability-instructions-body {
   margin: 0;
   font-size: 0.95rem;
@@ -378,6 +383,7 @@
 .chart-help-popover.scoring-help-popover .chart-help-section li .help-number,
 .chart-help-popover.scoring-help-popover .chart-help-section li .help-number strong {
   color: var(--primary);
+  font-weight: 800;
 }
 
 .chart-help-popover.scoring-help-popover .help-number strong,
@@ -700,7 +706,11 @@ body.modal-open {
   font-size: 0.95rem;
   line-height: 1.25;
   font-weight: 800;
-  color: #0a6ed1;
+  color: var(--primary);
+}
+
+.chart-help-popover.scoring-help-popover .chart-help-title {
+  color: var(--primary);
 }
 
 .chart-help-body {
@@ -834,12 +844,20 @@ body.modal-open {
   height: 100%;
 }
 
+.capability-chart-card .js-plotly-plot .plotly .cursor-crosshair,
+.capability-chart-card .js-plotly-plot .plotly .cursor-pointer,
+.capability-chart-card .js-plotly-plot .plotly .nsewdrag,
+.capability-chart-card .js-plotly-plot .plotly .nsdrag,
+.capability-chart-card .js-plotly-plot .plotly .ewdrag {
+  cursor: default !important;
+}
+
 .chart-tooltip {
   position: absolute;
   z-index: 40;
   display: none;
-  max-width: 340px;
-  min-width: 260px;
+  max-width: 320px;
+  min-width: 250px;
   background: #ffffff;
   border: 1px solid #0a6ed1;
   border-radius: 12px;
@@ -1020,7 +1038,7 @@ body.modal-open {
     border-radius: 18px;
   }
 
-  .capability-insights-intro-card {
+  .capability-insights-instructions-card {
     padding: 16px 18px;
   }
 
