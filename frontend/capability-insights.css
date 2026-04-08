@@ -322,8 +322,8 @@
 
 .chart-help-popover.scoring-help-popover .chart-help-body {
   margin-top: 8px;
-  font-size: inherit;
-  line-height: inherit;
+  font-size: 0.84rem;
+  line-height: 1.42;
   color: var(--muted);
 }
 
@@ -341,12 +341,12 @@
   line-height: inherit;
   font-weight: 700;
   color: #13253f;
-  margin-bottom: 4px;
+  margin: 0;
 }
 
 .chart-help-popover.scoring-help-popover .chart-help-section ul {
   list-style: none;
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   padding-left: 0;
 }
 
@@ -840,7 +840,7 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 720px;
+  min-height: 640px;
   height: 100%;
 }
 
@@ -1018,7 +1018,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 560px;
+    min-height: 520px;
   }
 
   .capability-explorer {
@@ -1028,7 +1028,7 @@ body.modal-open {
 
 @media (max-width: 920px) {
   #capability-chart {
-    min-height: 460px;
+    min-height: 420px;
   }
 }
 
@@ -1322,9 +1322,9 @@ body.modal-open {
   }
 
   .chart-help-popover.scoring-help-popover {
-    width: min(620px, calc(100vw - 24px));
-    max-width: min(620px, calc(100vw - 24px));
-    padding: 12px 14px;
+    width: min(620px, calc(100vw - 40px));
+    max-width: min(620px, calc(100vw - 40px));
+    padding: 14px 16px;
   }
 
   .chart-help-popover.scoring-help-popover.is-docked-mobile {
