@@ -29,14 +29,20 @@
 .capability-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 308px;
-  gap: 20px;
+  gap: 16px;
   align-items: stretch;
 }
 
 .capability-control-panel {
   display: grid;
-  gap: 14px;
-  align-self: start;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 16px;
+  height: 100%;
+  align-self: stretch;
+}
+
+.capability-chart-panel {
+  min-height: 100%;
 }
 
 .panel-card,
@@ -55,6 +61,7 @@
   margin-top: 12px;
   display: grid;
   gap: 8px;
+  align-content: start;
 }
 
 .explorer-domain {
@@ -155,6 +162,18 @@
 
 .explorer-card {
   max-height: none;
+}
+
+.inventory-card {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  background: #fbfdff;
+}
+
+.explorer-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .inventory-card {
@@ -500,6 +519,7 @@ body.modal-open {
   position: relative;
   overflow: hidden;
   padding: 14px 18px 8px;
+  min-height: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -709,8 +729,8 @@ body.modal-open {
   color: var(--primary);
 }
 
-.chart-help-popover.scoring-help-popover .chart-help-title {
-  color: var(--primary);
+#capability-chart-help-popover .chart-help-title {
+  color: #0a6ed1;
 }
 
 .chart-help-body {
@@ -840,8 +860,9 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 640px;
+  min-height: 720px;
   height: 100%;
+  flex: 1 1 auto;
 }
 
 .capability-chart-card .js-plotly-plot .plotly .cursor-crosshair,
@@ -1018,7 +1039,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 520px;
+    min-height: 560px;
   }
 
   .capability-explorer {
@@ -1028,7 +1049,7 @@ body.modal-open {
 
 @media (max-width: 920px) {
   #capability-chart {
-    min-height: 420px;
+    min-height: 520px;
   }
 }
 
