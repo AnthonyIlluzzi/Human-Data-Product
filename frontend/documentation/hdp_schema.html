@@ -221,6 +221,7 @@ erDiagram
   PROJECT ||--o{ SYSTEM_IMPROVEMENT : may_reference
   PROJECT ||--o{ PROJECT_SKILL : maps
   SKILL ||--o{ PROJECT_SKILL : maps
+  SKILLS_DOMAIN ||--o{ SKILL : groups
 
   %% Polymorphic feedback (enforced by loader, not DB FK constraints)
   EXPERIENCE ||--o{ FEEDBACK : references
@@ -273,11 +274,24 @@ erDiagram
     int    sort_order
   }
 
+  SKILLS_DOMAIN {
+    int    domain_id PK
+    string domain
+    int    sort_order
+    string summary
+  }
+  
   SKILL {
     int    skill_id PK
-    string category
     string skill_name
-    string level
+    string skill_ref
+    int    domain_id FK
+    int    display_order
+    int    depth
+    int    experience
+    int    confidence
+    string notes
+    string source_origin
   }
 
   CREDENTIAL {
@@ -340,7 +354,7 @@ erDiagram
     <p>The diagram below represents the full entity relationship model used during schema design. It includes layout optimizations and annotations not easily expressed in Mermaid. This diagram is the authoritative visual reference for the Human Data Product schema.</p>
 
     <div class="schema-image-wrap">
-      <img src="images/Human_Data_Product_ERD_v4.svg" alt="Human Data Product ERD" />
+      <img src="images/Human_Data_Product_ERD_v5.svg" alt="Human Data Product ERD" />
       <p class="schema-caption">Full entity relationship diagram for the Human Data Product schema.</p>
     </div>
 
@@ -460,8 +474,27 @@ erDiagram
       </tbody>
     </table>
 
+    <h3 id="skills_domain">skills_domain</h3>
+    <p class="entity-intro">Normalized domain catalog used by the capability / skill model.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>domain_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier for skill domain</td></tr>
+        <tr><td>domain</td><td>TEXT</td><td></td><td>Human-readable domain name</td></tr>
+        <tr><td>sort_order</td><td>INTEGER</td><td></td><td>Relative display order across domains</td></tr>
+        <tr><td>summary</td><td>TEXT</td><td></td><td>Domain summary used in Capability Insights</td></tr>
+      </tbody>
+    </table>
+    
     <h3 id="skill">skill</h3>
-    <p class="entity-intro">Normalized skill catalog.</p>
+    <p class="entity-intro">Normalized skill catalog aligned to the embedded capability model.</p>
     <table>
       <thead>
         <tr>
@@ -473,9 +506,15 @@ erDiagram
       </thead>
       <tbody>
         <tr><td>skill_id</td><td>INTEGER</td><td>PK</td><td>Unique identifier</td></tr>
-        <tr><td>category</td><td>TEXT</td><td></td><td>Skill category (data, platform, architecture, etc.)</td></tr>
         <tr><td>skill_name</td><td>TEXT</td><td></td><td>Skill name</td></tr>
-        <tr><td>level</td><td>TEXT</td><td></td><td>Proficiency level (beginner, intermediate, advanced, expert)</td></tr>
+        <tr><td>skill_ref</td><td>TEXT</td><td>UQ</td><td>Stable machine-friendly skill reference</td></tr>
+        <tr><td>domain_id</td><td>INTEGER</td><td>FK</td><td>References <code>skills_domain.domain_id</code></td></tr>
+        <tr><td>display_order</td><td>INTEGER</td><td></td><td>Relative display order within a domain</td></tr>
+        <tr><td>depth</td><td>INTEGER</td><td></td><td>Depth score from 1–4</td></tr>
+        <tr><td>experience</td><td>INTEGER</td><td></td><td>Experience score from 0–3</td></tr>
+        <tr><td>confidence</td><td>INTEGER</td><td></td><td>Confidence score from 0–100</td></tr>
+        <tr><td>notes</td><td>TEXT</td><td></td><td>Evidence / rationale supporting the skill</td></tr>
+        <tr><td>source_origin</td><td>TEXT</td><td></td><td>Source lineage of the normalized skill record</td></tr>
       </tbody>
     </table>
 
