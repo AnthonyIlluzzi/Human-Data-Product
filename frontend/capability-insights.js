@@ -34,6 +34,8 @@
   let capabilityApiBase = "";
   let initialized = false;
   let resizeHandlerBound = false;
+  let capabilityLayoutObserver = null;
+  let postRenderResizeTimeout = null;
 
   const els = {};
   const touchState = {
@@ -68,6 +70,7 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
   setInventoryRecency();
   bindInventoryModalEvents();
   bindCapabilityEvents();
+  bindLayoutObservers();
   updateOrientationOverlay();
 
   const tabIsActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
@@ -108,12 +111,24 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   cacheElements();
   updateOrientationOverlay();
 
-  if (!document.getElementById("capability-insights-tab")?.classList.contains("active")) return;
+  const insightsPanelActive = document.getElementById("insights-panel")?.classList.contains("active");
+  const tabActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
+
+  if (!insightsPanelActive || !tabActive) return;
   if (!window.Plotly) return;
   if (!els.chart) return;
 
+  const chartCard = els.chart.closest(".capability-chart-card");
+
   const renderWhenReady = (attempt = 0) => {
-    const chartReady = els.chart.offsetWidth > 0 && els.chart.offsetHeight > 0;
+    const chartRect = els.chart.getBoundingClientRect();
+    const cardRect = chartCard?.getBoundingClientRect();
+
+    const chartReady =
+      chartRect.width > 0 &&
+      (chartRect.height > 0 || els.chart.offsetHeight > 0) &&
+      !!cardRect &&
+      cardRect.width > 0;
 
     if (chartReady) {
       renderChart();
@@ -129,7 +144,7 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       return;
     }
 
-    if (attempt < 10) {
+    if (attempt < 18) {
       requestAnimationFrame(() => renderWhenReady(attempt + 1));
     }
   };
@@ -436,36 +451,64 @@ function getPlotHeight() {
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
   if (isMobile) {
-    return activeDomain ? 460 : 440;
+    return 420;
   }
 
   if (isTablet) {
-    return activeDomain ? 540 : 560;
+    return 520;
   }
 
-  const chartCard = els.chart?.closest(".capability-chart-card");
-  const toolbar = chartCard?.querySelector(".chart-toolbar");
-  const workspace = chartCard?.closest(".capability-workspace");
-  const controlPanel = workspace?.querySelector(".capability-control-panel");
+  return 620;
+}
 
-  if (chartCard && toolbar && controlPanel) {
-    const cardStyles = window.getComputedStyle(chartCard);
-    const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
-    const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
+function bindLayoutObservers() {
+  if (capabilityLayoutObserver || typeof ResizeObserver === "undefined") return;
 
-    const availableHeight =
-      controlPanel.offsetHeight -
-      toolbar.offsetHeight -
-      paddingTop -
-      paddingBottom -
-      8;
+  const observedElements = [
+    els.chart,
+    els.chart?.closest(".capability-chart-card"),
+    els.chart?.closest(".capability-workspace"),
+    els.explorer,
+    els.explorer?.closest(".explorer-card")
+  ].filter(Boolean);
 
-    if (Number.isFinite(availableHeight) && availableHeight > 0) {
-      return Math.max(660, Math.round(availableHeight));
-    }
-  }
+  if (!observedElements.length) return;
 
-  return activeDomain ? 660 : 680;
+  const handleResize = debounce(() => {
+    const insightsPanelActive = document.getElementById("insights-panel")?.classList.contains("active");
+    const tabActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
+
+    if (!insightsPanelActive || !tabActive) return;
+    window.refreshCapabilityInsights();
+  }, 80);
+
+  capabilityLayoutObserver = new ResizeObserver(() => {
+    handleResize();
+  });
+
+  observedElements.forEach((element) => {
+    capabilityLayoutObserver.observe(element);
+  });
+}
+
+function stabilizeActivePlot() {
+  if (!window.Plotly || !activeGraphDiv) return;
+
+  const resizePlot = () => {
+    if (!activeGraphDiv || !document.body.contains(activeGraphDiv)) return;
+    window.Plotly.Plots.resize(activeGraphDiv);
+  };
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      resizePlot();
+    });
+  });
+
+  window.clearTimeout(postRenderResizeTimeout);
+  postRenderResizeTimeout = window.setTimeout(() => {
+    resizePlot();
+  }, 120);
 }
 
   /* =========================
@@ -1159,6 +1202,11 @@ function getPlotHeight() {
 
     buildChartToolbar();
 
+    if (activeGraphDiv && activeGraphDiv === els.chart) {
+      window.Plotly.purge(els.chart);
+      activeGraphDiv = null;
+    }
+
     if (activeDomain) {
       renderSkillChart();
       return;
@@ -1276,6 +1324,7 @@ function getPlotHeight() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindTopLevelChartEvents(graphDiv, "profile");
+      stabilizeActivePlot();
     });
   }
 
@@ -1393,6 +1442,7 @@ function getPlotHeight() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindTopLevelChartEvents(graphDiv, "distribution");
+      stabilizeActivePlot();
     });
   }
 
@@ -1525,6 +1575,7 @@ function getPlotHeight() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindSkillChartEvents(graphDiv);
+      stabilizeActivePlot();
     });
   }
   
