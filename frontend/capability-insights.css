@@ -1049,7 +1049,7 @@ body.modal-open {
 
 @media (max-width: 920px) {
   #capability-chart {
-    min-height: 520px;
+    min-height: 500px;
   }
 }
 
