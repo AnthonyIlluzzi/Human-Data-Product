@@ -45,80 +45,43 @@
      PUBLIC API
   ========================= */
 
-  window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
-    capabilityApiBase = apiBase;
+window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
+  capabilityApiBase = apiBase;
 
-    cacheElements();
+  cacheElements();
 
-    const response = await fetch(`${capabilityApiBase}/analytics/capability-insights-dashboard`);
-    if (!response.ok) {
-      throw new Error(`Capability Insights failed: HTTP ${response.status}`);
-    }
+  const response = await fetch(`${capabilityApiBase}/analytics/capability-insights-dashboard`);
+  if (!response.ok) {
+    throw new Error(`Capability Insights failed: HTTP ${response.status}`);
+  }
 
-    const payload = await response.json();
-    skills = normalizeSkills(Array.isArray(payload.skills) ? payload.skills : []);
-    domains = buildDomainCollection(skills);
+  const payload = await response.json();
+  skills = normalizeSkills(Array.isArray(payload.skills) ? payload.skills : []);
+  domains = buildDomainCollection(skills);
 
-    buildExplorer();
-    buildChartViewToggle();
-    buildQuadrantControls();
-    buildChartToolbar();
-    buildInventoryTable();
-    setScoringHelpContent();
-    setInventoryRecency();
-    bindInventoryModalEvents();
-    bindCapabilityEvents();
+  buildExplorer();
+  buildChartViewToggle();
+  buildQuadrantControls();
+  buildChartToolbar();
+  buildInventoryTable();
+  setScoringHelpContent();
+  setInventoryRecency();
+  bindInventoryModalEvents();
+  bindCapabilityEvents();
+  updateOrientationOverlay();
+
+  const tabIsActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
+  if (tabIsActive) {
     renderChart();
-    updateOrientationOverlay();
+  }
 
-    if (!resizeHandlerBound) {
-      const handleViewportChange = debounce(() => {
-        updateOrientationOverlay();
-        if (activeGraphDiv && window.Plotly) {
-          try {
-            Plotly.Plots.resize(activeGraphDiv);
-          } catch (_) {
-            renderChart();
-          }
-        } else {
-          renderChart();
-        }
+  if (!resizeHandlerBound) {
+    const handleViewportChange = debounce(() => {
+      updateOrientationOverlay();
 
-        if (isChartHelpOpen) {
-          requestAnimationFrame(() => setChartHelpOpen(true));
-        }
+      const tabStillActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
 
-        if (isScoringHelpOpen) {
-          requestAnimationFrame(() => setScoringHelpOpen(true));
-        }
-      }, 120);
-
-      window.addEventListener("resize", handleViewportChange);
-      window.addEventListener("orientationchange", handleViewportChange);
-      document.addEventListener("click", dismissTooltipFromOutsideInteraction);
-      document.addEventListener("keydown", handleGlobalKeydown);
-      resizeHandlerBound = true;
-    }
-
-    initialized = true;
-  };
-
-  window.refreshCapabilityInsights = function refreshCapabilityInsights() {
-    cacheElements();
-    updateOrientationOverlay();
-
-    if (!document.getElementById("capability-insights-tab")?.classList.contains("active")) return;
-    if (!window.Plotly) return;
-    if (!els.chart) return;
-
-    requestAnimationFrame(() => {
-      if (activeGraphDiv) {
-        try {
-          Plotly.Plots.resize(activeGraphDiv);
-        } catch (_) {
-          renderChart();
-        }
-      } else {
+      if (tabStillActive) {
         renderChart();
       }
 
@@ -129,8 +92,40 @@
       if (isScoringHelpOpen) {
         requestAnimationFrame(() => setScoringHelpOpen(true));
       }
+    }, 120);
+
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("orientationchange", handleViewportChange);
+    document.addEventListener("click", dismissTooltipFromOutsideInteraction);
+    document.addEventListener("keydown", handleGlobalKeydown);
+    resizeHandlerBound = true;
+  }
+
+  initialized = true;
+};
+
+window.refreshCapabilityInsights = function refreshCapabilityInsights() {
+  cacheElements();
+  updateOrientationOverlay();
+
+  if (!document.getElementById("capability-insights-tab")?.classList.contains("active")) return;
+  if (!window.Plotly) return;
+  if (!els.chart) return;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      renderChart();
+
+      if (isChartHelpOpen) {
+        requestAnimationFrame(() => setChartHelpOpen(true));
+      }
+
+      if (isScoringHelpOpen) {
+        requestAnimationFrame(() => setScoringHelpOpen(true));
+      }
     });
-  };
+  });
+};
 
   /* =========================
      ELEMENT CACHE
@@ -422,25 +417,37 @@
     return items;
   }
 
-  function getPlotHeight() {
-    if (activeDomain) {
-      if (window.innerWidth <= 720) return 460;
-      if (window.innerWidth <= 920) return 520;
-      return 720;
-    }
+function getPlotHeight() {
+  const isMobile = window.innerWidth <= 720;
+  const isTablet = window.innerWidth <= 920 && !isMobile;
 
-    const rows = domains.length;
-
-    if (window.innerWidth <= 720) {
-      return Math.max(420, rows * 40 + 90);
-    }
-
-    if (window.innerWidth <= 920) {
-      return Math.max(460, rows * 46 + 100);
-    }
-
-    return Math.max(560, rows * 50 + 105);
+  if (isMobile) {
+    return 440;
   }
+
+  if (isTablet) {
+    return activeDomain ? 520 : 560;
+  }
+
+  const chartCard = els.chart?.closest(".capability-chart-card");
+  const toolbar = chartCard?.querySelector(".chart-toolbar");
+  const workspace = chartCard?.closest(".capability-workspace");
+  const controlPanel = workspace?.querySelector(".capability-control-panel");
+
+  if (chartCard && toolbar && controlPanel) {
+    const cardStyles = window.getComputedStyle(chartCard);
+    const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
+    const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
+    const availableHeight =
+      controlPanel.offsetHeight - toolbar.offsetHeight - paddingTop - paddingBottom - 10;
+
+    if (Number.isFinite(availableHeight) && availableHeight > 0) {
+      return Math.max(activeDomain ? 720 : 720, Math.round(availableHeight));
+    }
+  }
+
+  return 720;
+}
 
   function getOrientationShouldShow() {
     if (!els.tab?.classList.contains("active")) return false;
@@ -475,7 +482,7 @@
         ? `${domain.domain} · Skill Matrix`
         : "Skill Matrix";
       els.chartInstruction.textContent =
-        "Hover or tap any point to inspect the underlying skill.";
+        "Hover or tap any point to inspect the underlying skill. Use Focus View to isolate quadrants and inspect strengths.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
@@ -637,85 +644,88 @@
   ========================= */
 
   function getChartHelpContent() {
-    if (activeDomain) {
-      return {
-        title: "How to read this chart",
-        body: `
-          <div class="chart-help-section">
-            <strong>What this view shows</strong>
-            <p>Each point is a skill within the selected domain.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong>X-axis: Depth (1–4)</strong>
-            <p>How deeply the capability is understood and used.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong>Y-axis: Experience (0–3)</strong>
-            <p>How much real-world application and ownership is evidenced.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong>Focus View</strong>
-            <p>Use the controls to zoom into a single quadrant of the matrix: Expertise, Emerging, Foundational, or Passive.</p>
-          </div>
-        `
-      };
-    }
-
-    if (topLevelView === VIEW_PROFILE) {
-      return {
-        title: "How to read this chart",
-        body: `
-          <div class="chart-help-section">
-            <strong>What this view shows</strong>
-            <p>Each bar represents a domain. Segments show the share of skills in that domain by depth tier.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong><span class="help-dot low"></span> Foundational</strong>
-            <p>Awareness and foundational capability.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong><span class="help-dot moderate"></span> Applied</strong>
-            <p>Demonstrated working capability used in real contexts.</p>
-          </div>
-
-          <div class="chart-help-section">
-            <strong><span class="help-dot high"></span> Expertise</strong>
-            <p>Core strength used to shape systems, architecture, or outcomes.</p>
-          </div>
-        `
-      };
-    }
-
+  if (activeDomain) {
     return {
-      title: "How to read this chart",
+      title: "How to read the skill matrix",
       body: `
         <div class="chart-help-section">
           <strong>What this view shows</strong>
-          <p>This chart compares the number of skills in each domain, segmented by capability tier.</p>
+          <p>Each point is a skill within the selected domain.</p>
         </div>
 
         <div class="chart-help-section">
-          <strong><span class="help-dot low"></span> Foundational</strong>
-          <p>Skills scored at depth 1–2.</p>
+          <strong>X-axis: Depth (1–4)</strong>
+          <p>How deeply the capability is understood and used.</p>
         </div>
 
         <div class="chart-help-section">
-          <strong><span class="help-dot moderate"></span> Applied</strong>
-          <p>Skills scored at depth 3.</p>
+          <strong>Y-axis: Experience (0–3)</strong>
+          <p>How much real-world application and ownership is evidenced.</p>
         </div>
 
         <div class="chart-help-section">
-          <strong><span class="help-dot high"></span> Expertise</strong>
-          <p>Skills scored at depth 4.</p>
+          <strong>How to use it</strong>
+          <p>Top-right = strongest ownership.<br>Bottom-left = foundational awareness.<br>Hover to inspect. On touch devices, tap to inspect.</p>
+        </div>
+
+        <div class="chart-help-section">
+          <strong>Tip</strong>
+          <p>Use Focus View to isolate quadrants and inspect strengths.</p>
         </div>
       `
     };
   }
+
+  if (topLevelView === VIEW_PROFILE) {
+    return {
+      title: "How to read the capability profile",
+      body: `
+        <div class="chart-help-section">
+          <strong>What this view shows</strong>
+          <p>Each bar is one domain and always totals 100%.</p>
+        </div>
+
+        <div class="chart-help-section">
+          <strong>Skill Depth Segments</strong>
+          <ul>
+            <li><span class="help-dot low"></span> Foundational → supporting skills</li>
+            <li><span class="help-dot moderate"></span> Moderate → growing applied capability</li>
+            <li><span class="help-dot high"></span> Expertise → deepest concentration</li>
+          </ul>
+        </div>
+
+        <div class="chart-help-section">
+          <strong>How to use it</strong>
+          <p>Use this view to understand capability shape. Hover to inspect. On touch devices, tap once to inspect and tap again to open the domain skill matrix.</p>
+        </div>
+      `
+    };
+  }
+
+  return {
+    title: "How to read the domain distribution",
+    body: `
+      <div class="chart-help-section">
+        <strong>What you’re seeing</strong>
+        <p>Each bar represents a domain. Longer bar = greater overall breadth.</p>
+      </div>
+
+      <div class="chart-help-section">
+        <strong>Skill depth segments</strong>
+        <ul>
+          <li><span class="help-dot low"></span> Foundational → awareness</li>
+          <li><span class="help-dot moderate"></span> Moderate → applied/conceptual</li>
+          <li><span class="help-dot high"></span> Expertise → expert-level capability</li>
+        </ul>
+      </div>
+
+      <div class="chart-help-section">
+        <strong>How to use it</strong>
+        <p>Use this view to understand absolute breadth by domain. Hover to inspect. On touch devices, tap once to inspect and tap again to open the domain skill matrix.</p>
+      </div>
+    `
+  };
+}
 
   function updateChartHelpContent() {
     if (!els.chartHelpTitle || !els.chartHelpBody) return;
