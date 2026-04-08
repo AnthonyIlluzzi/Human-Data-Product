@@ -62,6 +62,7 @@
     buildQuadrantControls();
     buildChartToolbar();
     buildInventoryTable();
+    setInventoryRecency();
     bindInventoryModalEvents();
     bindCapabilityEvents();
     renderChart();
@@ -153,6 +154,7 @@
     els.inventoryModalBackdrop = document.getElementById("capability-inventory-modal-backdrop");
     els.inventoryModalClose = document.getElementById("capability-inventory-modal-close");
     els.inventoryTableBody = document.getElementById("capability-inventory-table-body");
+    els.inventoryRecency = document.getElementById("capability-inventory-recency");
     els.scoringHelpButton = document.getElementById("capability-scoring-help-button");
     els.scoringHelpPopover = document.getElementById("capability-scoring-help-popover");
     els.orientationOverlay = document.getElementById("capability-orientation-overlay");
@@ -612,12 +614,22 @@
       body: `
         <div class="chart-help-section">
           <strong>What this view shows</strong>
-          <p>This chart compares the number of skills represented in each domain.</p>
+          <p>This chart compares the number of skills in each domain, segmented by capability tier.</p>
         </div>
 
         <div class="chart-help-section">
-          <strong>How to use it</strong>
-          <p>Click any domain bar to open the skill matrix and inspect the underlying capability records.</p>
+          <strong><span class="help-dot low"></span> Foundational</strong>
+          <p>Skills scored at depth 1–2.</p>
+        </div>
+
+        <div class="chart-help-section">
+          <strong><span class="help-dot moderate"></span> Applied</strong>
+          <p>Skills scored at depth 3.</p>
+        </div>
+
+        <div class="chart-help-section">
+          <strong><span class="help-dot high"></span> Expertise</strong>
+          <p>Skills scored at depth 4.</p>
         </div>
       `
     };
@@ -726,6 +738,18 @@
       .join("");
   }
 
+  function setInventoryRecency() {
+    if (!els.inventoryRecency) return;
+
+    const now = new Date();
+    const monthYear = now.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric"
+    });
+
+    els.inventoryRecency.textContent = `Data Snapshot: ${monthYear}`;
+  }
+  
   function openInventoryModal() {
     if (!els.inventoryModal) return;
     inventoryModalTriggerEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -766,19 +790,27 @@
   function getDomainSummaries() {
     return domains.map((domain) => {
       const items = skills.filter((item) => Number(item.domain_id) === Number(domain.domain_id));
-      const low = items.filter((item) => item.profileTierKey === "low").length;
-      const moderate = items.filter((item) => item.profileTierKey === "moderate").length;
-      const high = items.filter((item) => item.profileTierKey === "high").length;
+      const lowItems = items.filter((item) => item.profileTierKey === "low");
+      const moderateItems = items.filter((item) => item.profileTierKey === "moderate");
+      const highItems = items.filter((item) => item.profileTierKey === "high");
       const total = items.length || 1;
+
+      const avgConfidenceFor = (rows) => {
+        if (!rows.length) return 0;
+        return Math.round(rows.reduce((sum, item) => sum + item.confidence, 0) / rows.length);
+      };
 
       return {
         ...domain,
-        lowCount: low,
-        moderateCount: moderate,
-        highCount: high,
-        lowPct: (low / total) * 100,
-        moderatePct: (moderate / total) * 100,
-        highPct: (high / total) * 100
+        lowCount: lowItems.length,
+        moderateCount: moderateItems.length,
+        highCount: highItems.length,
+        lowPct: (lowItems.length / total) * 100,
+        moderatePct: (moderateItems.length / total) * 100,
+        highPct: (highItems.length / total) * 100,
+        lowAvgConfidence: avgConfidenceFor(lowItems),
+        moderateAvgConfidence: avgConfidenceFor(moderateItems),
+        highAvgConfidence: avgConfidenceFor(highItems)
       };
     });
   }
@@ -802,37 +834,34 @@
       `;
     }
 
-    if (point?.pointType === "profile-domain") {
-      const domain = point.payload;
+    if (point?.pointType === "profile-segment") {
+      const segment = point.payload;
       return `
-        <div class="chart-tooltip-title">${escapeHtml(domain.domain)}</div>
-        <div class="chart-tooltip-domain">${domain.skill_count} skills in domain</div>
+        <div class="chart-tooltip-title">${escapeHtml(segment.domain)}</div>
+        <div class="chart-tooltip-domain">${segment.skill_count} skills in domain</div>
         <div class="chart-tooltip-meta">
-          <div>Expertise: <strong>${Math.round(domain.highPct)}%</strong></div>
-          <div>Applied: <strong>${Math.round(domain.moderatePct)}%</strong></div>
-          <div>Foundational: <strong>${Math.round(domain.lowPct)}%</strong></div>
+          <div>${escapeHtml(segment.segmentLabel)} skills: <strong>${Math.round(segment.segmentPct)}%</strong></div>
         </div>
-        <div class="chart-tooltip-evidence">${escapeHtml(domain.summary || "Click to inspect the underlying skill matrix.")}</div>
+        <div class="chart-tooltip-evidence">${escapeHtml(segment.summary || "Capability concentration within this domain.")}</div>
       `;
     }
 
-    if (point?.pointType === "distribution-domain") {
-      const domain = point.payload;
+    if (point?.pointType === "distribution-segment") {
+      const segment = point.payload;
       return `
-        <div class="chart-tooltip-title">${escapeHtml(domain.domain)}</div>
-        <div class="chart-tooltip-domain">${domain.skill_count} skills</div>
+        <div class="chart-tooltip-title">${escapeHtml(segment.domain)}</div>
+        <div class="chart-tooltip-domain">${segment.skill_count} total skills</div>
         <div class="chart-tooltip-meta">
-          <div>Expertise skills: <strong>${domain.expertise_count}</strong></div>
-          <div>Applied skills: <strong>${domain.applied_count}</strong></div>
-          <div>Average confidence: <strong>${domain.avg_confidence}</strong></div>
+          <div>${escapeHtml(segment.segmentLabel)} skills: <strong>${segment.segmentCount}</strong></div>
+          <div>Average confidence: <strong>${segment.segmentAvgConfidence}</strong></div>
         </div>
-        <div class="chart-tooltip-evidence">${escapeHtml(domain.summary || "Click to inspect the underlying skill matrix.")}</div>
+        <div class="chart-tooltip-evidence">${escapeHtml(segment.summary || "Capability distribution across this domain.")}</div>
       `;
     }
 
     return "";
   }
-
+  
   function positionTooltip(clientX, clientY) {
     if (!els.chartTooltip) return;
 
@@ -861,7 +890,7 @@
       return;
     }
 
-    const useDockedMode = requiresTouchDoubleTap() || (isTouchLikeDevice() && window.innerWidth > 720);
+    const useDockedMode = requiresTouchDoubleTap();
 
     if (useDockedMode) {
       const dockedTop = Math.max(
@@ -995,41 +1024,69 @@
     const rows = getProfileDomainSummaries();
     const y = rows.map((row) => row.domain);
 
-    const commonCustomData = rows.map((row) => ({
-      pointType: "profile-domain",
-      payload: row
-    }));
-
     const traces = [
       {
         type: "bar",
         orientation: "h",
         name: "Foundational",
-        marker: { color: getTierColor("low") },
+        marker: {
+          color: getTierColor("low"),
+          line: { width: 1, color: "#ffffff" }
+        },
         x: rows.map((row) => row.lowPct),
         y,
-        customdata: commonCustomData,
-        hovertemplate: "<extra></extra>"
+        customdata: rows.map((row) => ({
+          pointType: "profile-segment",
+          payload: {
+            ...row,
+            segmentKey: "low",
+            segmentLabel: "Foundational",
+            segmentPct: row.lowPct
+          }
+        })),
+        hoverinfo: "none"
       },
       {
         type: "bar",
         orientation: "h",
         name: "Applied",
-        marker: { color: getTierColor("moderate") },
+        marker: {
+          color: getTierColor("moderate"),
+          line: { width: 1, color: "#ffffff" }
+        },
         x: rows.map((row) => row.moderatePct),
         y,
-        customdata: commonCustomData,
-        hovertemplate: "<extra></extra>"
+        customdata: rows.map((row) => ({
+          pointType: "profile-segment",
+          payload: {
+            ...row,
+            segmentKey: "moderate",
+            segmentLabel: "Applied",
+            segmentPct: row.moderatePct
+          }
+        })),
+        hoverinfo: "none"
       },
       {
         type: "bar",
         orientation: "h",
         name: "Expertise",
-        marker: { color: getTierColor("high") },
+        marker: {
+          color: getTierColor("high"),
+          line: { width: 1, color: "#ffffff" }
+        },
         x: rows.map((row) => row.highPct),
         y,
-        customdata: commonCustomData,
-        hovertemplate: "<extra></extra>"
+        customdata: rows.map((row) => ({
+          pointType: "profile-segment",
+          payload: {
+            ...row,
+            segmentKey: "high",
+            segmentLabel: "Expertise",
+            segmentPct: row.highPct
+          }
+        })),
+        hoverinfo: "none"
       }
     ];
 
@@ -1040,11 +1097,14 @@
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
+      hovermode: "closest",
+      spikedistance: -1,
       xaxis: {
         range: [0, 100],
         ticksuffix: "%",
         gridcolor: "rgba(19,37,63,0.08)",
         zeroline: false,
+        showspikes: false,
         title: {
           text: "Share of Skills Within Domain (%)",
           standoff: 8
@@ -1053,7 +1113,8 @@
       yaxis: {
         autorange: "reversed",
         tickfont: { size: 13 },
-        automargin: true
+        automargin: true,
+        showspikes: false
       }
     };
 
@@ -1069,11 +1130,6 @@
   function renderDomainChart() {
     const rows = getDomainSummaries();
 
-    const sharedCustomData = rows.map((row) => ({
-      pointType: "distribution-domain",
-      payload: row
-    }));
-
     const traces = [
       {
         type: "bar",
@@ -1081,7 +1137,16 @@
         name: "Foundational",
         x: rows.map((row) => row.lowCount),
         y: rows.map((row) => row.domain),
-        customdata: sharedCustomData,
+        customdata: rows.map((row) => ({
+          pointType: "distribution-segment",
+          payload: {
+            ...row,
+            segmentKey: "low",
+            segmentLabel: "Foundational",
+            segmentCount: row.lowCount,
+            segmentAvgConfidence: row.lowAvgConfidence
+          }
+        })),
         hoverinfo: "none",
         marker: {
           color: getTierColor("low"),
@@ -1094,7 +1159,16 @@
         name: "Applied",
         x: rows.map((row) => row.moderateCount),
         y: rows.map((row) => row.domain),
-        customdata: sharedCustomData,
+        customdata: rows.map((row) => ({
+          pointType: "distribution-segment",
+          payload: {
+            ...row,
+            segmentKey: "moderate",
+            segmentLabel: "Applied",
+            segmentCount: row.moderateCount,
+            segmentAvgConfidence: row.moderateAvgConfidence
+          }
+        })),
         hoverinfo: "none",
         marker: {
           color: getTierColor("moderate"),
@@ -1107,7 +1181,16 @@
         name: "Expertise",
         x: rows.map((row) => row.highCount),
         y: rows.map((row) => row.domain),
-        customdata: sharedCustomData,
+        customdata: rows.map((row) => ({
+          pointType: "distribution-segment",
+          payload: {
+            ...row,
+            segmentKey: "high",
+            segmentLabel: "Expertise",
+            segmentCount: row.highCount,
+            segmentAvgConfidence: row.highAvgConfidence
+          }
+        })),
         hoverinfo: "none",
         marker: {
           color: getTierColor("high"),
@@ -1124,15 +1207,18 @@
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
       hovermode: "closest",
+      spikedistance: -1,
       xaxis: {
         title: { text: "Number of Skills" },
         gridcolor: "rgba(19,37,63,0.08)",
-        zeroline: false
+        zeroline: false,
+        showspikes: false
       },
       yaxis: {
         autorange: "reversed",
         tickfont: { size: 13 },
-        automargin: true
+        automargin: true,
+        showspikes: false
       },
       annotations: [
         {
@@ -1289,6 +1375,7 @@
       bindSkillChartEvents(graphDiv);
     });
   }
+  
   function getQuadrantAnnotations(domain, showQuadrants = true) {
     if (!showQuadrants) return [];
 
@@ -1331,11 +1418,11 @@
         y: 0.7,
         xref: "x",
         yref: "y",
-        text: `<b>${escapeHtml(domain?.domain || "Domain")} Distribution</b>`,
+        text: "<b>Emerging</b>",
         showarrow: false,
         xanchor: "center",
         yanchor: "middle",
-        font: { size: 16, color: "rgba(95,114,137,0.28)" }
+        font: { size: 18, color: "rgba(95,114,137,0.32)" }
       }
     ];
   }
@@ -1344,7 +1431,7 @@
      CHART EVENTS
   ========================= */
 
-    function bindTopLevelChartEvents(graphDiv, mode) {
+  function bindTopLevelChartEvents(graphDiv, mode) {
     graphDiv.on("plotly_hover", (eventData) => {
       if (!eventData?.points?.length) return;
       if (requiresTouchDoubleTap()) return;
@@ -1393,19 +1480,22 @@
   function bindSkillChartEvents(graphDiv) {
     graphDiv.on("plotly_hover", (eventData) => {
       if (!eventData?.points?.length) return;
+      if (requiresTouchDoubleTap()) return;
+
       const point = eventData.points[0];
       const event = eventData.event || {};
       showTooltip(point.customdata, event.clientX ?? window.innerWidth / 2, event.clientY ?? 120);
     });
 
     graphDiv.on("plotly_unhover", () => {
-      if (!isTouchLikeDevice()) {
+      if (!requiresTouchDoubleTap()) {
         hideTooltip();
       }
     });
 
     graphDiv.on("plotly_click", (eventData) => {
       if (!eventData?.points?.length) return;
+
       const point = eventData.points[0];
       const event = eventData.event || {};
       const skill = point.customdata?.payload;
