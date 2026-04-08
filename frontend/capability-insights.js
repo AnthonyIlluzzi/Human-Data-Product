@@ -447,18 +447,11 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   }
 
 function getPlotHeight() {
-  const isMobile = window.innerWidth <= 720;
-  const isTablet = window.innerWidth <= 1100 && !isMobile;
+  const width = window.innerWidth;
 
-  if (isMobile) {
-    return 420;
-  }
-
-  if (isTablet) {
-    return 520;
-  }
-
-  return 620;
+  if (width <= 720) return 420;     // mobile
+  if (width <= 1100) return 520;    // tablet
+  return 580;                       // desktop (reduced from 620)
 }
 
 function bindLayoutObservers() {
@@ -1201,12 +1194,23 @@ function stabilizeActivePlot() {
     }
 
     buildChartToolbar();
+    // Ensure chart container has stable height BEFORE rendering
+    const plotHeight = getPlotHeight();
+    if (els.chart) {
+      els.chart.style.height = `${plotHeight}px`;
+    }
 
     if (activeGraphDiv && activeGraphDiv === els.chart) {
       window.Plotly.purge(els.chart);
       activeGraphDiv = null;
     }
 
+    // Always fully reset Plotly before rendering
+    if (window.Plotly && els.chart) {
+      window.Plotly.purge(els.chart);
+      activeGraphDiv = null;
+    }
+    
     if (activeDomain) {
       renderSkillChart();
       return;
