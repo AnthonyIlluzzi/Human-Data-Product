@@ -14,6 +14,8 @@ from data_service import (
     get_system_improvement_detail,
     get_project_detail,
     get_skills,
+    get_skill_domains,
+    get_capability_insights_dashboard,
     search_projects,
     get_role_preferences,
     get_target_opportunity,
@@ -124,10 +126,13 @@ def project_detail(project_id: int):
         raise HTTPException(status_code=404, detail="Project not found")
     return result
 
-
 @app.get("/skills")
-def skills(category: str | None = None):
-    return get_skills(category=category)
+def skills(domain_id: int | None = None):
+    return get_skills(domain_id=domain_id)
+
+@app.get("/skill-domains")
+def skill_domains():
+    return get_skill_domains()
     
 @app.post("/query/execute")
 def query_execute(payload: SqlQueryRequest):
@@ -246,6 +251,9 @@ def experience_system_improvements(experience_id: int):
 def value_insights_dashboard():
     return get_value_insights_dashboard()
 
+@app.get("/analytics/capability-insights-dashboard")
+def capability_insights_dashboard():
+    return get_capability_insights_dashboard()
 
 @app.get("/analytics/opportunity-insights-dashboard")
 def opportunity_insights_dashboard():

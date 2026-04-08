@@ -1,145 +1,258 @@
 # Human Data Product
 
-A production-style data product that models, transforms, and exposes a professional profile as a consumable asset.
+Human Data Product is a portfolio asset that models a professional profile as a structured data product rather than a traditional resume.
 
-This system demonstrates how structured human data can be:
-- queried via SQL
-- accessed via API
-- interpreted through analytics
-- consumed through a frontend workspace
+It is designed to demonstrate how professional experience, skills, projects, feedback, and preferences can be represented as queryable, API-accessible, and insight-ready data.
 
-Designed to reflect real-world data platform patterns including modeling, transformation, API exposure, and end-user consumption.
-
-## Live Demo
-
-Frontend:
+**Live application**  
 https://human-data-product-web.onrender.com/
 
-API Base:
-https://human-data-product-api.onrender.com/
+## Overview
+
+This project presents a professional identity as a working data product with multiple output ports:
+
+- Overview page for product framing and metadata
+- SQL Workspace for read-only exploration of the dataset
+- API Workspace for endpoint-based access to the product data
+- Insights Workspace for derived visual insights
+
+The Human Data Product is intended to show how professional information can be structured with the same principles used in modern data platforms and data products:
+
+- normalized source data
+- governed schema
+- documented interfaces
+- analytical outputs
+- reusable downstream consumption patterns
+
+## Current product structure
+
+The current application includes these main areas.
+
+### 1. Overview
+
+Introduces the Human Data Product concept, product framing, summary metadata, documentation access, and supporting context.
+
+### 2. SQL Workspace
+
+Provides a read-only SQL interface over the underlying dataset for direct structured exploration.
+
+### 3. API Workspace
+
+Provides documented endpoint access to the Human Data Product backend.
+
+### 4. Insights Workspace
+
+Provides derived visual outputs across three tabs:
+
+- Value Insights
+- Capability Insights
+- Opportunity Insights
+
+## Capability Insights
+
+Capability Insights is now integrated directly into the Human Data Product as the second tab in the Insights Workspace.
+
+This tab embeds the capability and skill model directly into HDP rather than linking out to a standalone experience.
+
+Capability Insights includes:
+
+- Capability Profile by Domain
+- Domain Distribution
+- domain drilldown into Skill Matrix
+- Focus View filtering within the matrix
+- Skill Inventory Table modal
+- capability-oriented helper tooltips and hover interactions
+
+The capability model is driven by normalized domain and skill records in the HDP source dataset.
+
+## Core design principle
+
+This project is built around a simple idea:
+
+A professional profile can be treated like a data product.
+
+Instead of presenting information only as static narrative, the Human Data Product organizes professional data into structured entities that can be:
+
+- queried
+- joined
+- documented
+- visualized
+- analyzed through multiple interfaces
+
+## Repository structure
+
+```
+Human-Data-Product/
+|-- backend/
+|-- data/
+|-- documentation/
+|-- frontend/
+\-- README.md
+```
+
+## Key directories
+
+### `backend/`
+
+Backend service and data access logic for the Human Data Product.
+
+Typical responsibilities include:
+
+- API routing
+- query execution
+- derived analytics payloads
+- dataset loading and validation
 
 ---
 
-## Concept
+### `data/`
 
-A traditional resume is static, fragmented, and difficult to interrogate.
+Source dataset used to populate the Human Data Product.
 
-This project explores a different idea:
+This includes normalized records such as:
 
-> What if my professional experience was treated as structured data - designed for access, interpretation, and reuse?
-
-The Human Data Product transforms career history into a **curated, governed dataset** with defined access patterns and analytical capabilities.
-
----
-
-## Capabilities
-
-The dataset is exposed through multiple consumption layers:
-
-- **SQL Interface** - query structured experience, projects, and skills  
-- **REST API** - access raw and derived data programmatically  
-- **Insights Layer** - explore aggregated signals and narrative interpretations  
-
-These interfaces simulate how modern data products are consumed across analytical and operational use cases.
-
-### Curated Feedback System
-
-The feedback insights layer includes a curated feedback display model designed to improve signal clarity without hiding the underlying dataset.
-
-Each feedback record can include:
-
-- `viz_display_flag` - indicates whether the record is part of the curated highlight set
-- `viz_display_rank` - defines display order within the curated subset
-
-#### Behavior
-
-- Theme counts still include all feedback records
-- The drilldown view defaults to the top curated records for a theme
-- Users can toggle to view all records for full transparency
-- Curated records are selected to prioritize:
-  - quote quality and specificity
-  - source diversity where available
-  - recency when it strengthens the narrative
+- experience
+- project
+- skill
+- skills_domain
+- project_skill
+- feedback
+- role_preference
+- metadata and supporting entities
 
 ---
 
-## Architecture
+### `frontend/`
 
-Sources → Transformation → Structured Data Model → Consumption Interfaces
+Static frontend application for the Human Data Product.
 
-- **Source of Truth**: Structured JSON dataset  
-- **Data Model**: SQLite relational schema  
-- **Backend**: FastAPI service layer  
-- **Query Layer**: Read-only SQL execution engine  
-- **Frontend**: Interactive UI and workspaces for exploration  
+Typical files include:
 
-This mirrors real-world data product design patterns, where data is intentionally modeled, exposed, and consumed.
-
----
-
-## Why This Exists
-
-This project was built to demonstrate how:
-
-- Data product thinking can be applied beyond traditional business datasets  
-- Structured data enables deeper understanding than static documents  
-- Systems design, not just data, determines usability and value  
-
-It reflects a belief that:
-
-> Information becomes more valuable when it is structured, accessible, and designed for interaction.
+- `index.html`
+- `styles.css`
+- `app.js`
+- branded documentation pages under `frontend/documentation/`
 
 ---
 
-## Explore the Product
+### `documentation/`
 
-The Human Data Product can be explored through:
+Repository-level supporting documentation.
 
-- **Overview Workspace** - product metadata and architecture  
-- **SQL Workspace** - guided query exploration  
-- **API Workspace** - direct endpoint interaction  
-- **Insights Workspace** - analytical views and interpretation  
+Going forward, this folder should be treated as abbreviated repository documentation. The branded HTML documentation under `frontend/documentation/` is the user-facing documentation surface and source of truth.
 
 ---
 
-## Data Product Contract
+## Data model highlights
 
-The system follows a defined contract for inputs, transformations, and outputs:
+The Human Data Product uses normalized source data rather than a flat resume-style structure.
 
-- Structured dataset ingestion  
-- Deterministic transformation logic  
-- Stable access interfaces (API + SQL)  
-- Derived analytical outputs
+Examples of core entities include:
+
+- `experience`
+- `project`
+- `skill`
+- `skills_domain`
+- `project_skill`
+- `feedback`
+- `role_preference`
 
 ---
 
-## Documentation
+## Capability model entities
 
-For deeper exploration of the system design:
+The integrated capability model is centered on two key entities.
 
-- **Data Product Contract**  
-  /documentation/human_data_product_contract.md
+### `skills_domain`
 
-- **Data Model / Schema**  
-  /documentation/hdp_schema.md
+Represents the domain grouping used by Capability Insights.
 
-- **API Specifications**  
-  /documentation/hdp_api_specs.md
+Example fields:
 
-- **Architecture Diagram**  
-  /documentation/Images/Human_data_product_ERD_V3.svg
+- `domain_id`
+- `domain`
+- `sort_order`
+- `summary`
 
-## Operational Considerations
+### `skill`
 
-- Deployed on Render free-tier infrastructure
-- Cold-start latency mitigated via scheduled health pings
-- API includes `/health` endpoint for uptime validation
+Represents normalized skill records aligned to the capability model.
 
-## Notes
+Example fields:
 
-- The database is **generated dynamically** from the source dataset  
-- All transformations are deterministic and reproducible  
-- The system is designed to behave as a **real, deployable data product**  
+- `skill_id`
+- `skill_name`
+- `skill_ref`
+- `domain_id`
+- `display_order`
+- `depth`
+- `experience`
+- `confidence`
+- `notes`
+- `source_origin`
+
+These records support both analytical API outputs and the embedded Capability Insights experience.
+
+---
+
+## API overview
+
+The backend exposes endpoints for both core entity retrieval and analytical views.
+
+Examples include:
+
+- `/summary`
+- `/identity`
+- `/product-metadata`
+- `/experiences`
+- `/projects`
+- `/skills`
+- `/skill-domains`
+- `/analytics/value-insights-dashboard`
+- `/analytics/capability-insights-dashboard`
+- `/analytics/opportunity-insights-dashboard`
+
+The API is intended to support both direct exploration and frontend rendering.
+
+---
+
+## Documentation strategy
+
+The project includes both abbreviated Markdown documentation and branded HTML documentation.
+
+Going forward, documentation will be maintained using the following model:
+
+- `frontend/documentation/*.html` is the source of truth
+- `README.md` is the repository entry point
+- `documentation/*.md` is intentionally abbreviated and exists only as lightweight repository reference
+
+This avoids maintaining the same full documentation in multiple places.
+
+---
+
+## User-facing documentation
+
+The primary user-facing documentation lives in the branded HTML files under:
+
+- `frontend/documentation/hdp_api_specs.html`
+- `frontend/documentation/hdp_schema.html`
+
+These HTML files should be updated whenever the product documentation changes.
+
+---
+
+## Product intent
+
+This is not intended to be a generic portfolio site.
+
+It is a productized demonstration of:
+
+- data modeling
+- information design
+- analytical framing
+- structured professional storytelling
+- API and query accessibility
+- data product oriented thinking
 
 ---
 

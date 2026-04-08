@@ -98,9 +98,17 @@ def show_skills():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT skill_id, category, skill_name, level
-            FROM skill
-            ORDER BY category, skill_name;
+            SELECT
+                s.skill_id,
+                d.domain,
+                s.skill_name,
+                s.depth,
+                s.experience,
+                s.confidence
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            ORDER BY d.sort_order, s.display_order, s.skill_name;
         """)
         rows = cursor.fetchall()
 
@@ -113,14 +121,23 @@ def show_project_skills(project_id):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT p.project_id, p.name, s.skill_name, s.level
+            SELECT
+                p.project_id,
+                p.name,
+                d.domain,
+                s.skill_name,
+                s.depth,
+                s.experience,
+                s.confidence
             FROM project p
             JOIN project_skill ps
                 ON p.project_id = ps.project_id
             JOIN skill s
                 ON ps.skill_id = s.skill_id
+            JOIN skills_domain d
+                ON s.domain_id = d.domain_id
             WHERE p.project_id = ?
-            ORDER BY s.skill_name;
+            ORDER BY d.sort_order, s.display_order, s.skill_name;
         """, (project_id,))
         rows = cursor.fetchall()
 
@@ -175,24 +192,32 @@ def show_summary():
         skill_count = cursor.fetchone()[0]
 
         cursor.execute("""
-            SELECT category, COUNT(*) as skill_total
-            FROM skill
-            GROUP BY category
-            ORDER BY skill_total DESC, category
+            SELECT
+                d.domain,
+                COUNT(s.skill_id) as skill_total
+            FROM skills_domain d
+            LEFT JOIN skill s
+              ON d.domain_id = s.domain_id
+            GROUP BY d.domain_id, d.domain, d.sort_order
+            ORDER BY d.sort_order, d.domain
         """)
         skill_categories = cursor.fetchall()
 
         cursor.execute("""
-            SELECT skill_name, level
-            FROM skill
-            WHERE category IN ('architecture', 'data', 'strategy', 'analytics')
+            SELECT
+                s.skill_name,
+                d.domain,
+                s.depth,
+                s.experience
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
             ORDER BY
-                CASE level
-                    WHEN 'advanced' THEN 1
-                    WHEN 'intermediate' THEN 2
-                    ELSE 3
-                END,
-                skill_name
+                s.depth DESC,
+                s.experience DESC,
+                d.sort_order ASC,
+                s.display_order ASC,
+                s.skill_name ASC
             LIMIT 8
         """)
         top_skills = cursor.fetchall()
@@ -212,13 +237,13 @@ def show_summary():
 
     print("\nSkill Categories")
     print("----------------")
-    for category, total in skill_categories:
-        print(f"{category}: {total}")
+    for domain, total in skill_categories:
+        print(f"{domain}: {total}")
 
     print("\nSelected Core Skills")
     print("--------------------")
-    for skill_name, level in top_skills:
-        print(f"{skill_name} ({level})")
+    for skill_name, domain, depth, experience in top_skills:
+        print(f"{skill_name} ({domain} | depth {depth}, experience {experience})")
         
 def show_top_projects():
     with get_connection() as conn:
@@ -275,20 +300,24 @@ def show_skills_by_category():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT category, skill_name, level
-            FROM skill
-            ORDER BY category,
-                CASE level
-                    WHEN 'advanced' THEN 1
-                    WHEN 'intermediate' THEN 2
-                    ELSE 3
-                END,
-                skill_name
+            SELECT
+                d.domain,
+                s.skill_name,
+                s.depth,
+                s.experience,
+                s.confidence
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            ORDER BY
+                d.sort_order,
+                s.display_order,
+                s.skill_name
         """)
         rows = cursor.fetchall()
 
-    print("\nSkills by Category")
-    print("------------------")
+    print("\nSkills by Domain")
+    print("----------------")
     print_rows(cursor, rows)
     
 def show_feedback_themes():
@@ -395,12 +424,15 @@ def show_skill_strengths():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT category,
-                   SUM(CASE WHEN level='advanced' THEN 1 ELSE 0 END) AS advanced_count,
-                   COUNT(*) AS total_skills
-            FROM skill
-            GROUP BY category
-            ORDER BY advanced_count DESC, total_skills DESC
+            SELECT
+                d.domain,
+                SUM(CASE WHEN s.depth = 4 THEN 1 ELSE 0 END) AS expertise_count,
+                COUNT(*) AS total
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            GROUP BY d.domain_id, d.domain, d.sort_order
+            ORDER BY total DESC, d.sort_order, d.domain
         """)
 
         rows = cursor.fetchall()
@@ -408,8 +440,8 @@ def show_skill_strengths():
     print("\nSkill Strength Clusters")
     print("-----------------------")
 
-    for category, advanced_count, total in rows:
-        print(f"{category}: {advanced_count} advanced skills ({total} total)")
+    for domain, expertise_count, total in rows:
+        print(f"{domain}: {expertise_count} expertise skills ({total} total)")
         
 def show_project_detail(project_id):
     with get_connection() as conn:
@@ -428,7 +460,8 @@ def show_project_detail(project_id):
             return
 
         cursor.execute("""
-            SELECT s.skill_name, s.level
+            SELECT s.skill_name, s.depth, s.experience
+            FROM skill s
             FROM skill s
             JOIN project_skill ps
                 ON s.skill_id = ps.skill_id
@@ -452,8 +485,8 @@ def show_project_detail(project_id):
     if skills:
         print("\nAssociated Skills")
         print("-----------------")
-        for skill, level in skills:
-            print(f"- {skill} ({level})")
+        for skill, depth, experience in skills:
+            print(f"- {skill} (depth {depth}, experience {experience})")
             
         
 def search_all(keyword):
@@ -467,9 +500,15 @@ def search_all(keyword):
 
             UNION ALL
 
-            SELECT 'skill' AS entity_type, skill_id AS entity_id, skill_name AS title, category AS context
-            FROM skill
-            WHERE skill_name LIKE ? OR category LIKE ? OR level LIKE ?
+            SELECT
+                'skill' AS entity_type,
+                s.skill_id AS entity_id,
+                s.skill_name AS title,
+                d.domain AS context
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            WHERE s.skill_name LIKE ? OR d.domain LIKE ? OR s.notes LIKE ?
 
             UNION ALL
 

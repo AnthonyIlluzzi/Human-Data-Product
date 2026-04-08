@@ -3697,6 +3697,12 @@ body {
   padding: 14px 16px;
 }
 
+.insight-help-popover,
+.insight-help-popover * {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
 .insight-help-popover.is-visible {
   display: block;
 }
@@ -3716,7 +3722,7 @@ body {
   font-size: 0.95rem;
   line-height: 1.25;
   font-weight: 800;
-  color: var(--primary);
+  color: #0a6ed1;
 }
 
 .insight-help-body {
@@ -4204,38 +4210,45 @@ body {
 .insights-hover-tooltip {
   position: fixed;
   z-index: 70;
-  width: min(260px, calc(100vw - 24px));
-  padding: 9px 11px;
-  border-radius: 10px;
+  display: none;
+  max-width: 360px;
+  min-width: 260px;
   background: #ffffff;
-  border: 1px solid var(--primary);
-  box-shadow: 0 12px 24px rgba(19, 37, 63, 0.14);
+  border: 1px solid #0a6ed1;
+  border-radius: 12px;
+  box-shadow: 0 14px 28px rgba(19, 37, 63, 0.12);
+  padding: 14px 16px;
   pointer-events: none;
 }
 
-.insights-hover-tooltip-title {
+.insights-hover-tooltip.is-visible {
   display: block;
-  margin-bottom: 5px;
+}
+
+.insights-hover-tooltip-title {
+  margin: 0;
+  display: block;
   font-size: 0.95rem;
-  line-height: 1.25;
   font-weight: 800;
   color: var(--primary);
+  line-height: 1.25;
 }
 
 .insights-hover-tooltip-body {
   display: block;
+  margin-top: 4px;
   font-size: 0.84rem;
-  line-height: 1.42;
+  line-height: 1.4;
   color: var(--muted);
 }
 
 .insights-hover-tooltip-definition {
   display: block;
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid #e6edf7;
-  font-size: 0.82rem;
-  line-height: 1.42;
+  font-size: 0.84rem;
+  line-height: 1.4;
   color: var(--muted);
 }
 

@@ -22,6 +22,7 @@ TOP_LEVEL_TABLES = [
     "education",
     "credential",
     "project",
+    "skills_domain",
     "skill",
     "project_skill",
     "feedback",
@@ -80,8 +81,32 @@ def validate_referential_integrity(data: dict[str, Any]) -> None:
     education_ids = build_id_set(data["education"], "education_id")
     credential_ids = build_id_set(data["credential"], "credential_id")
     project_ids = build_id_set(data["project"], "project_id")
+    domain_ids = build_id_set(data["skills_domain"], "domain_id")
     skill_ids = build_id_set(data["skill"], "skill_id")
 
+    for record in data["skill"]:
+        domain_id = record["domain_id"]
+
+        if domain_id not in domain_ids:
+            raise ValueError(
+                f"Skill {record['skill_id']} references missing domain_id {domain_id}"
+            )
+
+        if not 1 <= int(record["depth"]) <= 4:
+            raise ValueError(
+                f"Skill {record['skill_id']} has invalid depth {record['depth']} (expected 1-4)"
+            )
+
+        if not 0 <= int(record["experience"]) <= 3:
+            raise ValueError(
+                f"Skill {record['skill_id']} has invalid experience {record['experience']} (expected 0-3)"
+            )
+
+        if not 0 <= int(record["confidence"]) <= 100:
+            raise ValueError(
+                f"Skill {record['skill_id']} has invalid confidence {record['confidence']} (expected 0-100)"
+            )
+    
     for record in data["project"]:
         if record["experience_id"] not in experience_ids:
             raise ValueError(
@@ -231,8 +256,24 @@ def validate_dataset(data: dict[str, Any]) -> None:
         "project",
     )
     require_keys(
+        data["skills_domain"],
+        {"domain_id", "domain", "sort_order", "summary"},
+        "skills_domain",
+    )
+    require_keys(
         data["skill"],
-        {"skill_id", "category", "skill_name", "level"},
+        {
+            "skill_id",
+            "skill_name",
+            "skill_ref",
+            "domain_id",
+            "display_order",
+            "depth",
+            "experience",
+            "confidence",
+            "notes",
+            "source_origin",
+        },
         "skill",
     )
     require_keys(
@@ -373,11 +414,25 @@ def create_tables(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (experience_id) REFERENCES experience(experience_id)
         );
 
+        CREATE TABLE IF NOT EXISTS skills_domain (
+            domain_id INTEGER PRIMARY KEY,
+            domain TEXT NOT NULL,
+            sort_order INTEGER NOT NULL,
+            summary TEXT
+        );
+        
         CREATE TABLE IF NOT EXISTS skill (
             skill_id INTEGER PRIMARY KEY,
-            category TEXT,
-            skill_name TEXT,
-            level TEXT
+            skill_name TEXT NOT NULL,
+            skill_ref TEXT NOT NULL UNIQUE,
+            domain_id INTEGER NOT NULL,
+            display_order INTEGER NOT NULL,
+            depth INTEGER NOT NULL,
+            experience INTEGER NOT NULL,
+            confidence INTEGER NOT NULL,
+            notes TEXT,
+            source_origin TEXT,
+            FOREIGN KEY (domain_id) REFERENCES skills_domain(domain_id)
         );
 
         CREATE TABLE IF NOT EXISTS project_skill (
@@ -427,6 +482,7 @@ def clear_tables(conn: sqlite3.Connection) -> None:
         "feedback",
         "project",
         "skill",
+        "skills_domain",
         "credential",
         "education",
         "experience",
@@ -538,8 +594,25 @@ def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
     )
     insert_many(
         conn,
+        "skills_domain",
+        ["domain_id", "domain", "sort_order", "summary"],
+        data["skills_domain"],
+    )
+    insert_many(
+        conn,
         "skill",
-        ["skill_id", "category", "skill_name", "level"],
+        [
+            "skill_id",
+            "skill_name",
+            "skill_ref",
+            "domain_id",
+            "display_order",
+            "depth",
+            "experience",
+            "confidence",
+            "notes",
+            "source_origin",
+        ],
         data["skill"],
     )
     insert_many(

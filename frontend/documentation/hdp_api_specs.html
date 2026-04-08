@@ -241,6 +241,11 @@
           <td>/skills</td>
           <td>Returns all skill records</td>
         </tr>
+        <tr>
+          <td>GET</td>
+          <td>/skill-domains</td>
+          <td>Returns all skill-domain records</td>
+        </tr>
       </tbody>
     </table>
 
@@ -374,24 +379,6 @@
           <td>GET</td>
           <td>/analytics/feedback-theme-details/{theme}</td>
           <td>Returns detailed feedback entries for a feedback theme</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3 id="insights">Insights</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th>Endpoint</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>GET</td>
-          <td>/insights</td>
-          <td>Returns curated insight cards for the Insights Workspace</td>
         </tr>
       </tbody>
     </table>
@@ -665,17 +652,17 @@
         <tr>
           <td>skill_categories</td>
           <td>array</td>
-          <td>Breakdown of skills by category</td>
+          <td>Breakdown of skills by capability domain</td>
         </tr>
         <tr>
           <td>skill_categories.category</td>
           <td>string</td>
-          <td>Skill category</td>
+          <td>Capability domain name</td>
         </tr>
         <tr>
           <td>skill_categories.skill_total</td>
           <td>integer</td>
-          <td>Number of skills in that category</td>
+          <td>Number of skills in that domain</td>
         </tr>
         <tr>
           <td>system_improvement_count</td>
@@ -701,14 +688,19 @@
   "skill_count": 33,
   "skill_categories": [
     {
-      "category": "capability",
-      "skill_total": 10
+      "category": "Data Architecture",
+      "skill_total": 6
     },
     {
-      "category": "leadership",
+      "category": "Data Platforms",
       "skill_total": 5
+    },
+    {
+      "category": "Leadership & Execution",
+      "skill_total": 4
     }
-  ]
+  ],
+  "system_improvement_count": 12
 }</code></pre>
     <p>Note: Response may contain multiple records.</p>
 
@@ -1013,16 +1005,16 @@
           <td>string</td>
           <td>Skill name</td>
         </tr>
-        <tr>
-          <td>associated_skills.category</td>
-          <td>string</td>
-          <td>Skill category</td>
-        </tr>
-        <tr>
-          <td>associated_skills.level</td>
-          <td>string</td>
-          <td>Skill proficiency level</td>
-        </tr>
+        <tr><td>associated_skills.skill_ref</td><td>string</td><td>Stable machine-friendly skill reference</td></tr>
+        <tr><td>associated_skills.domain_id</td><td>integer</td><td>Skill domain identifier</td></tr>
+        <tr><td>associated_skills.domain</td><td>string</td><td>Skill domain name</td></tr>
+        <tr><td>associated_skills.domain_sort_order</td><td>integer</td><td>Skill domain display order</td></tr>
+        <tr><td>associated_skills.display_order</td><td>integer</td><td>Skill display order within domain</td></tr>
+        <tr><td>associated_skills.depth</td><td>integer</td><td>Depth score from 1–4</td></tr>
+        <tr><td>associated_skills.experience</td><td>integer</td><td>Experience score from 0–3</td></tr>
+        <tr><td>associated_skills.confidence</td><td>integer</td><td>Confidence score from 0–100</td></tr>
+        <tr><td>associated_skills.notes</td><td>string</td><td>Evidence / rationale supporting the skill</td></tr>
+        <tr><td>associated_skills.source_origin</td><td>string</td><td>Source lineage for the skill record</td></tr>
         <tr>
           <td>related_system_improvements</td>
           <td>array</td>
@@ -1207,80 +1199,109 @@
       </tbody>
     </table>
 
-    <h2 id="get-skills">GET /skills</h2>
-    <p>Returns all skills associated with the Human Data Product.</p>
+<h2 id="get-skills">GET /skills</h2>
+<p>Returns all skill records in the normalized capability schema. Supports optional filtering by domain.</p>
 
-    <h3>Example</h3>
-    <pre><code>GET /skills?category=architecture</code></pre>
+<h3>Example Request</h3>
+<pre><code>GET /skills?domain_id=1</code></pre>
 
-    <h3>Response Structure</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>skill_id</td>
-          <td>integer</td>
-          <td>Unique skill identifier</td>
-        </tr>
-        <tr>
-          <td>category</td>
-          <td>string</td>
-          <td>Skill classification category</td>
-        </tr>
-        <tr>
-          <td>skill_name</td>
-          <td>string</td>
-          <td>Skill name</td>
-        </tr>
-        <tr>
-          <td>level</td>
-          <td>string</td>
-          <td>Skill proficiency level</td>
-        </tr>
-      </tbody>
-    </table>
+<h3>Response Structure</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>skill_id</td><td>integer</td><td>Skill identifier</td></tr>
+    <tr><td>skill_name</td><td>string</td><td>Skill name</td></tr>
+    <tr><td>skill_ref</td><td>string</td><td>Stable machine-friendly skill reference</td></tr>
+    <tr><td>domain_id</td><td>integer</td><td>Foreign key to <code>skills_domain.domain_id</code></td></tr>
+    <tr><td>domain</td><td>string</td><td>Human-readable domain name</td></tr>
+    <tr><td>domain_sort_order</td><td>integer</td><td>Display order of the skill domain</td></tr>
+    <tr><td>domain_summary</td><td>string</td><td>Domain summary used by capability visualizations</td></tr>
+    <tr><td>display_order</td><td>integer</td><td>Skill display order within its domain</td></tr>
+    <tr><td>depth</td><td>integer</td><td>Depth score from 1–4</td></tr>
+    <tr><td>experience</td><td>integer</td><td>Experience score from 0–3</td></tr>
+    <tr><td>confidence</td><td>integer</td><td>Confidence score from 0–100</td></tr>
+    <tr><td>notes</td><td>string</td><td>Evidence / rationale for the skill record</td></tr>
+    <tr><td>source_origin</td><td>string</td><td>Source lineage of the normalized skill record</td></tr>
+  </tbody>
+</table>
 
-    <h3>Query Parameters</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Parameter</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>category</td>
-          <td>string</td>
-          <td>Optional filter returning skills within a specific category</td>
-        </tr>
-      </tbody>
-    </table>
+<h3>Query Parameters</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>domain_id</td><td>integer</td><td>Optional filter returning skills for a specific domain</td></tr>
+  </tbody>
+</table>
 
-    <h3>Example Response</h3>
-    <pre><code>[
+<h3>Example Response</h3>
+<pre><code>[
   {
-    "skill_id": 5,
-    "category": "architecture",
-    "skill_name": "Metadata Architecture",
-    "level": "advanced"
-  },
-  {
-    "skill_id": 17,
-    "category": "architecture",
-    "skill_name": "Semantic Modeling",
-    "level": "advanced"
+    "skill_id": 1,
+    "skill_name": "Enterprise Data Architecture",
+    "skill_ref": "enterprise_data_architecture",
+    "domain_id": 1,
+    "domain": "Data Architecture",
+    "domain_sort_order": 1,
+    "domain_summary": "Core architecture strength spanning enterprise data architecture, semantic modeling, relational design, and data-product thinking.",
+    "display_order": 1,
+    "depth": 4,
+    "experience": 3,
+    "confidence": 96,
+    "notes": "Resume and portfolio evidence through repeated enterprise data, platform, and architecture positioning",
+    "source_origin": "capability_model"
   }
 ]</code></pre>
-    <p>Note: Response may contain multiple records.</p>
 
+<h2 id="get-skill-domains">GET /skill-domains</h2>
+<p>Returns the normalized capability domains used by the skill model and Capability Insights workspace.</p>
+
+<h3>Example Request</h3>
+<pre><code>GET /skill-domains</code></pre>
+
+<h3>Response Structure</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>domain_id</td><td>integer</td><td>Domain identifier</td></tr>
+    <tr><td>domain</td><td>string</td><td>Domain name</td></tr>
+    <tr><td>sort_order</td><td>integer</td><td>Relative display order</td></tr>
+    <tr><td>summary</td><td>string</td><td>Domain summary text</td></tr>
+    <tr><td>skill_count</td><td>integer</td><td>Number of skills currently mapped to the domain</td></tr>
+  </tbody>
+</table>
+
+<h3>Query Parameters</h3>
+<p>None</p>
+
+<h3>Example Response</h3>
+<pre><code>[
+  {
+    "domain_id": 1,
+    "domain": "Data Architecture",
+    "sort_order": 1,
+    "summary": "Core architecture strength spanning enterprise data architecture, semantic modeling, relational design, and data-product thinking.",
+    "skill_count": 6
+  }
+]</code></pre>
+    
     <h2 id="get-search-projects-q-keyword">GET /search/projects?q={keyword}</h2>
     <p>Searches projects by keyword.</p>
 
@@ -1657,16 +1678,14 @@
           <td>string</td>
           <td>Skill name</td>
         </tr>
-        <tr>
-          <td>category</td>
-          <td>string</td>
-          <td>Skill category</td>
-        </tr>
-        <tr>
-          <td>level</td>
-          <td>string</td>
-          <td>Skill proficiency level</td>
-        </tr>
+        <tr><td>skill_ref</td><td>string</td><td>Stable machine-friendly skill reference</td></tr>
+        <tr><td>domain_id</td><td>integer</td><td>Skill domain identifier</td></tr>
+        <tr><td>domain</td><td>string</td><td>Skill domain name</td></tr>
+        <tr><td>domain_sort_order</td><td>integer</td><td>Skill domain display order</td></tr>
+        <tr><td>display_order</td><td>integer</td><td>Skill display order within domain</td></tr>
+        <tr><td>depth</td><td>integer</td><td>Depth score from 1–4</td></tr>
+        <tr><td>experience</td><td>integer</td><td>Experience score from 0–3</td></tr>
+        <tr><td>confidence</td><td>integer</td><td>Confidence score from 0–100</td></tr>
         <tr>
           <td>project_count</td>
           <td>integer</td>
@@ -1682,17 +1701,16 @@
     <pre><code>[
   {
     "skill_id": 1,
-    "skill_name": "SQL",
-    "category": "data",
-    "level": "advanced",
+    "skill_name": "Enterprise Data Architecture",
+    "skill_ref": "enterprise_data_architecture",
+    "domain_id": 1,
+    "domain": "Data Architecture",
+    "domain_sort_order": 1,
+    "display_order": 1,
+    "depth": 4,
+    "experience": 3,
+    "confidence": 96,
     "project_count": 6
-  },
-  {
-    "skill_id": 21,
-    "skill_name": "Systems Thinking",
-    "category": "capability",
-    "level": "advanced",
-    "project_count": 4
   }
 ]</code></pre>
 
@@ -1748,16 +1766,16 @@
           <td>string</td>
           <td>Skill name</td>
         </tr>
-        <tr>
-          <td>skills.category</td>
-          <td>string</td>
-          <td>Skill category</td>
-        </tr>
-        <tr>
-          <td>skills.level</td>
-          <td>string</td>
-          <td>Skill level</td>
-        </tr>
+        <tr><td>associated_skills.skill_ref</td><td>string</td><td>Stable machine-friendly skill reference</td></tr>
+        <tr><td>associated_skills.domain_id</td><td>integer</td><td>Skill domain identifier</td></tr>
+        <tr><td>associated_skills.domain</td><td>string</td><td>Skill domain name</td></tr>
+        <tr><td>associated_skills.domain_sort_order</td><td>integer</td><td>Skill domain display order</td></tr>
+        <tr><td>associated_skills.display_order</td><td>integer</td><td>Skill display order within domain</td></tr>
+        <tr><td>associated_skills.depth</td><td>integer</td><td>Depth score from 1–4</td></tr>
+        <tr><td>associated_skills.experience</td><td>integer</td><td>Experience score from 0–3</td></tr>
+        <tr><td>associated_skills.confidence</td><td>integer</td><td>Confidence score from 0–100</td></tr>
+        <tr><td>associated_skills.notes</td><td>string</td><td>Evidence / rationale supporting the skill</td></tr>
+        <tr><td>associated_skills.source_origin</td><td>string</td><td>Source lineage for the skill record</td></tr>
         <tr>
           <td>skills.project_count</td>
           <td>integer</td>

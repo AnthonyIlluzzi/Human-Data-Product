@@ -596,581 +596,1711 @@
   ],
   "skill": [
     {
-      "skill_id": 1,
-      "category": "data",
-      "skill_name": "SQL",
-      "level": "advanced"
+      "skill_name": "Enterprise Data Architecture",
+      "skill_ref": "enterprise_data_architecture",
+      "domain_id": 1,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 96,
+      "notes": "Resume and portfolio evidence through repeated enterprise data, platform, and architecture positioning",
+      "source_origin": "capability_model",
+      "skill_id": 1
     },
     {
-      "skill_id": 2,
-      "category": "data",
-      "skill_name": "Python",
-      "level": "intermediate"
+      "skill_name": "Data Product Design",
+      "skill_ref": "data_product_design",
+      "domain_id": 1,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 95,
+      "notes": "Portfolio and conversation evidence through Human Data Product design and data product framing",
+      "source_origin": "capability_model",
+      "skill_id": 2
     },
     {
-      "skill_id": 3,
-      "category": "platform",
-      "skill_name": "SAP Fieldglass",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 4,
-      "category": "architecture",
-      "skill_name": "Analytics Architecture",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 5,
-      "category": "architecture",
-      "skill_name": "Metadata Architecture",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 6,
-      "category": "governance",
-      "skill_name": "Data Governance",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 7,
-      "category": "analytics",
-      "skill_name": "Product Usage Analytics",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 8,
-      "category": "analytics",
-      "skill_name": "KPI / Value Realization Frameworks",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 9,
-      "category": "strategy",
-      "skill_name": "Platform Adoption Strategy",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 10,
-      "category": "integration",
-      "skill_name": "API Testing (Bruno)",
-      "level": "intermediate"
-    },
-    {
-      "skill_id": 11,
-      "category": "engineering",
-      "skill_name": "Testing Strategy & Release Readiness",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 12,
-      "category": "data",
-      "skill_name": "Lakehouse Platforms (Databricks)",
-      "level": "intermediate"
-    },
-    {
-      "skill_id": 13,
-      "category": "tools",
-      "skill_name": "Jira",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 14,
-      "category": "tools",
-      "skill_name": "Confluence",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 15,
-      "category": "leadership",
-      "skill_name": "Cross-Functional Collaboration",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 16,
-      "category": "leadership",
-      "skill_name": "Executive Communication",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 17,
-      "category": "architecture",
       "skill_name": "Semantic Modeling",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 18,
-      "category": "platform",
-      "skill_name": "SAP Business Data Cloud",
-      "level": "intermediate"
-    },
-    {
-      "skill_id": 19,
-      "category": "platform",
-      "skill_name": "SAP Datasphere",
-      "level": "intermediate"
-    },
-    {
-      "skill_id": 20,
-      "category": "platform",
-      "skill_name": "SAP BTP",
-      "level": "intermediate"
-    },
-    {
-      "skill_id": 21,
-      "category": "capability",
-      "skill_name": "Systems Thinking",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 22,
-      "category": "capability",
-      "skill_name": "Analytical Problem Solving",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 23,
-      "category": "capability",
-      "skill_name": "Structured Communication",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 24,
-      "category": "capability",
-      "skill_name": "Conceptual Abstraction",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 25,
-      "category": "capability",
-      "skill_name": "Intellectual Curiosity",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 26,
-      "category": "capability",
-      "skill_name": "Cross-disciplinary Thinking",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 27,
-      "category": "capability",
-      "skill_name": "Strategic Thinking",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 28,
-      "category": "capability",
-      "skill_name": "Stakeholder Alignment",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 29,
-      "category": "capability",
-      "skill_name": "Attention to Detail",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 30,
-      "category": "leadership",
-      "skill_name": "Program & Initiative Leadership",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 31,
-      "category": "leadership",
-      "skill_name": "Change Management",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 32,
-      "category": "capability",
-      "skill_name": "Requirements Analysis & Solution Design",
-      "level": "advanced"
-    },
-    {
-      "skill_id": 33,
-      "category": "leadership",
-      "skill_name": "Mentorship & Capability Building",
-      "level": "advanced"
-    }
-  ],
-  "project_skill": [
-    {
-      "project_id": 1001,
-      "skill_id": 9
-    },
-    {
-      "project_id": 1001,
-      "skill_id": 16
-    },
-    {
-      "project_id": 1001,
-      "skill_id": 15
-    },
-    {
-      "project_id": 1001,
-      "skill_id": 27
-    },
-    {
-      "project_id": 1001,
-      "skill_id": 23
-    },
-    {
-      "project_id": 1001,
-      "skill_id": 28
-    },
-    {
-      "project_id": 1002,
+      "skill_ref": "semantic_modeling",
+      "domain_id": 1,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 94,
+      "notes": "Resume and conversation evidence through semantic layer, business meaning, and governed data framing",
+      "source_origin": "capability_model",
       "skill_id": 3
     },
     {
-      "project_id": 1002,
-      "skill_id": 10
-    },
-    {
-      "project_id": 1002,
-      "skill_id": 9
-    },
-    {
-      "project_id": 1002,
-      "skill_id": 21
-    },
-    {
-      "project_id": 1002,
-      "skill_id": 22
-    },
-    {
-      "project_id": 1002,
-      "skill_id": 32
-    },
-    {
-      "project_id": 1002,
-      "skill_id": 29
-    },
-    {
-      "project_id": 1003,
-      "skill_id": 1
-    },
-    {
-      "project_id": 1003,
+      "skill_name": "Solution Architecture",
+      "skill_ref": "solution_architecture",
+      "domain_id": 1,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume evidence through cross-functional solution design and architecture ownership",
+      "source_origin": "capability_model",
       "skill_id": 4
     },
     {
-      "project_id": 1003,
-      "skill_id": 7
-    },
-    {
-      "project_id": 1003,
-      "skill_id": 21
-    },
-    {
-      "project_id": 1003,
-      "skill_id": 22
-    },
-    {
-      "project_id": 1003,
-      "skill_id": 23
-    },
-    {
-      "project_id": 1003,
-      "skill_id": 27
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 9
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 1
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 7
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 30
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 28
-    },
-    {
-      "project_id": 1004,
-      "skill_id": 29
-    },
-    {
-      "project_id": 1005,
-      "skill_id": 1
-    },
-    {
-      "project_id": 1005,
-      "skill_id": 8
-    },
-    {
-      "project_id": 1005,
-      "skill_id": 16
-    },
-    {
-      "project_id": 1005,
-      "skill_id": 27
-    },
-    {
-      "project_id": 1005,
-      "skill_id": 23
-    },
-    {
-      "project_id": 1006,
-      "skill_id": 1
-    },
-    {
-      "project_id": 1006,
-      "skill_id": 7
-    },
-    {
-      "project_id": 1006,
-      "skill_id": 4
-    },
-    {
-      "project_id": 1006,
-      "skill_id": 22
-    },
-    {
-      "project_id": 1006,
-      "skill_id": 29
-    },
-    {
-      "project_id": 1007,
+      "skill_name": "Data Modeling (Conceptual)",
+      "skill_ref": "data_modeling_conceptual",
+      "domain_id": 1,
+      "display_order": 5,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 92,
+      "notes": "Resume and portfolio evidence through KPI structuring, entity design, and information framing",
+      "source_origin": "capability_model",
       "skill_id": 5
     },
     {
-      "project_id": 1007,
+      "skill_name": "Requirements Analysis & Solution Design",
+      "skill_ref": "requirements_analysis_and_solution_design",
+      "domain_id": 1,
+      "display_order": 6,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Strong evidence through translating needs into structured solutions, workflows, mappings, and scalable technical approaches.",
+      "source_origin": "hdp_enrichment",
       "skill_id": 6
     },
     {
-      "project_id": 1007,
-      "skill_id": 17
-    },
-    {
-      "project_id": 1007,
-      "skill_id": 21
-    },
-    {
-      "project_id": 1007,
-      "skill_id": 27
-    },
-    {
-      "project_id": 1007,
-      "skill_id": 29
-    },
-    {
-      "project_id": 1007,
-      "skill_id": 23
-    },
-    {
-      "project_id": 1008,
-      "skill_id": 11
-    },
-    {
-      "project_id": 1008,
-      "skill_id": 13
-    },
-    {
-      "project_id": 1008,
-      "skill_id": 15
-    },
-    {
-      "project_id": 1008,
-      "skill_id": 29
-    },
-    {
-      "project_id": 1008,
-      "skill_id": 30
-    },
-    {
-      "project_id": 2001,
-      "skill_id": 8
-    },
-    {
-      "project_id": 2001,
-      "skill_id": 1
-    },
-    {
-      "project_id": 2001,
-      "skill_id": 16
-    },
-    {
-      "project_id": 2001,
-      "skill_id": 27
-    },
-    {
-      "project_id": 2001,
-      "skill_id": 32
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 9
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 15
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 16
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 28
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 31
-    },
-    {
-      "project_id": 2002,
-      "skill_id": 30
-    },
-    {
-      "project_id": 3001,
-      "skill_id": 3
-    },
-    {
-      "project_id": 3001,
-      "skill_id": 1
-    },
-    {
-      "project_id": 3001,
-      "skill_id": 15
-    },
-    {
-      "project_id": 3001,
-      "skill_id": 28
-    },
-    {
-      "project_id": 3001,
-      "skill_id": 31
-    },
-    {
-      "project_id": 5001,
-      "skill_id": 8
-    },
-    {
-      "project_id": 5001,
-      "skill_id": 16
-    },
-    {
-      "project_id": 5001,
-      "skill_id": 15
-    },
-    {
-      "project_id": 5001,
-      "skill_id": 28
-    },
-    {
-      "project_id": 5001,
-      "skill_id": 23
-    },
-    {
-      "project_id": 5002,
+      "skill_name": "Data Modeling (Logical)",
+      "skill_ref": "data_modeling_logical",
+      "domain_id": 1,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 84,
+      "notes": "Resume and portfolio inference from analytics structuring, schema design, and data product modeling",
+      "source_origin": "capability_model",
       "skill_id": 7
     },
     {
-      "project_id": 5002,
-      "skill_id": 1
+      "skill_name": "Data Lifecycle Design",
+      "skill_ref": "data_lifecycle_design",
+      "domain_id": 1,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 82,
+      "notes": "Resume and portfolio inference from platform design, governance, and lifecycle-oriented thinking",
+      "source_origin": "capability_model",
+      "skill_id": 8
     },
     {
-      "project_id": 5002,
-      "skill_id": 16
+      "skill_name": "Domain-Oriented Design / Data Mesh Principles",
+      "skill_ref": "domain_oriented_design_data_mesh_principles",
+      "domain_id": 1,
+      "display_order": 9,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 79,
+      "notes": "Conversation and portfolio inference from platform thinking, decentralization, and domain-based framing",
+      "source_origin": "capability_model",
+      "skill_id": 9
     },
     {
-      "project_id": 5002,
-      "skill_id": 23
-    },
-    {
-      "project_id": 5002,
-      "skill_id": 22
-    },
-    {
-      "project_id": 5003,
-      "skill_id": 13
-    },
-    {
-      "project_id": 5003,
-      "skill_id": 15
-    },
-    {
-      "project_id": 5003,
-      "skill_id": 16
-    },
-    {
-      "project_id": 5003,
-      "skill_id": 30
-    },
-    {
-      "project_id": 5003,
-      "skill_id": 29
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 2
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 1
-    },
-    {
-      "project_id": 9001,
+      "skill_name": "Dimensional Modeling",
+      "skill_ref": "dimensional_modeling",
+      "domain_id": 1,
+      "display_order": 10,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 70,
+      "notes": "Resume inference from analytics and reporting architecture scope; not presented as a primary specialty",
+      "source_origin": "capability_model",
       "skill_id": 10
     },
     {
-      "project_id": 9001,
-      "skill_id": 5
+      "skill_name": "Medallion Architecture",
+      "skill_ref": "medallion_architecture",
+      "domain_id": 1,
+      "display_order": 11,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 67,
+      "notes": "Training and conversation evidence through Databricks and modern data architecture concepts",
+      "source_origin": "capability_model",
+      "skill_id": 11
     },
     {
-      "project_id": 9001,
-      "skill_id": 21
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 24
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 25
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 26
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 23
-    },
-    {
-      "project_id": 9001,
-      "skill_id": 29
-    },
-    {
-      "project_id": 9002,
-      "skill_id": 2
-    },
-    {
-      "project_id": 9002,
+      "skill_name": "Data Platform Architecture",
+      "skill_ref": "data_platform_architecture",
+      "domain_id": 2,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 96,
+      "notes": "Resume and portfolio evidence through platform architecture positioning and end-to-end data system design",
+      "source_origin": "capability_model",
       "skill_id": 12
     },
     {
-      "project_id": 9002,
-      "skill_id": 4
+      "skill_name": "SAP Fieldglass",
+      "skill_ref": "sap_fieldglass",
+      "domain_id": 2,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 95,
+      "notes": "Deep domain and platform expertise evidenced across multiple roles, customer advisory work, adoption strategy, and platform-improvement initiatives.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 13
     },
     {
-      "project_id": 9002,
+      "skill_name": "SAP Datasphere",
+      "skill_ref": "sap_datasphere",
+      "domain_id": 2,
+      "display_order": 3,
+      "depth": 3,
+      "experience": 1,
+      "confidence": 87,
+      "notes": "Training, role, and conversation evidence through ongoing SAP data platform focus",
+      "source_origin": "capability_model",
+      "skill_id": 14
+    },
+    {
+      "skill_name": "SAP Business Data Cloud",
+      "skill_ref": "sap_business_data_cloud",
+      "domain_id": 2,
+      "display_order": 4,
+      "depth": 3,
+      "experience": 1,
+      "confidence": 85,
+      "notes": "Training, certification focus, and conversation evidence tied to strategic SAP data platform positioning",
+      "source_origin": "capability_model",
+      "skill_id": 15
+    },
+    {
+      "skill_name": "Data Integration Patterns",
+      "skill_ref": "data_integration_patterns",
+      "domain_id": 2,
+      "display_order": 5,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 84,
+      "notes": "Resume evidence through cross-system architecture and integration-oriented problem solving",
+      "source_origin": "capability_model",
+      "skill_id": 16
+    },
+    {
+      "skill_name": "SAP BTP",
+      "skill_ref": "sap_btp",
+      "domain_id": 2,
+      "display_order": 6,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 83,
+      "notes": "Resume and conversation evidence through SAP platform architecture and ecosystem positioning",
+      "source_origin": "capability_model",
+      "skill_id": 17
+    },
+    {
+      "skill_name": "SAP HANA Cloud",
+      "skill_ref": "sap_hana_cloud",
+      "domain_id": 2,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 1,
+      "confidence": 80,
+      "notes": "Resume and conversation evidence through SAP data platform environment familiarity",
+      "source_origin": "capability_model",
+      "skill_id": 18
+    },
+    {
+      "skill_name": "Batch Processing",
+      "skill_ref": "batch_processing",
+      "domain_id": 2,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 77,
+      "notes": "Resume inference from analytics workflows, data refresh patterns, and backend pipeline usage",
+      "source_origin": "capability_model",
+      "skill_id": 19
+    },
+    {
+      "skill_name": "Lakehouse Architecture",
+      "skill_ref": "lakehouse_architecture",
+      "domain_id": 2,
+      "display_order": 9,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 68,
+      "notes": "Training and conversation evidence through modern data platform concepts; not presented as core delivery ownership",
+      "source_origin": "capability_model",
+      "skill_id": 20
+    },
+    {
+      "skill_name": "Databricks",
+      "skill_ref": "databricks",
+      "domain_id": 2,
+      "display_order": 10,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 66,
+      "notes": "Training, lab, and conversation evidence with working familiarity rather than primary production ownership",
+      "source_origin": "capability_model",
+      "skill_id": 21
+    },
+    {
+      "skill_name": "Cloud Data Platforms (AWS / Azure / GCP)",
+      "skill_ref": "cloud_data_platforms_aws_azure_gcp",
+      "domain_id": 2,
+      "display_order": 11,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 65,
+      "notes": "Resume inference from platform architecture scope and cloud-adjacent data work; not positioned as a primary practitioner signal",
+      "source_origin": "capability_model",
+      "skill_id": 22
+    },
+    {
+      "skill_name": "Real-Time / Streaming",
+      "skill_ref": "real_time_streaming",
+      "domain_id": 2,
+      "display_order": 12,
+      "depth": 1,
+      "experience": 0,
+      "confidence": 58,
+      "notes": "Conversation and training awareness only; not represented as applied delivery experience",
+      "source_origin": "capability_model",
+      "skill_id": 23
+    },
+    {
+      "skill_name": "Metadata Management",
+      "skill_ref": "metadata_management",
+      "domain_id": 3,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 94,
+      "notes": "Resume evidence through metadata, structure, and governed information design",
+      "source_origin": "capability_model",
       "skill_id": 24
     },
     {
-      "project_id": 9002,
+      "skill_name": "Data Governance Frameworks",
+      "skill_ref": "data_governance_frameworks",
+      "domain_id": 3,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume evidence through governance, adoption, and scalable data operating model work",
+      "source_origin": "capability_model",
+      "skill_id": 25
+    },
+    {
+      "skill_name": "Metadata Architecture",
+      "skill_ref": "metadata_architecture",
+      "domain_id": 3,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 92,
+      "notes": "Strong evidence through configuration metadata governance, logical-product mapping design, and metadata-driven platform improvements.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 26
+    },
+    {
+      "skill_name": "Data Governance",
+      "skill_ref": "data_governance",
+      "domain_id": 3,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 91,
+      "notes": "Applied governance capability across metadata frameworks, traceability, product alignment, and sustainable operating practices.",
+      "source_origin": "hdp_enrichment",
       "skill_id": 27
+    },
+    {
+      "skill_name": "Compliance / Auditability",
+      "skill_ref": "compliance_auditability",
+      "domain_id": 3,
+      "display_order": 5,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 82,
+      "notes": "Resume evidence through governance, traceability, and audit-oriented data design",
+      "source_origin": "capability_model",
+      "skill_id": 28
+    },
+    {
+      "skill_name": "Data Lineage",
+      "skill_ref": "data_lineage",
+      "domain_id": 3,
+      "display_order": 6,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 82,
+      "notes": "Resume and conversation evidence through auditability, traceability, and structured governance thinking",
+      "source_origin": "capability_model",
+      "skill_id": 29
+    },
+    {
+      "skill_name": "Data Quality Management",
+      "skill_ref": "data_quality_management",
+      "domain_id": 3,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 80,
+      "notes": "Resume inference from governance, standards, and reliable self-service data usage",
+      "source_origin": "capability_model",
+      "skill_id": 30
+    },
+    {
+      "skill_name": "Data Catalog Concepts",
+      "skill_ref": "data_catalog_concepts",
+      "domain_id": 3,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 79,
+      "notes": "Resume and conversation evidence through metadata alignment, discoverability, and governed data access thinking",
+      "source_origin": "capability_model",
+      "skill_id": 31
+    },
+    {
+      "skill_name": "Master Data Concepts",
+      "skill_ref": "master_data_concepts",
+      "domain_id": 3,
+      "display_order": 9,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 69,
+      "notes": "Conversation and role-scope evidence through enterprise architecture and identity/data consistency discussions",
+      "source_origin": "capability_model",
+      "skill_id": 32
+    },
+    {
+      "skill_name": "Data Security Concepts",
+      "skill_ref": "data_security_concepts",
+      "domain_id": 3,
+      "display_order": 10,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 67,
+      "notes": "Resume inference from governance and platform architecture scope; not positioned as a security specialty",
+      "source_origin": "capability_model",
+      "skill_id": 33
+    },
+    {
+      "skill_name": "Self-Service Analytics",
+      "skill_ref": "self_service_analytics",
+      "domain_id": 4,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 97,
+      "notes": "Resume evidence through major self-service enablement and adoption outcomes",
+      "source_origin": "capability_model",
+      "skill_id": 34
+    },
+    {
+      "skill_name": "Analytics Architecture",
+      "skill_ref": "analytics_architecture",
+      "domain_id": 4,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 95,
+      "notes": "Resume evidence through analytics architecture, reporting redesign, and scalable insight delivery",
+      "source_origin": "capability_model",
+      "skill_id": 35
+    },
+    {
+      "skill_name": "Product Usage Analytics",
+      "skill_ref": "product_usage_analytics",
+      "domain_id": 4,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 95,
+      "notes": "Resume evidence through usage analysis, adoption insight generation, and product improvement support",
+      "source_origin": "capability_model",
+      "skill_id": 36
+    },
+    {
+      "skill_name": "Insight Generation",
+      "skill_ref": "insight_generation",
+      "domain_id": 4,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 94,
+      "notes": "Resume and portfolio evidence through synthesizing raw data into actionable insight",
+      "source_origin": "capability_model",
+      "skill_id": 37
+    },
+    {
+      "skill_name": "Decision Support Systems",
+      "skill_ref": "decision_support_systems",
+      "domain_id": 4,
+      "display_order": 5,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume and portfolio evidence through insight design oriented toward decision making",
+      "source_origin": "capability_model",
+      "skill_id": 38
+    },
+    {
+      "skill_name": "KPI Design & Metrics Layer",
+      "skill_ref": "kpi_design_and_metrics_layer",
+      "domain_id": 4,
+      "display_order": 6,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume and portfolio evidence through KPI framing, measurement logic, and structured decision support",
+      "source_origin": "capability_model",
+      "skill_id": 39
+    },
+    {
+      "skill_name": "Data Visualization",
+      "skill_ref": "data_visualization",
+      "domain_id": 4,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 84,
+      "notes": "Portfolio and resume evidence through dashboard, chart, and insight presentation design",
+      "source_origin": "capability_model",
+      "skill_id": 40
+    },
+    {
+      "skill_name": "BI Tools / SAC",
+      "skill_ref": "bi_tools_sac",
+      "domain_id": 4,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 81,
+      "notes": "Resume evidence through SAP analytics platform usage and reporting enablement",
+      "source_origin": "capability_model",
+      "skill_id": 41
+    },
+    {
+      "skill_name": "Experimentation / A-B Thinking",
+      "skill_ref": "experimentation_a_b_thinking",
+      "domain_id": 4,
+      "display_order": 9,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 63,
+      "notes": "Resume and conversation inference from product analytics and optimization-oriented thinking",
+      "source_origin": "capability_model",
+      "skill_id": 42
+    },
+    {
+      "skill_name": "AI-Ready Data Architecture",
+      "skill_ref": "ai_ready_data_architecture",
+      "domain_id": 5,
+      "display_order": 1,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 88,
+      "notes": "Resume, conversation, and portfolio evidence through AI-ready data positioning and structured data foundations",
+      "source_origin": "capability_model",
+      "skill_id": 43
+    },
+    {
+      "skill_name": "Data for LLMs / Structured Grounding",
+      "skill_ref": "data_for_llms_structured_grounding",
+      "domain_id": 5,
+      "display_order": 2,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 85,
+      "notes": "Portfolio and conversation evidence through structured grounding, data product design, and AI-readiness framing",
+      "source_origin": "capability_model",
+      "skill_id": 44
+    },
+    {
+      "skill_name": "Prompt Engineering",
+      "skill_ref": "prompt_engineering",
+      "domain_id": 5,
+      "display_order": 3,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 76,
+      "notes": "Portfolio and conversation evidence through repeated AI-assisted iteration and instruction design",
+      "source_origin": "capability_model",
+      "skill_id": 45
+    },
+    {
+      "skill_name": "Knowledge Graph Concepts",
+      "skill_ref": "knowledge_graph_concepts",
+      "domain_id": 5,
+      "display_order": 4,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 68,
+      "notes": "Conversation and learning evidence through conceptual interest and enterprise data relevance",
+      "source_origin": "capability_model",
+      "skill_id": 46
+    },
+    {
+      "skill_name": "AI Data Pipelines",
+      "skill_ref": "ai_data_pipelines",
+      "domain_id": 5,
+      "display_order": 5,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 66,
+      "notes": "Conceptual and conversation evidence through data readiness and pipeline thinking for AI use cases",
+      "source_origin": "capability_model",
+      "skill_id": 47
+    },
+    {
+      "skill_name": "Feature Engineering Concepts",
+      "skill_ref": "feature_engineering_concepts",
+      "domain_id": 5,
+      "display_order": 6,
+      "depth": 1,
+      "experience": 0,
+      "confidence": 57,
+      "notes": "Training and conceptual awareness only; not represented as applied modeling work",
+      "source_origin": "capability_model",
+      "skill_id": 48
+    },
+    {
+      "skill_name": "Machine Learning Lifecycle",
+      "skill_ref": "machine_learning_lifecycle",
+      "domain_id": 5,
+      "display_order": 7,
+      "depth": 1,
+      "experience": 0,
+      "confidence": 56,
+      "notes": "Training and conceptual awareness only; not represented as hands-on ML lifecycle ownership",
+      "source_origin": "capability_model",
+      "skill_id": 49
+    },
+    {
+      "skill_name": "Vector Databases",
+      "skill_ref": "vector_databases",
+      "domain_id": 5,
+      "display_order": 8,
+      "depth": 1,
+      "experience": 0,
+      "confidence": 55,
+      "notes": "Awareness through learning and discussion; not represented as applied implementation",
+      "source_origin": "capability_model",
+      "skill_id": 50
+    },
+    {
+      "skill_name": "SQL",
+      "skill_ref": "sql",
+      "domain_id": 6,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 94,
+      "notes": "Resume and portfolio evidence through repeated SQL-driven analytics, querying, and data validation work",
+      "source_origin": "capability_model",
+      "skill_id": 51
+    },
+    {
+      "skill_name": "JSON / Data Structuring",
+      "skill_ref": "json_data_structuring",
+      "domain_id": 6,
+      "display_order": 2,
+      "depth": 3,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Portfolio and resume evidence through structured data design, ingestion, and schema-oriented thinking",
+      "source_origin": "capability_model",
+      "skill_id": 52
+    },
+    {
+      "skill_name": "ERD / Schema Design",
+      "skill_ref": "erd_schema_design",
+      "domain_id": 6,
+      "display_order": 3,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 88,
+      "notes": "Portfolio and architecture evidence through schema design, entity relationships, and data product modeling",
+      "source_origin": "capability_model",
+      "skill_id": 53
+    },
+    {
+      "skill_name": "Testing Strategy & Release Readiness",
+      "skill_ref": "testing_strategy_and_release_readiness",
+      "domain_id": 6,
+      "display_order": 4,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 88,
+      "notes": "Strong evidence through GA launch readiness, defect resolution, structured validation, and release-support workstreams.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 54
+    },
+    {
+      "skill_name": "Jira",
+      "skill_ref": "jira",
+      "domain_id": 6,
+      "display_order": 5,
+      "depth": 3,
+      "experience": 3,
+      "confidence": 85,
+      "notes": "Operational tool proficiency inferred from sustained product, implementation, and cross-functional delivery work.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 55
+    },
+    {
+      "skill_name": "API Design / Consumption",
+      "skill_ref": "api_design_consumption",
+      "domain_id": 6,
+      "display_order": 6,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 84,
+      "notes": "Portfolio evidence through HDP backend/API structure and endpoint design",
+      "source_origin": "capability_model",
+      "skill_id": 56
+    },
+    {
+      "skill_name": "Confluence",
+      "skill_ref": "confluence",
+      "domain_id": 6,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 3,
+      "confidence": 84,
+      "notes": "Operational documentation and knowledge-sharing proficiency inferred from repeatable enablement and delivery work.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 57
+    },
+    {
+      "skill_name": "REST APIs",
+      "skill_ref": "rest_apis",
+      "domain_id": 6,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 84,
+      "notes": "Portfolio evidence through API-oriented HDP implementation and endpoint consumption",
+      "source_origin": "capability_model",
+      "skill_id": 58
+    },
+    {
+      "skill_name": "CSS",
+      "skill_ref": "css",
+      "domain_id": 6,
+      "display_order": 9,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 80,
+      "notes": "Portfolio evidence through repeated HDP styling, layout, and responsive UI refinements",
+      "source_origin": "capability_model",
+      "skill_id": 59
+    },
+    {
+      "skill_name": "ETL / ELT Concepts",
+      "skill_ref": "etl_elt_concepts",
+      "domain_id": 6,
+      "display_order": 10,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 80,
+      "notes": "Resume and portfolio inference from data ingestion, transformation, and refresh pipeline design",
+      "source_origin": "capability_model",
+      "skill_id": 60
+    },
+    {
+      "skill_name": "Git / Version Control",
+      "skill_ref": "git_version_control",
+      "domain_id": 6,
+      "display_order": 11,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 79,
+      "notes": "Portfolio evidence through iterative GitHub-based development, branching, and deployment workflow",
+      "source_origin": "capability_model",
+      "skill_id": 61
+    },
+    {
+      "skill_name": "Data Query Optimization",
+      "skill_ref": "data_query_optimization",
+      "domain_id": 6,
+      "display_order": 12,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 78,
+      "notes": "Resume and portfolio evidence through efficient query design and data retrieval thinking",
+      "source_origin": "capability_model",
+      "skill_id": 62
+    },
+    {
+      "skill_name": "HTML",
+      "skill_ref": "html",
+      "domain_id": 6,
+      "display_order": 13,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 78,
+      "notes": "Portfolio evidence through HDP frontend structure and iterative page updates",
+      "source_origin": "capability_model",
+      "skill_id": 63
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_ref": "javascript",
+      "domain_id": 6,
+      "display_order": 14,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 76,
+      "notes": "Portfolio evidence through HDP interaction logic, filtering behavior, and chart/UI updates",
+      "source_origin": "capability_model",
+      "skill_id": 64
+    },
+    {
+      "skill_name": "Frontend Debugging",
+      "skill_ref": "frontend_debugging",
+      "domain_id": 6,
+      "display_order": 15,
+      "depth": 1,
+      "experience": 1,
+      "confidence": 75,
+      "notes": "Portfolio evidence through repeated UI troubleshooting and iterative frontend corrections",
+      "source_origin": "capability_model",
+      "skill_id": 65
+    },
+    {
+      "skill_name": "API Testing (Bruno)",
+      "skill_ref": "api_testing_bruno",
+      "domain_id": 6,
+      "display_order": 16,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 74,
+      "notes": "Portfolio and platform-improvement evidence through structured API validation and practical endpoint testing workflows.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 66
+    },
+    {
+      "skill_name": "SQLite",
+      "skill_ref": "sqlite",
+      "domain_id": 6,
+      "display_order": 17,
+      "depth": 1,
+      "experience": 1,
+      "confidence": 74,
+      "notes": "Portfolio evidence through HDP local database implementation and query validation",
+      "source_origin": "capability_model",
+      "skill_id": 67
+    },
+    {
+      "skill_name": "FastAPI",
+      "skill_ref": "fastapi",
+      "domain_id": 6,
+      "display_order": 18,
+      "depth": 1,
+      "experience": 1,
+      "confidence": 72,
+      "notes": "Portfolio evidence through HDP backend API structure and endpoint implementation",
+      "source_origin": "capability_model",
+      "skill_id": 68
+    },
+    {
+      "skill_name": "Python",
+      "skill_ref": "python",
+      "domain_id": 6,
+      "display_order": 19,
+      "depth": 2,
+      "experience": 1,
+      "confidence": 72,
+      "notes": "Portfolio evidence through data handling, ingestion utilities, and JSON-to-database pipeline work; working knowledge rather than specialist-level engineering.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 69
+    },
+    {
+      "skill_name": "PySpark / Spark",
+      "skill_ref": "pyspark_spark",
+      "domain_id": 6,
+      "display_order": 21,
+      "depth": 1,
+      "experience": 0,
+      "confidence": 56,
+      "notes": "Awareness through learning and discussion; not represented as hands-on implementation ownership",
+      "source_origin": "capability_model",
+      "skill_id": 71
+    },
+    {
+      "skill_name": "Adoption Strategy",
+      "skill_ref": "adoption_strategy",
+      "domain_id": 7,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 97,
+      "notes": "Resume evidence through adoption, self-service, and scaled usage enablement outcomes",
+      "source_origin": "capability_model",
+      "skill_id": 72
+    },
+    {
+      "skill_name": "User Enablement Systems",
+      "skill_ref": "user_enablement_systems",
+      "domain_id": 7,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 95,
+      "notes": "Resume evidence through self-service systems, support reduction, and scalable enablement design",
+      "source_origin": "capability_model",
+      "skill_id": 73
+    },
+    {
+      "skill_name": "Configuration & Extensibility Design",
+      "skill_ref": "configuration_and_extensibility_design",
+      "domain_id": 7,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 94,
+      "notes": "Resume evidence through configuration coverage, extensibility thinking, and platform design",
+      "source_origin": "capability_model",
+      "skill_id": 74
+    },
+    {
+      "skill_name": "Platform Operating Models",
+      "skill_ref": "platform_operating_models",
+      "domain_id": 7,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume and conversation evidence through platform operating model and ecosystem thinking",
+      "source_origin": "capability_model",
+      "skill_id": 75
+    },
+    {
+      "skill_name": "Systems Thinking",
+      "skill_ref": "systems_thinking",
+      "domain_id": 7,
+      "display_order": 5,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 92,
+      "notes": "Repeated evidence of reasoning across dependencies, operating models, workflows, and platform behavior rather than isolated tasks.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 76
+    },
+    {
+      "skill_name": "Value Realization Frameworks",
+      "skill_ref": "value_realization_frameworks",
+      "domain_id": 7,
+      "display_order": 6,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 91,
+      "notes": "Resume evidence through measurable value framing, internal monetization, and enablement strategy",
+      "source_origin": "capability_model",
+      "skill_id": 77
+    },
+    {
+      "skill_name": "Internal Tooling Strategy",
+      "skill_ref": "internal_tooling_strategy",
+      "domain_id": 7,
+      "display_order": 7,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 80,
+      "notes": "Resume and portfolio inference from internal enablement and tooling-oriented problem solving",
+      "source_origin": "capability_model",
+      "skill_id": 78
+    },
+    {
+      "skill_name": "Product-Led Growth Concepts",
+      "skill_ref": "product_led_growth_concepts",
+      "domain_id": 7,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 76,
+      "notes": "Resume and conversation inference from adoption systems, product usage insight, and self-service enablement",
+      "source_origin": "capability_model",
+      "skill_id": 79
+    },
+    {
+      "skill_name": "Cross-Functional Leadership",
+      "skill_ref": "cross_functional_leadership",
+      "domain_id": 8,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume evidence through cross-functional architecture, enablement, and delivery coordination",
+      "source_origin": "capability_model",
+      "skill_id": 80
+    },
+    {
+      "skill_name": "Stakeholder Alignment",
+      "skill_ref": "stakeholder_alignment",
+      "domain_id": 8,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 93,
+      "notes": "Resume evidence through stakeholder coordination, scalable change, and product/platform alignment",
+      "source_origin": "capability_model",
+      "skill_id": 81
+    },
+    {
+      "skill_name": "Strategic Roadmapping",
+      "skill_ref": "strategic_roadmapping",
+      "domain_id": 8,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 91,
+      "notes": "Resume and portfolio evidence through strategic prioritization, phased design, and long-range platform thinking",
+      "source_origin": "capability_model",
+      "skill_id": 82
+    },
+    {
+      "skill_name": "Attention to Detail",
+      "skill_ref": "attention_to_detail",
+      "domain_id": 8,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Repeatedly evidenced through careful validation, metadata corrections, iterative refinement, and reliable delivery.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 83
+    },
+    {
+      "skill_name": "Executive Communication",
+      "skill_ref": "executive_communication",
+      "domain_id": 8,
+      "display_order": 5,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Resume and conversation evidence through strategic framing, stakeholder communication, and architecture positioning",
+      "source_origin": "capability_model",
+      "skill_id": 84
+    },
+    {
+      "skill_name": "Structured Communication",
+      "skill_ref": "structured_communication",
+      "domain_id": 8,
+      "display_order": 6,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Consistent evidence through stakeholder explanations, demos, business cases, and translating complexity into understandable narratives.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 85
+    },
+    {
+      "skill_name": "Program Leadership",
+      "skill_ref": "program_leadership",
+      "domain_id": 8,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 81,
+      "notes": "Resume evidence through initiative leadership and coordinated execution across workstreams",
+      "source_origin": "capability_model",
+      "skill_id": 87
+    },
+    {
+      "skill_name": "Change Management",
+      "skill_ref": "change_management",
+      "domain_id": 8,
+      "display_order": 9,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 79,
+      "notes": "Resume evidence through adoption-oriented change, rollout thinking, and organizational enablement",
+      "source_origin": "capability_model",
+      "skill_id": 88
+    },
+    {
+      "skill_name": "Mentorship",
+      "skill_ref": "mentorship",
+      "domain_id": 8,
+      "display_order": 10,
+      "depth": 3,
+      "experience": 3,
+      "confidence": 73,
+      "notes": "Resume and conversation inference from advisory, guidance, and collaborative problem-solving patterns",
+      "source_origin": "capability_model",
+      "skill_id": 89
+    },
+    {
+      "skill_name": "Problem Structuring",
+      "skill_ref": "problem_structuring",
+      "domain_id": 9,
+      "display_order": 1,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 93,
+      "notes": "Breaking down complex, ambiguous problems into structured components and solvable layers",
+      "source_origin": "capability_model",
+      "skill_id": 90
+    },
+    {
+      "skill_name": "Analytical Problem Solving",
+      "skill_ref": "analytical_problem_solving",
+      "domain_id": 9,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 92,
+      "notes": "Strong evidence through query-driven problem solving, issue diagnosis, tradeoff analysis, and practical solution design.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 91
+    },
+    {
+      "skill_name": "Decision Framing",
+      "skill_ref": "decision_framing",
+      "domain_id": 9,
+      "display_order": 3,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 91,
+      "notes": "Structuring ambiguous problems into clear decision paths, priorities, and actionable next steps",
+      "source_origin": "capability_model",
+      "skill_id": 92
+    },
+    {
+      "skill_name": "Strategic Thinking",
+      "skill_ref": "strategic_thinking",
+      "domain_id": 9,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 91,
+      "notes": "Strong evidence through future-oriented framing, business-case creation, and positioning improvements in strategic terms.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 93
+    },
+    {
+      "skill_name": "Prioritization",
+      "skill_ref": "prioritization",
+      "domain_id": 9,
+      "display_order": 5,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Identifying what matters most and sequencing work based on impact, effort, and organizational context",
+      "source_origin": "capability_model",
+      "skill_id": 94
+    },
+    {
+      "skill_name": "Tradeoff Analysis",
+      "skill_ref": "tradeoff_analysis",
+      "domain_id": 9,
+      "display_order": 6,
+      "depth": 3,
+      "experience": 3,
+      "confidence": 89,
+      "notes": "Evaluating options by balancing scalability, usability, governance, and complexity to determine the most practical path forward",
+      "source_origin": "capability_model",
+      "skill_id": 95
+    },
+    {
+      "skill_name": "Conceptual Abstraction",
+      "skill_ref": "conceptual_abstraction",
+      "domain_id": 9,
+      "display_order": 7,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 88,
+      "notes": "Evidence through turning messy realities into structured models, frameworks, and product abstractions.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 96
+    },
+    {
+      "skill_name": "Decision Communication",
+      "skill_ref": "decision_communication",
+      "domain_id": 9,
+      "display_order": 8,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 88,
+      "notes": "Explaining decisions clearly, including rationale and tradeoffs, to align stakeholders and drive action",
+      "source_origin": "capability_model",
+      "skill_id": 97
+    },
+    {
+      "skill_name": "Cross-disciplinary Thinking",
+      "skill_ref": "cross_disciplinary_thinking",
+      "domain_id": 9,
+      "display_order": 9,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 87,
+      "notes": "Evidence through combining business, platform, analytics, governance, and product perspectives into cohesive approaches.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 98
+    },
+    {
+      "skill_name": "Intellectual Curiosity",
+      "skill_ref": "intellectual_curiosity",
+      "domain_id": 9,
+      "display_order": 10,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 86,
+      "notes": "Repeated pattern of self-directed learning, exploratory questioning, and proactive expansion into adjacent capabilities.",
+      "source_origin": "hdp_enrichment",
+      "skill_id": 99
+    },
+    {
+      "skill_name": "Outcome-Oriented Thinking",
+      "skill_ref": "outcome_oriented_thinking",
+      "domain_id": 10,
+      "display_order": 1,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 92,
+      "notes": "Connecting work to tangible outcomes such as improved decisions, efficiency, scalability, and business impact",
+      "source_origin": "capability_model",
+      "skill_id": 100
+    },
+    {
+      "skill_name": "Operational Metrics Thinking",
+      "skill_ref": "operational_metrics_thinking",
+      "domain_id": 10,
+      "display_order": 2,
+      "depth": 4,
+      "experience": 3,
+      "confidence": 90,
+      "notes": "Designing and interpreting metrics that reflect real operational performance, adoption, and business health",
+      "source_origin": "capability_model",
+      "skill_id": 101
+    },
+    {
+      "skill_name": "Business Process Awareness",
+      "skill_ref": "business_process_awareness",
+      "domain_id": 10,
+      "display_order": 3,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 85,
+      "notes": "Understanding how enterprise processes and workflows influence data, platform, and system design decisions",
+      "source_origin": "capability_model",
+      "skill_id": 102
+    },
+    {
+      "skill_name": "User / Customer Perspective",
+      "skill_ref": "user_customer_perspective",
+      "domain_id": 10,
+      "display_order": 4,
+      "depth": 4,
+      "experience": 2,
+      "confidence": 83,
+      "notes": "Understanding how users interact with systems, where friction exists, and how design decisions impact usability and adoption",
+      "source_origin": "capability_model",
+      "skill_id": 103
+    },
+    {
+      "skill_name": "Value Drivers Awareness",
+      "skill_ref": "value_drivers_awareness",
+      "domain_id": 10,
+      "display_order": 5,
+      "depth": 3,
+      "experience": 2,
+      "confidence": 82,
+      "notes": "Recognizing key levers such as revenue, cost, efficiency, and adoption that drive business outcomes",
+      "source_origin": "capability_model",
+      "skill_id": 104
     }
+  ],
+  "project_skill": [
+  {
+    "project_id": 1001,
+    "skill_id": 75
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 77
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 93
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 84
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 81
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 72
+  },
+  {
+    "project_id": 1001,
+    "skill_id": 92
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 13
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 16
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 66
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 6
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 76
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 74
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 34
+  },
+  {
+    "project_id": 1002,
+    "skill_id": 91
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 35
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 34
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 36
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 39
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 38
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 51
+  },
+  {
+    "project_id": 1003,
+    "skill_id": 37
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 72
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 74
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 73
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 36
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 75
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 6
+  },
+  {
+    "project_id": 1004,
+    "skill_id": 38
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 77
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 84
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 93
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 39
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 92
+  },
+  {
+    "project_id": 1005,
+    "skill_id": 95
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 51
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 36
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 35
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 37
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 91
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 38
+  },
+  {
+    "project_id": 1006,
+    "skill_id": 62
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 26
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 27
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 24
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 25
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 3
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 28
+  },
+  {
+    "project_id": 1007,
+    "skill_id": 30
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 54
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 83
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 91
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 80
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 55
+  },
+  {
+    "project_id": 1008,
+    "skill_id": 87
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 77
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 39
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 84
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 92
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 51
+  },
+  {
+    "project_id": 2001,
+    "skill_id": 100
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 72
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 81
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 84
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 103
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 87
+  },
+  {
+    "project_id": 2002,
+    "skill_id": 88
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 13
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 51
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 101
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 103
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 81
+  },
+  {
+    "project_id": 3001,
+    "skill_id": 91
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 101
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 84
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 103
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 100
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 81
+  },
+  {
+    "project_id": 5001,
+    "skill_id": 104
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 37
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 101
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 85
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 51
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 38
+  },
+  {
+    "project_id": 5002,
+    "skill_id": 103
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 87
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 80
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 85
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 83
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 88
+  },
+  {
+    "project_id": 5003,
+    "skill_id": 100
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 2
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 51
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 56
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 58
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 68
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 67
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 52
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 53
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 40
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 3
+  },
+  {
+    "project_id": 9001,
+    "skill_id": 69
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 43
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 44
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 45
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 20
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 21
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 96
+  },
+  {
+    "project_id": 9002,
+    "skill_id": 93
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 2
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 40
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 52
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 5
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 37
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 38
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 63
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 59
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 64
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 65
+  },
+  {
+    "project_id": 9003,
+    "skill_id": 82
+  }
   ],
   "feedback": [
     {
@@ -2843,6 +3973,68 @@
       "impact_type": "usability",
       "delivered_date": "2026-04-01",
       "sort_order": 37
+    }
+  ],
+  "skills_domain": [
+    {
+      "domain_id": 1,
+      "domain": "Data Architecture",
+      "sort_order": 1,
+      "summary": "Core architecture strength spanning enterprise data architecture, semantic modeling, relational design, and data-product thinking."
+    },
+    {
+      "domain_id": 2,
+      "domain": "Data Platforms",
+      "sort_order": 2,
+      "summary": "Platform-oriented capability across SAP ecosystems, data-platform design, integration patterns, and modern data-platform concepts."
+    },
+    {
+      "domain_id": 3,
+      "domain": "Data Governance",
+      "sort_order": 3,
+      "summary": "Governance strength centered on metadata, traceability, quality, compliance, and sustainable information structures."
+    },
+    {
+      "domain_id": 4,
+      "domain": "Analytics & Data Products",
+      "sort_order": 4,
+      "summary": "Highest-confidence domain focused on self-service analytics, usage insight, metrics design, and decision support."
+    },
+    {
+      "domain_id": 5,
+      "domain": "AI Foundations",
+      "sort_order": 5,
+      "summary": "AI-enablement capability grounded in structured data, prompt design, and data-readiness for conversational and LLM use cases."
+    },
+    {
+      "domain_id": 6,
+      "domain": "Technical",
+      "sort_order": 6,
+      "summary": "Hands-on technical capability across SQL, APIs, JSON, backend/frontend portfolio implementation, and data movement concepts."
+    },
+    {
+      "domain_id": 7,
+      "domain": "Platform Thinking",
+      "sort_order": 7,
+      "summary": "Distinctive strength in adoption systems, extensibility, internal tooling, and operating-model design for scale."
+    },
+    {
+      "domain_id": 8,
+      "domain": "Leadership & Execution",
+      "sort_order": 8,
+      "summary": "Cross-functional execution capability spanning communication, stakeholder alignment, mentorship, and delivery leadership."
+    },
+    {
+      "domain_id": 9,
+      "domain": "Decision Making",
+      "sort_order": 9,
+      "summary": "Strength in framing ambiguity, clarifying tradeoffs, sequencing work, and communicating decisions clearly."
+    },
+    {
+      "domain_id": 10,
+      "domain": "Business Understanding",
+      "sort_order": 10,
+      "summary": "Business-facing capability connecting system design to user needs, operational metrics, outcomes, and enterprise process context."
     }
   ]
 }

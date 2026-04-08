@@ -56,6 +56,7 @@ const loaders = [
     loadMetadata,
     loadOverview,
     loadVisualizations,
+    loadCapabilityInsights,
     loadContactInfo,
     loadNextOpportunity
   ];
@@ -223,6 +224,13 @@ function activateTab(tabId) {
     panel.classList.toggle("active", panel.id === tabId);
   });
 }
+  if (tabId === "capability-insights-tab" && typeof window.refreshCapabilityInsights === "function") {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.refreshCapabilityInsights();
+      });
+    });
+  }
 
 function bindOutputPorts() {
   document.querySelectorAll(".interactive-port").forEach(btn => {
@@ -403,6 +411,11 @@ async function loadVisualizations() {
   renderValueRealization(data.value_realization);
   bindPatternInfoTooltips();
   bindInsightHelpPopovers();
+}
+
+async function loadCapabilityInsights() {
+  if (typeof window.initCapabilityInsights !== "function") return;
+  await window.initCapabilityInsights(API_BASE);
 }
 
 function renderTimeline(containerId, items) {
@@ -935,6 +948,7 @@ function showFloatingInsightsTooltip(html, clientX, clientY) {
 
   tooltip.innerHTML = html;
   tooltip.classList.remove("hidden");
+  tooltip.classList.add("is-visible");
   tooltip.setAttribute("aria-hidden", "false");
   positionFloatingInsightsTooltip(clientX, clientY);
 }
@@ -944,6 +958,7 @@ function hideFloatingInsightsTooltip() {
   if (!tooltip) return;
 
   tooltip.classList.add("hidden");
+  tooltip.classList.remove("is-visible");
   tooltip.setAttribute("aria-hidden", "true");
   activeInsightsTooltipTrigger = null;
 }
