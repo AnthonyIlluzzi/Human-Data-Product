@@ -114,15 +114,17 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      renderChart();
+      requestAnimationFrame(() => {
+        renderChart();
 
-      if (isChartHelpOpen) {
-        requestAnimationFrame(() => setChartHelpOpen(true));
-      }
+        if (isChartHelpOpen) {
+          requestAnimationFrame(() => setChartHelpOpen(true));
+        }
 
-      if (isScoringHelpOpen) {
-        requestAnimationFrame(() => setScoringHelpOpen(true));
-      }
+        if (isScoringHelpOpen) {
+          requestAnimationFrame(() => setScoringHelpOpen(true));
+        }
+      });
     });
   });
 };
@@ -419,38 +421,39 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
 
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
-  const isTablet = window.innerWidth <= 920 && !isMobile;
+  const isTablet = window.innerWidth <= 1100 && !isMobile;
 
-  // Mobile: keep controlled heights
-  if (isMobile) return 440;
-  if (isTablet) return activeDomain ? 520 : 560;
+  if (isMobile) {
+    return activeDomain ? 460 : 440;
+  }
 
-  // Desktop: dynamic height based on layout
+  if (isTablet) {
+    return activeDomain ? 520 : 560;
+  }
+
   const chartCard = els.chart?.closest(".capability-chart-card");
   const toolbar = chartCard?.querySelector(".chart-toolbar");
   const workspace = chartCard?.closest(".capability-workspace");
-  const controlPanel = workspace?.querySelector(".capability-control-panel");
+  const explorerCard = workspace?.querySelector(".explorer-card");
 
-  if (chartCard && toolbar && controlPanel) {
+  if (chartCard && toolbar && explorerCard) {
     const cardStyles = window.getComputedStyle(chartCard);
-
     const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
     const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
 
     const availableHeight =
-      controlPanel.offsetHeight -
+      explorerCard.offsetHeight -
       toolbar.offsetHeight -
       paddingTop -
       paddingBottom -
-      12; // small buffer
+      6;
 
     if (Number.isFinite(availableHeight) && availableHeight > 0) {
-      return Math.max(620, Math.round(availableHeight));
+      return Math.max(640, Math.round(availableHeight));
     }
   }
 
-  // fallback
-  return 720;
+  return activeDomain ? 640 : 680;
 }
 
   /* =========================
