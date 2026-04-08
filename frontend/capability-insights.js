@@ -72,9 +72,9 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
 
   const tabIsActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
   if (tabIsActive) {
-    renderChart();
+    window.refreshCapabilityInsights();
   }
-
+  
   if (!resizeHandlerBound) {
     const handleViewportChange = debounce(() => {
       updateOrientationOverlay();
@@ -82,7 +82,7 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
       const tabStillActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
 
       if (tabStillActive) {
-        renderChart();
+        window.refreshCapabilityInsights();
       }
 
       if (isChartHelpOpen) {
@@ -112,19 +112,31 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   if (!window.Plotly) return;
   if (!els.chart) return;
 
+  const renderWhenReady = (attempt = 0) => {
+    const chartReady = els.chart.offsetWidth > 0 && els.chart.offsetHeight > 0;
+
+    if (chartReady) {
+      renderChart();
+
+      if (isChartHelpOpen) {
+        requestAnimationFrame(() => setChartHelpOpen(true));
+      }
+
+      if (isScoringHelpOpen) {
+        requestAnimationFrame(() => setScoringHelpOpen(true));
+      }
+
+      return;
+    }
+
+    if (attempt < 10) {
+      requestAnimationFrame(() => renderWhenReady(attempt + 1));
+    }
+  };
+
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        renderChart();
-
-        if (isChartHelpOpen) {
-          requestAnimationFrame(() => setChartHelpOpen(true));
-        }
-
-        if (isScoringHelpOpen) {
-          requestAnimationFrame(() => setScoringHelpOpen(true));
-        }
-      });
+      renderWhenReady();
     });
   });
 };
@@ -428,32 +440,32 @@ function getPlotHeight() {
   }
 
   if (isTablet) {
-    return activeDomain ? 520 : 560;
+    return activeDomain ? 540 : 560;
   }
 
   const chartCard = els.chart?.closest(".capability-chart-card");
   const toolbar = chartCard?.querySelector(".chart-toolbar");
   const workspace = chartCard?.closest(".capability-workspace");
-  const explorerCard = workspace?.querySelector(".explorer-card");
+  const controlPanel = workspace?.querySelector(".capability-control-panel");
 
-  if (chartCard && toolbar && explorerCard) {
+  if (chartCard && toolbar && controlPanel) {
     const cardStyles = window.getComputedStyle(chartCard);
     const paddingTop = parseFloat(cardStyles.paddingTop) || 0;
     const paddingBottom = parseFloat(cardStyles.paddingBottom) || 0;
 
     const availableHeight =
-      explorerCard.offsetHeight -
+      controlPanel.offsetHeight -
       toolbar.offsetHeight -
       paddingTop -
       paddingBottom -
-      6;
+      8;
 
     if (Number.isFinite(availableHeight) && availableHeight > 0) {
-      return Math.max(640, Math.round(availableHeight));
+      return Math.max(660, Math.round(availableHeight));
     }
   }
 
-  return activeDomain ? 640 : 680;
+  return activeDomain ? 660 : 680;
 }
 
   /* =========================
