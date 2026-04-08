@@ -9,6 +9,16 @@
     { key: "confidence", label: "High Confidence" }
   ];
 
+  const MATRIX_POINT_COLOR = "#6fa3e6";
+  const MATRIX_SELECTED_COLOR = "#0a6ed1";
+
+  const QUADRANT_RANGES = {
+    all: { x: [0.5, 4.28], y: [-0.08, 3.15] },
+    expertise: { x: [2.65, 4.15], y: [1.65, 3.1] },
+    applied: { x: [0.75, 4.15], y: [1.65, 3.1] },
+    confidence: { x: [0.75, 4.15], y: [-0.08, 3.15] }
+  };
+
   let skills = [];
   let domains = [];
   let topLevelView = VIEW_PROFILE;
@@ -290,14 +300,16 @@
 
   function getTierColor(key) {
     if (key === "high") return "#0a6ed1";
-    if (key === "moderate") return "#b4cae8";
-    return "#d7dee8";
+    if (key === "moderate") return "#c6dcfb";
+    return "#e3eaf3";
   }
 
-  function getHighlightedTierColor(key) {
-    if (key === "high") return "#0757a9";
-    if (key === "moderate") return "#8db1de";
-    return "#c6d0dc";
+  function getHighlightedTierColor() {
+    return "#0854a0";
+  }
+
+  function requiresTouchDoubleTap() {
+    return isTouchLikeDevice() && window.innerWidth <= 920;
   }
 
   function rgba(hex, alpha) {
