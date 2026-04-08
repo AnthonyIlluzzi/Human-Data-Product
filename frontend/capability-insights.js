@@ -470,7 +470,7 @@ function getPlotHeight() {
         ? `${domain.domain} · Skill Matrix`
         : "Skill Matrix";
       els.chartInstruction.textContent =
-        "Hover or tap any point to inspect the underlying skill. Use Focus View to isolate quadrants and inspect strengths.";
+        "Hover or tap any point to inspect the skill. Use Focus View to isolate quadrants.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
