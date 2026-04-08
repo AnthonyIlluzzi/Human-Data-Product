@@ -3,10 +3,11 @@
   const VIEW_DISTRIBUTION = "distribution";
 
   const QUADRANTS = [
-    { key: "all", label: "All Skills" },
+    { key: "all", label: "Full Matrix" },
     { key: "expertise", label: "Expertise" },
-    { key: "applied", label: "Applied Experience" },
-    { key: "confidence", label: "High Confidence" }
+    { key: "emerging", label: "Emerging" },
+    { key: "foundational", label: "Foundational" },
+    { key: "passive", label: "Passive" }
   ];
 
   const MATRIX_POINT_COLOR = "#6fa3e6";
@@ -190,8 +191,8 @@
           depthLabel: depthLabel(depth),
           experienceLabel: experienceLabel(experience),
           profileTierKey: getProfileTierKey(depth),
-          jitteredDepth: boundedJitter(depth, 1, 4, index, "x"),
-          jitteredExperience: boundedJitter(experience, 0, 3, index, "y")
+          jitteredDepth: depth,
+          jitteredExperience: experience
         };
       })
       .sort((a, b) => {
@@ -268,6 +269,56 @@
     return Math.max(min + 0.04, Math.min(max - 0.04, next));
   }
 
+  function spreadSkillPoints(items) {
+    const grouped = new Map();
+
+    items.forEach((item) => {
+      const key = `${item.depth}|${item.experience}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(item);
+    });
+
+    const spreadItems = [];
+
+    grouped.forEach((groupItems) => {
+      const count = groupItems.length;
+
+      if (count === 1) {
+        spreadItems.push({
+          ...groupItems[0],
+          jitteredDepth: groupItems[0].depth,
+          jitteredExperience: groupItems[0].experience
+        });
+        return;
+      }
+
+      const columns = Math.ceil(Math.sqrt(count));
+      const rows = Math.ceil(count / columns);
+
+      const xStep = count <= 2 ? 0.06 : count <= 4 ? 0.07 : 0.075;
+      const yStep = count <= 2 ? 0.06 : count <= 4 ? 0.07 : 0.075;
+
+      const xOffsetBase = ((columns - 1) * xStep) / 2;
+      const yOffsetBase = ((rows - 1) * yStep) / 2;
+
+      groupItems.forEach((item, index) => {
+        const col = index % columns;
+        const row = Math.floor(index / columns);
+
+        const nextDepth = clamp(item.depth + (col * xStep) - xOffsetBase, 0.62, 3.98);
+        const nextExperience = clamp(item.experience + (row * yStep) - yOffsetBase, 0.04, 2.96);
+
+        spreadItems.push({
+          ...item,
+          jitteredDepth: nextDepth,
+          jitteredExperience: nextExperience
+        });
+      });
+    });
+
+    return spreadItems;
+  }
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -341,9 +392,22 @@
   function getSkillsForDomain(domainId) {
     const items = skills.filter((item) => Number(item.domain_id) === Number(domainId));
 
-    if (activeQuadrant === "expertise") return items.filter((item) => item.depth >= 4);
-    if (activeQuadrant === "applied") return items.filter((item) => item.experience >= 2);
-    if (activeQuadrant === "confidence") return items.filter((item) => item.confidence >= 90);
+    if (activeQuadrant === "expertise") {
+      return items.filter((item) => item.depth >= 3 && item.experience >= 2);
+    }
+
+    if (activeQuadrant === "emerging") {
+      return items.filter((item) => item.depth >= 3 && item.experience <= 1);
+    }
+
+    if (activeQuadrant === "foundational") {
+      return items.filter((item) => item.depth <= 2 && item.experience <= 1);
+    }
+
+    if (activeQuadrant === "passive") {
+      return items.filter((item) => item.depth <= 2 && item.experience >= 2);
+    }
+
     return items;
   }
 
@@ -400,7 +464,7 @@
         ? `${domain.domain} · Skill Matrix`
         : "Skill Matrix";
       els.chartInstruction.textContent =
-        "Hover for detail. On touch devices, tap once to inspect each skill point.";
+        "Hover or tap any point to inspect the underlying skill. Use Focus View to isolate a quadrant.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
@@ -1297,7 +1361,7 @@
 
   function renderSkillChart() {
     const domain = getDomainById(activeDomain);
-    const items = getSkillsForDomain(activeDomain);
+    const items = spreadSkillPoints(getSkillsForDomain(activeDomain));
 
     const trace = {
       type: "scatter",
