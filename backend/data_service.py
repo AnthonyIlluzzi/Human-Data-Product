@@ -145,12 +145,22 @@ def get_summary():
         system_improvement_count = cursor.fetchone()["count"]
 
         cursor.execute("""
-            SELECT category, COUNT(*) AS skill_total
-            FROM skill
-            GROUP BY category
-            ORDER BY skill_total DESC, category
+            SELECT
+                d.domain,
+                COUNT(s.skill_id) AS skill_total
+            FROM skills_domain d
+            LEFT JOIN skill s
+              ON d.domain_id = s.domain_id
+            GROUP BY d.domain_id, d.domain, d.sort_order
+            ORDER BY d.sort_order ASC, d.domain ASC
         """)
-        skill_categories = rows_to_dicts(cursor.fetchall())
+        skill_categories = [
+            {
+                "category": row["domain"],
+                "skill_total": row["skill_total"],
+            }
+            for row in rows_to_dicts(cursor.fetchall())
+        ]
 
     return {
         "owner": owner,
@@ -680,16 +690,40 @@ def get_skill_utilization():
             SELECT
                 s.skill_id,
                 s.skill_name,
-                s.category,
-                s.level,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order AS domain_sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence,
                 COUNT(ps.project_id) AS project_count
             FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
             LEFT JOIN project_skill ps
-                ON s.skill_id = ps.skill_id
-            GROUP BY s.skill_id, s.skill_name, s.category, s.level
-            ORDER BY project_count DESC, s.skill_name ASC
+              ON s.skill_id = ps.skill_id
+            GROUP BY
+                s.skill_id,
+                s.skill_name,
+                s.skill_ref,
+                s.domain_id,
+                d.domain,
+                d.sort_order,
+                s.display_order,
+                s.depth,
+                s.experience,
+                s.confidence
+            ORDER BY project_count DESC, d.sort_order ASC, s.display_order ASC, s.skill_name ASC
         """)
-        return rows_to_dicts(cursor.fetchall())
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["depth_label"] = depth_label(row["depth"])
+        row["experience_label"] = experience_label(row["experience"])
+
+    return rows
 
 def get_skill_cooccurrence(limit: int = 6):
     with get_connection() as conn:
