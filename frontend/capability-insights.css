@@ -3,22 +3,20 @@
   gap: 14px;
 }
 
-.capability-insights-intro-card {
-  padding: 18px 22px;
-  background: linear-gradient(135deg, #f4f8ff 0%, #e6f0fb 45%, #d6e6f8 100%);
-  border: 1px solid rgba(10, 110, 209, 0.12);
+.capability-insights-instructions-card {
+  padding: 14px 18px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f3f8fe 100%);
+  border: 1px solid rgba(10, 110, 209, 0.10);
+  border-radius: 18px;
 }
 
-.capability-insights-intro-card h3 {
+.capability-instructions-header {
+  margin-bottom: 6px;
+}
+
+.capability-instructions-body {
   margin: 0;
-  font-size: clamp(1.55rem, 2vw, 2rem);
-  line-height: 1.1;
-  color: #0b2239;
-}
-
-.capability-insights-intro-copy {
-  margin: 10px 0 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 1.55;
   color: var(--muted);
 }
@@ -499,6 +497,7 @@ body.modal-open {
   height: 100%;
   display: flex;
   flex-direction: column;
+  isolation: isolate;
 }
 
 .chart-toolbar {
@@ -839,7 +838,7 @@ body.modal-open {
   position: absolute;
   z-index: 40;
   display: none;
-  max-width: 360px;
+  max-width: 340px;
   min-width: 260px;
   background: #ffffff;
   border: 1px solid #0a6ed1;
