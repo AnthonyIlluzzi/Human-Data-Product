@@ -678,13 +678,21 @@ ORDER BY project_id;"
         </button>
 
         <button
-          class="sql-template-btn"
-          data-sql="SELECT skill_id, category, skill_name, level
-FROM skill
-ORDER BY category, skill_name;"
-        >
-          Skills
-        </button>
+  class="sql-template-btn"
+  data-sql="SELECT
+  s.skill_id,
+  d.domain,
+  s.skill_name,
+  s.depth,
+  s.experience,
+  s.confidence
+FROM skill s
+JOIN skills_domain d
+  ON s.domain_id = d.domain_id
+ORDER BY d.sort_order, s.display_order, s.skill_name;"
+>
+  Skills
+</button>
       </div>
     </div>
 
@@ -692,17 +700,26 @@ ORDER BY category, skill_name;"
       <div class="sql-category">Relationships</div>
       <div class="sql-buttons">
         <button
-          class="sql-template-btn"
-          data-sql="SELECT p.project_id, p.name, s.skill_name, s.level
+  class="sql-template-btn"
+  data-sql="SELECT
+  p.project_id,
+  p.name,
+  d.domain,
+  s.skill_name,
+  s.depth,
+  s.experience,
+  s.confidence
 FROM project p
 JOIN project_skill ps
   ON p.project_id = ps.project_id
 JOIN skill s
   ON s.skill_id = ps.skill_id
-ORDER BY p.project_id, s.skill_name;"
-        >
-          Project Skills
-        </button>
+JOIN skills_domain d
+  ON s.domain_id = d.domain_id
+ORDER BY p.project_id, d.sort_order, s.display_order, s.skill_name;"
+>
+  Project Skills
+</button>
 
         <button
           class="sql-template-btn"
