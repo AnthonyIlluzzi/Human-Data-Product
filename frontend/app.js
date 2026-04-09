@@ -188,17 +188,20 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
 
   if (matchingNav) matchingNav.classList.add("active");
 
+  if (tabId) {
+    activateTab(tabId);
+  }
+
   if (tabId === "capability-insights-tab") {
     try {
       await ensureCapabilityInsightsInitialized();
+
+      if (typeof window.refreshCapabilityInsights === "function") {
+        scheduleCapabilityInsightsRefresh();
+      }
     } catch (error) {
       console.error("Capability Insights init failed:", error);
-      return;
     }
-  }
-
-  if (tabId) {
-    activateTab(tabId);
   }
 
   requestAnimationFrame(() => {
@@ -223,16 +226,19 @@ function bindTabs() {
     btn.addEventListener("click", async () => {
       const tabId = btn.dataset.tab;
 
+      activateTab(tabId);
+
       if (tabId === "capability-insights-tab") {
         try {
           await ensureCapabilityInsightsInitialized();
+
+          if (typeof window.refreshCapabilityInsights === "function") {
+            scheduleCapabilityInsightsRefresh();
+          }
         } catch (error) {
           console.error("Capability Insights init failed:", error);
-          return;
         }
       }
-
-      activateTab(tabId);
     });
   });
 }
