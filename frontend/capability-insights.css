@@ -30,15 +30,14 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 308px;
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .capability-control-panel {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  align-self: start;
-  height: auto;
+  align-self: stretch;
   min-height: 0;
 }
 
@@ -167,13 +166,14 @@
 .explorer-card {
   display: flex;
   flex-direction: column;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
   max-height: none;
 }
 
 .inventory-card {
   flex: 0 0 auto;
+  min-height: 0;
   padding-top: 14px;
   padding-bottom: 14px;
   background: #fbfdff;
@@ -517,7 +517,7 @@ body.modal-open {
   overflow: hidden;
   padding: 14px 18px 8px;
   min-height: 0;
-  height: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -858,9 +858,9 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 560px;
-  height: auto;
-  flex: 0 0 auto;
+  min-height: 720px;
+  height: 100%;
+  flex: 1 1 auto;
 }
 
 .capability-chart-card .js-plotly-plot .plotly .cursor-crosshair,
@@ -1037,7 +1037,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 500px;
+    min-height: 560px;
   }
 
   .capability-explorer {
@@ -1047,7 +1047,7 @@ body.modal-open {
 
 @media (max-width: 920px) {
   #capability-chart {
-    min-height: 480px;
+    min-height: 520px;
   }
 }
 
@@ -1164,7 +1164,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 400px;
+    min-height: 440px;
   }
 
   .inventory-modal-dialog {
@@ -1337,7 +1337,7 @@ body.modal-open {
   }
 
   #capability-chart {
-    min-height: 400px;
+    min-height: 460px;
   }
 
   .chart-help-popover.scoring-help-popover {

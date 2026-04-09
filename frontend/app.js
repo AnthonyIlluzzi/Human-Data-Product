@@ -4,6 +4,9 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
 
+let capabilityInsightsInitPromise = null;
+let capabilityInsightsInitialized = false;
+
 const DISTRIBUTION_DEFINITIONS = {
   solution_type: {
     capability_expansion: "Expands what users or teams can do through new self-service or enablement capabilities.",
@@ -56,7 +59,6 @@ const loaders = [
     loadMetadata,
     loadOverview,
     loadVisualizations,
-    loadCapabilityInsights,
     loadContactInfo,
     loadNextOpportunity
   ];
@@ -168,7 +170,7 @@ function bindSideNavigation() {
   });
 }
 
-function openWorkspacePanel(panelId, tabId = null, options = {}) {
+async function openWorkspacePanel(panelId, tabId = null, options = {}) {
   if (!panelId) return;
 
   const {
@@ -185,6 +187,15 @@ function openWorkspacePanel(panelId, tabId = null, options = {}) {
     .find(btn => btn.dataset.panel === panelId);
 
   if (matchingNav) matchingNav.classList.add("active");
+
+  if (tabId === "capability-insights-tab") {
+    try {
+      await ensureCapabilityInsightsInitialized();
+    } catch (error) {
+      console.error("Capability Insights init failed:", error);
+      return;
+    }
+  }
 
   if (tabId) {
     activateTab(tabId);
@@ -209,8 +220,19 @@ function scrollPanelToTop(panel, behavior = "smooth") {
 
 function bindTabs() {
   document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activateTab(btn.dataset.tab);
+    btn.addEventListener("click", async () => {
+      const tabId = btn.dataset.tab;
+
+      if (tabId === "capability-insights-tab") {
+        try {
+          await ensureCapabilityInsightsInitialized();
+        } catch (error) {
+          console.error("Capability Insights init failed:", error);
+          return;
+        }
+      }
+
+      activateTab(tabId);
     });
   });
 }
@@ -429,6 +451,23 @@ async function loadVisualizations() {
 async function loadCapabilityInsights() {
   if (typeof window.initCapabilityInsights !== "function") return;
   await window.initCapabilityInsights(API_BASE);
+}
+
+async function ensureCapabilityInsightsInitialized() {
+  if (capabilityInsightsInitialized) return;
+
+  if (!capabilityInsightsInitPromise) {
+    capabilityInsightsInitPromise = loadCapabilityInsights()
+      .then(() => {
+        capabilityInsightsInitialized = true;
+      })
+      .catch((error) => {
+        capabilityInsightsInitPromise = null;
+        throw error;
+      });
+  }
+
+  await capabilityInsightsInitPromise;
 }
 
 function renderTimeline(containerId, items) {
