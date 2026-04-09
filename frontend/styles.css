@@ -351,7 +351,7 @@ body {
 .catalog-definition-help {
   position: relative;
   display: inline-flex;
-  align-self: flex-start;
+  align-self: center;
   flex: 0 0 auto;
   margin-top: 0;
   z-index: 120;
