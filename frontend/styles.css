@@ -339,8 +339,8 @@ body {
 
 .catalog-heading-inline {
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+  align-items: flex-start;
+  gap: 5px;
 }
 
 .catalog-heading-inline h2 {
@@ -351,26 +351,30 @@ body {
 .catalog-definition-help {
   position: relative;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  align-self: flex-start;
   flex: 0 0 auto;
-  transform: translateY(-2px);
-  z-index: 90;
+  margin-top: -1px;
+  z-index: 120;
 }
 
 .catalog-definition-help .insight-help-button {
-  width: 24px;
-  height: 24px;
-  font-size: 0.8rem;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font-size: 0.74rem;
+  line-height: 1;
 }
 
 .catalog-definition-help .insight-help-popover {
+  position: absolute !important;
+  top: -2px !important;
+  left: calc(100% + 4px) !important;
+  right: auto !important;
+  bottom: auto !important;
   width: 300px;
-  max-width: calc(100vw - 32px);
-  top: -10px;
-  left: calc(100% + 6px);
-  transform: none;
-  z-index: 140;
+  max-width: min(300px, calc(100vw - 40px));
+  transform: none !important;
+  z-index: 160;
 }
 
 .catalog-definition-help .insight-help-title {
@@ -3622,9 +3626,20 @@ body {
     margin: 0 0 18px;
   }
 
-  .definition-card,
+.definition-card,
 .catalog-section-card-highlight {
   padding: 16px;
+  }
+
+.catalog-definition-help .insight-help-popover,
+.catalog-definition-help .insight-help-popover.is-docked-mobile {
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  left: 0 !important;
+  right: auto !important;
+  width: min(300px, calc(100vw - 32px));
+  max-width: min(300px, calc(100vw - 32px));
+  transform: none !important;
   }
 
 /* --- Mobile Output Readability --- */
