@@ -128,6 +128,7 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       cardRect.width > 0 &&
       cardRect.height > 0 &&
       chartRect.width > 0 &&
+      (chartRect.height > 0 || els.chart.offsetHeight > 0) &&
       getComputedStyle(els.chart).display !== "none" &&
       getComputedStyle(chartCard).display !== "none";
 
