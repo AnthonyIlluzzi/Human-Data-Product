@@ -889,9 +889,9 @@ function stabilizeActivePlot() {
           <tr>
             <td class="inventory-domain-cell">${escapeHtml(item.domain)}</td>
             <td class="inventory-skill-cell">${escapeHtml(item.skill_name)}</td>
-            <td><span class="inventory-metric-pill">${item.depth}</span></td>
-            <td><span class="inventory-metric-pill">${item.experience}</span></td>
-            <td><span class="inventory-metric-pill">${item.confidence}</span></td>
+            <td class="inventory-metric-cell"><span class="inventory-metric-pill">${item.depth}</span></td>
+            <td class="inventory-metric-cell"><span class="inventory-metric-pill">${item.experience}</span></td>
+            <td class="inventory-metric-cell"><span class="inventory-metric-pill">${item.confidence}</span></td>
           </tr>
         `;
       })
@@ -1308,7 +1308,7 @@ function stabilizeActivePlot() {
     const layout = {
       barmode: "stack",
       height: currentPlotHeight,
-      margin: { t: 12, r: 18, b: 40, l: 170 },
+      margin: { t: 18, r: 18, b: 58, l: 170 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
@@ -1418,7 +1418,7 @@ function stabilizeActivePlot() {
     const layout = {
       barmode: "stack",
       height: currentPlotHeight,
-      margin: { t: 18, r: 18, b: 34, l: 170 },
+      margin: { t: 18, r: 18, b: 58, l: 170 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
@@ -1491,7 +1491,7 @@ function stabilizeActivePlot() {
 
     const layout = {
       height: currentPlotHeight,
-      margin: { t: 12, r: 22, b: 58, l: 60 },
+      margin: { t: 18, r: 22, b: 58, l: 60 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       hovermode: "closest",
