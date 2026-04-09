@@ -34,7 +34,6 @@
   let capabilityApiBase = "";
   let initialized = false;
   let resizeHandlerBound = false;
-  let capabilityLayoutObserver = null;
   let postRenderResizeTimeout = null;
 
   const els = {};
@@ -126,6 +125,7 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
     const ready =
       !!cardRect &&
       cardRect.width > 0 &&
+      cardRect.height > 0 &&
       chartRect.width > 0 &&
       getComputedStyle(els.chart).display !== "none" &&
       getComputedStyle(chartCard).display !== "none";
@@ -151,7 +151,7 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       return;
     }
 
-    if (attempt < 12) {
+    if (attempt < 14) {
       window.setTimeout(() => renderWhenReady(attempt + 1), 50);
     }
   };
@@ -454,16 +454,48 @@ function getPlotHeight() {
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
   if (isMobile) {
-    return 400;
+    return activeDomain ? 460 : 440;
   }
 
   if (isTablet) {
-    return 500;
+    return activeDomain ? 560 : 540;
   }
 
-  return 560;
-}
+  const workspace = els.chart?.closest(".capability-workspace");
+  const controlPanel = workspace?.querySelector(".capability-control-panel");
+  const chartCard = els.chart?.closest(".capability-chart-card");
+  const toolbar = chartCard?.querySelector(".chart-toolbar");
 
+  if (controlPanel && chartCard && toolbar) {
+    const chartCardStyle = getComputedStyle(chartCard);
+    const paddingTop = parseFloat(chartCardStyle.paddingTop) || 0;
+    const paddingBottom = parseFloat(chartCardStyle.paddingBottom) || 0;
+
+    const availableHeight =
+      controlPanel.offsetHeight -
+      toolbar.offsetHeight -
+      paddingTop -
+      paddingBottom -
+      8;
+
+    if (Number.isFinite(availableHeight) && availableHeight > 620) {
+      return Math.round(availableHeight);
+    }
+  }
+
+  const workspaceRect = workspace?.getBoundingClientRect();
+  if (workspaceRect) {
+    const viewportHeight = window.innerHeight;
+    const bottomMargin = 24;
+    const availableViewportHeight = viewportHeight - workspaceRect.top - bottomMargin;
+
+    if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 720) {
+      return Math.round(availableViewportHeight - 40);
+    }
+  }
+
+  return 720;
+}
 function stabilizeActivePlot() {
   if (!window.Plotly || !activeGraphDiv) return;
 
@@ -1166,7 +1198,7 @@ function stabilizeActivePlot() {
      CHART RENDERING
   ========================= */
 
-  function renderChart() {
+    function renderChart() {
     if (!els.chart) return;
     if (!window.Plotly) {
       els.chart.innerHTML = "<p>Plotly is required for Capability Insights.</p>";
@@ -1195,7 +1227,7 @@ function stabilizeActivePlot() {
 
     renderDomainChart();
   }
-
+  
   function renderProfileChart() {
     const rows = getProfileDomainSummaries();
     const y = rows.map((row) => row.domain);
