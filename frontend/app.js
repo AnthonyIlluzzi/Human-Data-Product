@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindApiWorkspace();
   bindOutputPorts();
   bindLandingModals();
+  bindInsightHelpPopovers();
 
 const loaders = [
     loadMetadata,
