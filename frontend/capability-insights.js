@@ -456,17 +456,19 @@ function getPlotHeight() {
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
   if (isMobile) {
-    return activeDomain ? 460 : 440;
+    return activeDomain ? 452 : 436;
   }
 
   if (isTablet) {
-    return activeDomain ? 560 : 540;
+    return activeDomain ? 548 : 532;
   }
 
   const workspace = els.chart?.closest(".capability-workspace");
   const controlPanel = workspace?.querySelector(".capability-control-panel");
   const chartCard = els.chart?.closest(".capability-chart-card");
   const toolbar = chartCard?.querySelector(".chart-toolbar");
+
+  const desktopTrim = activeDomain ? 26 : 14;
 
   if (controlPanel && chartCard && toolbar) {
     const chartCardStyle = getComputedStyle(chartCard);
@@ -478,9 +480,9 @@ function getPlotHeight() {
       toolbar.offsetHeight -
       paddingTop -
       paddingBottom -
-      8;
+      desktopTrim;
 
-    if (Number.isFinite(availableHeight) && availableHeight > 620) {
+    if (Number.isFinite(availableHeight) && availableHeight > 600) {
       return Math.round(availableHeight);
     }
   }
@@ -489,15 +491,18 @@ function getPlotHeight() {
   if (workspaceRect) {
     const viewportHeight = window.innerHeight;
     const bottomMargin = 24;
-    const availableViewportHeight = viewportHeight - workspaceRect.top - bottomMargin;
+    const viewportTrim = activeDomain ? 56 : 44;
+    const availableViewportHeight =
+      viewportHeight - workspaceRect.top - bottomMargin - viewportTrim;
 
-    if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 720) {
-      return Math.round(availableViewportHeight - 40);
+    if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 640) {
+      return Math.round(availableViewportHeight);
     }
   }
 
-  return 720;
+  return activeDomain ? 688 : 700;
 }
+  
 function stabilizeActivePlot() {
   if (!window.Plotly || !activeGraphDiv) return;
 
