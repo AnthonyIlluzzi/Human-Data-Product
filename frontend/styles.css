@@ -333,13 +333,18 @@ body {
 
 .catalog-heading-title {
   width: fit-content;
+  position: relative;
+  z-index: 6;
 }
 
-.catalog-heading-title h2 {
-  margin: 0;
+.catalog-heading-inline {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.catalog-heading-inline h2 {
+  margin: 0;
   line-height: 1.1;
 }
 
@@ -349,9 +354,8 @@ body {
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  transform: none;
   margin-top: 1px;
-  z-index: 80;
+  z-index: 90;
 }
 
 .catalog-definition-help .insight-help-button {
@@ -361,13 +365,24 @@ body {
 }
 
 .catalog-definition-help .insight-help-popover {
-  width: min(360px, calc(100vw - 32px));
-  max-width: min(360px, calc(100vw - 32px));
-  z-index: 120;
+  width: min(340px, calc(100vw - 32px));
+  max-width: min(340px, calc(100vw - 32px));
+  z-index: 140;
 }
 
 .catalog-definition-help .insight-help-title {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  font-weight: 800;
   color: #0a6ed1;
+}
+
+.catalog-definition-help .insight-help-body {
+  margin: 8px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 .catalog-definition-help .insight-help-body p {
@@ -383,6 +398,18 @@ body {
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 14px;
   min-height: 100%;
+}
+
+.human-context-shell {
+  align-self: start;
+  display: grid;
+  width: 100%;
+  height: 300px;
+  padding: 16px 16px 14px;
+  border: 1px solid rgba(10, 110, 209, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .human-context-rotator {
@@ -402,11 +429,11 @@ body {
 }
 
 .human-context-kicker {
-  margin-bottom: 6px;
+  margin: 0 0 6px;
 }
 
 .human-context-title {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-size: 1.02rem;
   line-height: 1.2;
   color: #0b2239;
@@ -436,10 +463,18 @@ body {
 }
 
 .human-context-chip {
-  background: #f4f8fd;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border-radius: 999px;
   border: 1px solid #d5e4f7;
+  background: #f4f8fd;
   color: #29466d;
+  font-size: 0.78rem;
   font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .human-context-footer {
