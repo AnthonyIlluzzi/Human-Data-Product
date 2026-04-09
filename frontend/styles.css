@@ -353,7 +353,7 @@ body {
   display: inline-flex;
   align-self: flex-start;
   flex: 0 0 auto;
-  margin-top: -1px;
+  margin-top: 0;
   z-index: 120;
 }
 
