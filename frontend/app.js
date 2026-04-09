@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindOutputPorts();
   bindLandingModals();
   bindInsightHelpPopovers();
+  initLandingContextRotator();
 
 const loaders = [
     loadMetadata,
@@ -137,6 +138,65 @@ function bindCatalogNavigation() {
       });
     });
   });
+}
+
+const LANDING_CONTEXT_TILES = [
+  {
+    kicker: "ABOUT ANTHONY",
+    title: "Behind the Data",
+    summary:
+      "Anthony lives in Libertyville, IL, with his fiancée and his two sons. He focuses on turning complex systems into structured, scalable platforms and enjoys solving real problems with technology.",
+    chips: ["Father", "Foodie", "Curious Builder"]
+  },
+  {
+    kicker: "TARGET ROLE",
+    title: "Opportunity Profile",
+    summary:
+      "Senior architecture-oriented roles focused on enterprise data platforms, analytics enablement, and data product strategy, with strongest fit in strategic individual contributor environments.",
+    chips: ["Data Architect", "Principal", "Remote / Hybrid"]
+  }
+];
+
+function initLandingContextRotator() {
+  const kickerEl = document.getElementById("landing-context-kicker");
+  const titleEl = document.getElementById("landing-context-title");
+  const summaryEl = document.getElementById("landing-context-summary");
+  const chipsEl = document.getElementById("landing-context-chips");
+  const prevEl = document.getElementById("landing-context-prev");
+  const nextEl = document.getElementById("landing-context-next");
+
+  if (!kickerEl || !titleEl || !summaryEl || !chipsEl || !prevEl || !nextEl) return;
+
+  let activeIndex = 0;
+
+  const renderLandingContextTile = () => {
+    const tile = LANDING_CONTEXT_TILES[activeIndex];
+    if (!tile) return;
+
+    kickerEl.textContent = tile.kicker;
+    titleEl.textContent = tile.title;
+    summaryEl.textContent = tile.summary;
+    chipsEl.innerHTML = "";
+
+    (tile.chips || []).forEach(chip => {
+      const chipEl = document.createElement("span");
+      chipEl.className = "tag-chip human-context-chip";
+      chipEl.textContent = chip;
+      chipsEl.appendChild(chipEl);
+    });
+  };
+
+  prevEl.addEventListener("click", () => {
+    activeIndex = (activeIndex - 1 + LANDING_CONTEXT_TILES.length) % LANDING_CONTEXT_TILES.length;
+    renderLandingContextTile();
+  });
+
+  nextEl.addEventListener("click", () => {
+    activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
+    renderLandingContextTile();
+  });
+
+  renderLandingContextTile();
 }
 
 function bindLandingModals() {
