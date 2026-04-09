@@ -419,26 +419,26 @@
 }
 
 .inventory-modal-close {
-  width: 38px;
-  height: 38px;
-  border: 1px solid #cfe0f7;
-  background: #ffffff;
-  color: var(--text);
-  border-radius: 999px;
-  font: inherit;
-  font-size: 1.4rem;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d7e2ef;
+  border-radius: 12px;
+  background: #f7faff;
+  font-size: 28px;
   line-height: 1;
+  cursor: pointer;
+  color: var(--muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: 0.18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
   flex-shrink: 0;
 }
 
 .inventory-modal-close:hover {
-  background: #f4f8fd;
-  border-color: #8fb7e8;
+  background: #eef4fb;
+  border-color: #cfe0f4;
+  color: var(--primary-dark);
   transform: translateY(-1px);
 }
 
@@ -464,16 +464,31 @@
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 14px 18px;
+  padding: 14px 14px;
   border-bottom: 1px solid var(--border);
 }
 
 .inventory-table tbody td {
-  padding: 14px 18px;
+  padding: 14px 14px;
   border-bottom: 1px solid #e9eef5;
   font-size: 0.93rem;
   color: var(--text);
-  vertical-align: top;
+  vertical-align: middle;
+}
+
+.inventory-skill-cell {
+  min-width: 240px;
+}
+
+.inventory-table thead th.inventory-skill-heading {
+  width: 40%;
+}
+
+.inventory-table thead th.inventory-metric-heading,
+.inventory-table tbody td.inventory-metric-cell {
+  width: 108px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .inventory-table tbody tr:nth-child(even) {
@@ -488,10 +503,6 @@
   font-weight: 700;
   color: #30445f;
   white-space: nowrap;
-}
-
-.inventory-skill-cell {
-  min-width: 280px;
 }
 
 .inventory-metric-pill {
