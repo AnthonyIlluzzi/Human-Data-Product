@@ -35,6 +35,7 @@
   let initialized = false;
   let resizeHandlerBound = false;
   let postRenderResizeTimeout = null;
+  let currentPlotHeight = 720;
 
   const els = {};
   const touchState = {
@@ -1198,7 +1199,7 @@ function stabilizeActivePlot() {
      CHART RENDERING
   ========================= */
 
-    function renderChart() {
+  function renderChart() {
     if (!els.chart) return;
     if (!window.Plotly) {
       els.chart.innerHTML = "<p>Plotly is required for Capability Insights.</p>";
@@ -1207,8 +1208,8 @@ function stabilizeActivePlot() {
 
     buildChartToolbar();
 
-    const plotHeight = getPlotHeight();
-    els.chart.style.height = `${plotHeight}px`;
+    currentPlotHeight = getPlotHeight();
+    els.chart.style.height = `${currentPlotHeight}px`;
 
     if (activeGraphDiv) {
       window.Plotly.purge(els.chart);
@@ -1300,7 +1301,7 @@ function stabilizeActivePlot() {
 
     const layout = {
       barmode: "stack",
-      height: getPlotHeight(),
+      height: currentPlotHeight,
       margin: { t: 12, r: 18, b: 40, l: 170 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
@@ -1410,7 +1411,7 @@ function stabilizeActivePlot() {
 
     const layout = {
       barmode: "stack",
-      height: getPlotHeight(),
+      height: currentPlotHeight,
       margin: { t: 18, r: 18, b: 34, l: 170 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
@@ -1483,7 +1484,7 @@ function stabilizeActivePlot() {
     };
 
     const layout = {
-      height: getPlotHeight(),
+      height: currentPlotHeight,
       margin: { t: 12, r: 22, b: 58, l: 60 },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
