@@ -42,16 +42,6 @@
 	<p class="hero-value-line">
   	  This is what I do. I design user-friendly systems that bring structure to complex data and support better decision-making.
 	</p>
-
-    <div class="hero-identity">
-      <strong>Anthony Illuzzi</strong> · Chicago Area · Data Platform Architect
-    </div>
-
-    <div class="hero-cta-row">
-      <button class="btn-secondary hero-human-btn" data-modal-target="contact-modal">
-        Learn more about Anthony
-      </button>
-    </div>
   </div>
 
   <div class="landing-hero-image">
@@ -64,20 +54,45 @@
 
 <section id="definition-section">
   <div class="definition-catalog-grid">
-    <div class="definition-card">
-      <span class="section-kicker">What is a Data Product?</span>
-      <p class="definition-text">
-        A <strong>data product</strong> is a curated, reusable, and governed data asset
-        often derived from fragmented data sources. They are pre-packaged 'products' that include not just the data itself,
-        but also access paths, semantical context, metadata, transformations, and documentation. They are designed to enable
-        better decision making, and therefore must be reliable, discoverable, and provide analytical usability.
-      </p>
-    </div>
-
     <div class="catalog-section-card catalog-section-card-highlight">
       <div class="section-header compact-header">
-        <h2>Data Product Catalog</h2>
-        <p>Browse available data products and open a product workspace.</p>
+        <div class="catalog-heading-row">
+          <div class="catalog-heading-title">
+            <h2>Data Product Catalog</h2>
+            <div class="insight-help catalog-definition-help">
+              <button
+                id="catalog-definition-help-button"
+                class="insight-help-button"
+                type="button"
+                aria-label="What is a data product?"
+                aria-expanded="false"
+                aria-controls="catalog-definition-help-popover"
+              >
+                ?
+              </button>
+
+              <div
+                id="catalog-definition-help-popover"
+                class="insight-help-popover"
+                role="dialog"
+                aria-hidden="true"
+                aria-labelledby="catalog-definition-help-title"
+              >
+                <p id="catalog-definition-help-title" class="insight-help-title">What is a Data Product?</p>
+                <div class="insight-help-body">
+                  <p>
+                    A data product is a curated, reusable, and governed data asset derived from fragmented sources.
+                  </p>
+                  <p>
+                    It combines data, access paths, semantic context, metadata, transformations, and documentation to enable reliable, discoverable, and actionable insights.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>Browse available data products and open a product workspace.</p>
+        </div>
       </div>
 
       <div class="catalog-grid">
@@ -110,26 +125,52 @@
           </div>
         </article>
 
-        <article class="product-tile placeholder">
+        <article class="product-tile future">
           <div class="tile-top">
-            <span class="tile-type">Catalog Placeholder</span>
-            <span class="status-pill muted">PLANNED</span>
+            <span class="tile-type">Data Product</span>
+            <span class="status-pill muted">FUTURE</span>
           </div>
 
           <div class="tile-content">
-            <h2>More Products Coming</h2>
+            <h2>Cognitive Profile</h2>
 
-            <p>
-              Reserved placeholder for future portfolio-grade data products.
+            <p class="product-summary">
+              Structured model of decision-making and behavioral tendencies.
             </p>
           </div>
 
-          <div class="tile-footer">
-            <span>Future Phase</span>
+          <div class="tile-footer tile-footer-future">
+            <button class="btn-primary btn-disabled" type="button" disabled aria-disabled="true">
+              Open Product
+            </button>
           </div>
         </article>
       </div>
     </div>
+
+    <aside class="definition-card human-context-card">
+      <span class="section-kicker">Behind the Data</span>
+
+      <div class="human-context-copy">
+        <h2>Anthony Illuzzi</h2>
+        <p class="human-context-role">Chicago Area · Data Platform Architect</p>
+        <p class="definition-text">
+          I design user-friendly systems that bring structure to complex data and support better decision-making.
+        </p>
+      </div>
+
+      <div class="human-context-chips">
+        <span class="tag-chip human-context-chip">Data Architect</span>
+        <span class="tag-chip human-context-chip">Father</span>
+        <span class="tag-chip human-context-chip">Curious Builder</span>
+      </div>
+
+      <div class="human-context-actions">
+        <button class="btn-secondary human-context-btn" data-modal-target="contact-modal">
+          Learn more about Anthony
+        </button>
+      </div>
+    </aside>
   </div>
 </section>
 
