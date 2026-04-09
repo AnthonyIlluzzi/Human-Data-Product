@@ -339,8 +339,8 @@ body {
 
 .catalog-heading-inline {
   display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .catalog-heading-inline h2 {
@@ -354,7 +354,7 @@ body {
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  margin-top: 1px;
+  transform: translateY(-1px);
   z-index: 90;
 }
 
@@ -365,11 +365,16 @@ body {
 }
 
 .catalog-definition-help .insight-help-popover {
-  width: min(340px, calc(100vw - 32px));
-  max-width: min(340px, calc(100vw - 32px));
+  width: 320px;
+  max-width: calc(100vw - 32px);
+
+  top: 50%;
+  left: calc(100% + 10px);
+
+  transform: translateY(-50%);
+
   z-index: 140;
 }
-
 .catalog-definition-help .insight-help-title {
   margin: 0;
   font-size: 0.95rem;
