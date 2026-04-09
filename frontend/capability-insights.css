@@ -166,13 +166,14 @@
 .explorer-card {
   display: flex;
   flex-direction: column;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
   max-height: none;
 }
 
 .inventory-card {
   flex: 0 0 auto;
+  min-height: 0;
   padding-top: 14px;
   padding-bottom: 14px;
   background: #fbfdff;
