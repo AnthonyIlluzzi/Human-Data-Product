@@ -339,7 +339,7 @@ body {
 
 .catalog-heading-inline {
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
 }
 
