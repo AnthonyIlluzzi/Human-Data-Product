@@ -2416,8 +2416,8 @@ function renderOpportunityTreemap(containerId, segments) {
 
   container.innerHTML = `
     <div class="opportunity-treemap-shell">
-      <div class="opportunity-treemap-topbar">
-        <div class="opportunity-treemap-breadcrumb-slot">
+      <div class="opportunity-treemap-header">
+        <div class="opportunity-treemap-breadcrumb">
           <button
             type="button"
             class="opportunity-treemap-back-btn${isDrilldown ? "" : " is-hidden"}"
