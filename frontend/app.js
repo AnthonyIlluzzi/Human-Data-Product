@@ -444,9 +444,10 @@ function bindSqlWorkspace() {
   });
 
   document.getElementById("clear-sql-btn")?.addEventListener("click", () => {
-	  if (editor) editor.value = "";
-	  if (output) output.textContent = DEFAULT_SQL_OUTPUT_MESSAGE;
-	});
+    if (editor) editor.value = "";
+    if (output) output.textContent = DEFAULT_SQL_OUTPUT_MESSAGE;
+  });
+}
 
 function bindApiWorkspace() {
   document.querySelectorAll(".endpoint-btn").forEach(btn => {
