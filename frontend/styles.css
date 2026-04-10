@@ -1193,8 +1193,8 @@ body {
   background: rgba(19, 163, 74, 0.08);
 }
 
-.product-metadata .status-pill:not(.muted) {
-  color: #13a34a;
+#meta-status {
+  color: var(--success);
 }
 
 .status-dot {
