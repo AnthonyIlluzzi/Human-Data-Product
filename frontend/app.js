@@ -1183,12 +1183,15 @@ function attachTileBoundedTooltip(element, getHtml) {
     activeInsightsTooltipBounds = bounds;
 
     tooltip.classList.add("is-tile-bounded");
-    tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width, 96)}px`);
+    tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width - 14, 120)}px`);
+
+    const preferredX = bounds.right - 18;
+    const preferredY = bounds.top + 18;
 
     showFloatingInsightsTooltip(
       typeof getHtml === "function" ? getHtml() : getHtml,
-      clientX,
-      clientY,
+      preferredX,
+      preferredY,
       bounds
     );
   };
@@ -1238,6 +1241,7 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   const padding = 12;
   const gap = 12;
   const tooltipRect = tooltip.getBoundingClientRect();
+  const isTileBounded = tooltip.classList.contains("is-tile-bounded");
 
   const bounds = activeInsightsTooltipBounds || {
     left: padding,
@@ -1246,24 +1250,40 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
     bottom: window.innerHeight - padding
   };
 
-  let left = clientX + gap;
-  let top = clientY + gap;
+  let left;
+  let top;
 
-  if (left + tooltipRect.width > bounds.right - 8) {
-    left = clientX - tooltipRect.width - gap;
+  if (isTileBounded) {
+    left = bounds.right - tooltipRect.width - 8;
+    top = bounds.top + 8;
+
+    if (top + tooltipRect.height > bounds.bottom - 8) {
+      top = Math.max(bounds.top + 8, bounds.bottom - tooltipRect.height - 8);
+    }
+
+    if (left < bounds.left + 8) {
+      left = bounds.left + 8;
+    }
+  } else {
+    left = clientX + gap;
+    top = clientY + gap;
+
+    if (left + tooltipRect.width > bounds.right - 8) {
+      left = clientX - tooltipRect.width - gap;
+    }
+
+    if (top + tooltipRect.height > bounds.bottom - 8) {
+      top = clientY - tooltipRect.height - gap;
+    }
+
+    const minLeft = bounds.left + 8;
+    const maxLeft = Math.max(minLeft, bounds.right - tooltipRect.width - 8);
+    const minTop = bounds.top + 8;
+    const maxTop = Math.max(minTop, bounds.bottom - tooltipRect.height - 8);
+
+    left = Math.max(minLeft, Math.min(left, maxLeft));
+    top = Math.max(minTop, Math.min(top, maxTop));
   }
-
-  if (top + tooltipRect.height > bounds.bottom - 8) {
-    top = clientY - tooltipRect.height - gap;
-  }
-
-  const minLeft = bounds.left + 8;
-  const maxLeft = Math.max(minLeft, bounds.right - tooltipRect.width - 8);
-  const minTop = bounds.top + 8;
-  const maxTop = Math.max(minTop, bounds.bottom - tooltipRect.height - 8);
-
-  left = Math.max(minLeft, Math.min(left, maxLeft));
-  top = Math.max(minTop, Math.min(top, maxTop));
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
@@ -2361,14 +2381,29 @@ function renderOpportunityTreemap(containerId, segments) {
     group => group.dimensionKey === opportunityTreemapState.activeDimension
   );
 
-  const headerText = isDrilldown
-    ? `Higher Alignment ●●●●● Lower Alignment | Viewing ${activeDimensionNode?.dimensionLabel || "Selected Dimension"}`
-    : `Higher Alignment ●●●●● Lower Alignment | Click a segment to explore`;
+  const scaleMarkup = `
+    <div class="opportunity-treemap-scale">
+      <span class="opportunity-treemap-scale-label">Higher Alignment</span>
+      <span class="opportunity-treemap-scale-dots" aria-hidden="true">
+        <span class="scale-dot scale-dot-1"></span>
+        <span class="scale-dot scale-dot-2"></span>
+        <span class="scale-dot scale-dot-3"></span>
+        <span class="scale-dot scale-dot-4"></span>
+        <span class="scale-dot scale-dot-5"></span>
+      </span>
+      <span class="opportunity-treemap-scale-label">Lower Alignment</span>
+    </div>
+  `;
+
+  const subtitleMarkup = isDrilldown
+    ? `Weighted preference map showing how the next role is prioritized. <span class="opportunity-treemap-subtle-divider">|</span> Viewing ${activeDimensionNode?.dimensionLabel || "Selected Dimension"}`
+    : `Weighted preference map showing how the next role is prioritized. <span class="opportunity-treemap-subtle-divider">|</span> Click a segment to explore`;
 
   container.innerHTML = `
     <div class="opportunity-treemap-shell">
       <div class="opportunity-treemap-header">
-        <div class="opportunity-treemap-scale">${headerText}</div>
+        <div class="opportunity-treemap-subtitle-row">${subtitleMarkup}</div>
+        <div class="opportunity-treemap-scale-row">${scaleMarkup}</div>
       </div>
 
       ${isDrilldown ? `
