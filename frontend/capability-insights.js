@@ -134,23 +134,16 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       getComputedStyle(chartCard).display !== "none";
 
     if (ready) {
-      window.clearTimeout(postRenderResizeTimeout);
       renderChart();
-
-      postRenderResizeTimeout = window.setTimeout(() => {
-        if (activeGraphDiv && window.Plotly) {
-          window.Plotly.Plots.resize(activeGraphDiv);
-        }
-      }, 120);
 
       if (isChartHelpOpen) {
         requestAnimationFrame(() => setChartHelpOpen(true));
       }
-
+      
       if (isScoringHelpOpen) {
         requestAnimationFrame(() => setScoringHelpOpen(true));
       }
-
+      
       return;
     }
 
@@ -502,26 +495,6 @@ function getPlotHeight() {
   }
 
   return activeDomain ? 688 : 700;
-}
-  
-function stabilizeActivePlot() {
-  if (!window.Plotly || !activeGraphDiv) return;
-
-  const resizePlot = () => {
-    if (!activeGraphDiv || !document.body.contains(activeGraphDiv)) return;
-    window.Plotly.Plots.resize(activeGraphDiv);
-  };
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      resizePlot();
-    });
-  });
-
-  window.clearTimeout(postRenderResizeTimeout);
-  postRenderResizeTimeout = window.setTimeout(() => {
-    resizePlot();
-  }, 120);
 }
 
   /* =========================
@@ -1340,7 +1313,6 @@ function stabilizeActivePlot() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindTopLevelChartEvents(graphDiv, "profile");
-      stabilizeActivePlot();
     });
   }
 
@@ -1461,7 +1433,6 @@ function stabilizeActivePlot() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindTopLevelChartEvents(graphDiv, "distribution");
-      stabilizeActivePlot();
     });
   }
 
@@ -1594,7 +1565,6 @@ function stabilizeActivePlot() {
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
       bindSkillChartEvents(graphDiv);
-      stabilizeActivePlot();
     });
   }
   
