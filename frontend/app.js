@@ -1024,6 +1024,7 @@ function splitSkillLabel(skillName) {
 let valueDeliveryFeedbackGroups = [];
 let activeInsightsTooltipTrigger = null;
 let activeInsightsTooltipBounds = null;
+let activeInsightsTooltipAnchorRect = null;
 let insightsTooltipDismissBound = false;
 const opportunityTreemapState = {
   activeDimension: null
@@ -1166,6 +1167,7 @@ function hideFloatingInsightsTooltip() {
 
   activeInsightsTooltipTrigger = null;
   activeInsightsTooltipBounds = null;
+  activeInsightsTooltipAnchorRect = null;
 }
 
 function attachTileBoundedTooltip(element, getHtml) {
@@ -1173,46 +1175,42 @@ function attachTileBoundedTooltip(element, getHtml) {
 
   bindGlobalInsightsTooltipDismiss();
 
-  const showFromEvent = (clientX, clientY) => {
+  const getTreemapBounds = () => {
+    const canvas = element.closest(".opportunity-treemap-canvas");
+    return canvas?.getBoundingClientRect() || element.getBoundingClientRect();
+  };
+
+  const showFromElement = () => {
     const tooltip = document.getElementById("insights-hover-tooltip");
-    const bounds = element.getBoundingClientRect();
+    const anchorRect = element.getBoundingClientRect();
+    const bounds = getTreemapBounds();
 
     if (!tooltip) return;
 
     activeInsightsTooltipTrigger = element;
     activeInsightsTooltipBounds = bounds;
+    activeInsightsTooltipAnchorRect = anchorRect;
 
     tooltip.classList.add("is-tile-bounded");
-    tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width - 14, 120)}px`);
-
-    const preferredX = bounds.right - 18;
-    const preferredY = bounds.top + 18;
+    tooltip.style.setProperty("--tooltip-bound-width", `248px`);
 
     showFloatingInsightsTooltip(
       typeof getHtml === "function" ? getHtml() : getHtml,
-      preferredX,
-      preferredY,
+      anchorRect.left,
+      anchorRect.top,
       bounds
     );
   };
 
   if (!usesClickOnlyInsightsTooltips()) {
-    element.addEventListener("mouseenter", event => {
-      showFromEvent(event.clientX, event.clientY);
+    element.addEventListener("mouseenter", () => {
+      showFromElement();
     });
 
-    element.addEventListener("mousemove", event => {
-      const tooltip = document.getElementById("insights-hover-tooltip");
-      const bounds = element.getBoundingClientRect();
-
-      activeInsightsTooltipBounds = bounds;
-
-      if (tooltip) {
-        tooltip.classList.add("is-tile-bounded");
-        tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width, 96)}px`);
-      }
-
-      positionFloatingInsightsTooltip(event.clientX, event.clientY);
+    element.addEventListener("mousemove", () => {
+      activeInsightsTooltipBounds = getTreemapBounds();
+      activeInsightsTooltipAnchorRect = element.getBoundingClientRect();
+      positionFloatingInsightsTooltip(0, 0);
     });
 
     element.addEventListener("mouseleave", () => {
@@ -1223,8 +1221,7 @@ function attachTileBoundedTooltip(element, getHtml) {
   }
 
   element.addEventListener("focus", () => {
-    const rect = element.getBoundingClientRect();
-    showFromEvent(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    showFromElement();
   });
 
   element.addEventListener("blur", () => {
@@ -1253,17 +1250,25 @@ function positionFloatingInsightsTooltip(clientX, clientY) {
   let left;
   let top;
 
-  if (isTileBounded) {
-    left = bounds.right - tooltipRect.width - 8;
-    top = bounds.top + 8;
+  if (isTileBounded && activeInsightsTooltipAnchorRect) {
+    const anchor = activeInsightsTooltipAnchorRect;
+    const roomRight = bounds.right - anchor.right;
+    const roomLeft = anchor.left - bounds.left;
 
-    if (top + tooltipRect.height > bounds.bottom - 8) {
-      top = Math.max(bounds.top + 8, bounds.bottom - tooltipRect.height - 8);
+    if (roomRight >= tooltipRect.width + gap) {
+      left = anchor.right + gap;
+    } else if (roomLeft >= tooltipRect.width + gap) {
+      left = anchor.left - tooltipRect.width - gap;
+    } else {
+      left = Math.max(bounds.left + 8, Math.min(anchor.right + gap, bounds.right - tooltipRect.width - 8));
     }
 
-    if (left < bounds.left + 8) {
-      left = bounds.left + 8;
-    }
+    top = anchor.top + ((anchor.height - tooltipRect.height) / 2);
+
+    const minTop = bounds.top + 8;
+    const maxTop = Math.max(minTop, bounds.bottom - tooltipRect.height - 8);
+
+    top = Math.max(minTop, Math.min(top, maxTop));
   } else {
     left = clientX + gap;
     top = clientY + gap;
@@ -2395,14 +2400,9 @@ function renderOpportunityTreemap(containerId, segments) {
     </div>
   `;
 
-  const subtitleMarkup = isDrilldown
-    ? `Weighted preference map showing how the next role is prioritized. <span class="opportunity-treemap-subtle-divider">|</span> Viewing ${activeDimensionNode?.dimensionLabel || "Selected Dimension"}`
-    : `Weighted preference map showing how the next role is prioritized. <span class="opportunity-treemap-subtle-divider">|</span> Click a segment to explore`;
-
   container.innerHTML = `
     <div class="opportunity-treemap-shell">
       <div class="opportunity-treemap-header">
-        <div class="opportunity-treemap-subtitle-row">${subtitleMarkup}</div>
         <div class="opportunity-treemap-scale-row">${scaleMarkup}</div>
       </div>
 
