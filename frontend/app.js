@@ -1025,6 +1025,9 @@ let valueDeliveryFeedbackGroups = [];
 let activeInsightsTooltipTrigger = null;
 let activeInsightsTooltipBounds = null;
 let insightsTooltipDismissBound = false;
+const opportunityTreemapState = {
+  activeDimension: null
+};
 
 function usesClickOnlyInsightsTooltips() {
   return window.matchMedia("(hover: none), (pointer: coarse)").matches;
@@ -1155,10 +1158,77 @@ function hideFloatingInsightsTooltip() {
   if (!tooltip) return;
 
   tooltip.classList.add("hidden");
-  tooltip.classList.remove("is-visible");
+  tooltip.classList.remove("is-visible", "is-tile-bounded");
   tooltip.setAttribute("aria-hidden", "true");
+  tooltip.style.removeProperty("--tooltip-bound-width");
+  tooltip.style.left = "";
+  tooltip.style.top = "";
+
   activeInsightsTooltipTrigger = null;
   activeInsightsTooltipBounds = null;
+}
+
+function attachTileBoundedTooltip(element, getHtml) {
+  if (!element) return;
+
+  bindGlobalInsightsTooltipDismiss();
+
+  const showFromEvent = (clientX, clientY) => {
+    const tooltip = document.getElementById("insights-hover-tooltip");
+    const bounds = element.getBoundingClientRect();
+
+    if (!tooltip) return;
+
+    activeInsightsTooltipTrigger = element;
+    activeInsightsTooltipBounds = bounds;
+
+    tooltip.classList.add("is-tile-bounded");
+    tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width, 96)}px`);
+
+    showFloatingInsightsTooltip(
+      typeof getHtml === "function" ? getHtml() : getHtml,
+      clientX,
+      clientY,
+      bounds
+    );
+  };
+
+  if (!usesClickOnlyInsightsTooltips()) {
+    element.addEventListener("mouseenter", event => {
+      showFromEvent(event.clientX, event.clientY);
+    });
+
+    element.addEventListener("mousemove", event => {
+      const tooltip = document.getElementById("insights-hover-tooltip");
+      const bounds = element.getBoundingClientRect();
+
+      activeInsightsTooltipBounds = bounds;
+
+      if (tooltip) {
+        tooltip.classList.add("is-tile-bounded");
+        tooltip.style.setProperty("--tooltip-bound-width", `${Math.max(bounds.width, 96)}px`);
+      }
+
+      positionFloatingInsightsTooltip(event.clientX, event.clientY);
+    });
+
+    element.addEventListener("mouseleave", () => {
+      if (activeInsightsTooltipTrigger === element) {
+        hideFloatingInsightsTooltip();
+      }
+    });
+  }
+
+  element.addEventListener("focus", () => {
+    const rect = element.getBoundingClientRect();
+    showFromEvent(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  });
+
+  element.addEventListener("blur", () => {
+    if (activeInsightsTooltipTrigger === element) {
+      hideFloatingInsightsTooltip();
+    }
+  });
 }
 
 function positionFloatingInsightsTooltip(clientX, clientY) {
@@ -2268,84 +2338,291 @@ function renderOpportunityTreemap(containerId, segments) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const items = Array.isArray(segments) ? [...segments] : [];
-  items.sort((a, b) => (b.combined_weight || 0) - (a.combined_weight || 0));
+  const sourceItems = Array.isArray(segments) ? [...segments] : [];
+  if (!sourceItems.length) {
+    container.innerHTML = `<div class="detail-empty-state"><p>No opportunity fit data available.</p></div>`;
+    return;
+  }
 
-  const weights = items.map(item => Number(item.combined_weight || 0));
+  const activeDimension = opportunityTreemapState.activeDimension;
+  const grouped = groupOpportunityTreemapSegmentsByDimension(sourceItems);
+
+  const availableDimensionKeys = grouped.map(group => group.dimensionKey);
+  if (activeDimension && !availableDimensionKeys.includes(activeDimension)) {
+    opportunityTreemapState.activeDimension = null;
+  }
+
+  const isDrilldown = !!opportunityTreemapState.activeDimension;
+  const nodes = isDrilldown
+    ? buildOpportunityTreemapValueNodes(grouped, opportunityTreemapState.activeDimension)
+    : buildOpportunityTreemapDimensionNodes(grouped);
+
+  const activeDimensionNode = grouped.find(
+    group => group.dimensionKey === opportunityTreemapState.activeDimension
+  );
+
+  const headerText = isDrilldown
+    ? `Higher Alignment ●●●●● Lower Alignment | Viewing ${activeDimensionNode?.dimensionLabel || "Selected Dimension"}`
+    : `Higher Alignment ●●●●● Lower Alignment | Click a segment to explore`;
+
+  container.innerHTML = `
+    <div class="opportunity-treemap-shell">
+      <div class="opportunity-treemap-header">
+        <div class="opportunity-treemap-scale">${headerText}</div>
+      </div>
+
+      ${isDrilldown ? `
+        <div class="opportunity-treemap-breadcrumb">
+          <button type="button" class="opportunity-treemap-back-btn" id="${containerId}-back-btn">
+            ← Back to Dimensions
+          </button>
+        </div>
+      ` : ""}
+
+      <div class="opportunity-treemap-canvas" id="${containerId}-canvas"></div>
+    </div>
+  `;
+
+  const backButton = document.getElementById(`${containerId}-back-btn`);
+  backButton?.addEventListener("click", () => {
+    opportunityTreemapState.activeDimension = null;
+    hideFloatingInsightsTooltip();
+    renderOpportunityTreemap(containerId, sourceItems);
+  });
+
+  const canvas = document.getElementById(`${containerId}-canvas`);
+  if (!canvas) return;
+
+  const rects = computeOpportunityTreemapRects(nodes, 0, 0, 1000, 1000, 10);
+  const weights = nodes.map(node => Number(node.weight || 0));
   const maxWeight = Math.max(...weights, 1);
   const minWeight = Math.min(...weights, maxWeight);
 
-  const ratioFor = value => {
-    if (maxWeight === minWeight) return 1;
-    return (Number(value || 0) - minWeight) / (maxWeight - minWeight);
+  canvas.innerHTML = rects.map(({ node, x, y, width, height }) => {
+    const fill = opportunityTreemapFillFor(node.weight, minWeight, maxWeight);
+    const border = opportunityTreemapBorderFor(node.weight, minWeight, maxWeight);
+    const labelClass =
+      width < 180 || height < 130
+        ? "opportunity-treemap-tile-label is-compact"
+        : "opportunity-treemap-tile-label";
+
+    return `
+      <button
+        type="button"
+        class="opportunity-treemap-tile"
+        style="
+          left:${x / 10}%;
+          top:${y / 10}%;
+          width:${width / 10}%;
+          height:${height / 10}%;
+          --tile-fill:${fill};
+          --tile-border:${border};
+        "
+        data-node-id="${escapeHtml(node.id)}"
+        aria-label="${escapeHtml(node.label)}"
+      >
+        <span class="${labelClass}">${escapeHtml(node.label)}</span>
+      </button>
+    `;
+  }).join("");
+
+  canvas.querySelectorAll(".opportunity-treemap-tile").forEach(tile => {
+    const node = nodes.find(item => item.id === tile.dataset.nodeId);
+    if (!node) return;
+
+    attachTileBoundedTooltip(tile, () => buildOpportunityTreemapTooltip(node, isDrilldown));
+
+    if (!isDrilldown) {
+      tile.addEventListener("click", () => {
+        opportunityTreemapState.activeDimension = node.dimensionKey;
+        hideFloatingInsightsTooltip();
+        renderOpportunityTreemap(containerId, sourceItems);
+      });
+    }
+  });
+}
+
+function groupOpportunityTreemapSegmentsByDimension(segments) {
+  const map = new Map();
+
+  segments.forEach(segment => {
+    const dimensionKey = String(segment.dimension || "").trim();
+    const dimensionLabel = titleCase(dimensionKey.replaceAll("_", " "));
+    const combinedWeight = Number(segment.combined_weight || 0);
+
+    if (!map.has(dimensionKey)) {
+      map.set(dimensionKey, {
+        dimensionKey,
+        dimensionLabel,
+        items: [],
+        totalWeight: 0,
+        averageWeight: 0
+      });
+    }
+
+    const entry = map.get(dimensionKey);
+    entry.items.push({
+      ...segment,
+      combined_weight: combinedWeight
+    });
+    entry.totalWeight += combinedWeight;
+  });
+
+  return Array.from(map.values())
+    .map(entry => ({
+      ...entry,
+      averageWeight: entry.items.length ? entry.totalWeight / entry.items.length : 0
+    }))
+    .sort((a, b) => b.averageWeight - a.averageWeight);
+}
+
+function buildOpportunityTreemapDimensionNodes(grouped) {
+  return grouped.map(group => {
+    const topValues = [...group.items]
+      .sort((a, b) => (b.combined_weight || 0) - (a.combined_weight || 0))
+      .slice(0, 3)
+      .map(item => item.label);
+
+    return {
+      id: `dimension-${group.dimensionKey}`,
+      level: "dimension",
+      label: group.dimensionLabel,
+      dimensionKey: group.dimensionKey,
+      weight: group.averageWeight,
+      valueCount: group.items.length,
+      topValues
+    };
+  });
+}
+
+function buildOpportunityTreemapValueNodes(grouped, activeDimension) {
+  const group = grouped.find(item => item.dimensionKey === activeDimension);
+  if (!group) return [];
+
+  return [...group.items]
+    .sort((a, b) => (b.combined_weight || 0) - (a.combined_weight || 0))
+    .map(item => ({
+      id: `value-${item.preference_id}`,
+      level: "value",
+      label: item.label,
+      dimensionKey: group.dimensionKey,
+      dimensionLabel: group.dimensionLabel,
+      categoryLabel: item.category_label || item.category || "",
+      priority: capitalize(item.priority || ""),
+      dimensionWeight: Number(item.dimension_weight || 0),
+      valueWeight: Number(item.value_weight || 0),
+      weight: Number(item.combined_weight || 0)
+    }));
+}
+
+function buildOpportunityTreemapTooltip(node, isDrilldown) {
+  if (!isDrilldown) {
+    return `
+      <span class="insights-hover-tooltip-title">${escapeHtml(node.label)}</span>
+      <span class="insights-hover-tooltip-body">${node.valueCount} weighted preference values shape this dimension.</span>
+      <span class="insights-hover-tooltip-body">Top aligned values: ${escapeHtml(node.topValues.join(", "))}</span>
+      <span class="insights-hover-tooltip-body">Average alignment strength: ${node.weight.toFixed(2)}</span>
+    `;
+  }
+
+  return `
+    <span class="insights-hover-tooltip-title">${escapeHtml(node.label)}</span>
+    <span class="insights-hover-tooltip-body">${escapeHtml(titleCase(String(node.categoryLabel).replaceAll("_", " ")))} within ${escapeHtml(node.dimensionLabel)}</span>
+    <span class="insights-hover-tooltip-body">Priority: ${escapeHtml(node.priority)}</span>
+    <span class="insights-hover-tooltip-body">Dimension weight: ${node.dimensionWeight.toFixed(2)}</span>
+    <span class="insights-hover-tooltip-body">Value weight: ${node.valueWeight.toFixed(2)}</span>
+    <span class="insights-hover-tooltip-body">Combined alignment: ${node.weight.toFixed(2)}</span>
+  `;
+}
+
+function computeOpportunityTreemapRects(items, x, y, width, height, gap = 10) {
+  if (!items.length) return [];
+  if (items.length === 1) {
+    return [{ node: items[0], x, y, width, height }];
+  }
+
+  const total = items.reduce((sum, item) => sum + Number(item.weight || 0), 0);
+  const split = splitOpportunityTreemapItems(items);
+
+  const groupA = split.groupA;
+  const groupB = split.groupB;
+
+  const weightA = groupA.reduce((sum, item) => sum + Number(item.weight || 0), 0);
+  const shareA = total > 0 ? weightA / total : 0.5;
+
+  const horizontal = width >= height;
+
+  if (horizontal) {
+    const usableWidth = Math.max(width - gap, 0);
+    const widthA = usableWidth * shareA;
+    const widthB = usableWidth - widthA;
+
+    return [
+      ...computeOpportunityTreemapRects(groupA, x, y, widthA, height, gap),
+      ...computeOpportunityTreemapRects(groupB, x + widthA + gap, y, widthB, height, gap)
+    ];
+  }
+
+  const usableHeight = Math.max(height - gap, 0);
+  const heightA = usableHeight * shareA;
+  const heightB = usableHeight - heightA;
+
+  return [
+    ...computeOpportunityTreemapRects(groupA, x, y, width, heightA, gap),
+    ...computeOpportunityTreemapRects(groupB, x, y + heightA + gap, width, heightB, gap)
+  ];
+}
+
+function splitOpportunityTreemapItems(items) {
+  const sorted = [...items].sort((a, b) => (b.weight || 0) - (a.weight || 0));
+  const total = sorted.reduce((sum, item) => sum + Number(item.weight || 0), 0);
+
+  let running = 0;
+  let splitIndex = 1;
+  let bestDelta = Infinity;
+
+  for (let i = 1; i < sorted.length; i += 1) {
+    running += Number(sorted[i - 1].weight || 0);
+    const delta = Math.abs((total / 2) - running);
+
+    if (delta < bestDelta) {
+      bestDelta = delta;
+      splitIndex = i;
+    }
+  }
+
+  return {
+    groupA: sorted.slice(0, splitIndex),
+    groupB: sorted.slice(splitIndex)
   };
+}
 
-  const sizeBandFor = value => {
-    const ratio = ratioFor(value);
+function opportunityTreemapRatioFor(value, minWeight, maxWeight) {
+  if (maxWeight === minWeight) return 1;
+  return (Number(value || 0) - minWeight) / (maxWeight - minWeight);
+}
 
-    if (ratio >= 0.84) return "lg";
-    if (ratio >= 0.48) return "md";
-    return "sm";
-  };
+function opportunityTreemapFillFor(value, minWeight, maxWeight) {
+  const ratio = opportunityTreemapRatioFor(value, minWeight, maxWeight);
 
-  const fillFor = value => {
-    const ratio = ratioFor(value);
+  if (ratio >= 0.88) return "#0a6ed1";
+  if (ratio >= 0.72) return "#2f85df";
+  if (ratio >= 0.56) return "#4b93df";
+  if (ratio >= 0.40) return "#76afe8";
+  if (ratio >= 0.24) return "#9fcaf2";
+  return "#c2def8";
+}
 
-    if (ratio >= 0.88) return "#0a6ed1";
-    if (ratio >= 0.72) return "#2f85df";
-    if (ratio >= 0.56) return "#4b93df";
-    if (ratio >= 0.40) return "#76afe8";
-    if (ratio >= 0.24) return "#9fcaf2";
-    return "#c2def8";
-  };
+function opportunityTreemapBorderFor(value, minWeight, maxWeight) {
+  const ratio = opportunityTreemapRatioFor(value, minWeight, maxWeight);
 
-  const borderFor = value => {
-    const ratio = ratioFor(value);
-
-    if (ratio >= 0.88) return "#0854a0";
-    if (ratio >= 0.72) return "#1f6fc2";
-    if (ratio >= 0.56) return "#4b93df";
-    if (ratio >= 0.40) return "#76afe8";
-    if (ratio >= 0.24) return "#9fcaf2";
-    return "#c2def8";
-  };
-
-      container.innerHTML = `
-	    <div class="opportunity-treemap-grid" id="${containerId}-grid">
-	      ${items.map(item => `
-	        <button
-	          type="button"
-	          class="opportunity-treemap-tile opportunity-treemap-tile--${sizeBandFor(item.combined_weight)}"
-	          style="--tile-fill:${fillFor(item.combined_weight)}; --tile-border:${borderFor(item.combined_weight)};"
-	          data-tooltip-title="${escapeHtml(item.label)}"
-	          data-tooltip-group="${escapeHtml(item.group)}"
-	          data-tooltip-dimension-label="${escapeHtml(titleCase(String(item.dimension || "").replaceAll("_", " ")))}"
-	          data-tooltip-category="${escapeHtml(item.category_label || item.category || "")}"
-	          data-tooltip-priority="${escapeHtml(capitalize(item.priority || ""))}"
-	          data-tooltip-dimension="${Number(item.dimension_weight || 1).toFixed(2)}"
-	          data-tooltip-value="${Number(item.value_weight || 1).toFixed(2)}"
-	          data-tooltip-score="${Number(item.combined_weight || 0).toFixed(2)}"
-	          aria-label="${escapeHtml(item.label)}"
-	        ></button>
-	      `).join("")}
-	    </div>
-	  `;
-	
-	  container.querySelectorAll(".opportunity-treemap-tile").forEach(tile => {
-	    attachFloatingTooltip(
-	      tile,
-	      `
-	        <span class="insights-hover-tooltip-title">${tile.dataset.tooltipTitle || ""}</span>
-	        <span class="insights-hover-tooltip-body">${tile.dataset.tooltipGroup || ""} · ${tile.dataset.tooltipCategory || ""}</span>
-	        <span class="insights-hover-tooltip-body">Dimension: ${tile.dataset.tooltipDimensionLabel || ""}</span>
-	        <span class="insights-hover-tooltip-body">Priority: ${tile.dataset.tooltipPriority || ""}</span>
-	        <span class="insights-hover-tooltip-body">Dimension weight: ${tile.dataset.tooltipDimension || ""}</span>
-	        <span class="insights-hover-tooltip-body">Value weight: ${tile.dataset.tooltipValue || ""}</span>
-	        <span class="insights-hover-tooltip-body">Combined weight: ${tile.dataset.tooltipScore || ""}</span>
-	      `
-	    );
-	  });
-	}
+  if (ratio >= 0.88) return "#0854a0";
+  if (ratio >= 0.72) return "#1f6fc2";
+  if (ratio >= 0.56) return "#4b93df";
+  if (ratio >= 0.40) return "#76afe8";
+  if (ratio >= 0.24) return "#9fcaf2";
+  return "#c2def8";
+}
 
 function renderRolePriorities(containerId, roles) {
   const container = document.getElementById(containerId);
