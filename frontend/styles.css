@@ -4384,25 +4384,14 @@ body {
 }
 
 .opportunity-treemap-header {
-  display: grid;
-  gap: 8px;
-}
-
-.opportunity-treemap-subtitle-row {
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--muted);
-}
-
-.opportunity-treemap-subtle-divider {
-  margin: 0 6px;
-  color: #8aa0b8;
-  font-weight: 700;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .opportunity-treemap-scale-row {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
 }
 
 .opportunity-treemap-scale {
@@ -4577,9 +4566,9 @@ body {
 }
 
 .insights-hover-tooltip.is-tile-bounded {
-  min-width: 0;
-  width: min(calc(var(--tooltip-bound-width, 260px) - 16px), 280px);
-  max-width: min(calc(var(--tooltip-bound-width, 260px) - 16px), 280px);
+  min-width: 248px;
+  width: 248px;
+  max-width: 248px;
   word-break: break-word;
 }
 
@@ -4802,11 +4791,6 @@ body {
 
   .opportunity-treemap-tile-label.is-compact {
     font-size: 10px;
-  }
-
-  .opportunity-treemap-subtitle-row {
-    font-size: 12px;
-    line-height: 1.45;
   }
 
   .opportunity-treemap-scale-row {
