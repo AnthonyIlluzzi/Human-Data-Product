@@ -12,6 +12,7 @@
 
   const MATRIX_POINT_COLOR = "#6fa3e6";
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
+  const AXIS_TITLE_STANDOFF = 8;
 
   const QUADRANT_RANGES = {
     all: { x: [0.5, 4.28], y: [-0.08, 3.15] },
@@ -468,7 +469,7 @@ function getPlotHeight() {
   const chartCard = els.chart?.closest(".capability-chart-card");
   const toolbar = chartCard?.querySelector(".chart-toolbar");
 
-  const desktopTrim = activeDomain ? 26 : 14;
+  const desktopTrim = 14;
 
   if (controlPanel && chartCard && toolbar) {
     const chartCardStyle = getComputedStyle(chartCard);
@@ -1322,7 +1323,7 @@ function stabilizeActivePlot() {
         showspikes: false,
         title: {
           text: "Share of Skills Within Domain (%)",
-          standoff: 8
+          standoff: AXIS_TITLE_STANDOFF
         }
       },
       yaxis: {
@@ -1425,7 +1426,10 @@ function stabilizeActivePlot() {
       hovermode: "closest",
       spikedistance: -1,
       xaxis: {
-        title: { text: "Number of Skills" },
+        title: {
+          text: "Number of Skills",
+          standoff: AXIS_TITLE_STANDOFF
+        },
         gridcolor: "rgba(19,37,63,0.08)",
         zeroline: false,
         showspikes: false
@@ -1505,7 +1509,7 @@ function stabilizeActivePlot() {
         ticktext: ["1", "2", "3", "4"],
         title: {
           text: "Depth of Understanding",
-          standoff: 10
+          standoff: AXIS_TITLE_STANDOFF
         },
         showspikes: false,
         zeroline: false,
@@ -1517,7 +1521,7 @@ function stabilizeActivePlot() {
         ticktext: ["0", "1", "2", "3"],
         title: {
           text: "Practical Experience",
-          standoff: 10
+          standoff: AXIS_TITLE_STANDOFF
         },
         showspikes: false,
         zeroline: false,

@@ -633,6 +633,19 @@ body.modal-open {
   margin-left: auto;
 }
 
+@media (min-width: 1101px) {
+  .chart-toolbar-actions {
+    min-height: 68px;
+    justify-content: flex-start;
+  }
+
+  .chart-view-toggle-wrap,
+  .quadrant-controls-wrap {
+    min-height: 68px;
+    justify-content: flex-start;
+  }
+}
+
 .chart-back-button {
   display: none;
   width: fit-content;
