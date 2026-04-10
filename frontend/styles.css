@@ -4468,7 +4468,7 @@ body {
 .opportunity-treemap-canvas {
   position: relative;
   width: 100%;
-  height: 274px;
+  height: 312px;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -4625,7 +4625,7 @@ body {
   }
 
   .opportunity-treemap-canvas {
-    height: 258px;
+    height: 292px;
   }
 
   .opportunity-treemap-tile {
@@ -4787,7 +4787,7 @@ body {
   }
 
   .opportunity-treemap-canvas {
-    height: 238px;
+    height: 252px;
   }
 
   .opportunity-treemap-tile {
