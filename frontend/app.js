@@ -2461,8 +2461,9 @@ function renderOpportunityTreemap(containerId, segments) {
     `;
   }).join("");
 
-  canvas.querySelectorAll(".opportunity-treemap-tile").forEach(tile => {
-    const node = nodes.find(item => item.id === tile.dataset.nodeId);
+  canvas.querySelectorAll(".opportunity-treemap-tile").forEach((tile, index) => {
+    const rect = rects[index];
+    const node = rect?.node;
     if (!node) return;
 
     attachTileBoundedTooltip(tile, () => buildOpportunityTreemapTooltip(node, isDrilldown));
@@ -2536,8 +2537,11 @@ function buildOpportunityTreemapValueNodes(grouped, activeDimension) {
 
   return [...group.items]
     .sort((a, b) => (b.combined_weight || 0) - (a.combined_weight || 0))
-    .map(item => ({
-      id: `value-${item.preference_id}`,
+    .map((item, index) => ({
+      id: `value-${group.dimensionKey}-${index}-${String(item.label || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")}`,
       level: "value",
       label: item.label,
       dimensionKey: group.dimensionKey,
