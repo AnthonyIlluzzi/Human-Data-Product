@@ -6,6 +6,15 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
 
 let capabilityInsightsInitPromise = null;
 let capabilityInsightsInitialized = false;
+const DEFAULT_SQL_QUERY = `SELECT experience_id, company, role, start_date, end_date, domain
+FROM experience
+ORDER BY sort_order;`;
+
+const DEFAULT_SQL_OUTPUT_MESSAGE = "Load a predefined query and submit.";
+const DEFAULT_API_ENDPOINT = "/summary";
+const DEFAULT_API_OUTPUT_MESSAGE = "Execute an endpoint to populate this area.";
+const DEFAULT_INSIGHTS_TAB_ID = "visualizations-tab";
+const DEFAULT_VALUE_DISTRIBUTION_DIMENSION = "solution_type";
 
 const DISTRIBUTION_DEFINITIONS = {
   solution_type: {
@@ -238,6 +247,18 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
     scrollBehavior = "smooth"
   } = options;
 
+  const currentActivePanelId = document.querySelector(".workspace-panel.active")?.id || null;
+  const panelChanged = currentActivePanelId !== panelId;
+
+  const resolvedTabId =
+    panelChanged && panelId === "insights-panel"
+      ? DEFAULT_INSIGHTS_TAB_ID
+      : tabId;
+
+  if (panelChanged) {
+    resetWorkspaceState(panelId);
+  }
+
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   document.querySelectorAll(".workspace-panel").forEach(panel => panel.classList.remove("active"));
 
@@ -249,11 +270,11 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
 
   if (matchingNav) matchingNav.classList.add("active");
 
-  if (tabId) {
-    activateTab(tabId);
+  if (resolvedTabId) {
+    activateTab(resolvedTabId);
   }
 
-  if (tabId === "capability-insights-tab") {
+  if (resolvedTabId === "capability-insights-tab") {
     try {
       await ensureCapabilityInsightsInitialized();
 
@@ -344,15 +365,56 @@ function bindOutputPorts() {
   });
 }
 
+function resetWorkspaceState(panelId) {
+  if (panelId === "sql-panel") {
+    resetSqlWorkspace();
+    return;
+  }
+
+  if (panelId === "api-panel") {
+    resetApiWorkspace();
+    return;
+  }
+
+  if (panelId === "insights-panel") {
+    resetInsightsWorkspace();
+  }
+}
+
+function resetSqlWorkspace() {
+  const editor = document.getElementById("sql-editor");
+  const output = document.getElementById("sql-output");
+
+  if (editor) editor.value = DEFAULT_SQL_QUERY;
+  if (output) output.textContent = DEFAULT_SQL_OUTPUT_MESSAGE;
+}
+
+function resetApiWorkspace() {
+  const input = document.getElementById("api-endpoint-input");
+  const output = document.getElementById("api-output");
+
+  if (input) input.value = DEFAULT_API_ENDPOINT;
+  if (output) output.textContent = DEFAULT_API_OUTPUT_MESSAGE;
+}
+
+function resetInsightsWorkspace() {
+  activateTab(DEFAULT_INSIGHTS_TAB_ID);
+
+  document
+    .querySelector(`[data-distribution-dimension="${DEFAULT_VALUE_DISTRIBUTION_DIMENSION}"]`)
+    ?.click();
+
+  if (typeof window.resetCapabilityInsightsState === "function") {
+    window.resetCapabilityInsightsState();
+  }
+}
+
 function bindSqlWorkspace() {
   const editor = document.getElementById("sql-editor");
   const output = document.getElementById("sql-output");
-  const defaultSql = `SELECT experience_id, company, role, start_date, end_date, domain
-FROM experience
-ORDER BY sort_order;`;
 
   if (editor) {
-    editor.value = defaultSql;
+    editor.value = DEFAULT_SQL_QUERY;
   }
 
   document.querySelectorAll(".sql-template-btn").forEach(btn => {
@@ -382,10 +444,9 @@ ORDER BY sort_order;`;
   });
 
   document.getElementById("clear-sql-btn")?.addEventListener("click", () => {
-    if (editor) editor.value = "";
-    if (output) output.textContent = "Load a predefined query and submit.";
-  });
-}
+	  if (editor) editor.value = "";
+	  if (output) output.textContent = DEFAULT_SQL_OUTPUT_MESSAGE;
+	});
 
 function bindApiWorkspace() {
   document.querySelectorAll(".endpoint-btn").forEach(btn => {
