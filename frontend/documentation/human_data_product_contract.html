@@ -27,7 +27,7 @@
 
     .doc-eyebrow {
       display: inline-block;
-      margin-bottom: 10px;
+      margin-bottom: 0;
       padding: 6px 10px;
       border-radius: 999px;
       background: #eef4fb;
@@ -122,13 +122,13 @@
       gap: 8px;
       padding: 6px 12px;
       border-radius: 999px;
-      background: linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+      background: linear-gradient(180deg, #f5f8fc 0%, #eef4fb 100%);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #e6edf3;
       font-size: 12.5px;
       font-weight: 500;
       letter-spacing: 0.2px;
-      margin: 0 auto 18px;
+      margin-bottom: 14px;
     }
     
     .doc-header-icon {
@@ -145,6 +145,13 @@
       letter-spacing: 0.04em;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
     }
+
+    .doc-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
     
     .doc-header-text {
       white-space: nowrap;
@@ -153,12 +160,17 @@
 </head>
 
 <body>
-  <div class="doc-header-badge">
-    <div class="doc-header-icon">HDP</div>
-    <div class="doc-header-text">Human Data Product</div>
-  </div>
   <div class="container">
-    <div class="doc-eyebrow">Overview Documentation</div>
+   <div class="doc-header-row">
+      <div class="doc-header-badge">
+        <div class="doc-header-icon">HDP</div>
+        <div class="doc-header-text">Human Data Product</div>
+      </div>
+    
+      <div class="doc-eyebrow">Overview Documentation</div>
+    </div>
+    
+    <h1>Human Data Product Contract</h1>
     <h1 id="human-data-product-contract">Human Data Product Contract</h1>
     <p class="doc-description">Defines the structure, semantics, and guarantees of the Human Data Product across ingestion, transformation, exposure, and consumption.</p>
 
