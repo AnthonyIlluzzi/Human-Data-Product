@@ -1191,10 +1191,14 @@ body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background: currentColor;
+  background: #13a34a;
   border-radius: 50%;
   margin-right: 0;
   flex: 0 0 auto;
+}
+
+.status-pill.muted .status-dot {
+  background: #7f8ea3;
 }
 
 .meta-value {
