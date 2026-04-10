@@ -1835,7 +1835,8 @@ async function loadNextOpportunity() {
     data.trajectory.observed_copy,
     data.trajectory.derivation
   );
-
+	
+  setOpportunityTreemapHeading(null);
   renderOpportunityTreemap("opportunity-fit-treemap", data.fit_profile.segments);
   setObservedPanel(
     "opportunity-fit-title",
@@ -2359,6 +2360,18 @@ function renderValueRealization(payload) {
   );
 }
 
+function setOpportunityTreemapHeading(activeDimensionLabel = null) {
+  const heading = document.querySelector("#next-opportunity-tab #opportunity-fit-treemap")
+    ?.closest(".insight-surface-card")
+    ?.querySelector(".viz-card-header h3");
+
+  if (!heading) return;
+
+  heading.textContent = activeDimensionLabel
+    ? `Opportunity Fit Profile: ${activeDimensionLabel}`
+    : "Opportunity Fit Profile";
+}
+
 function renderOpportunityTreemap(containerId, segments) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -2385,6 +2398,7 @@ function renderOpportunityTreemap(containerId, segments) {
   const activeDimensionNode = grouped.find(
     group => group.dimensionKey === opportunityTreemapState.activeDimension
   );
+  setOpportunityTreemapHeading(activeDimensionNode?.dimensionLabel || null);
 
   const scaleMarkup = `
     <div class="opportunity-treemap-scale">
@@ -2402,17 +2416,20 @@ function renderOpportunityTreemap(containerId, segments) {
 
   container.innerHTML = `
     <div class="opportunity-treemap-shell">
-      <div class="opportunity-treemap-header">
-        <div class="opportunity-treemap-scale-row">${scaleMarkup}</div>
-      </div>
-
-      ${isDrilldown ? `
-        <div class="opportunity-treemap-breadcrumb">
-          <button type="button" class="opportunity-treemap-back-btn" id="${containerId}-back-btn">
+      <div class="opportunity-treemap-topbar">
+        <div class="opportunity-treemap-breadcrumb-slot">
+          <button
+            type="button"
+            class="opportunity-treemap-back-btn${isDrilldown ? "" : " is-hidden"}"
+            id="${containerId}-back-btn"
+            ${isDrilldown ? "" : 'tabindex="-1" aria-hidden="true"'}
+          >
             ← Back to Dimensions
           </button>
         </div>
-      ` : ""}
+
+        <div class="opportunity-treemap-scale-row">${scaleMarkup}</div>
+      </div>
 
       <div class="opportunity-treemap-canvas" id="${containerId}-canvas"></div>
     </div>
@@ -2558,19 +2575,18 @@ function buildOpportunityTreemapTooltip(node, isDrilldown) {
   if (!isDrilldown) {
     return `
       <span class="insights-hover-tooltip-title">${escapeHtml(node.label)}</span>
-      <span class="insights-hover-tooltip-body">${node.valueCount} weighted preference values shape this dimension.</span>
-      <span class="insights-hover-tooltip-body">Top aligned values: ${escapeHtml(node.topValues.join(", "))}</span>
-      <span class="insights-hover-tooltip-body">Average alignment strength: ${node.weight.toFixed(2)}</span>
+      <span class="insights-hover-tooltip-body"><strong>${node.valueCount}</strong> preferences share this dimension.</span>
+      <span class="insights-hover-tooltip-body">Average alignment strength: <strong>${node.weight.toFixed(2)}</strong></span>
     `;
   }
 
   return `
     <span class="insights-hover-tooltip-title">${escapeHtml(node.label)}</span>
-    <span class="insights-hover-tooltip-body">${escapeHtml(titleCase(String(node.categoryLabel).replaceAll("_", " ")))} within ${escapeHtml(node.dimensionLabel)}</span>
-    <span class="insights-hover-tooltip-body">Priority: ${escapeHtml(node.priority)}</span>
-    <span class="insights-hover-tooltip-body">Dimension weight: ${node.dimensionWeight.toFixed(2)}</span>
-    <span class="insights-hover-tooltip-body">Value weight: ${node.valueWeight.toFixed(2)}</span>
-    <span class="insights-hover-tooltip-body">Combined alignment: ${node.weight.toFixed(2)}</span>
+    <span class="insights-hover-tooltip-body">Category: <strong>${escapeHtml(titleCase(String(node.categoryLabel).replaceAll("_", " ")))}</strong></span>
+    <span class="insights-hover-tooltip-body">Priority: <strong>${escapeHtml(node.priority)}</strong></span>
+    <span class="insights-hover-tooltip-body">Dimension weight: <strong>${node.dimensionWeight.toFixed(2)}</strong></span>
+    <span class="insights-hover-tooltip-body">Value weight: <strong>${node.valueWeight.toFixed(2)}</strong></span>
+    <span class="insights-hover-tooltip-body">Combined alignment: <strong>${node.weight.toFixed(2)}</strong></span>
   `;
 }
 
