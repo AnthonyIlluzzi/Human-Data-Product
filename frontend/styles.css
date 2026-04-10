@@ -4384,17 +4384,59 @@ body {
 }
 
 .opportunity-treemap-header {
+  display: grid;
+  gap: 8px;
+}
+
+.opportunity-treemap-subtitle-row {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.opportunity-treemap-subtle-divider {
+  margin: 0 6px;
+  color: #8aa0b8;
+  font-weight: 700;
+}
+
+.opportunity-treemap-scale-row {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .opportunity-treemap-scale {
-  font-size: 12px;
-  line-height: 1.35;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.2;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
 }
+
+.opportunity-treemap-scale-label {
+  white-space: nowrap;
+}
+
+.opportunity-treemap-scale-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scale-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.scale-dot-1 { background: #0a6ed1; }
+.scale-dot-2 { background: #2f85df; }
+.scale-dot-3 { background: #4b93df; }
+.scale-dot-4 { background: #76afe8; }
+.scale-dot-5 { background: #9fcaf2; }
 
 .opportunity-treemap-breadcrumb {
   display: flex;
@@ -4536,8 +4578,8 @@ body {
 
 .insights-hover-tooltip.is-tile-bounded {
   min-width: 0;
-  width: calc(var(--tooltip-bound-width, 260px) - 16px);
-  max-width: calc(var(--tooltip-bound-width, 260px) - 16px);
+  width: min(calc(var(--tooltip-bound-width, 260px) - 16px), 280px);
+  max-width: min(calc(var(--tooltip-bound-width, 260px) - 16px), 280px);
   word-break: break-word;
 }
 
@@ -4760,6 +4802,26 @@ body {
 
   .opportunity-treemap-tile-label.is-compact {
     font-size: 10px;
+  }
+
+  .opportunity-treemap-subtitle-row {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .opportunity-treemap-scale-row {
+    justify-content: flex-start;
+  }
+
+  .opportunity-treemap-scale {
+    font-size: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .scale-dot {
+    width: 10px;
+    height: 10px;
   }
 
   .value-heatmap-grid {
