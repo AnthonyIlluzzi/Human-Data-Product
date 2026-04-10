@@ -164,15 +164,64 @@
       margin-bottom: 10px;
       color: #32485f;
     }
+
+    .doc-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #eaf2fb 0%, #e3edf9 100%);
+    border: 1px solid #d6e6fb;
+    color: #0f172a;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    margin-bottom: 14px;
+  }
+  
+  .doc-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: #2c6db8;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  
+  .doc-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  
+  .doc-header-text {
+    white-space: nowrap;
+  }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="doc-eyebrow">SQL Workspace Documentation</div>
-    <h1>Human Data Product Schema</h1>
-    <p class="doc-description">Entity design, relationships, and structural patterns that model professional experience as a consumable data product.</p>
-
+    <div class="doc-header-row">
+      <div class="doc-header-badge">
+        <div class="doc-header-icon">HDP</div>
+        <div class="doc-header-text">Human Data Product</div>
+      </div>
+  
+      <div class="doc-eyebrow">Schema Documentation</div>
+    </div>
+  
+    <h1>HDP Schema</h1>
+    <p class="doc-description">Reference structure for core entities, relationships, and modeled fields used by the Human Data Product.</p>
+  
     <div class="section-divider"></div>
 
     <p>This schema models professional experience as a structured data product.</p>
