@@ -4378,25 +4378,75 @@ body {
   margin-top: 2px;
 }
 
-.opportunity-treemap-grid {
+.opportunity-treemap-shell {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  grid-auto-rows: 36px;
-  gap: 5px;
-  max-height: none;
-  overflow: visible;
+  gap: 8px;
+}
+
+.opportunity-treemap-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.opportunity-treemap-scale {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.opportunity-treemap-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.opportunity-treemap-back-btn {
+  appearance: none;
+  border: 1px solid rgba(10, 110, 209, 0.18);
+  background: #f7fbff;
+  color: #0a6ed1;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.opportunity-treemap-back-btn:hover {
+  background: #eef6ff;
+}
+
+.opportunity-treemap-back-btn:focus-visible {
+  outline: 2px solid #0854a0;
+  outline-offset: 2px;
+}
+
+.opportunity-treemap-canvas {
+  position: relative;
+  width: 100%;
+  height: 274px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .opportunity-treemap-tile {
+  position: absolute;
   min-width: 0;
   min-height: 0;
-  padding: 0;
+  padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--tile-border, #d8e4f3);
   background: var(--tile-fill, #eef5fd);
   overflow: hidden;
   cursor: pointer;
   appearance: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .opportunity-treemap-tile:focus-visible {
@@ -4404,19 +4454,20 @@ body {
   outline-offset: 2px;
 }
 
-.opportunity-treemap-tile--lg {
-  grid-column: span 2;
-  grid-row: span 2;
+.opportunity-treemap-tile-label {
+  display: block;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(8, 30, 61, 0.14);
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
-.opportunity-treemap-tile--md {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.opportunity-treemap-tile--sm {
-  grid-column: span 1;
-  grid-row: span 1;
+.opportunity-treemap-tile-label.is-compact {
+  font-size: 12px;
+  line-height: 1.15;
 }
 
 .role-priority-shell {
@@ -4483,6 +4534,13 @@ body {
   display: block;
 }
 
+.insights-hover-tooltip.is-tile-bounded {
+  min-width: 0;
+  width: calc(var(--tooltip-bound-width, 260px) - 16px);
+  max-width: calc(var(--tooltip-bound-width, 260px) - 16px);
+  word-break: break-word;
+}
+
 .insights-hover-tooltip-title {
   margin: 0;
   display: block;
@@ -4525,25 +4583,20 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .opportunity-treemap-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: 32px;
-    max-height: none;
+  .opportunity-treemap-canvas {
+    height: 258px;
   }
 
-  .opportunity-treemap-tile--lg {
-    grid-column: span 2;
-    grid-row: span 2;
+  .opportunity-treemap-tile {
+    padding: 9px 10px;
   }
 
-  .opportunity-treemap-tile--md {
-    grid-column: span 2;
-    grid-row: span 1;
+  .opportunity-treemap-tile-label {
+    font-size: 13px;
   }
 
-  .opportunity-treemap-tile--sm {
-    grid-column: span 1;
-    grid-row: span 1;
+  .opportunity-treemap-tile-label.is-compact {
+    font-size: 11px;
   }
 
   .role-priority-row {
@@ -4611,7 +4664,8 @@ body {
     max-height: min(68vh, 620px);
     overflow: auto;
   }
-    .feedback-approach-toggle-row {
+  
+  .feedback-approach-toggle-row {
     grid-template-columns: 1fr;
   }
 
@@ -4657,7 +4711,7 @@ body {
     line-height: 1.22;
   }
 
-    .insight-observed-title-row {
+  .insight-observed-title-row {
     gap: 10px;
     margin-bottom: 6px;
   }
@@ -4686,24 +4740,26 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .opportunity-treemap-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 28px;
+  .opportunity-treemap-scale {
+    font-size: 11px;
+    line-height: 1.4;
   }
 
-  .opportunity-treemap-tile--lg {
-    grid-column: span 2;
-    grid-row: span 2;
+  .opportunity-treemap-canvas {
+    height: 238px;
   }
 
-  .opportunity-treemap-tile--md {
-    grid-column: span 2;
-    grid-row: span 1;
+  .opportunity-treemap-tile {
+    padding: 8px 9px;
+    border-radius: 9px;
   }
 
-  .opportunity-treemap-tile--sm {
-    grid-column: span 1;
-    grid-row: span 1;
+  .opportunity-treemap-tile-label {
+    font-size: 12px;
+  }
+
+  .opportunity-treemap-tile-label.is-compact {
+    font-size: 10px;
   }
 
   .value-heatmap-grid {
