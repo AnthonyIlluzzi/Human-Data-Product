@@ -155,6 +155,28 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   renderWhenReady();
 };
 
+  window.resetCapabilityInsightsState = function resetCapabilityInsightsState() {
+    topLevelView = VIEW_PROFILE;
+    activeDomain = null;
+    activeQuadrant = "all";
+    selectedPointKey = null;
+    isChartHelpOpen = false;
+    isScoringHelpOpen = false;
+  
+    if (!initialized) return;
+  
+    cacheElements();
+    hideTooltip();
+    clearSelectedPoint();
+    setChartHelpOpen(false);
+    setScoringHelpOpen(false);
+    closeInventoryModal();
+    buildChartToolbar();
+    buildQuadrantControls();
+    buildChartViewToggle();
+    buildExplorer();
+  };
+
   /* =========================
      ELEMENT CACHE
   ========================= */
