@@ -1187,6 +1187,16 @@ body {
   border-color: #d3dbe6;
 }
 
+.status-pill.positive {
+  color: #13a34a;
+  border-color: rgba(19, 163, 74, 0.28);
+  background: rgba(19, 163, 74, 0.08);
+}
+
+.product-metadata .status-pill:not(.muted) {
+  color: #13a34a;
+}
+
 .status-dot {
   display: inline-block;
   width: 8px;
