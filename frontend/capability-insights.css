@@ -1394,8 +1394,9 @@ body.modal-open {
     font-size: 0.95rem;
     line-height: 1.25;
   }
+}
 
-  /* Capability Insights v1 finalization */
+/* Capability Insights v1 finalization */
 
 .capability-instructions-grid {
   display: grid;
