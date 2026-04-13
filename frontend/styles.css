@@ -3823,6 +3823,12 @@ body {
 .insights-dashboard-row--wide-left > .insight-observed-card,
 .insights-dashboard-row--wide-right > .insight-observed-card,
 .insights-dashboard-row--trajectory > .insight-observed-card {
+  align-self: start;
+}
+
+.insights-dashboard-row--wide-left > .insight-observed-card,
+.insights-dashboard-row--wide-right > .insight-observed-card,
+.insights-dashboard-row--trajectory > .insight-observed-card {
   height: auto;
 }
 
