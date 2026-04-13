@@ -2288,7 +2288,14 @@ function renderValueRealization(payload) {
   container.innerHTML = `
     <div class="value-heatmap-grid" style="grid-template-columns: 170px repeat(${cols.length}, minmax(0, 1fr));">
       <div class="value-heatmap-corner">Approach</div>
-      ${cols.map(col => `<div class="value-heatmap-axis value-heatmap-axis--column">${escapeHtml(col.label)}</div>`).join("")}
+      ${cols.map(col => `
+		  <div
+		    class="value-heatmap-axis value-heatmap-axis--column is-hoverable"
+		    data-impact-key="${escapeHtml(col.key)}"
+		  >
+		    ${escapeHtml(col.label)}
+		  </div>
+		`).join("")}
       ${rows.map(row => `
         <div class="value-heatmap-axis value-heatmap-axis--row${rowMaxScores.get(row.key) > 0 ? " value-heatmap-axis--row-has-dominant" : ""}">
           ${escapeHtml(row.label)}
@@ -2323,7 +2330,22 @@ function renderValueRealization(payload) {
     </div>
   `;
 
-  container.querySelectorAll(".value-heatmap-cell").forEach(cell => {
+  container.querySelectorAll(".value-heatmap-axis--column[data-impact-key]").forEach(header => {
+	  const impactKey = header.dataset.impactKey;
+	  const definition =
+	    DISTRIBUTION_DEFINITIONS?.impact_type?.[impactKey] ||
+	    "This outcome category is derived from the structured system-improvement model.";
+	
+	  attachFloatingTooltip(
+	    header,
+	    `
+	      <span class="insights-hover-tooltip-title">${escapeHtml(header.textContent.trim())}</span>
+	      <span class="insights-hover-tooltip-definition">${escapeHtml(definition)}</span>
+	    `
+	  );
+	});
+	
+	container.querySelectorAll(".value-heatmap-cell").forEach(cell => {
     const dominantLine = cell.dataset.heatmapDominant === "true"
       ? `<span class="insights-hover-tooltip-body">Primary outcome for this approach</span>`
       : "";
