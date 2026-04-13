@@ -2274,6 +2274,20 @@ function renderValueRealization(payload) {
     return "rgba(188,220,251,0.44)";
   };
 
+  const scaleMarkup = `
+    <div class="opportunity-treemap-scale">
+      <span class="opportunity-treemap-scale-label">Stronger Realization</span>
+      <span class="opportunity-treemap-scale-dots" aria-hidden="true">
+        <span class="scale-dot scale-dot-1"></span>
+        <span class="scale-dot scale-dot-2"></span>
+        <span class="scale-dot scale-dot-3"></span>
+        <span class="scale-dot scale-dot-4"></span>
+        <span class="scale-dot scale-dot-5"></span>
+      </span>
+      <span class="opportunity-treemap-scale-label">Weaker Realization</span>
+    </div>
+  `;
+
   const borderFor = score => {
     if (score <= 0) return "rgba(10,110,209,0.10)";
     const ratio = score / maxScore;
@@ -2286,16 +2300,17 @@ function renderValueRealization(payload) {
   };
 
   container.innerHTML = `
+    <div class="opportunity-treemap-scale-row">${scaleMarkup}</div>
     <div class="value-heatmap-grid" style="grid-template-columns: 170px repeat(${cols.length}, minmax(0, 1fr));">
       <div class="value-heatmap-corner">Approach</div>
       ${cols.map(col => `
-		  <div
-		    class="value-heatmap-axis value-heatmap-axis--column is-hoverable"
-		    data-impact-key="${escapeHtml(col.key)}"
-		  >
-		    ${escapeHtml(col.label)}
-		  </div>
-		`).join("")}
+        <div
+          class="value-heatmap-axis value-heatmap-axis--column is-hoverable"
+          data-impact-key="${escapeHtml(col.key)}"
+        >
+          ${escapeHtml(col.label)}
+        </div>
+      `).join("")}
       ${rows.map(row => `
         <div class="value-heatmap-axis value-heatmap-axis--row${rowMaxScores.get(row.key) > 0 ? " value-heatmap-axis--row-has-dominant" : ""}">
           ${escapeHtml(row.label)}
