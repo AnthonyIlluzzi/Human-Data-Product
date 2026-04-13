@@ -1569,26 +1569,6 @@ function updateDerivedInsight() {
         showspikes: false
       }
     };
-      yaxis: {
-        autorange: "reversed",
-        tickfont: { size: 13 },
-        automargin: true,
-        showspikes: false
-      },
-      annotations: [
-        {
-          xref: "paper",
-          yref: "paper",
-          x: 0,
-          y: 1.08,
-          text: "<b>Foundational</b> = depth 1–2&nbsp;&nbsp;&nbsp;<b>Applied</b> = depth 3&nbsp;&nbsp;&nbsp;<b>Expertise</b> = depth 4",
-          showarrow: false,
-          xanchor: "left",
-          yanchor: "bottom",
-          font: { size: 12, color: "#5f7289" }
-        }
-      ]
-    };
 
     Plotly.newPlot(els.chart, traces, layout, {
       displayModeBar: false,
