@@ -42,28 +42,45 @@
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
   const AXIS_TITLE_STANDOFF = 8;
 
-  const SHARED_PLOT_TOP_MARGIN = 24;
+  const BAR_PLOT_TOP_MARGIN = 10;
+  const MATRIX_PLOT_TOP_MARGIN = 16;
   const SHARED_PLOT_RIGHT_MARGIN = 22;
   const SHARED_PLOT_BOTTOM_MARGIN = 60;
   const BAR_PLOT_LEFT_MARGIN = 170;
   const MATRIX_PLOT_LEFT_MARGIN = 72;
-
-  function getReservedChromeHeight() {
-    const isMobile = window.innerWidth <= 720;
-    const isTablet = window.innerWidth <= 1100 && !isMobile;
-
-    if (isMobile) {
-      const chartCard = els.chart?.closest(".capability-chart-card");
-      const toolbar = chartCard?.querySelector(".chart-toolbar");
-      return getElementHeight(toolbar) + getElementHeight(els.matrixContext) + 10;
-    }
-
-    return isTablet ? 176 : 164;
+  
+  const CHART_CARD_HEIGHTS = {
+    desktop: 610,
+    tablet: 560,
+    mobile: 420
+  };
+  
+  const MIN_PLOT_HEIGHTS = {
+    desktop: 420,
+    tablet: 360,
+    mobile: 300
+  };
+  
+  function getViewportBucket() {
+    if (window.innerWidth <= 720) return "mobile";
+    if (window.innerWidth <= 1100) return "tablet";
+    return "desktop";
   }
-
+  
+  function getReservedChromeHeight() {
+    const chartCard = els.chart?.closest(".capability-chart-card");
+    const toolbar = chartCard?.querySelector(".chart-toolbar");
+  
+    const toolbarHeight = getElementHeight(toolbar);
+    const contextHeight = getElementHeight(els.matrixContext);
+    const chromeGap = getViewportBucket() === "mobile" ? 10 : 12;
+  
+    return toolbarHeight + contextHeight + chromeGap;
+  }
+  
   function getSharedPlotMargins(view) {
     return {
-      t: SHARED_PLOT_TOP_MARGIN,
+      t: view === VIEW_MATRIX ? MATRIX_PLOT_TOP_MARGIN : BAR_PLOT_TOP_MARGIN,
       r: SHARED_PLOT_RIGHT_MARGIN,
       b: SHARED_PLOT_BOTTOM_MARGIN,
       l: view === VIEW_MATRIX ? MATRIX_PLOT_LEFT_MARGIN : BAR_PLOT_LEFT_MARGIN
