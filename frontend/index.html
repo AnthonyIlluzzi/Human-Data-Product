@@ -1181,124 +1181,155 @@ LIMIT 1;"
 
     <div id="capability-insights-tab" class="tab-panel">
     <div class="capability-insights-page">
-      <div class="card compact-card capability-insights-instructions-card">
-		  <p class="capability-instructions-body">
-		    <strong>Instructions:</strong> Start with <strong>Capability Profile</strong> to see where strengths are most concentrated.
-		    Then switch to <strong>Domain Distribution</strong> to view the range of skills. Click any domain area to explore the underlying skill matrix.
-		    On touch devices, tap once for tooltip detail and tap again to view the matrix.
-		  </p>
-		</div>
-
-      <div id="capability-orientation-overlay" class="orientation-overlay" aria-hidden="true">
-        <div class="orientation-overlay-card">
-          <p class="orientation-overlay-eyebrow">Mobile Experience</p>
-          <h2>Best viewed in landscape</h2>
-          <p>
-            Capability Insights is designed for a wider view. Rotate your phone to landscape
-            for the best interactive experience.
-          </p>
-        </div>
-      </div>
-
-      <div class="capability-workspace">
-        <section class="chart-panel capability-chart-panel">
-          <div class="chart-card capability-chart-card">
-            <div class="chart-toolbar">
-              <div class="chart-toolbar-left">
-                <button
-                  id="capability-chart-back-button"
-                  class="chart-back-button"
-                  type="button"
-                  aria-label="Back to domain overview"
-                >
-                  ← Back to Overview
-                </button>
-
-                <div class="chart-toolbar-copy">
-                  <div class="chart-title-row">
-                    <h2 id="capability-chart-title">Capability Profile by Domain</h2>
-
-                    <div class="chart-help">
-                      <button
-                        id="capability-chart-help-button"
-                        class="chart-help-button"
-                        type="button"
-                        aria-label="How to interpret this chart"
-                        aria-expanded="false"
-                        aria-controls="capability-chart-help-popover"
-                      >
-                        ?
-                      </button>
-
-                      <div
-                        id="capability-chart-help-popover"
-                        class="chart-help-popover"
-                        role="dialog"
-                        aria-hidden="true"
-                      >
-                        <p id="capability-chart-help-title" class="chart-help-title">How to read this chart</p>
-                        <div id="capability-chart-help-body" class="chart-help-body"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <p id="capability-chart-instruction">
-                    Hover for detail. On touch devices, tap once to inspect and tap again to open the matrix.
-                  </p>
-                </div>
-              </div>
-
-              <div class="chart-toolbar-actions">
-                <div id="capability-chart-view-toggle-wrap" class="chart-view-toggle-wrap">
-                  <span class="chart-view-toggle-label">Top-Level View</span>
-                  <div id="capability-chart-view-toggle" class="chart-view-toggle"></div>
-                </div>
-
-                <div id="capability-quadrant-controls-wrap" class="quadrant-controls-wrap">
-                  <span class="quadrant-controls-label">Focus View</span>
-                  <div id="capability-quadrant-controls" class="quadrant-controls"></div>
-                </div>
-              </div>
-            </div>
-
-            <div id="capability-chart"></div>
-            <div id="capability-chart-tooltip" class="chart-tooltip" role="dialog" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <aside class="control-panel capability-control-panel">
-          <div class="panel-card explorer-card">
-            <div class="panel-header">
-              <h2>Explore Domains</h2>
-              <p>
-                Select any domain below, or drill down directly from either top-level chart, to inspect the underlying skill matrix.
-              </p>
-            </div>
-
-            <div id="capability-explorer" class="capability-explorer"></div>
-          </div>
-
-          <div class="panel-card inventory-card">
-            <div class="panel-header panel-header-compact">
-              <h2>Skill Inventory Table</h2>
-              <p>Open a simple table view of all skills from the underlying source data.</p>
-            </div>
-
-            <button
-              id="capability-inventory-modal-open"
-              class="inventory-link-btn"
-              type="button"
-              aria-haspopup="dialog"
-              aria-controls="capability-inventory-modal"
-              aria-expanded="false"
-            >
-              Open Quick Scan Table
-            </button>
-          </div>
-        </aside>
-      </div>
-    </div>
-
+	  <div class="card compact-card capability-insights-instructions-card capability-instructions-grid">
+	    <div class="capability-instructions-left">
+	      <p class="capability-instructions-body">
+	        <strong>Instructions:</strong> Start with <strong>Capability Profile</strong> to see where strengths are most concentrated.
+	        Then switch to <strong>Domain Distribution</strong> to view the range of skills. Click any domain area to explore the underlying skill matrix.
+	        On touch devices, tap once for tooltip detail and tap again to view the matrix.
+	      </p>
+	    </div>
+	
+	    <div class="capability-instructions-right">
+	      <button
+	        id="capability-inventory-modal-open"
+	        class="inventory-link-btn"
+	        type="button"
+	        aria-haspopup="dialog"
+	        aria-controls="capability-inventory-modal"
+	        aria-expanded="false"
+	      >
+	        View Table
+	      </button>
+	    </div>
+	  </div>
+	
+	  <div id="capability-orientation-overlay" class="orientation-overlay" aria-hidden="true">
+	    <div class="orientation-overlay-card">
+	      <p class="orientation-overlay-eyebrow">Mobile Experience</p>
+	      <h2>Best viewed in landscape</h2>
+	      <p>
+	        Capability Insights is designed for a wider view. Rotate your phone to landscape
+	        for the best interactive experience.
+	      </p>
+	    </div>
+	  </div>
+	
+	  <div class="capability-workspace">
+	    <section class="chart-panel capability-chart-panel">
+	      <div class="chart-card capability-chart-card">
+	        <div class="chart-toolbar">
+	          <div class="chart-toolbar-left">
+	            <button
+	              id="capability-chart-back-button"
+	              class="chart-back-button"
+	              type="button"
+	              aria-label="Back to domain overview"
+	            >
+	              ← Back to Overview
+	            </button>
+	
+	            <div class="chart-toolbar-copy">
+	              <div class="chart-title-row">
+	                <h2 id="capability-chart-title">Capability Profile by Domain</h2>
+	
+	                <div class="chart-help">
+	                  <button
+	                    id="capability-chart-help-button"
+	                    class="chart-help-button"
+	                    type="button"
+	                    aria-label="How to interpret this chart"
+	                    aria-expanded="false"
+	                    aria-controls="capability-chart-help-popover"
+	                  >
+	                    ?
+	                  </button>
+	
+	                  <div
+	                    id="capability-chart-help-popover"
+	                    class="chart-help-popover"
+	                    role="dialog"
+	                    aria-hidden="true"
+	                  >
+	                    <p id="capability-chart-help-title" class="chart-help-title">How to read this chart</p>
+	                    <div id="capability-chart-help-body" class="chart-help-body"></div>
+	                  </div>
+	                </div>
+	              </div>
+	
+	              <p id="capability-chart-instruction">
+	                Hover for detail. On touch devices, tap once to inspect and tap again to open the matrix.
+	              </p>
+	            </div>
+	          </div>
+	
+	          <div class="chart-toolbar-actions">
+	            <div id="capability-chart-view-toggle-wrap" class="chart-view-toggle-wrap">
+	              <span class="chart-view-toggle-label">Top-Level View</span>
+	              <div id="capability-chart-view-toggle" class="chart-view-toggle"></div>
+	            </div>
+	
+	            <div id="capability-matrix-filters-wrap" class="matrix-filters-wrap is-hidden">
+	              <div class="matrix-filter-group">
+	                <label for="capability-quadrant-select" class="matrix-filter-label">Quadrant</label>
+	                <select id="capability-quadrant-select" class="matrix-filter-select"></select>
+	              </div>
+	
+	              <div class="matrix-filter-group">
+	                <label for="capability-domain-select" class="matrix-filter-label">Domain</label>
+	                <select id="capability-domain-select" class="matrix-filter-select"></select>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	
+	        <div id="capability-matrix-context" class="matrix-context-line is-hidden"></div>
+	        <div id="capability-chart"></div>
+	        <div id="capability-chart-tooltip" class="chart-tooltip" role="dialog" aria-live="polite"></div>
+	      </div>
+	    </section>
+	
+	    <aside class="capability-derived-panel">
+	      <div class="card compact-card insight-observed-card">
+	        <div class="insight-observed-eyebrow">Derived Insight</div>
+	
+	        <div class="insight-observed-title-row">
+	          <h3 id="capability-derived-title">Capability concentration</h3>
+	
+	          <div class="insight-help">
+	            <button
+	              id="capability-derived-help-button"
+	              class="insight-help-button"
+	              type="button"
+	              aria-label="How this was calculated"
+	              aria-expanded="false"
+	              aria-controls="capability-derived-help-popover"
+	            >
+	              ?
+	            </button>
+	
+	            <div
+	              id="capability-derived-help-popover"
+	              class="insight-help-popover"
+	              role="dialog"
+	              aria-hidden="true"
+	            >
+	              <p class="insight-help-title">How this was calculated</p>
+	              <div id="capability-derived-derivation" class="insight-help-body">
+	                Loading derivation details…
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	
+	        <div id="capability-derived-copy" class="insight-observed-copy">
+	          Loading capability insight…
+	        </div>
+	      </div>
+	    </aside>
+	  </div>
+	</div>
+		
     <div
       id="capability-inventory-modal"
       class="inventory-modal"
