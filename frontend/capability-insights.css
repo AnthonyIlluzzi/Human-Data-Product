@@ -4,20 +4,33 @@
 }
 
 .capability-insights-instructions-card {
-  padding: 8px 18px 12px;
+  padding: 12px 18px 10px;
   background: linear-gradient(180deg, #fbfdff 0%, #f3f8fe 100%);
   border: 1px solid rgba(10, 110, 209, 0.10);
   border-radius: 18px;
 }
 
+.capability-instructions-left {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+
 .capability-instructions-header {
-  margin-bottom: 2px;
+  margin: 0;
 }
 
 .capability-instructions-header h2 {
   margin: 0;
   font-size: 1.12rem;
   line-height: 1.2;
+}
+
+.capability-instructions-body {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--muted);
 }
 
 .capability-instructions-body {
