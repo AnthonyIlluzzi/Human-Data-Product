@@ -51,8 +51,8 @@
   
   const CHART_DIMENSIONS = {
     desktop: {
-      cardHeight: 790,
-      plotHeight: 610
+      cardHeight: 850,
+      plotHeight: 690
     },
     tablet: {
       cardHeight: 620,
@@ -105,7 +105,7 @@
   let initialized = false;
   let resizeHandlerBound = false;
   let postRenderResizeTimeout = null;
-  let currentPlotHeight = 610;
+  let currentPlotHeight = 690;
 
   const els = {};
   const touchState = {
