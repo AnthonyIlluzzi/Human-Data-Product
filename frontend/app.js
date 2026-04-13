@@ -2096,25 +2096,22 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
       </div>
 
       <div class="feedback-evidence-active">
-        <div class="feedback-evidence-active-header">
-          <div class="feedback-evidence-active-main">
-            <span class="composition-card-index">${activeGroup.index}</span>
-            <div>
-              <h4>${escapeHtml(activeGroup.label)}</h4>
-            </div>
-          </div>
-        </div>
-
-        ${activeGroup.items.length ? `
-          <div class="detail-card-list">
-            ${activeGroup.items.slice(0, 4).map(entry => `
-              <div class="feedback-quote-card">
-                <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
-                <p>${escapeHtml(entry.quote || "")}</p>
-              </div>
-            `).join("")}
-          </div>
-        ` : `
+	    ${activeGroup.items.length ? `
+	      <div class="detail-card-list feedback-evidence-record-list">
+	        ${activeGroup.items.slice(0, 4).map(entry => `
+	          <div class="feedback-quote-card">
+	            <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+	            <p>${escapeHtml(entry.quote || "")}</p>
+	          </div>
+	        `).join("")}
+	      </div>
+	    ` : `
+	      <div class="detail-empty-state feedback-evidence-record-list">
+	        <h4>No curated feedback available</h4>
+	        <p>No curated feedback examples are available for this approach.</p>
+	      </div>
+	    `}
+	  </div>
           <div class="detail-empty-state">
             <h4>No curated feedback available</h4>
             <p>No curated feedback examples are available for this approach.</p>
