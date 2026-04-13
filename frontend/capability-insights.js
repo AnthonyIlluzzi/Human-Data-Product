@@ -510,16 +510,48 @@ function getMatrixSkills() {
   return filterSkillsByQuadrant(baseItems);
 }
 
+function getMatrixFilterReserveHeight() {
+  if (!els.matrixFiltersWrap) return 0;
+
+  const wrap = els.matrixFiltersWrap;
+  const wasHidden = wrap.classList.contains("is-hidden");
+  const previousVisibility = wrap.style.visibility;
+  const previousPosition = wrap.style.position;
+  const previousPointerEvents = wrap.style.pointerEvents;
+  const previousDisplay = wrap.style.display;
+
+  if (wasHidden) {
+    wrap.classList.remove("is-hidden");
+    wrap.style.visibility = "hidden";
+    wrap.style.position = "absolute";
+    wrap.style.pointerEvents = "none";
+    wrap.style.display = "grid";
+  }
+
+  const measuredHeight = Math.ceil(wrap.getBoundingClientRect().height || 0);
+
+  if (wasHidden) {
+    wrap.classList.add("is-hidden");
+    wrap.style.visibility = previousVisibility;
+    wrap.style.position = previousPosition;
+    wrap.style.pointerEvents = previousPointerEvents;
+    wrap.style.display = previousDisplay;
+  }
+
+  return measuredHeight > 0 ? measuredHeight + 12 : 0;
+}
+  
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
   const isTablet = window.innerWidth <= 1100 && !isMobile;
+  const reserveHeight = topLevelView === VIEW_MATRIX ? 0 : getMatrixFilterReserveHeight();
 
   if (isMobile) {
-    return 452;
+    return 452 + reserveHeight;
   }
 
   if (isTablet) {
-    return 548;
+    return 548 + reserveHeight;
   }
 
   const workspace = els.chart?.closest(".capability-workspace");
@@ -541,7 +573,7 @@ function getPlotHeight() {
       desktopTrim;
 
     if (Number.isFinite(availableHeight) && availableHeight > 600) {
-      return Math.round(availableHeight);
+      return Math.round(availableHeight + reserveHeight);
     }
   }
 
@@ -554,11 +586,11 @@ function getPlotHeight() {
       viewportHeight - workspaceRect.top - bottomMargin - viewportTrim;
 
     if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 640) {
-      return Math.round(availableViewportHeight);
+      return Math.round(availableViewportHeight + reserveHeight);
     }
   }
 
-  return 688;
+  return 688 + reserveHeight;
 }
   
   /* =========================
