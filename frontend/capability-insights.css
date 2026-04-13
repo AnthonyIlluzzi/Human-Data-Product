@@ -1533,3 +1533,40 @@ body.modal-open {
     grid-template-columns: 1fr;
   }
 }
+
+.capability-instructions-right {
+  align-items: stretch;
+}
+
+.capability-inventory-tile {
+  width: 300px;
+  max-width: 100%;
+  background: #fbfdff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+
+.capability-inventory-tile-header h2 {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+.capability-inventory-tile-header p {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.capability-inventory-tile-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 720px) {
+  .capability-inventory-tile {
+    width: 100%;
+  }
+}
