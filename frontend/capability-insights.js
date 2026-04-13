@@ -42,6 +42,34 @@
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
   const AXIS_TITLE_STANDOFF = 8;
 
+  const SHARED_PLOT_TOP_MARGIN = 24;
+  const SHARED_PLOT_RIGHT_MARGIN = 22;
+  const SHARED_PLOT_BOTTOM_MARGIN = 60;
+  const BAR_PLOT_LEFT_MARGIN = 170;
+  const MATRIX_PLOT_LEFT_MARGIN = 72;
+
+  function getReservedChromeHeight() {
+    const isMobile = window.innerWidth <= 720;
+    const isTablet = window.innerWidth <= 1100 && !isMobile;
+
+    if (isMobile) {
+      const chartCard = els.chart?.closest(".capability-chart-card");
+      const toolbar = chartCard?.querySelector(".chart-toolbar");
+      return getElementHeight(toolbar) + getElementHeight(els.matrixContext) + 10;
+    }
+
+    return isTablet ? 176 : 164;
+  }
+
+  function getSharedPlotMargins(view) {
+    return {
+      t: SHARED_PLOT_TOP_MARGIN,
+      r: SHARED_PLOT_RIGHT_MARGIN,
+      b: SHARED_PLOT_BOTTOM_MARGIN,
+      l: view === VIEW_MATRIX ? MATRIX_PLOT_LEFT_MARGIN : BAR_PLOT_LEFT_MARGIN
+    };
+  }
+  
   const QUADRANT_RANGES = {
     all: { x: [0.5, 4.28], y: [-0.08, 3.15] },
     expertise: { x: [2.72, 4.12], y: [1.72, 3.08] },
@@ -536,8 +564,8 @@ function getTargetChartCardHeight() {
     ? Math.floor(viewportHeight - workspaceRect.top - topBuffer - bottomBuffer)
     : null;
 
-  const minCardHeight = isMobile ? 420 : isTablet ? 500 : 640;
-  const maxCardHeight = isMobile ? 420 : isTablet ? 560 : 760;
+  const minCardHeight = isMobile ? 420 : isTablet ? 520 : 680;
+  const maxCardHeight = isMobile ? 420 : isTablet ? 580 : 780;
 
   if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
     return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
@@ -564,15 +592,11 @@ function getPlotHeight() {
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
   const chartCard = els.chart?.closest(".capability-chart-card");
-  const toolbar = chartCard?.querySelector(".chart-toolbar");
-
   const chartCardStyle = chartCard ? getComputedStyle(chartCard) : null;
   const paddingTop = chartCardStyle ? parseFloat(chartCardStyle.paddingTop) || 0 : 0;
   const paddingBottom = chartCardStyle ? parseFloat(chartCardStyle.paddingBottom) || 0 : 0;
 
-  const toolbarHeight = getElementHeight(toolbar);
-  const matrixContextHeight = getElementHeight(els.matrixContext);
-
+  const reservedChromeHeight = getReservedChromeHeight();
   const innerTrim = isMobile ? 10 : 12;
   const targetCardHeight = syncChartCardHeight() || getTargetChartCardHeight();
 
@@ -580,11 +604,10 @@ function getPlotHeight() {
     targetCardHeight -
     paddingTop -
     paddingBottom -
-    toolbarHeight -
-    matrixContextHeight -
+    reservedChromeHeight -
     innerTrim;
 
-  const minPlotHeight = isMobile ? 300 : isTablet ? 340 : 390;
+  const minPlotHeight = isMobile ? 300 : isTablet ? 360 : 452;
 
   return Math.round(Math.max(rawPlotHeight, minPlotHeight));
 }
@@ -1414,7 +1437,7 @@ function updateDerivedInsight() {
     const layout = {
       barmode: "stack",
       height: currentPlotHeight,
-      margin: { t: 18, r: 18, b: 58, l: 170 },
+      margin: getSharedPlotMargins(VIEW_PROFILE),
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
@@ -1524,7 +1547,7 @@ function updateDerivedInsight() {
     const layout = {
       barmode: "stack",
       height: currentPlotHeight,
-      margin: { t: 18, r: 18, b: 58, l: 170 },
+      margin: getSharedPlotMargins(VIEW_DISTRIBUTION),
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
@@ -1539,6 +1562,13 @@ function updateDerivedInsight() {
         zeroline: false,
         showspikes: false
       },
+      yaxis: {
+        autorange: "reversed",
+        tickfont: { size: 13 },
+        automargin: true,
+        showspikes: false
+      }
+    };
       yaxis: {
         autorange: "reversed",
         tickfont: { size: 13 },
@@ -1600,7 +1630,7 @@ function updateDerivedInsight() {
   
     const layout = {
       height: currentPlotHeight,
-      margin: { t: 18, r: 22, b: 58, l: 60 },
+      margin: getSharedPlotMargins(VIEW_MATRIX),
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       hovermode: "closest",
