@@ -4,19 +4,20 @@
 }
 
 .capability-insights-instructions-card {
-  padding: 12px 16px;
+  padding: 10px 18px 12px;
   background: linear-gradient(180deg, #fbfdff 0%, #f3f8fe 100%);
   border: 1px solid rgba(10, 110, 209, 0.10);
   border-radius: 18px;
 }
 
 .capability-instructions-header {
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .capability-instructions-header h2 {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1.12rem;
+  line-height: 1.2;
 }
 
 .capability-instructions-body {
