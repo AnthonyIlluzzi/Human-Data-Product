@@ -1,42 +1,43 @@
-const VIEW_PROFILE = "profile";
-const VIEW_DISTRIBUTION = "distribution";
-const VIEW_MATRIX = "matrix";
+(() => {
+  const VIEW_PROFILE = "profile";
+  const VIEW_DISTRIBUTION = "distribution";
+  const VIEW_MATRIX = "matrix";
 
-const QUADRANTS = [
-  { key: "all", label: "All" },
-  { key: "expertise", label: "Expertise" },
-  { key: "emerging", label: "Emerging" },
-  { key: "foundational", label: "Foundational" },
-  { key: "passive", label: "Passive" }
-];
+  const QUADRANTS = [
+    { key: "all", label: "All" },
+    { key: "expertise", label: "Expertise" },
+    { key: "emerging", label: "Emerging" },
+    { key: "foundational", label: "Foundational" },
+    { key: "passive", label: "Passive" }
+  ];
 
-const DERIVED_INSIGHT_CONTENT = {
-  [VIEW_PROFILE]: {
-    title: "Capability concentration",
-    copy: [
-      "Strength is concentrated in architecture, platform, and decision-oriented domains with high expertise density.",
-      "The profile reflects a system-level operator focused on design, governance, and scalable data systems."
-    ],
-    derivation: "Based on depth-tier distribution within each domain, normalized to show how capability concentration is shaped across the portfolio."
-  },
-  [VIEW_DISTRIBUTION]: {
-    title: "Domain coverage pattern",
-    copy: [
-      "Skill coverage spans multiple domains, with deeper concentration in architecture, platform, and analytics areas.",
-      "Breadth enables cross-domain problem solving, while depth anchors system-level design capability."
-    ],
-    derivation: "Based on absolute skill counts by domain and depth tier, showing where capability breadth and depth are most concentrated."
-  },
-  [VIEW_MATRIX]: {
-    title: "Skill depth & experience pattern",
-    copy: [
-      "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
-      "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
-    ],
-    derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
-  }
-};
-
+  const DERIVED_INSIGHT_CONTENT = {
+    [VIEW_PROFILE]: {
+      title: "Capability concentration",
+      copy: [
+        "Strength is concentrated in architecture, platform, and decision-oriented domains with high expertise density.",
+        "The profile reflects a system-level operator focused on design, governance, and scalable data systems."
+      ],
+      derivation: "Based on depth-tier distribution within each domain, normalized to show how capability concentration is shaped across the portfolio."
+    },
+    [VIEW_DISTRIBUTION]: {
+      title: "Domain coverage pattern",
+      copy: [
+        "Skill coverage spans multiple domains, with deeper concentration in architecture, platform, and analytics areas.",
+        "Breadth enables cross-domain problem solving, while depth anchors system-level design capability."
+      ],
+      derivation: "Based on absolute skill counts by domain and depth tier, showing where capability breadth and depth are most concentrated."
+    },
+    [VIEW_MATRIX]: {
+      title: "Skill depth & experience pattern",
+      copy: [
+        "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
+        "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
+      ],
+      derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
+    }
+  };
+  
   const MATRIX_POINT_COLOR = "#6fa3e6";
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
   const AXIS_TITLE_STANDOFF = 8;
@@ -522,19 +523,18 @@ function getPlotHeight() {
   }
 
   const workspace = els.chart?.closest(".capability-workspace");
-  const controlPanel = workspace?.querySelector(".capability-control-panel");
   const chartCard = els.chart?.closest(".capability-chart-card");
   const toolbar = chartCard?.querySelector(".chart-toolbar");
 
   const desktopTrim = 14;
 
-  if (controlPanel && chartCard && toolbar) {
+  if (chartCard && toolbar) {
     const chartCardStyle = getComputedStyle(chartCard);
     const paddingTop = parseFloat(chartCardStyle.paddingTop) || 0;
     const paddingBottom = parseFloat(chartCardStyle.paddingBottom) || 0;
 
     const availableHeight =
-      controlPanel.offsetHeight -
+      chartCard.offsetHeight -
       toolbar.offsetHeight -
       paddingTop -
       paddingBottom -
@@ -560,7 +560,7 @@ function getPlotHeight() {
 
   return activeDomain ? 688 : 700;
 }
-
+  
   /* =========================
      TOOLBAR / TOGGLES
   ========================= */
