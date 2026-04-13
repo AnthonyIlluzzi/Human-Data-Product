@@ -42,8 +42,8 @@
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
   const AXIS_TITLE_STANDOFF = 8;
 
-  const BAR_PLOT_TOP_MARGIN = 10;
-  const MATRIX_PLOT_TOP_MARGIN = 10;
+  const BAR_PLOT_TOP_MARGIN = 0;
+  const MATRIX_PLOT_TOP_MARGIN = 8;
   const SHARED_PLOT_RIGHT_MARGIN = 22;
   const SHARED_PLOT_BOTTOM_MARGIN = 60;
   const BAR_PLOT_LEFT_MARGIN = 170;
@@ -51,8 +51,8 @@
   
   const CHART_DIMENSIONS = {
     desktop: {
-      cardHeight: 760,
-      plotHeight: 560
+      cardHeight: 790,
+      plotHeight: 610
     },
     tablet: {
       cardHeight: 620,
@@ -105,7 +105,7 @@
   let initialized = false;
   let resizeHandlerBound = false;
   let postRenderResizeTimeout = null;
-  let currentPlotHeight = 560;
+  let currentPlotHeight = 610;
 
   const els = {};
   const touchState = {
