@@ -594,7 +594,7 @@ function getPlotHeight() {
         : "Skill Matrix";
   
       els.chartInstruction.textContent =
-        "Use Quadrant and Domain to inspect the skill matrix. Hover or tap any point to inspect a skill.";
+        "Use Quadrant and Domain to filter the skill matrix. Hover or tap any point to inspect.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
