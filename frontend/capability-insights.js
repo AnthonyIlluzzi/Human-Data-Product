@@ -43,22 +43,25 @@
   const AXIS_TITLE_STANDOFF = 8;
 
   const BAR_PLOT_TOP_MARGIN = 10;
-  const MATRIX_PLOT_TOP_MARGIN = 16;
+  const MATRIX_PLOT_TOP_MARGIN = 10;
   const SHARED_PLOT_RIGHT_MARGIN = 22;
   const SHARED_PLOT_BOTTOM_MARGIN = 60;
   const BAR_PLOT_LEFT_MARGIN = 170;
   const MATRIX_PLOT_LEFT_MARGIN = 72;
   
-  const CHART_CARD_HEIGHTS = {
-    desktop: 610,
-    tablet: 560,
-    mobile: 420
-  };
-  
-  const MIN_PLOT_HEIGHTS = {
-    desktop: 420,
-    tablet: 360,
-    mobile: 300
+  const CHART_DIMENSIONS = {
+    desktop: {
+      cardHeight: 760,
+      plotHeight: 560
+    },
+    tablet: {
+      cardHeight: 620,
+      plotHeight: 430
+    },
+    mobile: {
+      cardHeight: 440,
+      plotHeight: 290
+    }
   };
   
   function getViewportBucket() {
@@ -67,15 +70,8 @@
     return "desktop";
   }
   
-  function getReservedChromeHeight() {
-    const chartCard = els.chart?.closest(".capability-chart-card");
-    const toolbar = chartCard?.querySelector(".chart-toolbar");
-  
-    const toolbarHeight = getElementHeight(toolbar);
-    const contextHeight = getElementHeight(els.matrixContext);
-    const chromeGap = getViewportBucket() === "mobile" ? 10 : 12;
-  
-    return toolbarHeight + contextHeight + chromeGap;
+  function getChartDimensions() {
+    return CHART_DIMENSIONS[getViewportBucket()];
   }
   
   function getSharedPlotMargins(view) {
@@ -109,7 +105,7 @@
   let initialized = false;
   let resizeHandlerBound = false;
   let postRenderResizeTimeout = null;
-  let currentPlotHeight = 720;
+  let currentPlotHeight = 560;
 
   const els = {};
   const touchState = {
@@ -555,54 +551,27 @@ function getMatrixSkills() {
   return filterSkillsByQuadrant(baseItems);
 }
   
-function getElementHeight(element) {
-  if (!element) return 0;
-
-  if (element.classList?.contains("is-hidden")) {
-    return 0;
-  }
-
-  return Math.ceil(element.getBoundingClientRect().height || 0);
-}
-
-function getTargetChartCardHeight() {
-  const viewportBucket = getViewportBucket();
-  return CHART_CARD_HEIGHTS[viewportBucket];
-}
-
 function syncChartCardHeight() {
   const chartCard = els.chart?.closest(".capability-chart-card");
   if (!chartCard) return 0;
 
-  const targetHeight = getTargetChartCardHeight();
+  const { cardHeight, plotHeight } = getChartDimensions();
 
-  chartCard.style.height = `${targetHeight}px`;
-  chartCard.style.minHeight = `${targetHeight}px`;
-  chartCard.style.maxHeight = `${targetHeight}px`;
+  chartCard.style.height = `${cardHeight}px`;
+  chartCard.style.minHeight = `${cardHeight}px`;
+  chartCard.style.maxHeight = `${cardHeight}px`;
 
-  return targetHeight;
+  if (els.chart) {
+    els.chart.style.height = `${plotHeight}px`;
+    els.chart.style.minHeight = `${plotHeight}px`;
+    els.chart.style.maxHeight = `${plotHeight}px`;
+  }
+
+  return cardHeight;
 }
 
 function getPlotHeight() {
-  const viewportBucket = getViewportBucket();
-
-  const chartCard = els.chart?.closest(".capability-chart-card");
-  const chartCardStyle = chartCard ? getComputedStyle(chartCard) : null;
-  const paddingTop = chartCardStyle ? parseFloat(chartCardStyle.paddingTop) || 0 : 0;
-  const paddingBottom = chartCardStyle ? parseFloat(chartCardStyle.paddingBottom) || 0 : 0;
-
-  const targetCardHeight = syncChartCardHeight() || getTargetChartCardHeight();
-  const reservedChromeHeight = getReservedChromeHeight();
-
-  const rawPlotHeight =
-    targetCardHeight -
-    paddingTop -
-    paddingBottom -
-    reservedChromeHeight;
-
-  return Math.round(
-    Math.max(rawPlotHeight, MIN_PLOT_HEIGHTS[viewportBucket])
-  );
+  return getChartDimensions().plotHeight;
 }
   
   /* =========================
