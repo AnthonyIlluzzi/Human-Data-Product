@@ -640,7 +640,7 @@ body.modal-open {
   }
 
   .chart-card.capability-chart-card {
-    min-height: 850px;
+    min-height: 900px;
   }
 
   .chart-toolbar {
@@ -693,32 +693,6 @@ body.modal-open {
   .capability-derived-panel .insight-observed-card h3 {
     white-space: nowrap;
   }
-}
-
-.chart-back-button {
-  display: none;
-  width: fit-content;
-  border: 1px solid #cfe0f7;
-  background: #f4f8fd;
-  color: var(--text);
-  border-radius: 999px;
-  padding: 8px 12px;
-  font: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.18s ease;
-}
-
-.chart-back-button:hover {
-  background: #ebf3fc;
-  border-color: #8fb7e8;
-  transform: translateY(-1px);
-}
-
-.chart-back-button.is-visible {
-  display: inline-flex;
-  align-items: center;
 }
 
 .chart-help {
