@@ -532,6 +532,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  box-sizing: border-box;
   isolation: isolate;
 }
 
@@ -885,6 +886,14 @@ body.modal-open {
   min-height: 0;
   height: 100%;
   flex: 1 1 auto;
+  display: block;
+}
+
+#capability-chart .js-plotly-plot,
+#capability-chart .plot-container,
+#capability-chart .svg-container {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .capability-chart-card .js-plotly-plot .plotly .cursor-crosshair,
@@ -1405,7 +1414,7 @@ body.modal-open {
 
 .capability-workspace {
   grid-template-columns: minmax(0, 1fr) 320px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .capability-derived-panel {
