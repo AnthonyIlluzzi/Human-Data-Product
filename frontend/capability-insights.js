@@ -158,11 +158,11 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       cardRect.width > 0 &&
       cardRect.height > 0 &&
       chartRect.width > 0 &&
-      (chartRect.height > 0 || els.chart.offsetHeight > 0) &&
       getComputedStyle(els.chart).display !== "none" &&
       getComputedStyle(chartCard).display !== "none";
 
     if (ready) {
+      syncChartCardHeight();
       renderChart();
 
       if (isChartHelpOpen) {
@@ -528,13 +528,14 @@ function getTargetChartCardHeight() {
   const workspaceRect = workspace?.getBoundingClientRect();
 
   const viewportHeight = window.innerHeight;
-  const bottomMargin = isMobile ? 10 : 16;
+  const bottomBuffer = isMobile ? 12 : 20;
+
   const availableViewportHeight = workspaceRect
-    ? viewportHeight - workspaceRect.top - bottomMargin
+    ? Math.floor(viewportHeight - workspaceRect.top - bottomBuffer)
     : null;
 
-  const minCardHeight = isMobile ? 420 : isTablet ? 500 : 560;
-  const maxCardHeight = isMobile ? 420 : isTablet ? 500 : 560;
+  const minCardHeight = isMobile ? 420 : isTablet ? 480 : 500;
+  const maxCardHeight = isMobile ? 420 : isTablet ? 520 : 552;
 
   if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
     return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
@@ -542,7 +543,20 @@ function getTargetChartCardHeight() {
 
   return maxCardHeight;
 }
-  
+
+function syncChartCardHeight() {
+  const chartCard = els.chart?.closest(".capability-chart-card");
+  if (!chartCard) return 0;
+
+  const targetHeight = getTargetChartCardHeight();
+
+  chartCard.style.height = `${targetHeight}px`;
+  chartCard.style.minHeight = `${targetHeight}px`;
+  chartCard.style.maxHeight = `${targetHeight}px`;
+
+  return targetHeight;
+}
+
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
   const isTablet = window.innerWidth <= 1100 && !isMobile;
@@ -558,9 +572,9 @@ function getPlotHeight() {
   const matrixContextHeight = getElementHeight(els.matrixContext);
 
   const innerTrim = isMobile ? 10 : 12;
-  const targetCardHeight = getTargetChartCardHeight();
+  const targetCardHeight = syncChartCardHeight() || getTargetChartCardHeight();
 
-  const plotHeight =
+  const rawPlotHeight =
     targetCardHeight -
     paddingTop -
     paddingBottom -
@@ -568,10 +582,9 @@ function getPlotHeight() {
     matrixContextHeight -
     innerTrim;
 
-  const minPlotHeight = isMobile ? 300 : isTablet ? 360 : 420;
-  const maxPlotHeight = isMobile ? 320 : isTablet ? 400 : 470;
+  const minPlotHeight = isMobile ? 300 : isTablet ? 340 : 390;
 
-  return Math.round(clamp(plotHeight, minPlotHeight, maxPlotHeight));
+  return Math.round(Math.max(rawPlotHeight, minPlotHeight));
 }
   
   /* =========================
@@ -1304,6 +1317,7 @@ function updateDerivedInsight() {
     buildDomainSelect();
     updateDerivedInsight();
   
+    syncChartCardHeight();
     currentPlotHeight = getPlotHeight();
     els.chart.style.height = `${currentPlotHeight}px`;
   
@@ -1428,6 +1442,7 @@ function updateDerivedInsight() {
       responsive: true
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
+      requestAnimationFrame(() => Plotly.Plots.resize(graphDiv));
       bindTopLevelChartEvents(graphDiv, "profile");
     });
   }
@@ -1548,6 +1563,7 @@ function updateDerivedInsight() {
       responsive: true
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
+      requestAnimationFrame(() => Plotly.Plots.resize(graphDiv));
       bindTopLevelChartEvents(graphDiv, "distribution");
     });
   }
@@ -1638,6 +1654,7 @@ function updateDerivedInsight() {
       responsive: true
     }).then((graphDiv) => {
       activeGraphDiv = graphDiv;
+      requestAnimationFrame(() => Plotly.Plots.resize(graphDiv));
       bindSkillChartEvents(graphDiv);
     });
   }
