@@ -566,29 +566,8 @@ function getElementHeight(element) {
 }
 
 function getTargetChartCardHeight() {
-  const isMobile = window.innerWidth <= 720;
-  const isTablet = window.innerWidth <= 1100 && !isMobile;
-
-  const workspace = els.chart?.closest(".capability-workspace");
-  const workspaceRect = workspace?.getBoundingClientRect();
-
-  const viewportHeight = window.innerHeight;
-
-  const topBuffer = isMobile ? 0 : 0;
-  const bottomBuffer = isMobile ? 12 : isTablet ? 16 : 8;
-
-  const availableViewportHeight = workspaceRect
-    ? Math.floor(viewportHeight - workspaceRect.top - topBuffer - bottomBuffer)
-    : null;
-
-  const minCardHeight = isMobile ? 420 : isTablet ? 520 : 680;
-  const maxCardHeight = isMobile ? 420 : isTablet ? 580 : 780;
-
-  if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
-    return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
-  }
-
-  return maxCardHeight;
+  const viewportBucket = getViewportBucket();
+  return CHART_CARD_HEIGHTS[viewportBucket];
 }
 
 function syncChartCardHeight() {
@@ -605,28 +584,25 @@ function syncChartCardHeight() {
 }
 
 function getPlotHeight() {
-  const isMobile = window.innerWidth <= 720;
-  const isTablet = window.innerWidth <= 1100 && !isMobile;
+  const viewportBucket = getViewportBucket();
 
   const chartCard = els.chart?.closest(".capability-chart-card");
   const chartCardStyle = chartCard ? getComputedStyle(chartCard) : null;
   const paddingTop = chartCardStyle ? parseFloat(chartCardStyle.paddingTop) || 0 : 0;
   const paddingBottom = chartCardStyle ? parseFloat(chartCardStyle.paddingBottom) || 0 : 0;
 
-  const reservedChromeHeight = getReservedChromeHeight();
-  const innerTrim = isMobile ? 10 : 12;
   const targetCardHeight = syncChartCardHeight() || getTargetChartCardHeight();
+  const reservedChromeHeight = getReservedChromeHeight();
 
   const rawPlotHeight =
     targetCardHeight -
     paddingTop -
     paddingBottom -
-    reservedChromeHeight -
-    innerTrim;
+    reservedChromeHeight;
 
-  const minPlotHeight = isMobile ? 300 : isTablet ? 360 : 452;
-
-  return Math.round(Math.max(rawPlotHeight, minPlotHeight));
+  return Math.round(
+    Math.max(rawPlotHeight, MIN_PLOT_HEIGHTS[viewportBucket])
+  );
 }
   
   /* =========================
