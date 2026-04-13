@@ -1561,8 +1561,10 @@ body.modal-open {
 }
 
 .capability-inventory-tile-btn {
-  width: 100%;
-  margin-top: 10px;
+  width: fit-content;
+  min-width: 190px;
+  margin: 10px auto 0;
+  display: block;
 }
 
 @media (max-width: 720px) {
