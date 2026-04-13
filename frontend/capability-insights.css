@@ -882,7 +882,7 @@ body.modal-open {
 
 #capability-chart {
   width: 100%;
-  min-height: 680px;
+  min-height: 0;
   height: 100%;
   flex: 1 1 auto;
 }
@@ -1060,18 +1060,8 @@ body.modal-open {
     right: auto;
   }
 
-  #capability-chart {
-    min-height: 540px;
-  }
-
   .capability-explorer {
     max-height: none;
-  }
-}
-
-@media (max-width: 920px) {
-  #capability-chart {
-    min-height: 500px;
   }
 }
 
@@ -1185,10 +1175,6 @@ body.modal-open {
     min-width: 0;
     width: auto;
     max-width: min(320px, calc(100vw - 24px));
-  }
-
-  #capability-chart {
-    min-height: 436px;
   }
 
   .inventory-modal-dialog {
@@ -1358,10 +1344,6 @@ body.modal-open {
   .chart-tooltip-evidence {
     font-size: 0.84rem;
     line-height: 1.4;
-  }
-
-  #capability-chart {
-    min-height: 448px;
   }
 
   .chart-help-popover.scoring-help-popover {
