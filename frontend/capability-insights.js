@@ -51,8 +51,8 @@
   
   const CHART_DIMENSIONS = {
     desktop: {
-      cardHeight: 850,
-      plotHeight: 690
+      cardHeight: 900,
+      plotHeight: 740
     },
     tablet: {
       cardHeight: 620,
@@ -105,7 +105,7 @@
   let initialized = false;
   let resizeHandlerBound = false;
   let postRenderResizeTimeout = null;
-  let currentPlotHeight = 690;
+  let currentPlotHeight = 740;
 
   const els = {};
   const touchState = {
@@ -258,7 +258,6 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   els.chartTitle = document.getElementById("capability-chart-title");
   els.chartInstruction = document.getElementById("capability-chart-instruction");
   els.chartTooltip = document.getElementById("capability-chart-tooltip");
-  els.chartBackButton = document.getElementById("capability-chart-back-button");
   els.chartHelpButton = document.getElementById("capability-chart-help-button");
   els.chartHelpPopover = document.getElementById("capability-chart-help-popover");
   els.chartHelpTitle = document.getElementById("capability-chart-help-title");
@@ -581,10 +580,6 @@ function getPlotHeight() {
   function buildChartToolbar() {
     const isMatrixView = topLevelView === VIEW_MATRIX;
     const activeDomainRecord = activeDomain ? getDomainById(activeDomain) : null;
-  
-    if (els.chartBackButton) {
-      els.chartBackButton.classList.toggle("is-visible", isMatrixView && !!activeDomainRecord);
-    }
   
     if (els.matrixFiltersWrap) {
       els.matrixFiltersWrap.classList.toggle("is-hidden", !isMatrixView);
@@ -1793,11 +1788,6 @@ function updateDerivedInsight() {
   ========================= */
 
   function bindCapabilityEvents() {
-    if (!initialized && els.chartBackButton) {
-      els.chartBackButton.addEventListener("click", () => {
-        returnToDomainOverview();
-      });
-    }
   
     if (!initialized && els.chartHelpButton) {
       els.chartHelpButton.addEventListener("click", (event) => {
