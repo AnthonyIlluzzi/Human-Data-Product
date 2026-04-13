@@ -909,12 +909,12 @@ function renderFeedbackValidation(chartId, items) {
     const segment = segments[idx];
 
     attachFloatingTooltip(
-      node,
-      `
-        <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
-        <span class="insights-hover-tooltip-body">${segment.value} supporting excerpt${segment.value === 1 ? "" : "s"}</span>
-      `
-    );
+	  node,
+	  `
+	    <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+	    <span class="insights-hover-tooltip-body"><strong>${segment.value}</strong> supporting excerpt${segment.value === 1 ? "" : "s"}</span>
+	  `
+	);
 
     node.addEventListener("click", async () => {
       try {
@@ -1958,14 +1958,14 @@ function renderDistributionBar(containerId, view) {
       "This category is derived from the structured system-improvement model.";
 
     attachFloatingTooltip(
-      node,
-      `
-        <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
-        <span class="insights-hover-tooltip-body">${segment.count} records</span>
-        <span class="insights-hover-tooltip-body">${segment.share}% of selected view</span>
-        <span class="insights-hover-tooltip-definition">${escapeHtml(definition)}</span>
-      `
-    );
+	  node,
+	  `
+	    <span class="insights-hover-tooltip-title">${escapeHtml(segment.label)}</span>
+	    <span class="insights-hover-tooltip-body"><strong>${segment.count}</strong> records</span>
+	    <span class="insights-hover-tooltip-body"><strong>${segment.share}%</strong> of selected view</span>
+	    <span class="insights-hover-tooltip-definition">${escapeHtml(definition)}</span>
+	  `
+	);
   });
 }
 
@@ -2095,24 +2095,18 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
         `).join("")}
       </div>
 
-      <div class="feedback-evidence-active">
-	    ${activeGroup.items.length ? `
-	      <div class="detail-card-list feedback-evidence-record-list">
-	        ${activeGroup.items.slice(0, 4).map(entry => `
-	          <div class="feedback-quote-card">
-	            <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
-	            <p>${escapeHtml(entry.quote || "")}</p>
-	          </div>
-	        `).join("")}
-	      </div>
-	    ` : `
-	      <div class="detail-empty-state feedback-evidence-record-list">
-	        <h4>No curated feedback available</h4>
-	        <p>No curated feedback examples are available for this approach.</p>
-	      </div>
-	    `}
-	  </div>
-          <div class="detail-empty-state">
+    <div class="feedback-evidence-active">
+        ${activeGroup.items.length ? `
+          <div class="detail-card-list feedback-evidence-record-list">
+            ${activeGroup.items.slice(0, 4).map(entry => `
+              <div class="feedback-quote-card">
+                <div class="feedback-source-pill">${escapeHtml(titleCase((entry.source_type || "source").replaceAll("_", " ")))}</div>
+                <p>${escapeHtml(entry.quote || "")}</p>
+              </div>
+            `).join("")}
+          </div>
+        ` : `
+          <div class="detail-empty-state feedback-evidence-record-list">
             <h4>No curated feedback available</h4>
             <p>No curated feedback examples are available for this approach.</p>
           </div>
@@ -2339,10 +2333,10 @@ function renderValueRealization(payload) {
       `
         <span class="insights-hover-tooltip-title">${escapeHtml(cell.dataset.heatmapRow)}: ${escapeHtml(cell.dataset.heatmapCol)}</span>
         ${dominantLine}
-        <span class="insights-hover-tooltip-body">Factual core: ${cell.dataset.heatmapFactual}</span>
-        <span class="insights-hover-tooltip-body">Project inference: ${cell.dataset.heatmapProject}</span>
-        <span class="insights-hover-tooltip-body">Feedback reinforcement: ${cell.dataset.heatmapFeedback}</span>
-        <span class="insights-hover-tooltip-body">Weighted score: ${cell.dataset.heatmapScore}</span>
+        <span class="insights-hover-tooltip-body">Factual core: <strong>${cell.dataset.heatmapFactual}</strong></span>
+        <span class="insights-hover-tooltip-body">Project inference: <strong>${cell.dataset.heatmapProject}</strong></span>
+        <span class="insights-hover-tooltip-body">Feedback reinforcement: <strong>${cell.dataset.heatmapFeedback}</strong></span>
+        <span class="insights-hover-tooltip-body">Weighted score: <strong>${cell.dataset.heatmapScore}</strong></span>
       `
     );
   });
