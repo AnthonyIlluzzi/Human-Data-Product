@@ -4408,6 +4408,10 @@ body {
   min-height: 26px;
 }
 
+#value-realization-heatmap > .opportunity-treemap-scale-row {
+  margin-bottom: 4px;
+}
+
 .opportunity-treemap-scale {
   display: inline-flex;
   align-items: center;
