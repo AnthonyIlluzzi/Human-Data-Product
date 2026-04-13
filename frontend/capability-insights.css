@@ -526,7 +526,7 @@ body.modal-open {
 .chart-card.capability-chart-card {
   position: relative;
   overflow: hidden;
-  padding: 14px 18px 8px;
+  padding: 14px 18px 10px;
   min-height: 0;
   height: 100%;
   display: flex;
@@ -640,48 +640,42 @@ body.modal-open {
   }
 
   .chart-card.capability-chart-card {
-    min-height: 640px;
+    min-height: 610px;
   }
 
   .chart-toolbar {
-    min-height: 138px;
+    min-height: 116px;
     align-items: flex-start;
   }
 
   .chart-toolbar-left {
-    min-height: 92px;
+    min-height: 76px;
     align-content: start;
   }
 
   .chart-toolbar-actions {
-    min-height: 138px;
-    justify-content: space-between;
+    min-height: 0;
+    justify-content: flex-start;
+    gap: 10px;
   }
 
   .chart-view-toggle-wrap {
-    min-height: 62px;
+    min-height: 0;
     justify-content: flex-start;
   }
 
   .matrix-filters-wrap {
-    min-height: 74px;
+    min-height: 0;
     align-content: start;
   }
 
-  .matrix-filters-wrap.is-hidden {
-    display: grid;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
   .matrix-context-line {
-    min-height: 22px;
-    margin: 10px 0 6px;
+    min-height: 0;
+    margin: 6px 0 2px;
   }
 
   .matrix-context-line.is-hidden {
-    display: block;
-    visibility: hidden;
+    display: none;
   }
 
   .capability-derived-panel .insight-observed-title-row {
