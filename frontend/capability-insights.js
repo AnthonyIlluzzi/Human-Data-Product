@@ -1,14 +1,41 @@
-(() => {
-  const VIEW_PROFILE = "profile";
-  const VIEW_DISTRIBUTION = "distribution";
+const VIEW_PROFILE = "profile";
+const VIEW_DISTRIBUTION = "distribution";
+const VIEW_MATRIX = "matrix";
 
-  const QUADRANTS = [
-    { key: "all", label: "Full Matrix" },
-    { key: "expertise", label: "Expertise" },
-    { key: "emerging", label: "Emerging" },
-    { key: "foundational", label: "Foundational" },
-    { key: "passive", label: "Passive" }
-  ];
+const QUADRANTS = [
+  { key: "all", label: "All" },
+  { key: "expertise", label: "Expertise" },
+  { key: "emerging", label: "Emerging" },
+  { key: "foundational", label: "Foundational" },
+  { key: "passive", label: "Passive" }
+];
+
+const DERIVED_INSIGHT_CONTENT = {
+  [VIEW_PROFILE]: {
+    title: "Capability concentration",
+    copy: [
+      "Strength is concentrated in architecture, platform, and decision-oriented domains with high expertise density.",
+      "The profile reflects a system-level operator focused on design, governance, and scalable data systems."
+    ],
+    derivation: "Based on depth-tier distribution within each domain, normalized to show how capability concentration is shaped across the portfolio."
+  },
+  [VIEW_DISTRIBUTION]: {
+    title: "Domain coverage pattern",
+    copy: [
+      "Skill coverage spans multiple domains, with deeper concentration in architecture, platform, and analytics areas.",
+      "Breadth enables cross-domain problem solving, while depth anchors system-level design capability."
+    ],
+    derivation: "Based on absolute skill counts by domain and depth tier, showing where capability breadth and depth are most concentrated."
+  },
+  [VIEW_MATRIX]: {
+    title: "Skill depth & experience pattern",
+    copy: [
+      "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
+      "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
+    ],
+    derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
+  }
+};
 
   const MATRIX_POINT_COLOR = "#6fa3e6";
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
@@ -62,10 +89,11 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
   skills = normalizeSkills(Array.isArray(payload.skills) ? payload.skills : []);
   domains = buildDomainCollection(skills);
 
-  buildExplorer();
   buildChartViewToggle();
   buildQuadrantControls();
+  buildDomainSelect();
   buildChartToolbar();
+  updateDerivedInsight();
   buildInventoryTable();
   setScoringHelpContent();
   setInventoryRecency();
@@ -77,7 +105,7 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
   if (tabIsActive) {
     window.refreshCapabilityInsights();
   }
-  
+
   if (!resizeHandlerBound) {
     const handleViewportChange = debounce(() => {
       updateOrientationOverlay();
@@ -173,8 +201,9 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
     closeInventoryModal();
     buildChartToolbar();
     buildQuadrantControls();
+    buildDomainSelect();
     buildChartViewToggle();
-    buildExplorer();
+    updateDerivedInsight();
   };
 
   /* =========================
@@ -182,31 +211,38 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   ========================= */
 
   function cacheElements() {
-    els.tab = document.getElementById("capability-insights-tab");
-    els.chart = document.getElementById("capability-chart");
-    els.chartTitle = document.getElementById("capability-chart-title");
-    els.chartInstruction = document.getElementById("capability-chart-instruction");
-    els.chartTooltip = document.getElementById("capability-chart-tooltip");
-    els.chartBackButton = document.getElementById("capability-chart-back-button");
-    els.chartHelpButton = document.getElementById("capability-chart-help-button");
-    els.chartHelpPopover = document.getElementById("capability-chart-help-popover");
-    els.chartHelpTitle = document.getElementById("capability-chart-help-title");
-    els.chartHelpBody = document.getElementById("capability-chart-help-body");
-    els.chartViewToggleWrap = document.getElementById("capability-chart-view-toggle-wrap");
-    els.chartViewToggle = document.getElementById("capability-chart-view-toggle");
-    els.quadrantControlsWrap = document.getElementById("capability-quadrant-controls-wrap");
-    els.quadrantControls = document.getElementById("capability-quadrant-controls");
-    els.explorer = document.getElementById("capability-explorer");
-    els.inventoryModalOpen = document.getElementById("capability-inventory-modal-open");
-    els.inventoryModal = document.getElementById("capability-inventory-modal");
-    els.inventoryModalBackdrop = document.getElementById("capability-inventory-modal-backdrop");
-    els.inventoryModalClose = document.getElementById("capability-inventory-modal-close");
-    els.inventoryTableBody = document.getElementById("capability-inventory-table-body");
-    els.inventoryRecency = document.getElementById("capability-inventory-recency");
-    els.scoringHelpButton = document.getElementById("capability-scoring-help-button");
-    els.scoringHelpPopover = document.getElementById("capability-scoring-help-popover");
-    els.orientationOverlay = document.getElementById("capability-orientation-overlay");
-  }
+  els.tab = document.getElementById("capability-insights-tab");
+  els.chart = document.getElementById("capability-chart");
+  els.chartTitle = document.getElementById("capability-chart-title");
+  els.chartInstruction = document.getElementById("capability-chart-instruction");
+  els.chartTooltip = document.getElementById("capability-chart-tooltip");
+  els.chartBackButton = document.getElementById("capability-chart-back-button");
+  els.chartHelpButton = document.getElementById("capability-chart-help-button");
+  els.chartHelpPopover = document.getElementById("capability-chart-help-popover");
+  els.chartHelpTitle = document.getElementById("capability-chart-help-title");
+  els.chartHelpBody = document.getElementById("capability-chart-help-body");
+  els.chartViewToggleWrap = document.getElementById("capability-chart-view-toggle-wrap");
+  els.chartViewToggle = document.getElementById("capability-chart-view-toggle");
+
+  els.matrixFiltersWrap = document.getElementById("capability-matrix-filters-wrap");
+  els.quadrantSelect = document.getElementById("capability-quadrant-select");
+  els.domainSelect = document.getElementById("capability-domain-select");
+  els.matrixContext = document.getElementById("capability-matrix-context");
+
+  els.inventoryModalOpen = document.getElementById("capability-inventory-modal-open");
+  els.inventoryModal = document.getElementById("capability-inventory-modal");
+  els.inventoryModalBackdrop = document.getElementById("capability-inventory-modal-backdrop");
+  els.inventoryModalClose = document.getElementById("capability-inventory-modal-close");
+  els.inventoryTableBody = document.getElementById("capability-inventory-table-body");
+  els.inventoryRecency = document.getElementById("capability-inventory-recency");
+  els.scoringHelpButton = document.getElementById("capability-scoring-help-button");
+  els.scoringHelpPopover = document.getElementById("capability-scoring-help-popover");
+  els.orientationOverlay = document.getElementById("capability-orientation-overlay");
+
+  els.derivedTitle = document.getElementById("capability-derived-title");
+  els.derivedCopy = document.getElementById("capability-derived-copy");
+  els.derivedDerivation = document.getElementById("capability-derived-derivation");
+}
 
   /* =========================
      NORMALIZATION
@@ -445,27 +481,33 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
     return domains.find((domain) => Number(domain.domain_id) === Number(domainId)) || null;
   }
 
-  function getSkillsForDomain(domainId) {
-    const items = skills.filter((item) => Number(item.domain_id) === Number(domainId));
-
+  function filterSkillsByQuadrant(items) {
     if (activeQuadrant === "expertise") {
       return items.filter((item) => item.depth >= 3 && item.experience >= 2);
     }
-
+  
     if (activeQuadrant === "emerging") {
       return items.filter((item) => item.depth >= 3 && item.experience <= 1);
     }
-
+  
     if (activeQuadrant === "foundational") {
       return items.filter((item) => item.depth <= 2 && item.experience <= 1);
     }
-
+  
     if (activeQuadrant === "passive") {
       return items.filter((item) => item.depth <= 2 && item.experience >= 2);
     }
-
+  
     return items;
   }
+
+function getMatrixSkills() {
+  const baseItems = activeDomain
+    ? skills.filter((item) => Number(item.domain_id) === Number(activeDomain))
+    : skills;
+
+  return filterSkillsByQuadrant(baseItems);
+}
 
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
@@ -524,110 +566,146 @@ function getPlotHeight() {
   ========================= */
 
   function buildChartToolbar() {
-    if (!els.chartBackButton) return;
-
-    const isDomainView = !!activeDomain;
-
-    els.chartBackButton.classList.toggle("is-visible", isDomainView);
-
-    if (els.chartViewToggleWrap) {
-      els.chartViewToggleWrap.classList.toggle("is-hidden", isDomainView);
+    const isMatrixView = topLevelView === VIEW_MATRIX;
+    const activeDomainRecord = activeDomain ? getDomainById(activeDomain) : null;
+  
+    if (els.chartBackButton) {
+      els.chartBackButton.classList.toggle("is-visible", isMatrixView && !!activeDomainRecord);
     }
-
-    if (els.quadrantControlsWrap) {
-      els.quadrantControlsWrap.classList.toggle("is-hidden", !isDomainView);
+  
+    if (els.matrixFiltersWrap) {
+      els.matrixFiltersWrap.classList.toggle("is-hidden", !isMatrixView);
     }
-
+  
     if (!els.chartTitle || !els.chartInstruction) return;
-
-    if (isDomainView) {
-      const domain = getDomainById(activeDomain);
-      els.chartTitle.textContent = domain
-        ? `${domain.domain} · Skill Matrix`
+  
+    if (isMatrixView) {
+      els.chartTitle.textContent = activeDomainRecord
+        ? `${activeDomainRecord.domain} · Skill Matrix`
         : "Skill Matrix";
+  
       els.chartInstruction.textContent =
-        "Hover or tap any point to inspect the skill. Use Focus View to isolate quadrants.";
+        "Use Quadrant and Domain to inspect the skill matrix. Hover or tap any point to inspect a skill.";
     } else if (topLevelView === VIEW_PROFILE) {
       els.chartTitle.textContent = "Capability Profile by Domain";
       els.chartInstruction.textContent =
-        "Hover for detail. On touch devices, tap once to inspect and tap again to view the matrix.";
+        "Hover for detail. On touch devices, tap once to inspect and tap again to open the matrix.";
     } else {
       els.chartTitle.textContent = "Domain Distribution";
       els.chartInstruction.textContent =
-        "Hover for detail. On touch devices, tap once to inspect and tap again to view the matrix.";
+        "Hover for detail. On touch devices, tap once to inspect and tap again to open the matrix.";
     }
-
+  
     updateChartHelpContent();
+    updateMatrixContext();
+    updateDerivedInsight();
   }
 
   function buildChartViewToggle() {
     if (!els.chartViewToggle) return;
-
+  
     els.chartViewToggle.innerHTML = "";
-
+  
     const buttons = [
       { key: VIEW_PROFILE, label: "Capability Profile" },
       { key: VIEW_DISTRIBUTION, label: "Domain Distribution" },
-      { key: "quick-scan", label: "Quick Scan" }
+      { key: VIEW_MATRIX, label: "Matrix" }
     ];
-
+  
     buttons.forEach((button) => {
       const element = document.createElement("button");
       element.type = "button";
       element.className = "chart-view-btn";
       element.textContent = button.label;
-
-      if (button.key === topLevelView && button.key !== "quick-scan") {
+  
+      if (button.key === topLevelView) {
         element.classList.add("active");
       }
-
+  
       element.addEventListener("click", () => {
-        if (button.key === "quick-scan") {
-          openInventoryModal();
+        if (button.key === topLevelView && !(button.key === VIEW_MATRIX && activeDomain !== null)) {
           return;
         }
-
+  
         topLevelView = button.key;
-        activeDomain = null;
         selectedPointKey = null;
         hideTooltip();
         clearSelectedPoint();
+  
+        if (button.key === VIEW_MATRIX) {
+          activeDomain = null;
+          activeQuadrant = "all";
+        } else {
+          activeDomain = null;
+          activeQuadrant = "all";
+        }
+  
         buildChartToolbar();
         buildChartViewToggle();
-        buildExplorer();
+        buildQuadrantControls();
+        buildDomainSelect();
         renderChart();
       });
-
+  
       els.chartViewToggle.appendChild(element);
     });
   }
 
   function buildQuadrantControls() {
-    if (!els.quadrantControls) return;
-
-    els.quadrantControls.innerHTML = "";
-
-    QUADRANTS.forEach((quadrant) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "quadrant-btn";
-      button.textContent = quadrant.label;
-
-      if (quadrant.key === activeQuadrant) {
-        button.classList.add("active");
-      }
-
-      button.addEventListener("click", () => {
-        activeQuadrant = quadrant.key;
-        selectedPointKey = null;
-        hideTooltip();
-        buildQuadrantControls();
-        renderChart();
-      });
-
-      els.quadrantControls.appendChild(button);
-    });
+    if (!els.quadrantSelect) return;
+  
+    els.quadrantSelect.innerHTML = QUADRANTS.map((quadrant) => `
+      <option value="${quadrant.key}">${quadrant.label}</option>
+    `).join("");
+  
+    els.quadrantSelect.value = activeQuadrant;
   }
+
+function buildDomainSelect() {
+  if (!els.domainSelect) return;
+
+  els.domainSelect.innerHTML = `
+    <option value="">All Domains</option>
+    ${domains.map((domain) => `
+      <option value="${domain.domain_id}">${escapeHtml(domain.domain)} (${domain.skill_count})</option>
+    `).join("")}
+  `;
+
+  els.domainSelect.value = activeDomain ? String(activeDomain) : "";
+}
+
+function updateMatrixContext() {
+  if (!els.matrixContext) return;
+
+  if (topLevelView !== VIEW_MATRIX) {
+    els.matrixContext.classList.add("is-hidden");
+    els.matrixContext.textContent = "";
+    return;
+  }
+
+  const domainLabel = activeDomain
+    ? (getDomainById(activeDomain)?.domain || "Selected Domain")
+    : "All Domains";
+
+  const quadrantLabel = QUADRANTS.find((quadrant) => quadrant.key === activeQuadrant)?.label || "All";
+
+  els.matrixContext.textContent = `Viewing: ${domainLabel} • ${quadrantLabel}`;
+  els.matrixContext.classList.remove("is-hidden");
+}
+
+function updateDerivedInsight() {
+  if (!els.derivedTitle || !els.derivedCopy || !els.derivedDerivation) return;
+
+  const content = DERIVED_INSIGHT_CONTENT[topLevelView] || DERIVED_INSIGHT_CONTENT[VIEW_PROFILE];
+
+  els.derivedTitle.textContent = content.title;
+  els.derivedCopy.innerHTML = `
+    <ul>
+      ${content.copy.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    </ul>
+  `;
+  els.derivedDerivation.textContent = content.derivation;
+}
 
   /* =========================
      EXPLORER
@@ -674,26 +752,31 @@ function getPlotHeight() {
   }
 
   function openDomain(domainId) {
+    topLevelView = VIEW_MATRIX;
     activeDomain = Number(domainId);
     activeQuadrant = "all";
     selectedPointKey = null;
     hideTooltip();
+  
     buildChartToolbar();
+    buildChartViewToggle();
     buildQuadrantControls();
-    buildExplorer();
+    buildDomainSelect();
     renderChart();
     scrollChartCardToTop();
   }
-
+  
   function returnToDomainOverview() {
+    topLevelView = VIEW_PROFILE;
     activeDomain = null;
     activeQuadrant = "all";
     selectedPointKey = null;
     hideTooltip();
+  
     buildChartToolbar();
-    buildQuadrantControls();
     buildChartViewToggle();
-    buildExplorer();
+    buildQuadrantControls();
+    buildDomainSelect();
     renderChart();
   }
 
@@ -708,88 +791,83 @@ function getPlotHeight() {
   ========================= */
 
   function getChartHelpContent() {
-  if (activeDomain) {
+    if (topLevelView === VIEW_MATRIX) {
+      return {
+        title: "How to read the skill matrix",
+        body: `
+          <div class="chart-help-section">
+            <strong>What this view shows</strong>
+            <p>Each point is a skill. Use Domain to inspect one domain or keep All Domains selected for the full matrix.</p>
+          </div>
+  
+          <div class="chart-help-section">
+            <strong>X-axis: Depth (1–4)</strong>
+            <p>How deeply the capability is understood and used.</p>
+          </div>
+  
+          <div class="chart-help-section">
+            <strong>Y-axis: Experience (0–3)</strong>
+            <p>How much real-world application and ownership is evidenced.</p>
+          </div>
+  
+          <div class="chart-help-section">
+            <strong>How to use it</strong>
+            <p>Use Quadrant to isolate concentration zones and Domain to narrow the matrix to a specific capability area.</p>
+          </div>
+        `
+      };
+    }
+  
+    if (topLevelView === VIEW_PROFILE) {
+      return {
+        title: "How to read the capability profile",
+        body: `
+          <div class="chart-help-section">
+            <strong>What this view shows</strong>
+            <p>Each bar is one domain and always totals 100%.</p>
+          </div>
+  
+          <div class="chart-help-section">
+            <strong>Skill Depth Segments</strong>
+            <ul>
+              <li><span class="help-dot low"></span> Foundational → supporting skills</li>
+              <li><span class="help-dot moderate"></span> Moderate → growing applied capability</li>
+              <li><span class="help-dot high"></span> Expertise → deepest concentration</li>
+            </ul>
+          </div>
+  
+          <div class="chart-help-section">
+            <strong>How to use it</strong>
+            <p>Use this view to understand capability shape. Hover to inspect. On touch devices, tap once to inspect and tap again to open the matrix.</p>
+          </div>
+        `
+      };
+    }
+  
     return {
-      title: "How to read the skill matrix",
+      title: "How to read the domain distribution",
       body: `
         <div class="chart-help-section">
-          <strong>What this view shows</strong>
-          <p>Each point is a skill within the selected domain.</p>
+          <strong>What you’re seeing</strong>
+          <p>Each bar represents a domain. Longer bar = greater overall breadth.</p>
         </div>
-
+  
         <div class="chart-help-section">
-          <strong>X-axis: Depth (1–4)</strong>
-          <p>How deeply the capability is understood and used.</p>
-        </div>
-
-        <div class="chart-help-section">
-          <strong>Y-axis: Experience (0–3)</strong>
-          <p>How much real-world application and ownership is evidenced.</p>
-        </div>
-
-        <div class="chart-help-section">
-          <strong>How to use it</strong>
-          <p>Top-right = strongest ownership.<br>Bottom-left = foundational awareness.<br>Hover to inspect. On touch devices, tap to inspect.</p>
-        </div>
-
-        <div class="chart-help-section">
-          <strong>Tip</strong>
-          <p>Use Focus View to isolate quadrants and inspect strengths.</p>
-        </div>
-      `
-    };
-  }
-
-  if (topLevelView === VIEW_PROFILE) {
-    return {
-      title: "How to read the capability profile",
-      body: `
-        <div class="chart-help-section">
-          <strong>What this view shows</strong>
-          <p>Each bar is one domain and always totals 100%.</p>
-        </div>
-
-        <div class="chart-help-section">
-          <strong>Skill Depth Segments</strong>
+          <strong>Skill depth segments</strong>
           <ul>
-            <li><span class="help-dot low"></span> Foundational → supporting skills</li>
-            <li><span class="help-dot moderate"></span> Moderate → growing applied capability</li>
-            <li><span class="help-dot high"></span> Expertise → deepest concentration</li>
+            <li><span class="help-dot low"></span> Foundational → awareness</li>
+            <li><span class="help-dot moderate"></span> Moderate → applied/conceptual</li>
+            <li><span class="help-dot high"></span> Expertise → expert-level capability</li>
           </ul>
         </div>
-
+  
         <div class="chart-help-section">
           <strong>How to use it</strong>
-          <p>Use this view to understand capability shape. Hover to inspect. On touch devices, tap once to inspect and tap again to open the domain skill matrix.</p>
+          <p>Use this view to understand absolute breadth by domain. Hover to inspect. On touch devices, tap once to inspect and tap again to open the matrix.</p>
         </div>
       `
     };
   }
-
-  return {
-    title: "How to read the domain distribution",
-    body: `
-      <div class="chart-help-section">
-        <strong>What you’re seeing</strong>
-        <p>Each bar represents a domain. Longer bar = greater overall breadth.</p>
-      </div>
-
-      <div class="chart-help-section">
-        <strong>Skill depth segments</strong>
-        <ul>
-          <li><span class="help-dot low"></span> Foundational → awareness</li>
-          <li><span class="help-dot moderate"></span> Moderate → applied/conceptual</li>
-          <li><span class="help-dot high"></span> Expertise → expert-level capability</li>
-        </ul>
-      </div>
-
-      <div class="chart-help-section">
-        <strong>How to use it</strong>
-        <p>Use this view to understand absolute breadth by domain. Hover to inspect. On touch devices, tap once to inspect and tap again to open the domain skill matrix.</p>
-      </div>
-    `
-  };
-}
 
   function updateChartHelpContent() {
     if (!els.chartHelpTitle || !els.chartHelpBody) return;
@@ -1207,27 +1285,30 @@ function getPlotHeight() {
       els.chart.innerHTML = "<p>Plotly is required for Capability Insights.</p>";
       return;
     }
-
+  
     buildChartToolbar();
-
+    buildQuadrantControls();
+    buildDomainSelect();
+    updateDerivedInsight();
+  
     currentPlotHeight = getPlotHeight();
     els.chart.style.height = `${currentPlotHeight}px`;
-
+  
     if (activeGraphDiv) {
       window.Plotly.purge(els.chart);
       activeGraphDiv = null;
     }
-
-    if (activeDomain) {
+  
+    if (topLevelView === VIEW_MATRIX) {
       renderSkillChart();
       return;
     }
-
+  
     if (topLevelView === VIEW_PROFILE) {
       renderProfileChart();
       return;
     }
-
+  
     renderDomainChart();
   }
   
@@ -1459,11 +1540,9 @@ function getPlotHeight() {
   }
 
   function renderSkillChart() {
-    const domain = getDomainById(activeDomain);
-    const activeRange = QUADRANT_RANGES[activeQuadrant] || QUADRANT_RANGES.all;
-    const items = spreadSkillPoints(getSkillsForDomain(activeDomain), activeQuadrant);
+    const items = spreadSkillPoints(getMatrixSkills(), activeQuadrant);
     const showQuadrantScaffold = activeQuadrant === "all";
-
+  
     const trace = {
       type: "scatter",
       mode: "markers",
@@ -1485,7 +1564,9 @@ function getPlotHeight() {
         }
       }
     };
-
+  
+    const activeRange = QUADRANT_RANGES[activeQuadrant] || QUADRANT_RANGES.all;
+  
     const layout = {
       height: currentPlotHeight,
       margin: { t: 18, r: 22, b: 58, l: 60 },
@@ -1504,83 +1585,41 @@ function getPlotHeight() {
           text: "Depth of Understanding",
           standoff: AXIS_TITLE_STANDOFF
         },
-        showspikes: false,
-        zeroline: false,
-        gridcolor: "rgba(19,37,63,0.08)"
+        gridcolor: "rgba(19,37,63,0.08)",
+        zeroline: false
       },
       yaxis: {
         range: activeRange.y,
         tickvals: [0, 1, 2, 3],
         ticktext: ["0", "1", "2", "3"],
         title: {
-          text: "Practical Experience",
+          text: "Experience",
           standoff: AXIS_TITLE_STANDOFF
         },
-        showspikes: false,
-        zeroline: false,
-        gridcolor: "rgba(19,37,63,0.08)"
+        gridcolor: "rgba(19,37,63,0.08)",
+        zeroline: false
       },
       shapes: showQuadrantScaffold ? [
         {
-          type: "rect",
-          xref: "x",
-          yref: "y",
-          x0: 0.5, x1: 2.5,
-          y0: 1.5, y1: 3.15,
-          fillcolor: "rgba(95,114,137,0.035)",
-          line: { width: 0 },
-          layer: "below"
-        },
-        {
-          type: "rect",
-          xref: "x",
-          yref: "y",
-          x0: 2.5, x1: 4.28,
-          y0: 1.5, y1: 3.15,
-          fillcolor: "rgba(95,114,137,0.035)",
-          line: { width: 0 },
-          layer: "below"
-        },
-        {
-          type: "rect",
-          xref: "x",
-          yref: "y",
-          x0: 0.5, x1: 2.5,
-          y0: -0.08, y1: 1.5,
-          fillcolor: "rgba(95,114,137,0.02)",
-          line: { width: 0 },
-          layer: "below"
-        },
-        {
-          type: "rect",
-          xref: "x",
-          yref: "y",
-          x0: 2.5, x1: 4.28,
-          y0: -0.08, y1: 1.5,
-          fillcolor: "rgba(95,114,137,0.02)",
-          line: { width: 0 },
-          layer: "below"
-        },
-        {
           type: "line",
-          xref: "x",
-          yref: "y",
-          x0: 2.5, x1: 2.5,
-          y0: -0.08, y1: 3.15,
+          x0: 2.5,
+          x1: 2.5,
+          y0: activeRange.y[0],
+          y1: activeRange.y[1],
           line: { color: "#d2dbe7", width: 2 }
         },
         {
           type: "line",
-          xref: "x",
-          yref: "y",
-          x0: 0.5, x1: 4.28,
-          y0: 1.5, y1: 1.5,
+          x0: activeRange.x[0],
+          x1: activeRange.x[1],
+          y0: 1.5,
+          y1: 1.5,
           line: { color: "#d2dbe7", width: 2 }
         }
       ] : [],
-      annotations: getQuadrantAnnotations(domain, showQuadrantScaffold)
+      annotations: getQuadrantAnnotations(null, showQuadrantScaffold)
     };
-
+  
     Plotly.newPlot(els.chart, [trace], layout, {
       displayModeBar: false,
       responsive: true
@@ -1755,30 +1794,52 @@ function getPlotHeight() {
         returnToDomainOverview();
       });
     }
-
+  
     if (!initialized && els.chartHelpButton) {
       els.chartHelpButton.addEventListener("click", (event) => {
         event.stopPropagation();
         toggleChartHelp();
       });
     }
-
+  
     if (!initialized && els.chartHelpPopover) {
       els.chartHelpPopover.addEventListener("click", (event) => {
         event.stopPropagation();
       });
     }
-
+  
     if (!initialized && els.scoringHelpButton) {
       els.scoringHelpButton.addEventListener("click", (event) => {
         event.stopPropagation();
         toggleScoringHelp();
       });
     }
-
+  
     if (!initialized && els.scoringHelpPopover) {
       els.scoringHelpPopover.addEventListener("click", (event) => {
         event.stopPropagation();
+      });
+    }
+  
+    if (!initialized && els.quadrantSelect) {
+      els.quadrantSelect.addEventListener("change", () => {
+        activeQuadrant = els.quadrantSelect.value || "all";
+        selectedPointKey = null;
+        hideTooltip();
+        buildQuadrantControls();
+        updateMatrixContext();
+        renderChart();
+      });
+    }
+  
+    if (!initialized && els.domainSelect) {
+      els.domainSelect.addEventListener("change", () => {
+        activeDomain = els.domainSelect.value ? Number(els.domainSelect.value) : null;
+        selectedPointKey = null;
+        hideTooltip();
+        buildDomainSelect();
+        updateMatrixContext();
+        renderChart();
       });
     }
   }
