@@ -3807,11 +3807,11 @@ body {
 }
 
 .insights-dashboard-row--wide-left {
-  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.95fr);
+  grid-template-columns: minmax(0, 3.6fr) minmax(300px, 0.95fr);
 }
 
 .insights-dashboard-row--wide-right {
-  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2.14fr);
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2.27fr);
 }
 
 .insights-dashboard-row--wide-left,
@@ -4136,7 +4136,7 @@ body {
 }
 
 .distribution-bar-segment {
-  min-height: 38px;
+  min-height: 60px;
   border: none;
   cursor: pointer;
 }
