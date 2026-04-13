@@ -635,15 +635,62 @@ body.modal-open {
 }
 
 @media (min-width: 1101px) {
+  .capability-chart-panel {
+    min-height: 0;
+  }
+
+  .chart-card.capability-chart-card {
+    min-height: 640px;
+  }
+
+  .chart-toolbar {
+    min-height: 138px;
+    align-items: flex-start;
+  }
+
+  .chart-toolbar-left {
+    min-height: 92px;
+    align-content: start;
+  }
+
   .chart-toolbar-actions {
-    min-height: 68px;
+    min-height: 138px;
+    justify-content: space-between;
+  }
+
+  .chart-view-toggle-wrap {
+    min-height: 62px;
     justify-content: flex-start;
   }
 
-  .chart-view-toggle-wrap,
-  .quadrant-controls-wrap {
-    min-height: 68px;
-    justify-content: flex-start;
+  .matrix-filters-wrap {
+    min-height: 74px;
+    align-content: start;
+  }
+
+  .matrix-filters-wrap.is-hidden {
+    display: grid;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .matrix-context-line {
+    min-height: 22px;
+    margin: 10px 0 6px;
+  }
+
+  .matrix-context-line.is-hidden {
+    display: block;
+    visibility: hidden;
+  }
+
+  .capability-derived-panel .insight-observed-title-row {
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .capability-derived-panel .insight-observed-card h3 {
+    white-space: nowrap;
   }
 }
 
@@ -1486,47 +1533,6 @@ body.modal-open {
 
 .matrix-context-line.is-hidden {
   display: none;
-}
-
-@media (min-width: 1101px) {
-  .chart-toolbar {
-    min-height: 126px;
-    align-items: flex-start;
-  }
-
-  .chart-toolbar-actions {
-    min-height: 126px;
-    justify-content: space-between;
-  }
-
-  .matrix-filters-wrap {
-    min-height: 66px;
-    align-content: start;
-  }
-
-  .matrix-filters-wrap.is-hidden {
-    display: grid;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  .matrix-context-line {
-    min-height: 20px;
-  }
-
-  .matrix-context-line.is-hidden {
-    display: block;
-    visibility: hidden;
-  }
-
-  .capability-derived-panel .insight-observed-title-row {
-    gap: 10px;
-    flex-wrap: nowrap;
-  }
-
-  .capability-derived-panel .insight-observed-card h3 {
-    white-space: nowrap;
-  }
 }
 
 @media (max-width: 1100px) {
