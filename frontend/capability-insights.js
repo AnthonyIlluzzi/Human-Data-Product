@@ -528,14 +528,16 @@ function getTargetChartCardHeight() {
   const workspaceRect = workspace?.getBoundingClientRect();
 
   const viewportHeight = window.innerHeight;
-  const bottomBuffer = isMobile ? 12 : isTablet ? 16 : 12;
+
+  const topBuffer = isMobile ? 0 : 0;
+  const bottomBuffer = isMobile ? 12 : isTablet ? 16 : 8;
 
   const availableViewportHeight = workspaceRect
-    ? Math.floor(viewportHeight - workspaceRect.top - bottomBuffer)
+    ? Math.floor(viewportHeight - workspaceRect.top - topBuffer - bottomBuffer)
     : null;
 
-  const minCardHeight = isMobile ? 420 : isTablet ? 480 : 500;
-  const maxCardHeight = isMobile ? 420 : isTablet ? 540 : 596;
+  const minCardHeight = isMobile ? 420 : isTablet ? 500 : 640;
+  const maxCardHeight = isMobile ? 420 : isTablet ? 560 : 760;
 
   if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
     return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
