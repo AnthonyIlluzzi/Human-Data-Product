@@ -509,88 +509,44 @@ function getMatrixSkills() {
 
   return filterSkillsByQuadrant(baseItems);
 }
-
-function getMatrixFilterReserveHeight() {
-  if (!els.matrixFiltersWrap) return 0;
-
-  const wrap = els.matrixFiltersWrap;
-  const wasHidden = wrap.classList.contains("is-hidden");
-  const previousVisibility = wrap.style.visibility;
-  const previousPosition = wrap.style.position;
-  const previousPointerEvents = wrap.style.pointerEvents;
-  const previousDisplay = wrap.style.display;
-
-  if (wasHidden) {
-    wrap.classList.remove("is-hidden");
-    wrap.style.visibility = "hidden";
-    wrap.style.position = "absolute";
-    wrap.style.pointerEvents = "none";
-    wrap.style.display = "grid";
-  }
-
-  const measuredHeight = Math.ceil(wrap.getBoundingClientRect().height || 0);
-
-  if (wasHidden) {
-    wrap.classList.add("is-hidden");
-    wrap.style.visibility = previousVisibility;
-    wrap.style.position = previousPosition;
-    wrap.style.pointerEvents = previousPointerEvents;
-    wrap.style.display = previousDisplay;
-  }
-
-  return measuredHeight > 0 ? measuredHeight + 12 : 0;
-}
   
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
   const isTablet = window.innerWidth <= 1100 && !isMobile;
-  const nonMatrixBoost = topLevelView === VIEW_MATRIX ? 0 : (isMobile ? 12 : isTablet ? 18 : 28);
+
+  const workspace = els.chart?.closest(".capability-workspace");
+  const workspaceRect = workspace?.getBoundingClientRect();
+
+  const viewportHeight = window.innerHeight;
+  const bottomMargin = isMobile ? 12 : 20;
+  const availableViewportHeight = workspaceRect
+    ? viewportHeight - workspaceRect.top - bottomMargin
+    : null;
+
+  const toolbarAllowance = isMobile ? 132 : isTablet ? 142 : 150;
+  const matrixControlPenalty = topLevelView === VIEW_MATRIX ? (isMobile ? 46 : isTablet ? 54 : 62) : 0;
+
+  const minHeight = isMobile ? 360 : isTablet ? 420 : 500;
+  const maxHeight = isMobile ? 420 : isTablet ? 500 : 560;
+
+  if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
+    const nextHeight =
+      availableViewportHeight -
+      toolbarAllowance -
+      matrixControlPenalty;
+
+    return Math.round(clamp(nextHeight, minHeight, maxHeight));
+  }
 
   if (isMobile) {
-    return 452 + nonMatrixBoost;
+    return topLevelView === VIEW_MATRIX ? 374 : 420;
   }
 
   if (isTablet) {
-    return 548 + nonMatrixBoost;
+    return topLevelView === VIEW_MATRIX ? 446 : 500;
   }
 
-  const workspace = els.chart?.closest(".capability-workspace");
-  const chartCard = els.chart?.closest(".capability-chart-card");
-  const toolbar = chartCard?.querySelector(".chart-toolbar");
-
-  const desktopTrim = 14;
-
-  if (chartCard && toolbar) {
-    const chartCardStyle = getComputedStyle(chartCard);
-    const paddingTop = parseFloat(chartCardStyle.paddingTop) || 0;
-    const paddingBottom = parseFloat(chartCardStyle.paddingBottom) || 0;
-
-    const availableHeight =
-      chartCard.offsetHeight -
-      toolbar.offsetHeight -
-      paddingTop -
-      paddingBottom -
-      desktopTrim;
-
-    if (Number.isFinite(availableHeight) && availableHeight > 600) {
-      return Math.round(availableHeight + nonMatrixBoost);
-    }
-  }
-
-  const workspaceRect = workspace?.getBoundingClientRect();
-  if (workspaceRect) {
-    const viewportHeight = window.innerHeight;
-    const bottomMargin = 24;
-    const viewportTrim = 56;
-    const availableViewportHeight =
-      viewportHeight - workspaceRect.top - bottomMargin - viewportTrim;
-
-    if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 640) {
-      return Math.round(availableViewportHeight + nonMatrixBoost);
-    }
-  }
-
-  return 688 + nonMatrixBoost;
+  return topLevelView === VIEW_MATRIX ? 498 : 560;
 }
   
   /* =========================
