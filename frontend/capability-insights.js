@@ -544,14 +544,14 @@ function getMatrixFilterReserveHeight() {
 function getPlotHeight() {
   const isMobile = window.innerWidth <= 720;
   const isTablet = window.innerWidth <= 1100 && !isMobile;
-  const reserveHeight = topLevelView === VIEW_MATRIX ? 0 : getMatrixFilterReserveHeight();
+  const nonMatrixBoost = topLevelView === VIEW_MATRIX ? 0 : (isMobile ? 12 : isTablet ? 18 : 28);
 
   if (isMobile) {
-    return 452 + reserveHeight;
+    return 452 + nonMatrixBoost;
   }
 
   if (isTablet) {
-    return 548 + reserveHeight;
+    return 548 + nonMatrixBoost;
   }
 
   const workspace = els.chart?.closest(".capability-workspace");
@@ -573,7 +573,7 @@ function getPlotHeight() {
       desktopTrim;
 
     if (Number.isFinite(availableHeight) && availableHeight > 600) {
-      return Math.round(availableHeight + reserveHeight);
+      return Math.round(availableHeight + nonMatrixBoost);
     }
   }
 
@@ -586,11 +586,11 @@ function getPlotHeight() {
       viewportHeight - workspaceRect.top - bottomMargin - viewportTrim;
 
     if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 640) {
-      return Math.round(availableViewportHeight + reserveHeight);
+      return Math.round(availableViewportHeight + nonMatrixBoost);
     }
   }
 
-  return 688 + reserveHeight;
+  return 688 + nonMatrixBoost;
 }
   
   /* =========================
