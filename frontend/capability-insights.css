@@ -4,7 +4,7 @@
 }
 
 .capability-insights-instructions-card {
-  padding: 10px 18px 12px;
+  padding: 8px 18px 12px;
   background: linear-gradient(180deg, #fbfdff 0%, #f3f8fe 100%);
   border: 1px solid rgba(10, 110, 209, 0.10);
   border-radius: 18px;
@@ -1415,7 +1415,7 @@ body.modal-open {
 .capability-instructions-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: start;
   gap: 16px;
 }
 
