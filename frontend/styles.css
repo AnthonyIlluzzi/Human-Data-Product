@@ -2567,6 +2567,10 @@ body {
   gap: 10px;
 }
 
+.feedback-evidence-record-list {
+  margin-top: 16px;
+}
+
 .feedback-approach-toggle {
   display: flex;
   align-items: center;
