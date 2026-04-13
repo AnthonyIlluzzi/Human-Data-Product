@@ -515,11 +515,11 @@ function getPlotHeight() {
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
   if (isMobile) {
-    return activeDomain ? 452 : 436;
+    return 452;
   }
 
   if (isTablet) {
-    return activeDomain ? 548 : 532;
+    return 548;
   }
 
   const workspace = els.chart?.closest(".capability-workspace");
@@ -549,7 +549,7 @@ function getPlotHeight() {
   if (workspaceRect) {
     const viewportHeight = window.innerHeight;
     const bottomMargin = 24;
-    const viewportTrim = activeDomain ? 56 : 44;
+    const viewportTrim = 56;
     const availableViewportHeight =
       viewportHeight - workspaceRect.top - bottomMargin - viewportTrim;
 
@@ -558,7 +558,7 @@ function getPlotHeight() {
     }
   }
 
-  return activeDomain ? 688 : 700;
+  return 688;
 }
   
   /* =========================
