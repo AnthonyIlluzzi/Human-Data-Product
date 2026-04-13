@@ -510,7 +510,17 @@ function getMatrixSkills() {
   return filterSkillsByQuadrant(baseItems);
 }
   
-function getPlotHeight() {
+function getElementHeight(element) {
+  if (!element) return 0;
+
+  if (element.classList?.contains("is-hidden")) {
+    return 0;
+  }
+
+  return Math.ceil(element.getBoundingClientRect().height || 0);
+}
+
+function getTargetChartCardHeight() {
   const isMobile = window.innerWidth <= 720;
   const isTablet = window.innerWidth <= 1100 && !isMobile;
 
@@ -518,35 +528,50 @@ function getPlotHeight() {
   const workspaceRect = workspace?.getBoundingClientRect();
 
   const viewportHeight = window.innerHeight;
-  const bottomMargin = isMobile ? 12 : 20;
+  const bottomMargin = isMobile ? 10 : 16;
   const availableViewportHeight = workspaceRect
     ? viewportHeight - workspaceRect.top - bottomMargin
     : null;
 
-  const toolbarAllowance = isMobile ? 132 : isTablet ? 142 : 150;
-  const matrixControlPenalty = topLevelView === VIEW_MATRIX ? (isMobile ? 46 : isTablet ? 54 : 62) : 0;
-
-  const minHeight = isMobile ? 360 : isTablet ? 420 : 500;
-  const maxHeight = isMobile ? 420 : isTablet ? 500 : 560;
+  const minCardHeight = isMobile ? 420 : isTablet ? 500 : 560;
+  const maxCardHeight = isMobile ? 420 : isTablet ? 500 : 560;
 
   if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
-    const nextHeight =
-      availableViewportHeight -
-      toolbarAllowance -
-      matrixControlPenalty;
-
-    return Math.round(clamp(nextHeight, minHeight, maxHeight));
+    return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
   }
 
-  if (isMobile) {
-    return topLevelView === VIEW_MATRIX ? 374 : 420;
-  }
+  return maxCardHeight;
+}
+  
+function getPlotHeight() {
+  const isMobile = window.innerWidth <= 720;
+  const isTablet = window.innerWidth <= 1100 && !isMobile;
 
-  if (isTablet) {
-    return topLevelView === VIEW_MATRIX ? 446 : 500;
-  }
+  const chartCard = els.chart?.closest(".capability-chart-card");
+  const toolbar = chartCard?.querySelector(".chart-toolbar");
 
-  return topLevelView === VIEW_MATRIX ? 498 : 560;
+  const chartCardStyle = chartCard ? getComputedStyle(chartCard) : null;
+  const paddingTop = chartCardStyle ? parseFloat(chartCardStyle.paddingTop) || 0 : 0;
+  const paddingBottom = chartCardStyle ? parseFloat(chartCardStyle.paddingBottom) || 0 : 0;
+
+  const toolbarHeight = getElementHeight(toolbar);
+  const matrixContextHeight = getElementHeight(els.matrixContext);
+
+  const innerTrim = isMobile ? 10 : 12;
+  const targetCardHeight = getTargetChartCardHeight();
+
+  const plotHeight =
+    targetCardHeight -
+    paddingTop -
+    paddingBottom -
+    toolbarHeight -
+    matrixContextHeight -
+    innerTrim;
+
+  const minPlotHeight = isMobile ? 300 : isTablet ? 360 : 420;
+  const maxPlotHeight = isMobile ? 320 : isTablet ? 400 : 470;
+
+  return Math.round(clamp(plotHeight, minPlotHeight, maxPlotHeight));
 }
   
   /* =========================
