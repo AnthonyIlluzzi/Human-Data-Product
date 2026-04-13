@@ -29,13 +29,13 @@
       derivation: "Based on absolute skill counts by domain and depth tier, showing where capability breadth and depth are most concentrated."
     },
     [VIEW_MATRIX]: {
-      title: "Skill depth & experience pattern",
-      copy: [
-        "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
-        "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
-      ],
-      derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
-    }
+    title: "Depth and experience pattern",
+    copy: [
+      "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
+      "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
+    ],
+    derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
+  }
   };
   
   const MATRIX_POINT_COLOR = "#6fa3e6";
@@ -528,14 +528,14 @@ function getTargetChartCardHeight() {
   const workspaceRect = workspace?.getBoundingClientRect();
 
   const viewportHeight = window.innerHeight;
-  const bottomBuffer = isMobile ? 12 : 20;
+  const bottomBuffer = isMobile ? 12 : isTablet ? 16 : 12;
 
   const availableViewportHeight = workspaceRect
     ? Math.floor(viewportHeight - workspaceRect.top - bottomBuffer)
     : null;
 
   const minCardHeight = isMobile ? 420 : isTablet ? 480 : 500;
-  const maxCardHeight = isMobile ? 420 : isTablet ? 520 : 552;
+  const maxCardHeight = isMobile ? 420 : isTablet ? 540 : 596;
 
   if (Number.isFinite(availableViewportHeight) && availableViewportHeight > 0) {
     return Math.round(clamp(availableViewportHeight, minCardHeight, maxCardHeight));
