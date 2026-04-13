@@ -29,7 +29,7 @@
       derivation: "Based on absolute skill counts by domain and depth tier, showing where capability breadth and depth are most concentrated."
     },
     [VIEW_MATRIX]: {
-    title: "Depth and experience pattern",
+    title: "Depth & experience pattern",
     copy: [
       "Most skills cluster in Expertise and Emerging zones, indicating strong depth with continued expansion into adjacent areas.",
       "Limited presence in Passive and Foundational areas reflects a portfolio built on applied, production-level experience."
