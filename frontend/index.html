@@ -7,6 +7,15 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="capability-insights.css" />
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NDMHNV4QGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NDMHNV4QGX');
+</script>
 </head>
 <body>
   <!-- Landing / Catalog Page -->
@@ -236,13 +245,15 @@
         <div class="about-modal-action-block">
           <p class="about-modal-action-label">Take a look under the hood:</p>
           <a
-            class="btn-primary link-btn about-modal-action-btn"
-            href="https://github.com/AnthonyIlluzzi/Human-Data-Product"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View GitHub Repository
-          </a>
+			  class="btn-primary link-btn about-modal-action-btn"
+			  href="https://github.com/AnthonyIlluzzi/Human-Data-Product"
+			  target="_blank"
+			  rel="noopener noreferrer"
+			  id="github-repo-link"
+			  data-github-location="repo"
+			>
+			  View GitHub Repository
+			</a>
         </div>
       </div>
     </div>
@@ -303,14 +314,15 @@
 
           <div class="button-column">
   <a
-    class="btn-primary link-btn"
-    href="assets/Anthony-Illuzzi-Enterprise-Data-Platform-Strategy.pdf"
-    id="resume-link"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Download Resume
-  </a>
+	  class="btn-primary link-btn"
+	  href="assets/Anthony-Illuzzi-Enterprise-Data-Platform-Strategy.pdf"
+	  id="resume-link"
+	  data-github-location="resume"
+	  target="_blank"
+	  rel="noopener noreferrer"
+	>
+	  Download Resume
+	</a>
 
   <a
     class="btn-secondary link-btn"
@@ -655,6 +667,7 @@
 	  <a
 	    class="doc-link-btn"
 	    href="documentation/human_data_product_contract.html"
+		data-doc-type="data_contract"
 	    target="_blank"
 	    rel="noopener noreferrer"
 	  >
@@ -670,6 +683,7 @@
 	  <a
 	    class="doc-link-btn"
 	    href="documentation/hdp_schema.html"
+		data-doc-type="schema"
 	    target="_blank"
 	    rel="noopener noreferrer"
 	  >
@@ -685,6 +699,7 @@
 	  <a
 	    class="doc-link-btn"
 	    href="documentation/hdp_api_specs.html"
+		data-doc-type="api_specs"
 	    target="_blank"
 	    rel="noopener noreferrer"
 	  >
@@ -879,6 +894,7 @@ LIMIT 1;"
 		    <a
 		      class="doc-link-btn"
 		      href="documentation/hdp_schema.html"
+			  data-doc-type="schema"
 		      target="_blank"
 		      rel="noopener noreferrer"
 		    >
@@ -971,6 +987,7 @@ LIMIT 1;"
 		    <a
 		      class="doc-link-btn"
 		      href="documentation/hdp_api_specs.html"
+			  data-doc-type="api_specs"
 		      target="_blank"
 		      rel="noopener noreferrer"
 		    >
