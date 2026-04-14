@@ -406,8 +406,6 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
 
   if (resolvedTabId) {
     activateTab(resolvedTabId);
-  }
-  if (resolvedTabId) {
     trackInsightsTabView(resolvedTabId);
   }
 
