@@ -16,6 +16,137 @@ const DEFAULT_API_OUTPUT_MESSAGE = "Execute an endpoint to populate this area.";
 const DEFAULT_INSIGHTS_TAB_ID = "visualizations-tab";
 const DEFAULT_VALUE_DISTRIBUTION_DIMENSION = "solution_type";
 
+const GA_EVENT_NAMES = {
+  VIEW_OVERVIEW: "view_overview",
+  VIEW_VALUE_INSIGHTS: "view_value_insights",
+  VIEW_CAPABILITY_INSIGHTS: "view_capability_insights",
+  VIEW_OPPORTUNITY_INSIGHTS: "view_opportunity_insights",
+  VIEW_SQL_WORKSPACE: "view_sql_workspace",
+  VIEW_API_WORKSPACE: "view_api_workspace",
+  VIEW_DOCUMENTATION: "view_documentation",
+  CLICK_LINKEDIN: "click_linkedin",
+  CLICK_GITHUB: "click_github",
+  EXECUTE_SQL_QUERY: "execute_sql_query",
+  EXECUTE_API_CALL: "execute_api_call",
+  PERSONA_SIGNAL: "persona_signal",
+  INTEREST_SIGNAL: "interest_signal"
+};
+
+const sessionAnalyticsState = {
+  trackedViews: new Set(),
+  hasTechnicalEngagement: false,
+  hasMeaningfulEngagement: false,
+  hasProfessionalFollowup: false,
+  personaSignalFired: false,
+  interestSignalFired: false,
+  sqlWorkspaceViewed: false,
+  apiWorkspaceViewed: false
+};
+
+function analyticsEnabled() {
+  return typeof window.gtag === "function";
+}
+
+function trackEvent(eventName, params = {}) {
+  if (!analyticsEnabled()) return;
+  window.gtag("event", eventName, params);
+}
+
+function trackViewOnce(eventName, params = {}) {
+  if (sessionAnalyticsState.trackedViews.has(eventName)) return;
+  sessionAnalyticsState.trackedViews.add(eventName);
+  trackEvent(eventName, params);
+}
+
+function markTechnicalEngagement() {
+  sessionAnalyticsState.hasTechnicalEngagement = true;
+
+  if (!sessionAnalyticsState.personaSignalFired) {
+    trackEvent(GA_EVENT_NAMES.PERSONA_SIGNAL, { type: "technical" });
+    sessionAnalyticsState.personaSignalFired = true;
+  }
+}
+
+function markMeaningfulEngagement() {
+  sessionAnalyticsState.hasMeaningfulEngagement = true;
+  evaluateInterestSignal();
+}
+
+function markProfessionalFollowup() {
+  sessionAnalyticsState.hasProfessionalFollowup = true;
+  evaluateInterestSignal();
+}
+
+function evaluateInterestSignal() {
+  if (sessionAnalyticsState.interestSignalFired) return;
+  if (!sessionAnalyticsState.hasMeaningfulEngagement) return;
+  if (!sessionAnalyticsState.hasProfessionalFollowup) return;
+
+  trackEvent(GA_EVENT_NAMES.INTEREST_SIGNAL);
+  sessionAnalyticsState.interestSignalFired = true;
+}
+
+function bindAnalyticsLinks() {
+  document.getElementById("linkedin-link")?.addEventListener("click", () => {
+    trackEvent(GA_EVENT_NAMES.CLICK_LINKEDIN);
+    markProfessionalFollowup();
+  });
+
+  document.getElementById("resume-link")?.addEventListener("click", () => {
+    trackEvent(GA_EVENT_NAMES.CLICK_GITHUB, { location: "resume" });
+    markProfessionalFollowup();
+  });
+
+  document.getElementById("github-repo-link")?.addEventListener("click", () => {
+    trackEvent(GA_EVENT_NAMES.CLICK_GITHUB, { location: "repo" });
+    markTechnicalEngagement();
+  });
+
+  document.querySelectorAll(".doc-link-btn[data-doc-type]").forEach(link => {
+    link.addEventListener("click", () => {
+      trackEvent(GA_EVENT_NAMES.VIEW_DOCUMENTATION, {
+        doc_type: link.dataset.docType
+      });
+    });
+  });
+}
+
+function trackPanelView(panelId) {
+  if (panelId === "overview-panel") {
+    trackViewOnce(GA_EVENT_NAMES.VIEW_OVERVIEW);
+    return;
+  }
+
+  if (panelId === "sql-panel" && !sessionAnalyticsState.sqlWorkspaceViewed) {
+    sessionAnalyticsState.sqlWorkspaceViewed = true;
+    trackViewOnce(GA_EVENT_NAMES.VIEW_SQL_WORKSPACE);
+    return;
+  }
+
+  if (panelId === "api-panel" && !sessionAnalyticsState.apiWorkspaceViewed) {
+    sessionAnalyticsState.apiWorkspaceViewed = true;
+    trackViewOnce(GA_EVENT_NAMES.VIEW_API_WORKSPACE);
+  }
+}
+
+function trackInsightsTabView(tabId) {
+  if (tabId === "visualizations-tab") {
+    trackViewOnce(GA_EVENT_NAMES.VIEW_VALUE_INSIGHTS);
+    return;
+  }
+
+  if (tabId === "capability-insights-tab") {
+    trackViewOnce(GA_EVENT_NAMES.VIEW_CAPABILITY_INSIGHTS);
+    markMeaningfulEngagement();
+    return;
+  }
+
+  if (tabId === "next-opportunity-tab") {
+    trackViewOnce(GA_EVENT_NAMES.VIEW_OPPORTUNITY_INSIGHTS);
+    markMeaningfulEngagement();
+  }
+}
+
 const DISTRIBUTION_DEFINITIONS = {
   solution_type: {
     capability_expansion: "Expands what users or teams can do through new self-service or enablement capabilities.",
@@ -64,6 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindOutputPorts();
   bindLandingModals();
   bindInsightHelpPopovers();
+  bindAnalyticsLinks();
   initLandingContextRotator();
 
 const loaders = [
@@ -102,6 +234,7 @@ function bindCatalogNavigation() {
     });
 
     overviewPanel?.classList.add("active");
+	trackViewOnce(GA_EVENT_NAMES.VIEW_OVERVIEW);
 
     /* Force Safari/WebKit to commit layout before scrolling */
     void productPage?.offsetHeight;
@@ -269,9 +402,13 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
     .find(btn => btn.dataset.panel === panelId);
 
   if (matchingNav) matchingNav.classList.add("active");
+  trackPanelView(panelId);
 
   if (resolvedTabId) {
     activateTab(resolvedTabId);
+  }
+  if (resolvedTabId) {
+    trackInsightsTabView(resolvedTabId);
   }
 
   if (resolvedTabId === "capability-insights-tab") {
@@ -309,6 +446,7 @@ function bindTabs() {
       const tabId = btn.dataset.tab;
 
       activateTab(tabId);
+	  trackInsightsTabView(tabId);
 
       if (tabId === "capability-insights-tab") {
         try {
@@ -431,6 +569,9 @@ function bindSqlWorkspace() {
 
     try {
       const data = await postJson("/query/execute", { sql });
+	  trackEvent(GA_EVENT_NAMES.EXECUTE_SQL_QUERY);
+      markTechnicalEngagement();
+      markMeaningfulEngagement();
       output.textContent = formatSqlResults(data);
     } catch (error) {
       output.textContent =
@@ -464,6 +605,9 @@ function bindApiWorkspace() {
 
     try {
       const data = await fetchJson(endpoint);
+	  trackEvent(GA_EVENT_NAMES.EXECUTE_API_CALL);
+      markTechnicalEngagement();
+      markMeaningfulEngagement();
       output.textContent = JSON.stringify(data, null, 2);
     } catch (error) {
       output.textContent =
