@@ -31,22 +31,6 @@ function loadAppState() {
   }
 }
 
-const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
-
-function saveAppState(nextState = {}) {
-  const current = loadAppState();
-  const merged = { ...current, ...nextState };
-  localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(merged));
-}
-
-function loadAppState() {
-  try {
-    return JSON.parse(localStorage.getItem(APP_STATE_STORAGE_KEY) || "{}");
-  } catch {
-    return {};
-  }
-}
-
 const GA_EVENT_NAMES = {
   VIEW_OVERVIEW: "view_overview",
   VIEW_VALUE_INSIGHTS: "view_value_insights",
