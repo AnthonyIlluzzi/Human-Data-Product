@@ -563,6 +563,11 @@ body {
   z-index: 40;
 }
 
+body.modal-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
 .modal-card {
   width: min(720px, 100%);
   background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
@@ -832,6 +837,26 @@ body {
 
 .contact-detail-copy {
   min-width: 0;
+}
+
+.contact-detail-action {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.contact-detail-action:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.contact-detail-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .contact-detail-label {
@@ -1268,6 +1293,120 @@ body {
 
 .full-width {
   width: 100%;
+}
+
+/* Mobile shell header / drawer */
+
+.mobile-shell-header,
+.mobile-nav-drawer {
+  display: none;
+}
+
+.mobile-shell-header {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 10px 14px;
+  background: rgba(245, 247, 251, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(217, 225, 236, 0.92);
+}
+
+.mobile-shell-icon-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #d7e2ef;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mobile-hamburger {
+  display: inline-grid;
+  gap: 4px;
+}
+
+.mobile-hamburger span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.mobile-shell-brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mobile-shell-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+.mobile-nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 28, 45, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.mobile-nav-panel {
+  position: relative;
+  width: min(320px, calc(100vw - 28px));
+  max-width: 320px;
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid var(--border);
+  box-shadow: 0 20px 44px rgba(17, 31, 49, 0.18);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 18px 16px 16px;
+}
+
+.mobile-nav-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.mobile-nav-panel-body {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.mobile-nav-group {
+  display: grid;
+  gap: 8px;
 }
 
 /* Product Page */
@@ -3498,12 +3637,14 @@ body {
   }
   
   .architecture-flow {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .architecture-flow-arrow {
-  display: none;
+    display: flex;
+    min-height: 20px;
+    transform: rotate(90deg);
   }
 
   .next-opportunity-layout {
@@ -3562,15 +3703,20 @@ body {
 }
 
 @media (max-width: 960px) {
+  .mobile-shell-header {
+    display: flex;
+  }
+
+  .mobile-nav-drawer {
+    display: block;
+  }
+
   .landing-layout {
     grid-template-columns: 1fr;
   }
 
   .landing-sidebar {
-    position: relative;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    display: none;
   }
 
   #product-page {
@@ -3578,18 +3724,25 @@ body {
   }
 
   .sidebar {
-    position: relative;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    display: none;
   }
 
   .workspace {
-    padding: 20px 16px;
+    padding: 16px 16px 24px;
   }
 
   .landing-content {
-    padding: 20px 16px 28px;
+    padding: 16px 16px 28px;
+  }
+
+  #catalog-page,
+  #product-page {
+    scroll-margin-top: 72px;
+  }
+
+  #catalog-page .landing-content,
+  #product-page .workspace {
+    padding-top: 16px;
   }
 
   .catalog-grid {
@@ -3620,13 +3773,26 @@ body {
   }
   
   .architecture-stage {
-  padding: 16px 12px 14px;
-}
+    grid-template-columns: 50px minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    text-align: left;
+    gap: 12px;
+    padding: 14px 12px;
+  }
 
-.architecture-icon-box {
-  width: 50px;
-  height: 50px;
-}
+  .architecture-icon-box {
+    width: 46px;
+    height: 46px;
+  }
+
+  .architecture-stage-body {
+    gap: 2px;
+  }
+
+  .architecture-stage-body h4 {
+    white-space: normal;
+  }
 
 .opportunity-pillars-grid,
 .opportunity-evidence-grid,
@@ -3665,15 +3831,15 @@ body {
   padding: 16px;
   }
 
-.catalog-definition-help .insight-help-popover,
-.catalog-definition-help .insight-help-popover.is-docked-mobile {
-  position: absolute !important;
-  top: calc(100% + 8px) !important;
-  left: 0 !important;
-  right: auto !important;
-  width: min(300px, calc(100vw - 32px));
-  max-width: min(300px, calc(100vw - 32px));
-  transform: none !important;
+  .catalog-definition-help .insight-help-popover,
+  .catalog-definition-help .insight-help-popover.is-docked-mobile {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: auto !important;
+    right: 0 !important;
+    width: min(300px, calc(100vw - 32px));
+    max-width: min(300px, calc(100vw - 32px));
+    transform: none !important;
   }
 
 /* --- Mobile Output Readability --- */
@@ -3716,7 +3882,8 @@ body {
 
 @media (max-width: 768px) {
   .modal-overlay {
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     padding: 14px;
   }
 
@@ -3724,6 +3891,9 @@ body {
     width: 100%;
     max-height: calc(100dvh - 28px);
     border-radius: 18px;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .modal-header {
@@ -3734,8 +3904,16 @@ body {
     font-size: 1.55rem;
   }
 
+  #contact-modal .modal-header h2 {
+    font-size: clamp(1.2rem, 4.8vw, 1.55rem);
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
   .modal-body {
     padding: 12px 16px 18px;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .modal-close {
@@ -3797,6 +3975,24 @@ body {
 /* =========================
    Insights Workspace Redesign
    ========================= */
+
+.mobile-insights-stack {
+  display: none;
+  gap: var(--space-3);
+}
+
+.mobile-insight-card {
+  display: grid;
+  gap: 12px;
+}
+
+.mobile-insight-action {
+  margin-top: 2px;
+}
+
+.desktop-insights-only-mobile-hidden {
+  display: block;
+}
 
 .insights-dashboard-page {
   display: grid;
@@ -4666,6 +4862,18 @@ body {
 }
 
 @media (max-width: 680px) {
+  #value-insights-mobile-stack,
+  #capability-insights-mobile-stack,
+  #opportunity-insights-mobile-stack {
+    display: grid;
+  }
+
+  #visualizations-tab .insights-dashboard-page,
+  #capability-insights-tab .capability-insights-page,
+  #next-opportunity-tab .insights-dashboard-page {
+    display: none;
+  }
+  
   .insights-dashboard-page {
     row-gap: var(--space-3);
   }
