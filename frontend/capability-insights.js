@@ -1879,18 +1879,6 @@ function updateDerivedInsight() {
       });
     }
   }
-
-  /* =========================
-     ORIENTATION OVERLAY
-  ========================= */
-
-  function getOrientationShouldShow() {
-    const isMobileViewport = window.innerWidth <= 920;
-    const isLandscape = window.innerWidth > window.innerHeight;
-    const tabActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
-
-    return isMobileViewport && !isLandscape && tabActive;
-  }
   
   /* =========================
      UTILS
