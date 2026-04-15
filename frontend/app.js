@@ -343,7 +343,7 @@ const LANDING_CONTEXT_TILES = [
     kicker: "ABOUT ANTHONY",
     title: "Behind the Data",
     summary:
-      "Anthony lives in Libertyville, IL, with his fiancée and his two sons. He focuses on turning complex systems into structured, scalable platforms and enjoys solving real problems with technology.",
+      "Anthony lives in the Chicago land area with his fiancée and his two sons. He focuses on turning complex systems into structured, scalable platforms and enjoys solving real problems with technology.",
     chips: ["Father", "Foodie", "Curious Builder"]
   },
   {
