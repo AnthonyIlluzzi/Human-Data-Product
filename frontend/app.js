@@ -2211,7 +2211,10 @@ async function loadContactInfo() {
       `,
       linkedin: `
         <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
-          <path d="M6.8 8.8v8.4M6.8 6.2a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm4.1 11V8.8h4v1.2c.6-.9 1.6-1.5 3-1.5 2.3 0 3.6 1.5 3.6 4.2v4.5h-4.1v-4c0-1.2-.4-1.9-1.5-1.9s-1.8.8-1.8 2.1v3.8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="4.25" y="4.25" width="15.5" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M8.15 10.2v5.55" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="8.15" cy="8.15" r="0.9" fill="currentColor"/>
+          <path d="M11.35 15.75V10.2h2.65v.8c.45-.62 1.18-1 2.1-1 1.62 0 2.55 1.06 2.55 2.96v2.79" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       `
     };
@@ -2219,7 +2222,7 @@ async function loadContactInfo() {
     const actionLabelMap = {
       email: "Email",
       phone: "Call",
-      linkedin: "Open LinkedIn"
+      linkedin: "LinkedIn"
     };
 
     const actionableContacts = contacts.filter(contact =>
