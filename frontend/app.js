@@ -392,48 +392,49 @@ function initLandingContextRotator() {
 
   nextEl.addEventListener("click", () => {
     activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
-      let touchStartX = 0;
-	  let touchStartY = 0;
-	  let touchEndX = 0;
-	  let touchEndY = 0;
-	
-	  rotatorCard?.addEventListener("touchstart", event => {
-	    const touch = event.changedTouches?.[0];
-	    if (!touch) return;
-	
-	    touchStartX = touch.clientX;
-	    touchStartY = touch.clientY;
-	    touchEndX = touch.clientX;
-	    touchEndY = touch.clientY;
-	  }, { passive: true });
-	
-	  rotatorCard?.addEventListener("touchmove", event => {
-	    const touch = event.changedTouches?.[0];
-	    if (!touch) return;
-	
-	    touchEndX = touch.clientX;
-	    touchEndY = touch.clientY;
-	  }, { passive: true });
-	
-	  rotatorCard?.addEventListener("touchend", () => {
-	    const deltaX = touchEndX - touchStartX;
-	    const deltaY = touchEndY - touchStartY;
-	
-	    const absX = Math.abs(deltaX);
-	    const absY = Math.abs(deltaY);
-	
-	    if (absX < 40 || absX <= absY) return;
-	
-	    if (deltaX < 0) {
-	      activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
+    renderLandingContextTile();
+  });
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  rotatorCard?.addEventListener("touchstart", event => {
+    const touch = event.changedTouches?.[0];
+    if (!touch) return;
+
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchEndX = touch.clientX;
+    touchEndY = touch.clientY;
+  }, { passive: true });
+
+  rotatorCard?.addEventListener("touchmove", event => {
+    const touch = event.changedTouches?.[0];
+    if (!touch) return;
+
+    touchEndX = touch.clientX;
+    touchEndY = touch.clientY;
+  }, { passive: true });
+
+  rotatorCard?.addEventListener("touchend", () => {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
+    if (absX < 40 || absX <= absY) return;
+
+    if (deltaX < 0) {
+      activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
       renderLandingContextTile();
       return;
     }
 
     activeIndex = (activeIndex - 1 + LANDING_CONTEXT_TILES.length) % LANDING_CONTEXT_TILES.length;
     renderLandingContextTile();
-  });
-	  renderLandingContextTile();
   });
 
   renderLandingContextTile();
