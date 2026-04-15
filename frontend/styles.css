@@ -809,9 +809,9 @@ body.modal-open {
 
 .contact-detail-item {
   display: grid;
-  grid-template-columns: 36px 1fr;
+  grid-template-columns: 36px minmax(0, 1fr);
   gap: 12px;
-  align-items: start;
+  align-items: center;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
 }
@@ -837,20 +837,41 @@ body.modal-open {
 
 .contact-detail-copy {
   min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-detail-action {
   display: inline-flex;
   align-items: center;
-  color: var(--text);
+  justify-content: center;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #d7e7fb;
+  background: #f4f8fd;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.2;
+  text-align: center;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .contact-detail-action:hover {
+  background: #ebf3fc;
+  border-color: #8fb7e8;
   color: var(--primary-dark);
-  text-decoration: underline;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.contact-detail-action:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10, 110, 209, 0.14);
 }
 
 .contact-detail-svg {
