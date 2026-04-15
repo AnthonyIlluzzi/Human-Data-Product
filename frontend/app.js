@@ -2206,15 +2206,51 @@ async function loadContactInfo() {
       `,
       phone: `
         <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
-          <path d="M8.4 4.8c.4-.4 1-.6 1.5-.4l2 .8c.6.2.9.9.8 1.5l-.5 2.1c-.1.5 0 1 .4 1.4l1.6 1.6c.4.4.9.5 1.4.4l2.1-.5c.6-.1 1.2.2 1.5.8l.8 2c.2.5 0 1.1-.4 1.5l-1.3 1.3c-.8.8-2 1.1-3.1.8-2.4-.7-4.7-2.1-6.7-4.1s-3.4-4.3-4.1-6.7c-.3-1.1 0-2.3.8-3.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M21 16.2v2.6a1.8 1.8 0 0 1-1.96 1.8 17.82 17.82 0 0 1-7.78-2.77 17.45 17.45 0 0 1-5.35-5.35A17.82 17.82 0 0 1 3.14 4.7 1.8 1.8 0 0 1 4.93 2.75h2.6a1.8 1.8 0 0 1 1.78 1.52c.12.8.31 1.58.58 2.34a1.8 1.8 0 0 1-.41 1.86l-1.13 1.13a14.4 14.4 0 0 0 6.05 6.05l1.13-1.13a1.8 1.8 0 0 1 1.86-.41c.76.27 1.54.46 2.34.58A1.8 1.8 0 0 1 21 16.2Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       `,
       linkedin: `
         <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
-          <rect x="4.25" y="4.25" width="15.5" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/>
-          <path d="M8.15 10.2v5.55" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-          <circle cx="8.15" cy="8.15" r="0.9" fill="currentColor"/>
-          <path d="M11.35 15.75V10.2h2.65v.8c.45-.62 1.18-1 2.1-1 1.62 0 2.55 1.06 2.55 2.96v2.79" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect
+            x="3.25"
+            y="3.25"
+            width="17.5"
+            height="17.5"
+            rx="3.2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+          <circle cx="8.1" cy="8.05" r="1.05" fill="currentColor" />
+          <path
+            d="M7.1 10.4v6.2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+          />
+          <path
+            d="M11.2 16.6v-6.2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+          />
+          <path
+            d="M11.2 12.8c0-1.45 1.02-2.55 2.48-2.55 1.72 0 2.72 1.13 2.72 3.18v3.17"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       `
     };
