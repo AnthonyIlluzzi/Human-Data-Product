@@ -37,7 +37,15 @@
     derivation: "Based on plotted depth and experience scores across the skill inventory, with quadrant filters isolating concentration patterns within the matrix."
   }
   };
-  
+
+  window.getCapabilityInsightCards = function getCapabilityInsightCards() {
+    return [
+      DERIVED_INSIGHT_CONTENT[VIEW_PROFILE],
+      DERIVED_INSIGHT_CONTENT[VIEW_DISTRIBUTION],
+      DERIVED_INSIGHT_CONTENT[VIEW_MATRIX]
+    ].filter(Boolean);
+  };
+    
   const MATRIX_POINT_COLOR = "#6fa3e6";
   const MATRIX_SELECTED_COLOR = "#0a6ed1";
   const AXIS_TITLE_STANDOFF = 8;
@@ -142,7 +150,6 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
   setInventoryRecency();
   bindInventoryModalEvents();
   bindCapabilityEvents();
-  updateOrientationOverlay();
 
   const tabIsActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
   if (tabIsActive) {
@@ -151,7 +158,6 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
 
   if (!resizeHandlerBound) {
     const handleViewportChange = debounce(() => {
-      updateOrientationOverlay();
 
       const tabStillActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
 
@@ -180,7 +186,6 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
 
 window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   cacheElements();
-  updateOrientationOverlay();
 
   const insightsPanelActive = document.getElementById("insights-panel")?.classList.contains("active");
   const tabActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
@@ -279,7 +284,6 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   els.inventoryRecency = document.getElementById("capability-inventory-recency");
   els.scoringHelpButton = document.getElementById("capability-scoring-help-button");
   els.scoringHelpPopover = document.getElementById("capability-scoring-help-popover");
-  els.orientationOverlay = document.getElementById("capability-orientation-overlay");
 
   els.derivedTitle = document.getElementById("capability-derived-title");
   els.derivedCopy = document.getElementById("capability-derived-copy");
@@ -932,21 +936,58 @@ function updateDerivedInsight() {
 
   function setScoringHelpOpen(shouldOpen) {
     if (!els.scoringHelpPopover || !els.scoringHelpButton) return;
-
+  
     isScoringHelpOpen = shouldOpen;
     els.scoringHelpButton.classList.toggle("is-active", shouldOpen);
     els.scoringHelpButton.setAttribute("aria-expanded", String(shouldOpen));
     els.scoringHelpPopover.classList.toggle("is-visible", shouldOpen);
     els.scoringHelpPopover.setAttribute("aria-hidden", String(!shouldOpen));
-
+  
     const mobileDocked = window.innerWidth <= 720;
     els.scoringHelpPopover.classList.toggle("is-docked-mobile", shouldOpen && mobileDocked);
-
-    if (shouldOpen) {
-      const pos = getScoringHelpPopoverPosition();
-      els.scoringHelpPopover.style.top = `${mobileDocked ? 78 : pos.top}px`;
-      els.scoringHelpPopover.style.left = `${mobileDocked ? 10 : pos.left}px`;
+  
+    if (!shouldOpen) {
+      els.scoringHelpPopover.style.top = "";
+      els.scoringHelpPopover.style.left = "";
+      els.scoringHelpPopover.style.width = "";
+      els.scoringHelpPopover.style.maxWidth = "";
+      els.scoringHelpPopover.style.maxHeight = "";
+      return;
     }
+  
+    const buttonRect = els.scoringHelpButton.getBoundingClientRect();
+    const viewportPadding = 12;
+  
+    if (mobileDocked) {
+      const mobileWidth = Math.min(360, window.innerWidth - (viewportPadding * 2));
+      let left = buttonRect.right - mobileWidth;
+      let top = buttonRect.bottom + 8;
+  
+      if (left < viewportPadding) {
+        left = viewportPadding;
+      }
+  
+      const maxLeft = window.innerWidth - mobileWidth - viewportPadding;
+      if (left > maxLeft) {
+        left = maxLeft;
+      }
+  
+      const maxHeight = Math.max(220, window.innerHeight - top - viewportPadding);
+  
+      els.scoringHelpPopover.style.width = `${mobileWidth}px`;
+      els.scoringHelpPopover.style.maxWidth = `${mobileWidth}px`;
+      els.scoringHelpPopover.style.left = `${left}px`;
+      els.scoringHelpPopover.style.top = `${top}px`;
+      els.scoringHelpPopover.style.maxHeight = `${maxHeight}px`;
+      return;
+    }
+  
+    const pos = getScoringHelpPopoverPosition();
+    els.scoringHelpPopover.style.width = "";
+    els.scoringHelpPopover.style.maxWidth = "";
+    els.scoringHelpPopover.style.maxHeight = "";
+    els.scoringHelpPopover.style.top = `${pos.top}px`;
+    els.scoringHelpPopover.style.left = `${pos.left}px`;
   }
 
   function toggleScoringHelp() {
@@ -1851,14 +1892,6 @@ function updateDerivedInsight() {
     return isMobileViewport && !isLandscape && tabActive;
   }
   
-  function updateOrientationOverlay() {
-    if (!els.orientationOverlay) return;
-
-    const shouldShow = getOrientationShouldShow();
-    els.orientationOverlay.classList.toggle("is-visible", shouldShow);
-    els.orientationOverlay.setAttribute("aria-hidden", String(!shouldShow));
-  }
-
   /* =========================
      UTILS
   ========================= */
