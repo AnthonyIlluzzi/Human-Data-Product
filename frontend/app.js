@@ -15,6 +15,37 @@ const DEFAULT_API_ENDPOINT = "/summary";
 const DEFAULT_API_OUTPUT_MESSAGE = "Execute an endpoint to populate this area.";
 const DEFAULT_INSIGHTS_TAB_ID = "visualizations-tab";
 const DEFAULT_VALUE_DISTRIBUTION_DIMENSION = "solution_type";
+const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
+
+function saveAppState(nextState = {}) {
+  const current = loadAppState();
+  const merged = { ...current, ...nextState };
+  localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(merged));
+}
+
+function loadAppState() {
+  try {
+    return JSON.parse(localStorage.getItem(APP_STATE_STORAGE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
+
+function saveAppState(nextState = {}) {
+  const current = loadAppState();
+  const merged = { ...current, ...nextState };
+  localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(merged));
+}
+
+function loadAppState() {
+  try {
+    return JSON.parse(localStorage.getItem(APP_STATE_STORAGE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
 
 const GA_EVENT_NAMES = {
   VIEW_OVERVIEW: "view_overview",
@@ -87,7 +118,10 @@ function evaluateInterestSignal() {
 }
 
 function bindAnalyticsLinks() {
-  document.getElementById("linkedin-link")?.addEventListener("click", () => {
+  document.addEventListener("click", (event) => {
+    const linkedinTrigger = event.target.closest("[data-contact-action='linkedin']");
+    if (!linkedinTrigger) return;
+
     trackEvent(GA_EVENT_NAMES.CLICK_LINKEDIN);
     markProfessionalFollowup();
   });
@@ -189,6 +223,7 @@ const DISTRIBUTION_DEFINITIONS = {
 document.addEventListener("DOMContentLoaded", async () => {
   bindCatalogNavigation();
   bindSideNavigation();
+  bindMobileShellNavigation();
   bindTabs();
   bindSqlWorkspace();
   bindApiWorkspace();
@@ -196,6 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindLandingModals();
   bindInsightHelpPopovers();
   bindAnalyticsLinks();
+  bindMobileInsightsEntryOverlay();
   initLandingContextRotator();
 
 const loaders = [
@@ -213,6 +249,32 @@ const loaders = [
       console.error(`Loader failed: ${loader.name}`, error);
     }
   }
+
+  const appState = loadAppState();
+  const catalogPage = document.getElementById("catalog-page");
+  const productPage = document.getElementById("product-page");
+
+  if (appState.page === "product") {
+    catalogPage?.classList.add("hidden");
+    productPage?.classList.remove("hidden");
+
+    const targetPanel = appState.panel || "overview-panel";
+    const targetTab =
+      targetPanel === "insights-panel"
+        ? (appState.insightsTab || DEFAULT_INSIGHTS_TAB_ID)
+        : null;
+
+    await openWorkspacePanel(targetPanel, targetTab, {
+      scrollBehavior: "auto"
+    });
+  } else {
+    catalogPage?.classList.remove("hidden");
+    productPage?.classList.add("hidden");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
+  }
 });
 
 function bindCatalogNavigation() {
@@ -222,7 +284,12 @@ function bindCatalogNavigation() {
     const overviewPanel = document.getElementById("overview-panel");
     const workspace = document.querySelector(".workspace");
 
-    catalogPage?.classList.add("hidden");
+    saveAppState({
+      page: "product",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
+	catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
 
     document.querySelectorAll(".workspace-panel").forEach(panel => {
@@ -264,6 +331,11 @@ function bindCatalogNavigation() {
     const productPage = document.getElementById("product-page");
     const catalogPage = document.getElementById("catalog-page");
 
+	saveAppState({
+      page: "catalog",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
 
@@ -306,6 +378,7 @@ function initLandingContextRotator() {
   const chipsEl = document.getElementById("landing-context-chips");
   const prevEl = document.getElementById("landing-context-prev");
   const nextEl = document.getElementById("landing-context-next");
+  const rotatorCard = document.querySelector(".human-context-rotator");
 
   if (!kickerEl || !titleEl || !summaryEl || !chipsEl || !prevEl || !nextEl) return;
 
@@ -335,24 +408,80 @@ function initLandingContextRotator() {
 
   nextEl.addEventListener("click", () => {
     activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
+      let touchStartX = 0;
+	  let touchStartY = 0;
+	  let touchEndX = 0;
+	  let touchEndY = 0;
+	
+	  rotatorCard?.addEventListener("touchstart", event => {
+	    const touch = event.changedTouches?.[0];
+	    if (!touch) return;
+	
+	    touchStartX = touch.clientX;
+	    touchStartY = touch.clientY;
+	    touchEndX = touch.clientX;
+	    touchEndY = touch.clientY;
+	  }, { passive: true });
+	
+	  rotatorCard?.addEventListener("touchmove", event => {
+	    const touch = event.changedTouches?.[0];
+	    if (!touch) return;
+	
+	    touchEndX = touch.clientX;
+	    touchEndY = touch.clientY;
+	  }, { passive: true });
+	
+	  rotatorCard?.addEventListener("touchend", () => {
+	    const deltaX = touchEndX - touchStartX;
+	    const deltaY = touchEndY - touchStartY;
+	
+	    const absX = Math.abs(deltaX);
+	    const absY = Math.abs(deltaY);
+	
+	    if (absX < 40 || absX <= absY) return;
+	
+	    if (deltaX < 0) {
+	      activeIndex = (activeIndex + 1) % LANDING_CONTEXT_TILES.length;
+      renderLandingContextTile();
+      return;
+    }
+
+    activeIndex = (activeIndex - 1 + LANDING_CONTEXT_TILES.length) % LANDING_CONTEXT_TILES.length;
     renderLandingContextTile();
+  });
+	  renderLandingContextTile();
   });
 
   renderLandingContextTile();
 }
 
 function bindLandingModals() {
+  const syncModalBodyLock = () => {
+    const hasVisibleModal = Array.from(document.querySelectorAll(".modal-overlay"))
+      .some(overlay => !overlay.classList.contains("hidden"));
+
+    document.body.classList.toggle("modal-open", hasVisibleModal);
+  };
+
   document.querySelectorAll("[data-modal-target]").forEach(btn => {
     btn.addEventListener("click", () => {
       const modalId = btn.dataset.modalTarget;
-      document.getElementById(modalId)?.classList.remove("hidden");
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+
+      modal.classList.remove("hidden");
+      syncModalBodyLock();
     });
   });
 
   document.querySelectorAll("[data-close-modal]").forEach(btn => {
     btn.addEventListener("click", () => {
       const modalId = btn.dataset.closeModal;
-      document.getElementById(modalId)?.classList.add("hidden");
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+
+      modal.classList.add("hidden");
+      syncModalBodyLock();
     });
   });
 
@@ -360,6 +489,7 @@ function bindLandingModals() {
     overlay.addEventListener("click", (event) => {
       if (event.target === overlay) {
         overlay.classList.add("hidden");
+        syncModalBodyLock();
       }
     });
   });
@@ -370,6 +500,129 @@ function bindSideNavigation() {
     btn.addEventListener("click", () => {
       openWorkspacePanel(btn.dataset.panel);
     });
+  });
+}
+
+function bindMobileShellNavigation() {
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const openBtn = document.getElementById("mobile-nav-open");
+  const closeBtn = document.getElementById("mobile-nav-close");
+  const backdrop = document.getElementById("mobile-nav-backdrop");
+  const mobileBackToCatalogBtn = document.getElementById("mobile-back-to-catalog-btn");
+
+  if (!drawer || !openBtn || !closeBtn || !backdrop) return;
+
+  const setDrawerOpen = (isOpen) => {
+    drawer.classList.toggle("hidden", !isOpen);
+    drawer.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    openBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    document.body.classList.toggle("modal-open", isOpen);
+  };
+
+  openBtn.addEventListener("click", () => {
+    setDrawerOpen(true);
+  });
+
+  closeBtn.addEventListener("click", () => {
+    setDrawerOpen(false);
+  });
+
+  backdrop.addEventListener("click", () => {
+    setDrawerOpen(false);
+  });
+
+  drawer.querySelectorAll("[data-mobile-nav-target='catalog-page']").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setDrawerOpen(false);
+
+      const productPage = document.getElementById("product-page");
+      const catalogPage = document.getElementById("catalog-page");
+
+      productPage?.classList.add("hidden");
+      catalogPage?.classList.remove("hidden");
+
+      saveAppState({
+        page: "catalog",
+        panel: "overview-panel",
+        insightsTab: DEFAULT_INSIGHTS_TAB_ID
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: "auto" });
+          catalogPage?.scrollIntoView({
+            block: "start",
+            inline: "nearest",
+            behavior: "auto"
+          });
+        });
+      });
+    });
+  });
+
+  drawer.querySelectorAll("[data-panel]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const panelId = btn.dataset.panel;
+      if (!panelId) return;
+
+      setDrawerOpen(false);
+
+      const catalogPage = document.getElementById("catalog-page");
+      const productPage = document.getElementById("product-page");
+
+      catalogPage?.classList.add("hidden");
+      productPage?.classList.remove("hidden");
+
+      await openWorkspacePanel(panelId, panelId === "insights-panel" ? DEFAULT_INSIGHTS_TAB_ID : null, {
+        scrollBehavior: "auto"
+      });
+    });
+  });
+
+  drawer.querySelectorAll("[data-modal-target]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const modalId = btn.dataset.modalTarget;
+      const modal = document.getElementById(modalId);
+
+      setDrawerOpen(false);
+
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      document.body.classList.add("modal-open");
+    });
+  });
+
+  mobileBackToCatalogBtn?.addEventListener("click", () => {
+    setDrawerOpen(false);
+
+    const productPage = document.getElementById("product-page");
+    const catalogPage = document.getElementById("catalog-page");
+
+    productPage?.classList.add("hidden");
+    catalogPage?.classList.remove("hidden");
+
+    saveAppState({
+      page: "catalog",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        catalogPage?.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
+      });
+    });
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !drawer.classList.contains("hidden")) {
+      setDrawerOpen(false);
+    }
   });
 }
 
@@ -404,9 +657,19 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
   if (matchingNav) matchingNav.classList.add("active");
   trackPanelView(panelId);
 
+  saveAppState({
+    page: "product",
+    panel: panelId,
+    insightsTab: resolvedTabId || document.querySelector(".tab-panel.active")?.id || DEFAULT_INSIGHTS_TAB_ID
+  });
+
   if (resolvedTabId) {
     activateTab(resolvedTabId);
     trackInsightsTabView(resolvedTabId);
+  }
+
+  if (panelId === "insights-panel" && typeof window.maybeOpenMobileInsightsEntryOverlay === "function") {
+    window.maybeOpenMobileInsightsEntryOverlay();
   }
 
   if (resolvedTabId === "capability-insights-tab") {
@@ -444,7 +707,13 @@ function bindTabs() {
       const tabId = btn.dataset.tab;
 
       activateTab(tabId);
-	  trackInsightsTabView(tabId);
+      trackInsightsTabView(tabId);
+
+      saveAppState({
+        page: "product",
+        panel: "insights-panel",
+        insightsTab: tabId
+      });
 
       if (tabId === "capability-insights-tab") {
         try {
@@ -499,6 +768,51 @@ function bindOutputPorts() {
       openWorkspacePanel(targetPanel, targetTab);
     });
   });
+}
+
+function bindMobileInsightsEntryOverlay() {
+  const overlay = document.getElementById("mobile-insights-entry-overlay");
+  const proceedBtn = document.getElementById("mobile-insights-entry-proceed");
+  const closeBtn = document.getElementById("mobile-insights-entry-close");
+  const backdrop = document.getElementById("mobile-insights-entry-backdrop");
+
+  if (!overlay || !proceedBtn || !closeBtn || !backdrop) return;
+
+  let shownThisSession = false;
+
+  const isMobileViewport = () => window.innerWidth <= 680;
+
+  const closeOverlay = () => {
+    overlay.classList.add("hidden");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  const openOverlay = () => {
+    if (!isMobileViewport()) return;
+    if (shownThisSession) return;
+
+    overlay.classList.remove("hidden");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    shownThisSession = true;
+  };
+
+  proceedBtn.addEventListener("click", () => {
+    closeOverlay();
+  });
+
+  closeBtn.addEventListener("click", () => {
+    closeOverlay();
+  });
+
+  backdrop.addEventListener("click", () => {
+    closeOverlay();
+  });
+
+  window.maybeOpenMobileInsightsEntryOverlay = () => {
+    openOverlay();
+  };
 }
 
 function resetWorkspaceState(panelId) {
@@ -715,6 +1029,7 @@ async function loadVisualizations() {
   bindValueDistributionToggles(data.distribution_views);
   renderValueDelivery(data.value_delivery);
   renderValueRealization(data.value_realization);
+  renderMobileValueInsights(data);
   bindPatternInfoTooltips();
   bindInsightHelpPopovers();
 }
@@ -731,8 +1046,9 @@ async function ensureCapabilityInsightsInitialized() {
     capabilityInsightsInitPromise = loadCapabilityInsights()
       .then(() => {
         capabilityInsightsInitialized = true;
+        renderMobileCapabilityInsights();
       })
-      .catch((error) => {
+      .catch(error => {
         capabilityInsightsInitPromise = null;
         throw error;
       });
@@ -1898,41 +2214,63 @@ async function loadContactInfo() {
     const contacts = await fetchJson("/contact-info");
 
     const iconMap = {
-      email: "@",
-      phone: "✆",
-      linkedin: "in",
-      location: "⌂"
+      email: `
+        <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
+          <path d="M4 6.5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 17.5H4A1.5 1.5 0 0 1 2.5 16V8A1.5 1.5 0 0 1 4 6.5Zm0 1 8 5.4 8-5.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `,
+      phone: `
+        <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
+          <path d="M8.4 4.8c.4-.4 1-.6 1.5-.4l2 .8c.6.2.9.9.8 1.5l-.5 2.1c-.1.5 0 1 .4 1.4l1.6 1.6c.4.4.9.5 1.4.4l2.1-.5c.6-.1 1.2.2 1.5.8l.8 2c.2.5 0 1.1-.4 1.5l-1.3 1.3c-.8.8-2 1.1-3.1.8-2.4-.7-4.7-2.1-6.7-4.1s-3.4-4.3-4.1-6.7c-.3-1.1 0-2.3.8-3.1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `,
+      linkedin: `
+        <svg viewBox="0 0 24 24" class="contact-detail-svg" aria-hidden="true">
+          <path d="M6.8 8.8v8.4M6.8 6.2a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm4.1 11V8.8h4v1.2c.6-.9 1.6-1.5 3-1.5 2.3 0 3.6 1.5 3.6 4.2v4.5h-4.1v-4c0-1.2-.4-1.9-1.5-1.9s-1.8.8-1.8 2.1v3.8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `
     };
 
-    const labelMap = {
+    const actionLabelMap = {
       email: "Email",
-      phone: "Phone",
-      linkedin: "LinkedIn",
-      location: "Location"
+      phone: "Call",
+      linkedin: "Open LinkedIn"
     };
 
-    const formatted = contacts
+    const actionableContacts = contacts.filter(contact =>
+      ["email", "phone", "linkedin"].includes(contact.category)
+    );
+
+    const formatted = actionableContacts
       .map(contact => {
         const category = contact.category || "";
-        const label = labelMap[category] || capitalize(category);
-        const icon = iconMap[category] || "•";
+        const icon = iconMap[category] || "";
+        const actionLabel = actionLabelMap[category] || capitalize(category);
 
-        let valueHtml = escapeHtml(contact.value);
+        let href = "#";
+        let extraAttrs = "";
 
         if (category === "email") {
-          valueHtml = `<a href="mailto:${escapeHtml(contact.value)}">${escapeHtml(contact.value)}</a>`;
+          href = `mailto:${contact.value}`;
         } else if (category === "phone") {
-          valueHtml = `<a href="tel:${escapeHtml(contact.value)}">${escapeHtml(contact.value)}</a>`;
+          href = `tel:${contact.value}`;
         } else if (category === "linkedin") {
-          valueHtml = `<a href="${escapeHtml(contact.value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(contact.value)}</a>`;
+          href = contact.value;
+          extraAttrs = ` target="_blank" rel="noopener noreferrer"`;
         }
 
         return `
           <div class="contact-detail-item">
             <div class="contact-detail-icon" aria-hidden="true">${icon}</div>
             <div class="contact-detail-copy">
-              <span class="contact-detail-label">${label}</span>
-              <span class="contact-detail-value">${valueHtml}</span>
+              <a
+                class="contact-detail-action"
+                href="${escapeHtml(href)}"
+                ${extraAttrs}
+                data-contact-action="${escapeHtml(category)}"
+              >
+                ${escapeHtml(actionLabel)}
+              </a>
             </div>
           </div>
         `;
@@ -1942,12 +2280,6 @@ async function loadContactInfo() {
     const landingList = document.getElementById("landing-contact-list");
     if (landingList) {
       landingList.innerHTML = formatted || '<div class="contact-detail-item">No contact information available.</div>';
-    }
-
-    const linkedin = contacts.find(c => c.category === "linkedin")?.value;
-    if (linkedin) {
-      const linkedInButton = document.getElementById("linkedin-link");
-      if (linkedInButton) linkedInButton.href = linkedin;
     }
   } catch (error) {
     console.error("Failed to load contact info:", error);
@@ -1998,7 +2330,8 @@ async function loadNextOpportunity() {
     data.role_priorities.observed_copy,
     data.role_priorities.derivation
   );
-
+	
+  renderMobileOpportunityInsights(data);
   bindInsightHelpPopovers();
 }
 
@@ -2026,6 +2359,51 @@ function setObservedPanel(titleId, copyId, derivationId, title, copy, derivation
   if (derivationEl) {
     derivationEl.textContent = derivation || "";
   }
+}
+
+function formatObservedCopy(copy) {
+  if (Array.isArray(copy)) {
+    return `
+      <ul>
+        ${copy.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+      </ul>
+    `;
+  }
+
+  if (typeof copy === "string") {
+    return `<p>${escapeHtml(copy)}</p>`;
+  }
+
+  return "";
+}
+
+function buildMobileInsightCard({ eyebrow = "Derived Insight", title = "", copy = "", derivation = "", actionHtml = "" }) {
+  return `
+    <article class="mobile-insight-card insight-observed-card">
+      <div class="insight-observed-header-row">
+        <div>
+          <div class="insight-observed-kicker">${escapeHtml(eyebrow)}</div>
+          <h4>${escapeHtml(title)}</h4>
+        </div>
+      </div>
+
+      <div class="insight-observed-copy">
+        ${formatObservedCopy(copy)}
+      </div>
+
+      ${derivation ? `
+        <div class="insight-observed-derivation">
+          ${escapeHtml(derivation)}
+        </div>
+      ` : ""}
+
+      ${actionHtml ? `
+        <div class="mobile-insight-action">
+          ${actionHtml}
+        </div>
+      ` : ""}
+    </article>
+  `;
 }
 
 function bindValueDistributionToggles(distributionViews) {
@@ -2064,6 +2442,136 @@ function bindValueDistributionToggles(distributionViews) {
   });
 
   renderDimension("solution_type");
+}
+
+function renderMobileValueInsights(data) {
+  const container = document.getElementById("value-insights-mobile-stack");
+  if (!container) return;
+
+  const distributionViews = data?.distribution_views || {};
+  const solutionView = distributionViews.solution_type;
+  const problemView = distributionViews.problem_type;
+  const systemLayerView = distributionViews.system_layer;
+  const valueDelivery = data?.value_delivery;
+  const valueRealization = data?.value_realization;
+
+  container.innerHTML = [
+    solutionView ? buildMobileInsightCard({
+      eyebrow: "Where value is created",
+      title: solutionView.observed_title || "Approach distribution",
+      copy: solutionView.observed_copy,
+      derivation: solutionView.derivation
+    }) : "",
+    problemView ? buildMobileInsightCard({
+      eyebrow: "Where value is created",
+      title: problemView.observed_title || "Problem distribution",
+      copy: problemView.observed_copy,
+      derivation: problemView.derivation
+    }) : "",
+    systemLayerView ? buildMobileInsightCard({
+      eyebrow: "Where value is created",
+      title: systemLayerView.observed_title || "System layer distribution",
+      copy: systemLayerView.observed_copy,
+      derivation: systemLayerView.derivation
+    }) : "",
+    valueDelivery ? buildMobileInsightCard({
+      eyebrow: "How value is delivered",
+      title: "Delivery pattern",
+      copy: valueDelivery.insights?.map(item => item.statement) || [],
+      derivation: valueDelivery.derivation
+    }) : "",
+    valueRealization ? buildMobileInsightCard({
+      eyebrow: "How value is realized",
+      title: valueRealization.observed_title || "Capability expansion",
+      copy: valueRealization.observed_copy,
+      derivation: valueRealization.derivation
+    }) : "",
+    buildMobileInsightCard({
+      eyebrow: "Feedback evidence",
+      title: "View Feedback Evidence",
+      copy: "Review curated feedback examples tied to the delivery approaches shown above.",
+      derivation: "",
+      actionHtml: `
+        <button
+          type="button"
+          class="btn-secondary"
+          id="mobile-feedback-evidence-btn"
+        >
+          View Feedback Evidence
+        </button>
+      `
+    })
+  ].filter(Boolean).join("");
+
+  document.getElementById("mobile-feedback-evidence-btn")?.addEventListener("click", () => {
+    const hasFeedback = valueDeliveryFeedbackGroups.some(group => (group.items || []).length);
+    if (!hasFeedback) return;
+    openFeedbackEvidenceModal(valueDeliveryFeedbackGroups);
+  });
+}
+
+function renderMobileCapabilityInsights() {
+  const container = document.getElementById("capability-insights-mobile-stack");
+  if (!container) return;
+  if (typeof window.getCapabilityInsightCards !== "function") return;
+
+  const cards = window.getCapabilityInsightCards();
+
+  container.innerHTML = [
+    buildMobileInsightCard({
+      eyebrow: "Capability Insights",
+      title: "Skills Inventory Table",
+      copy: "Open the current skill inventory table and review the existing depth, experience, and confidence scoring details.",
+      derivation: "",
+      actionHtml: `
+        <button
+          type="button"
+          class="btn-secondary"
+          id="mobile-capability-inventory-btn"
+        >
+          Open Skill Inventory
+        </button>
+      `
+    }),
+    ...(cards || []).map(card => buildMobileInsightCard({
+      eyebrow: "Derived Insight",
+      title: card?.title || "Observed Pattern",
+      copy: card?.copy || "",
+      derivation: card?.derivation || ""
+    }))
+  ].join("");
+
+  document.getElementById("mobile-capability-inventory-btn")?.addEventListener("click", () => {
+    if (typeof window.openCapabilityInventoryModal === "function") {
+      window.openCapabilityInventoryModal();
+    }
+  });
+}
+
+function renderMobileOpportunityInsights(data) {
+  const container = document.getElementById("opportunity-insights-mobile-stack");
+  if (!container) return;
+
+  container.innerHTML = [
+    buildMobileInsightCard({
+      eyebrow: "Career trajectory",
+      title: data?.trajectory?.observed_title || "Career trajectory",
+      copy: data?.trajectory?.observed_copy || "",
+      derivation: data?.trajectory?.derivation || ""
+    }),
+    buildMobileInsightCard({
+      eyebrow: "Opportunity fit profile",
+      title: data?.fit_profile?.observed_title || "Opportunity fit profile",
+      copy: data?.fit_profile?.observed_copy || "",
+      derivation: data?.fit_profile?.derivation || ""
+    }),
+    buildMobileInsightCard({
+      eyebrow: "Target role priorities",
+      title: data?.role_priorities?.observed_title || "Target role priorities",
+      copy: data?.role_priorities?.observed_copy || "",
+      derivation: data?.role_priorities?.derivation || ""
+    })
+  ].join("");
 }
 
 function renderDistributionBar(containerId, view) {
@@ -2292,14 +2800,33 @@ function bindInsightHelpPopovers() {
 	  if (!button || !popover) return;
 	
 	  const isMobile = window.innerWidth <= 680;
-	  popover.classList.remove("is-docked-mobile");
-	
-	  if (isMobile) {
-	    popover.classList.add("is-docked-mobile");
-	    popover.style.left = "";
-	    popover.style.top = "";
-	    return;
-	  }
+      popover.classList.remove("is-docked-mobile");
+
+      if (isMobile) {
+        popover.classList.add("is-docked-mobile");
+
+        const buttonRect = button.getBoundingClientRect();
+        const viewportPadding = 16;
+        const maxWidth = Math.min(300, window.innerWidth - (viewportPadding * 2));
+
+        popover.style.width = `${maxWidth}px`;
+        popover.style.maxWidth = `${maxWidth}px`;
+
+        let left = buttonRect.right - maxWidth;
+        if (left < viewportPadding) {
+          left = viewportPadding;
+        }
+
+        if (left + maxWidth > window.innerWidth - viewportPadding) {
+          left = window.innerWidth - maxWidth - viewportPadding;
+        }
+
+        const top = buttonRect.bottom + 8;
+
+        popover.style.left = `${left}px`;
+        popover.style.top = `${top}px`;
+        return;
+      }
 	
 	  const buttonRect = button.getBoundingClientRect();
 	  const popoverRect = popover.getBoundingClientRect();
