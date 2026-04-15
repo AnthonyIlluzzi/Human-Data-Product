@@ -1097,6 +1097,8 @@ function updateDerivedInsight() {
     }
   }
 
+  window.openCapabilityInventoryModal = openInventoryModal;
+
   function bindInventoryModalEvents() {
     if (els.inventoryModalOpen) {
       els.inventoryModalOpen.addEventListener("click", openInventoryModal);
