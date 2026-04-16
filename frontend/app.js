@@ -1491,6 +1491,7 @@ function openFeedbackDetailModal(themeLabel, entries) {
   title.textContent = `${themeLabel} Feedback`;
   renderModalContent();
   modal.classList.remove("hidden");
+  syncGlobalBodyLockState();
 }
 
 function bindPatternInfoTooltips() {
@@ -2817,6 +2818,7 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
       </div>
     `;
     modal.classList.remove("hidden");
+	syncGlobalBodyLockState();
     return;
   }
 
@@ -2871,6 +2873,7 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
   });
 
   modal.classList.remove("hidden");
+  syncGlobalBodyLockState();
 }
 
 function bindInsightHelpPopovers() {
