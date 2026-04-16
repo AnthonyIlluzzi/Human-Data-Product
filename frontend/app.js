@@ -19,15 +19,17 @@ const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
 const MOBILE_INSIGHTS_OVERLAY_SESSION_KEY = "hdp_mobile_insights_overlay_seen";
 const MOBILE_LAYOUT_BREAKPOINT = 960;
 
+const APP_STATE_STORAGE = window.sessionStorage;
+
 function saveAppState(nextState = {}) {
   const current = loadAppState();
   const merged = { ...current, ...nextState };
-  localStorage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(merged));
+  APP_STATE_STORAGE.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(merged));
 }
 
 function loadAppState() {
   try {
-    return JSON.parse(localStorage.getItem(APP_STATE_STORAGE_KEY) || "{}");
+    return JSON.parse(APP_STATE_STORAGE.getItem(APP_STATE_STORAGE_KEY) || "{}");
   } catch {
     return {};
   }
@@ -566,6 +568,7 @@ function bindMobileShellNavigation() {
   const closeBtn = document.getElementById("mobile-nav-close");
   const backdrop = document.getElementById("mobile-nav-backdrop");
   const mobileBackToCatalogBtn = document.getElementById("mobile-back-to-catalog-btn");
+  const mobileHomeBtn = document.getElementById("mobile-shell-home");
 
   if (!drawer || !openBtn || !closeBtn || !backdrop) return;
 
@@ -590,6 +593,36 @@ function bindMobileShellNavigation() {
     setDrawerOpen(false);
   });
 
+  mobileHomeBtn?.addEventListener("click", () => {
+    setDrawerOpen(false);
+
+    const productPage = document.getElementById("product-page");
+    const catalogPage = document.getElementById("catalog-page");
+
+    productPage?.classList.add("hidden");
+    catalogPage?.classList.remove("hidden");
+
+    saveAppState({
+      page: "catalog",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
+
+    syncMobileDrawerForCurrentPage();
+    syncGlobalBodyLockState();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        catalogPage?.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
+      });
+    });
+  });
+	
   drawer.querySelectorAll("[data-mobile-nav-target='catalog-page']").forEach(btn => {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
