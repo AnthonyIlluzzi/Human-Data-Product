@@ -691,6 +691,64 @@ body.modal-open {
   font-weight: 700;
 }
 
+.mobile-insights-entry-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mobile-insights-entry-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 28, 45, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+.mobile-insights-entry-card {
+  position: relative;
+  z-index: 1;
+  width: min(420px, calc(100vw - 32px));
+  padding: 22px 18px 18px;
+  border-radius: 18px;
+  border: 1px solid #d7e2ef;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  box-shadow: 0 20px 56px rgba(17, 31, 49, 0.2);
+  display: grid;
+  gap: 12px;
+}
+
+.mobile-insights-entry-card h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.mobile-insights-entry-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.mobile-insights-entry-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.orientation-overlay-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
 .contact-modal-layout {
   display: grid;
   gap: var(--space-3);
@@ -1334,6 +1392,11 @@ body.modal-open {
   background: rgba(245, 247, 251, 0.92);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(217, 225, 236, 0.92);
+}
+
+body.has-active-overlay .mobile-shell-header {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .mobile-shell-icon-btn {
@@ -3793,22 +3856,30 @@ body.modal-open {
     height: 180px;
   }
   
+    .architecture-flow {
+    gap: 8px;
+  }
+
+  .architecture-flow-arrow {
+    min-height: 14px;
+  }
+
   .architecture-stage {
-    grid-template-columns: 50px minmax(0, 1fr);
+    grid-template-columns: 46px minmax(0, 1fr);
     align-items: center;
     justify-items: start;
     text-align: left;
-    gap: 12px;
-    padding: 14px 12px;
+    gap: 10px;
+    padding: 12px 10px;
   }
 
   .architecture-icon-box {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
   }
 
   .architecture-stage-body {
-    gap: 2px;
+    gap: 1px;
   }
 
   .architecture-stage-body h4 {
@@ -3915,6 +3986,34 @@ body.modal-open {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     overflow: hidden;
+  }
+
+  #contact-modal .modal-card {
+    width: 100%;
+    max-height: calc(100dvh - 88px);
+    margin-top: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  #contact-modal .modal-body {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  #feedback-detail-modal .feedback-detail-modal-card {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 72px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  #feedback-detail-modal .feedback-detail-modal-body {
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .modal-header {

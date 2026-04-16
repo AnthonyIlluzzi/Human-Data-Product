@@ -1125,9 +1125,10 @@ body.modal-open {
   }
 
   .chart-help-popover.scoring-help-popover.is-docked-mobile {
+    top: 96px;
     width: min(360px, calc(100vw - 24px));
     max-width: min(360px, calc(100vw - 24px));
-    max-height: calc(100dvh - 140px);
+    max-height: calc(100dvh - 128px);
     overflow-y: auto;
   }
 
@@ -1182,7 +1183,7 @@ body.modal-open {
 
   .inventory-modal-dialog {
     width: calc(100vw - 20px);
-    max-height: calc(100dvh - 20px);
+    max-height: calc(100dvh - 72px);
     margin: 10px auto;
     border-radius: 18px;
     display: grid;

@@ -75,20 +75,18 @@
 	    </div>
 	
 	    <div class="mobile-nav-panel-body">
-	      <div class="mobile-nav-group">
+	      <div id="mobile-nav-catalog-group" class="mobile-nav-group">
 	        <button class="nav-btn mobile-nav-link" type="button" data-mobile-nav-target="catalog-page">Catalog</button>
 	        <button class="nav-btn mobile-nav-link" type="button" data-modal-target="about-modal">HDP Project</button>
 	        <button class="nav-btn mobile-nav-link" type="button" data-modal-target="contact-modal">About the Human</button>
 	      </div>
 	
-	      <div class="mobile-nav-group">
+	      <div id="mobile-nav-product-group" class="mobile-nav-group hidden">
 	        <button class="nav-btn mobile-nav-link" type="button" data-panel="overview-panel">Overview</button>
 	        <button class="nav-btn mobile-nav-link" type="button" data-panel="insights-panel">Insights</button>
 	        <button class="nav-btn mobile-nav-link" type="button" data-panel="sql-panel">SQL Query</button>
 	        <button class="nav-btn mobile-nav-link" type="button" data-panel="api-panel">API Access</button>
-	      </div>
-	
-	      <div class="mobile-nav-group">
+	        <button class="nav-btn mobile-nav-link" type="button" data-modal-target="contact-modal">About the Human</button>
 	        <button id="mobile-back-to-catalog-btn" class="btn-secondary full-width" type="button">Back to Catalog</button>
 	      </div>
 	    </div>
@@ -1115,7 +1113,7 @@ LIMIT 1;"
   </div>
 
   <div id="visualizations-tab" class="tab-panel active">
-	<div id="value-insights-mobile-stack" class="mobile-insights-stack hidden" aria-hidden="true"></div>
+	<div id="value-insights-mobile-stack" class="mobile-insights-stack" aria-hidden="true"></div>
     <div class="insights-dashboard-page">
       <!-- Row 1 -->
       <div class="insights-dashboard-row insights-dashboard-row--wide-left">
@@ -1289,7 +1287,7 @@ LIMIT 1;"
   </div>
 
     <div id="capability-insights-tab" class="tab-panel">
-	<div id="capability-insights-mobile-stack" class="mobile-insights-stack hidden" aria-hidden="true"></div>
+	<div id="capability-insights-mobile-stack" class="mobile-insights-stack" aria-hidden="true"></div>
     <div class="capability-insights-page">
 	  <div class="card compact-card capability-insights-instructions-card capability-instructions-grid">
 	    <div class="capability-instructions-left">
@@ -1538,7 +1536,7 @@ LIMIT 1;"
   </div>
 
   <div id="next-opportunity-tab" class="tab-panel">
-    <div id="opportunity-insights-mobile-stack" class="mobile-insights-stack hidden" aria-hidden="true"></div>
+    <div id="opportunity-insights-mobile-stack" class="mobile-insights-stack" aria-hidden="true"></div>
 	  <div class="insights-dashboard-page">
       <!-- Row 1 -->
       <div class="insights-dashboard-row insights-dashboard-row--trajectory">
