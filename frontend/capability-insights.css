@@ -241,10 +241,13 @@
   inset: 0;
   z-index: 220;
   display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
 }
 
 .inventory-modal.is-visible {
-  display: block;
+  display: flex;
 }
 
 .inventory-modal-backdrop {
@@ -256,9 +259,9 @@
 
 .inventory-modal-dialog {
   position: relative;
-  width: min(1120px, calc(100vw - 40px));
-  max-height: calc(100vh - 48px);
-  margin: 24px auto;
+  width: min(1120px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: 0;
   background: #ffffff;
   border: 1px solid rgba(10, 110, 209, 0.14);
   border-radius: 22px;
@@ -1126,10 +1129,24 @@ body.modal-open {
 
   .chart-help-popover.scoring-help-popover.is-docked-mobile {
     top: 96px;
-    width: min(360px, calc(100vw - 24px));
-    max-width: min(360px, calc(100vw - 24px));
-    max-height: calc(100dvh - 128px);
-    overflow-y: auto;
+    width: min(340px, calc(100vw - 24px));
+    max-width: min(340px, calc(100vw - 24px));
+    max-height: calc(100dvh - 140px);
+    overflow: hidden;
+  }
+
+  .chart-help-popover.scoring-help-popover .chart-help-body {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    line-height: 1.32;
+  }
+
+  .chart-help-popover.scoring-help-popover .chart-help-section {
+    margin-top: 8px;
+  }
+
+  .chart-help-popover.scoring-help-popover .chart-help-section li {
+    margin-bottom: 4px;
   }
 
   .quadrant-controls-wrap {
@@ -1208,9 +1225,43 @@ body.modal-open {
     overflow: auto;
   }
 
+  .inventory-table {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
   .inventory-table thead th,
   .inventory-table tbody td {
-    padding: 12px 14px;
+    padding: 10px 8px;
+    font-size: 0.78rem;
+  }
+
+  .inventory-table thead th.inventory-domain-heading,
+  .inventory-table tbody td.inventory-domain-cell {
+    width: 28%;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .inventory-table thead th.inventory-skill-heading,
+  .inventory-table tbody td.inventory-skill-cell {
+    width: 33%;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .inventory-table thead th.inventory-metric-heading,
+  .inventory-table tbody td.inventory-metric-cell {
+    width: 13%;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .inventory-metric-pill {
+    min-width: 26px;
+    padding: 3px 6px;
+    font-size: 0.74rem;
   }
 }
 
