@@ -1083,14 +1083,22 @@ function updateDerivedInsight() {
     inventoryModalTriggerEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     els.inventoryModal.classList.add("is-visible");
     els.inventoryModal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
+    if (typeof window.syncGlobalBodyLockState === "function") {
+      window.syncGlobalBodyLockState();
+    } else {
+      document.body.classList.add("modal-open");
+    }
   }
 
   function closeInventoryModal() {
     if (!els.inventoryModal) return;
     els.inventoryModal.classList.remove("is-visible");
     els.inventoryModal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
+    if (typeof window.syncGlobalBodyLockState === "function") {
+      window.syncGlobalBodyLockState();
+    } else {
+      document.body.classList.remove("modal-open");
+    }
 
     if (inventoryModalTriggerEl?.focus) {
       inventoryModalTriggerEl.focus();
