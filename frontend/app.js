@@ -17,6 +17,7 @@ const DEFAULT_INSIGHTS_TAB_ID = "visualizations-tab";
 const DEFAULT_VALUE_DISTRIBUTION_DIMENSION = "solution_type";
 const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
 const MOBILE_INSIGHTS_OVERLAY_SESSION_KEY = "hdp_mobile_insights_overlay_seen";
+const MOBILE_LAYOUT_BREAKPOINT = 960;
 
 function saveAppState(nextState = {}) {
   const current = loadAppState();
@@ -55,7 +56,17 @@ function syncGlobalBodyLockState() {
   document.body.classList.toggle("modal-open", shouldLockBody);
   document.body.classList.toggle("has-active-overlay", hasActiveOverlay);
 }
-window.syncGlobalBodyLockState = syncGlobalBodyLockState;
+window.syncGlobalBodyLockState = syncGlobalBodyLockState
+
+function getStickyPageOffset() {
+  if (window.innerWidth > MOBILE_LAYOUT_BREAKPOINT) return 12;
+
+  const mobileHeader = document.getElementById("mobile-shell-header");
+  if (!mobileHeader) return 12;
+
+  const headerHeight = mobileHeader.getBoundingClientRect().height || 0;
+  return Math.max(headerHeight + 12, 68);
+}
 
 function syncMobileDrawerForCurrentPage() {
   const catalogPage = document.getElementById("catalog-page");
@@ -746,7 +757,7 @@ function scrollPanelToTop(panel, behavior = "smooth") {
   if (!panel) return;
 
   const target = panel.querySelector(".panel-header") || panel;
-  const top = window.scrollY + target.getBoundingClientRect().top - 12;
+  const top = window.scrollY + target.getBoundingClientRect().top - getStickyPageOffset();
 
   window.scrollTo({
     top: Math.max(top, 0),
@@ -832,7 +843,7 @@ function bindMobileInsightsEntryOverlay() {
 
   if (!overlay || !proceedBtn || !closeBtn || !backdrop) return;
 
-  const isMobileViewport = () => window.innerWidth <= 680;
+  const isMobileViewport = () => window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 
   const hasSeenOverlayThisSession = () =>
     sessionStorage.getItem(MOBILE_INSIGHTS_OVERLAY_SESSION_KEY) === "true";
