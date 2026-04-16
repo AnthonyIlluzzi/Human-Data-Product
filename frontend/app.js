@@ -16,6 +16,7 @@ const DEFAULT_API_OUTPUT_MESSAGE = "Execute an endpoint to populate this area.";
 const DEFAULT_INSIGHTS_TAB_ID = "visualizations-tab";
 const DEFAULT_VALUE_DISTRIBUTION_DIMENSION = "solution_type";
 const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
+const MOBILE_INSIGHTS_OVERLAY_SESSION_KEY = "hdp_mobile_insights_overlay_seen";
 
 function saveAppState(nextState = {}) {
   const current = loadAppState();
@@ -29,6 +30,45 @@ function loadAppState() {
   } catch {
     return {};
   }
+}
+
+function syncGlobalBodyLockState() {
+  const hasVisibleModalOverlay = Array.from(document.querySelectorAll(".modal-overlay"))
+    .some(overlay => !overlay.classList.contains("hidden"));
+
+  const mobileDrawerOpen = !document.getElementById("mobile-nav-drawer")?.classList.contains("hidden");
+  const mobileInsightsOverlayOpen = !document.getElementById("mobile-insights-entry-overlay")?.classList.contains("hidden");
+  const capabilityInventoryModalOpen = document.getElementById("capability-inventory-modal")?.classList.contains("is-visible");
+
+  const shouldLockBody =
+    hasVisibleModalOverlay ||
+    mobileDrawerOpen ||
+    mobileInsightsOverlayOpen ||
+    capabilityInventoryModalOpen;
+
+  const hasActiveOverlay =
+    hasVisibleModalOverlay ||
+    mobileDrawerOpen ||
+    mobileInsightsOverlayOpen ||
+    capabilityInventoryModalOpen;
+
+  document.body.classList.toggle("modal-open", shouldLockBody);
+  document.body.classList.toggle("has-active-overlay", hasActiveOverlay);
+}
+
+function syncMobileDrawerForCurrentPage() {
+  const catalogPage = document.getElementById("catalog-page");
+  const productPage = document.getElementById("product-page");
+  const catalogGroup = document.getElementById("mobile-nav-catalog-group");
+  const productGroup = document.getElementById("mobile-nav-product-group");
+
+  if (!catalogGroup || !productGroup || !catalogPage || !productPage) return;
+
+  const showingCatalog = !catalogPage.classList.contains("hidden");
+  const showingProduct = !productPage.classList.contains("hidden");
+
+  catalogGroup.classList.toggle("hidden", !showingCatalog);
+  productGroup.classList.toggle("hidden", !showingProduct);
 }
 
 const GA_EVENT_NAMES = {
@@ -241,6 +281,7 @@ const loaders = [
   if (appState.page === "product") {
     catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
+    syncMobileDrawerForCurrentPage();
 
     const targetPanel = appState.panel || "overview-panel";
     const targetTab =
@@ -251,14 +292,31 @@ const loaders = [
     await openWorkspacePanel(targetPanel, targetTab, {
       scrollBehavior: "auto"
     });
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const restoredPanel = document.getElementById(targetPanel);
+        scrollPanelToTop(restoredPanel, "auto");
+      });
+    });
   } else {
     catalogPage?.classList.remove("hidden");
     productPage?.classList.add("hidden");
+    syncMobileDrawerForCurrentPage();
 
     requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        catalogPage?.scrollIntoView({
+          block: "start",
+          inline: "nearest",
+          behavior: "auto"
+        });
+      });
     });
   }
+
+  syncGlobalBodyLockState();
 });
 
 function bindCatalogNavigation() {
@@ -273,8 +331,10 @@ function bindCatalogNavigation() {
       panel: "overview-panel",
       insightsTab: DEFAULT_INSIGHTS_TAB_ID
     });
-	catalogPage?.classList.add("hidden");
+
+    catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
+    syncMobileDrawerForCurrentPage();
 
     document.querySelectorAll(".workspace-panel").forEach(panel => {
       panel.classList.remove("active");
@@ -285,9 +345,9 @@ function bindCatalogNavigation() {
     });
 
     overviewPanel?.classList.add("active");
-	trackViewOnce(GA_EVENT_NAMES.VIEW_OVERVIEW);
+    trackViewOnce(GA_EVENT_NAMES.VIEW_OVERVIEW);
+    syncGlobalBodyLockState();
 
-    /* Force Safari/WebKit to commit layout before scrolling */
     void productPage?.offsetHeight;
     void overviewPanel?.offsetHeight;
     void workspace?.offsetHeight;
@@ -315,13 +375,16 @@ function bindCatalogNavigation() {
     const productPage = document.getElementById("product-page");
     const catalogPage = document.getElementById("catalog-page");
 
-	saveAppState({
+    saveAppState({
       page: "catalog",
       panel: "overview-panel",
       insightsTab: DEFAULT_INSIGHTS_TAB_ID
     });
+
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
+    syncMobileDrawerForCurrentPage();
+    syncGlobalBodyLockState();
 
     void catalogPage?.offsetHeight;
 
@@ -441,13 +504,6 @@ function initLandingContextRotator() {
 }
 
 function bindLandingModals() {
-  const syncModalBodyLock = () => {
-    const hasVisibleModal = Array.from(document.querySelectorAll(".modal-overlay"))
-      .some(overlay => !overlay.classList.contains("hidden"));
-
-    document.body.classList.toggle("modal-open", hasVisibleModal);
-  };
-
   document.querySelectorAll("[data-modal-target]").forEach(btn => {
     btn.addEventListener("click", () => {
       const modalId = btn.dataset.modalTarget;
@@ -455,7 +511,7 @@ function bindLandingModals() {
       if (!modal) return;
 
       modal.classList.remove("hidden");
-      syncModalBodyLock();
+      syncGlobalBodyLockState();
     });
   });
 
@@ -466,7 +522,7 @@ function bindLandingModals() {
       if (!modal) return;
 
       modal.classList.add("hidden");
-      syncModalBodyLock();
+      syncGlobalBodyLockState();
     });
   });
 
@@ -474,7 +530,7 @@ function bindLandingModals() {
     overlay.addEventListener("click", (event) => {
       if (event.target === overlay) {
         overlay.classList.add("hidden");
-        syncModalBodyLock();
+        syncGlobalBodyLockState();
       }
     });
   });
@@ -501,10 +557,12 @@ function bindMobileShellNavigation() {
     drawer.classList.toggle("hidden", !isOpen);
     drawer.setAttribute("aria-hidden", isOpen ? "false" : "true");
     openBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    document.body.classList.toggle("modal-open", isOpen);
+    syncMobileDrawerForCurrentPage();
+    syncGlobalBodyLockState();
   };
 
   openBtn.addEventListener("click", () => {
+    syncMobileDrawerForCurrentPage();
     setDrawerOpen(true);
   });
 
@@ -532,6 +590,9 @@ function bindMobileShellNavigation() {
         insightsTab: DEFAULT_INSIGHTS_TAB_ID
       });
 
+      syncMobileDrawerForCurrentPage();
+      syncGlobalBodyLockState();
+
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           window.scrollTo({ top: 0, behavior: "auto" });
@@ -557,10 +618,13 @@ function bindMobileShellNavigation() {
 
       catalogPage?.classList.add("hidden");
       productPage?.classList.remove("hidden");
+      syncMobileDrawerForCurrentPage();
 
-      await openWorkspacePanel(panelId, panelId === "insights-panel" ? DEFAULT_INSIGHTS_TAB_ID : null, {
-        scrollBehavior: "auto"
-      });
+      await openWorkspacePanel(
+        panelId,
+        panelId === "insights-panel" ? DEFAULT_INSIGHTS_TAB_ID : null,
+        { scrollBehavior: "auto" }
+      );
     });
   });
 
@@ -573,7 +637,7 @@ function bindMobileShellNavigation() {
 
       if (!modal) return;
       modal.classList.remove("hidden");
-      document.body.classList.add("modal-open");
+      syncGlobalBodyLockState();
     });
   });
 
@@ -591,6 +655,9 @@ function bindMobileShellNavigation() {
       panel: "overview-panel",
       insightsTab: DEFAULT_INSIGHTS_TAB_ID
     });
+
+    syncMobileDrawerForCurrentPage();
+    syncGlobalBodyLockState();
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -711,6 +778,7 @@ function bindTabs() {
           console.error("Capability Insights init failed:", error);
         }
       }
+	  scrollPanelToTop(document.getElementById("insights-panel"), "auto");
     });
   });
 }
@@ -763,24 +831,29 @@ function bindMobileInsightsEntryOverlay() {
 
   if (!overlay || !proceedBtn || !closeBtn || !backdrop) return;
 
-  let shownThisSession = false;
-
   const isMobileViewport = () => window.innerWidth <= 680;
+
+  const hasSeenOverlayThisSession = () =>
+    sessionStorage.getItem(MOBILE_INSIGHTS_OVERLAY_SESSION_KEY) === "true";
+
+  const markOverlaySeenThisSession = () => {
+    sessionStorage.setItem(MOBILE_INSIGHTS_OVERLAY_SESSION_KEY, "true");
+  };
 
   const closeOverlay = () => {
     overlay.classList.add("hidden");
     overlay.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
+    syncGlobalBodyLockState();
   };
 
   const openOverlay = () => {
     if (!isMobileViewport()) return;
-    if (shownThisSession) return;
+    if (hasSeenOverlayThisSession()) return;
 
     overlay.classList.remove("hidden");
     overlay.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-    shownThisSession = true;
+    markOverlaySeenThisSession();
+    syncGlobalBodyLockState();
   };
 
   proceedBtn.addEventListener("click", () => {
