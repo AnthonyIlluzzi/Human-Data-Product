@@ -1026,41 +1026,46 @@ function setScoringHelpContent() {
   if (!els.scoringHelpPopover) return;
 
   els.scoringHelpPopover.innerHTML = `
-    <p class="chart-help-title">How scoring works</p>
+  <p class="chart-help-title">How scoring works</p>
 
-    <div class="chart-help-body scoring-help-body">
-      <div class="chart-help-section">
-        <strong>Depth</strong> reflects level of understanding:
-      </div>
-
-      <div class="chart-help-section">
-        <ul>
-          <li><span class="help-number">1</span> Awareness</li>
-          <li><span class="help-number">2</span> Foundational</li>
-          <li><span class="help-number">3</span> Applied</li>
-          <li><span class="help-number">4</span> Expertise</li>
-        </ul>
-      </div>
-
-      <div class="chart-help-section">
-        <strong>Experience</strong> reflects real-world application:
-      </div>
-
-      <div class="chart-help-section">
-        <ul>
-          <li><span class="help-number">0</span> None</li>
-          <li><span class="help-number">1</span> Exposure</li>
-          <li><span class="help-number">2</span> Applied</li>
-          <li><span class="help-number">3</span> Owned</li>
-        </ul>
-      </div>
-
-      <div class="chart-help-section scoring-help-footer">
-        Confidence reflects how strongly the score is supported by resume and portfolio evidence.
-      </div>
+  <div class="chart-help-body scoring-help-body">
+    
+    <div class="chart-help-section">
+      <strong>Depth</strong> reflects level of understanding:
     </div>
-  `;
-}
+
+    <div class="chart-help-section">
+      <ul>
+        <li><span class="help-number">1</span> - Awareness: basic familiarity</li>
+        <li><span class="help-number">2</span> - Foundational: understands core concepts</li>
+        <li><span class="help-number">3</span> - Applied: uses independently</li>
+        <li><span class="help-number">4</span> - Expertise: leads design or direction</li>
+      </ul>
+    </div>
+
+    <div class="chart-help-section">
+      <strong>Experience</strong> reflects real-world application:
+    </div>
+
+    <div class="chart-help-section">
+      <ul>
+        <li><span class="help-number">0</span> - None: no direct use</li>
+        <li><span class="help-number">1</span> - Exposure: limited involvement</li>
+        <li><span class="help-number">2</span> - Applied: repeated use</li>
+        <li><span class="help-number">3</span> - Owned: accountable for outcomes</li>
+      </ul>
+    </div>
+
+    <div class="chart-help-section">
+      <p><strong>Confidence</strong> is an inferred value reflecting how strongly the assigned scores are supported by evidence in the underlying dataset.</p>
+    </div>    
+
+    <div class="chart-help-section scoring-help-footer">
+      Depth and experience are intentionally separate. Scores are stored per skill and presented directly in this view.
+    </div>
+
+  </div>
+`;
   
   function setInventoryRecency() {
     if (!els.inventoryRecency) return;
