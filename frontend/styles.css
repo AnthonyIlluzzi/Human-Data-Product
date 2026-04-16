@@ -4104,6 +4104,45 @@ body.has-active-overlay .mobile-shell-header {
 .mobile-insight-card {
   display: grid;
   gap: 12px;
+  padding: 14px 16px 12px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f5f9fe 100%);
+}
+
+.mobile-insight-card .insight-observed-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.mobile-insight-card .insight-observed-card h3,
+.mobile-insight-card h3 {
+  margin: 0;
+  line-height: 1.18;
+}
+
+.mobile-insight-card .insight-observed-copy {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  display: grid;
+  gap: 10px;
+}
+
+.mobile-insight-card .insight-observed-copy p {
+  margin: 0;
+}
+
+.mobile-insight-card .insight-observed-copy ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.mobile-insight-card .insight-observed-copy li {
+  margin: 0 0 6px;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .mobile-insight-action {
