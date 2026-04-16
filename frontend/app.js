@@ -68,6 +68,17 @@ function getStickyPageOffset() {
   return Math.max(headerHeight + 12, 68);
 }
 
+function resetModalScrollPosition(modal) {
+  if (!modal) return;
+
+  modal.scrollTop = 0;
+
+  modal.querySelectorAll(".modal-body, .feedback-detail-modal-body, .inventory-table-wrap").forEach(node => {
+    node.scrollTop = 0;
+    node.scrollLeft = 0;
+  });
+}
+
 function syncMobileDrawerForCurrentPage() {
   const catalogPage = document.getElementById("catalog-page");
   const productPage = document.getElementById("product-page");
@@ -366,19 +377,7 @@ function bindCatalogNavigation() {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-
-        const scrollTarget =
-          overviewPanel?.querySelector(".panel-header") ||
-          overviewPanel ||
-          workspace ||
-          productPage;
-
-        scrollTarget?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
+        scrollPanelToTop(overviewPanel, "auto");
       });
     });
   });
@@ -522,6 +521,7 @@ function bindLandingModals() {
       const modal = document.getElementById(modalId);
       if (!modal) return;
 
+      resetModalScrollPosition(modal);
       modal.classList.remove("hidden");
       syncGlobalBodyLockState();
     });
@@ -1502,6 +1502,7 @@ function openFeedbackDetailModal(themeLabel, entries) {
 
   title.textContent = `${themeLabel} Feedback`;
   renderModalContent();
+  resetModalScrollPosition(modal);
   modal.classList.remove("hidden");
   syncGlobalBodyLockState();
 }
@@ -2487,25 +2488,54 @@ function formatObservedCopy(copy) {
   return "";
 }
 
-function buildMobileInsightCard({ eyebrow = "Derived Insight", title = "", copy = "", derivation = "", actionHtml = "" }) {
+function buildMobileInsightCard({
+  eyebrow = "Derived Insight",
+  title = "",
+  copy = "",
+  derivation = "",
+  actionHtml = "",
+  helpId = ""
+}) {
+  const hasHelp = Boolean(derivation && helpId);
+
   return `
     <article class="mobile-insight-card insight-observed-card">
-      <div class="insight-observed-header-row">
-        <div>
-          <div class="insight-observed-kicker">${escapeHtml(eyebrow)}</div>
-          <h4>${escapeHtml(title)}</h4>
-        </div>
+      <div class="insight-observed-eyebrow">${escapeHtml(eyebrow)}</div>
+
+      <div class="insight-observed-title-row">
+        <h3>${escapeHtml(title)}</h3>
+
+        ${hasHelp ? `
+          <div class="insight-help">
+            <button
+              id="${escapeHtml(helpId)}-button"
+              class="insight-help-button"
+              type="button"
+              aria-label="How this was calculated"
+              aria-expanded="false"
+              aria-controls="${escapeHtml(helpId)}-popover"
+            >
+              ?
+            </button>
+
+            <div
+              id="${escapeHtml(helpId)}-popover"
+              class="insight-help-popover"
+              role="dialog"
+              aria-hidden="true"
+            >
+              <p class="insight-help-title">How this was calculated</p>
+              <div class="insight-help-body">
+                ${escapeHtml(derivation)}
+              </div>
+            </div>
+          </div>
+        ` : ""}
       </div>
 
       <div class="insight-observed-copy">
         ${formatObservedCopy(copy)}
       </div>
-
-      ${derivation ? `
-        <div class="insight-observed-derivation">
-          ${escapeHtml(derivation)}
-        </div>
-      ` : ""}
 
       ${actionHtml ? `
         <div class="mobile-insight-action">
@@ -2515,7 +2545,6 @@ function buildMobileInsightCard({ eyebrow = "Derived Insight", title = "", copy 
     </article>
   `;
 }
-
 function bindValueDistributionToggles(distributionViews) {
   const buttons = document.querySelectorAll("[data-distribution-dimension]");
   if (!buttons.length) return;
@@ -2570,31 +2599,36 @@ function renderMobileValueInsights(data) {
       eyebrow: "Where value is created",
       title: solutionView.observed_title || "Approach distribution",
       copy: solutionView.observed_copy,
-      derivation: solutionView.derivation
+      derivation: solutionView.derivation,
+      helpId: "mobile-value-created-approach"
     }) : "",
     problemView ? buildMobileInsightCard({
       eyebrow: "Where value is created",
       title: problemView.observed_title || "Problem distribution",
       copy: problemView.observed_copy,
-      derivation: problemView.derivation
+      derivation: problemView.derivation,
+      helpId: "mobile-value-created-problem"
     }) : "",
     systemLayerView ? buildMobileInsightCard({
       eyebrow: "Where value is created",
       title: systemLayerView.observed_title || "System layer distribution",
       copy: systemLayerView.observed_copy,
-      derivation: systemLayerView.derivation
+      derivation: systemLayerView.derivation,
+      helpId: "mobile-value-created-system-layer"
     }) : "",
     valueDelivery ? buildMobileInsightCard({
       eyebrow: "How value is delivered",
       title: "Delivery pattern",
       copy: valueDelivery.insights?.map(item => item.statement) || [],
-      derivation: valueDelivery.derivation
+      derivation: valueDelivery.derivation,
+      helpId: "mobile-value-delivery"
     }) : "",
     valueRealization ? buildMobileInsightCard({
       eyebrow: "How value is realized",
       title: valueRealization.observed_title || "Capability expansion",
       copy: valueRealization.observed_copy,
-      derivation: valueRealization.derivation
+      derivation: valueRealization.derivation,
+      helpId: "mobile-value-realization"
     }) : "",
     buildMobileInsightCard({
       eyebrow: "Feedback evidence",
@@ -2606,6 +2640,7 @@ function renderMobileValueInsights(data) {
           type="button"
           class="btn-secondary"
           id="mobile-feedback-evidence-btn"
+		  bindInsightHelpPopovers();
         >
           View Feedback Evidence
         </button>
@@ -2638,16 +2673,18 @@ function renderMobileCapabilityInsights() {
           type="button"
           class="btn-secondary"
           id="mobile-capability-inventory-btn"
+		  bindInsightHelpPopovers();
         >
           Open Skill Inventory
         </button>
       `
     }),
-    ...(cards || []).map(card => buildMobileInsightCard({
+    ...(cards || []).map((card, index) => buildMobileInsightCard({
       eyebrow: "Derived Insight",
       title: card?.title || "Observed Pattern",
       copy: card?.copy || "",
-      derivation: card?.derivation || ""
+      derivation: card?.derivation || "",
+      helpId: `mobile-capability-derived-${index + 1}`
     }))
   ].join("");
 
@@ -2667,21 +2704,25 @@ function renderMobileOpportunityInsights(data) {
       eyebrow: "Career trajectory",
       title: data?.trajectory?.observed_title || "Career trajectory",
       copy: data?.trajectory?.observed_copy || "",
-      derivation: data?.trajectory?.derivation || ""
+      derivation: data?.trajectory?.derivation || "",
+      helpId: "mobile-opportunity-trajectory"
     }),
     buildMobileInsightCard({
       eyebrow: "Opportunity fit profile",
       title: data?.fit_profile?.observed_title || "Opportunity fit profile",
       copy: data?.fit_profile?.observed_copy || "",
-      derivation: data?.fit_profile?.derivation || ""
+      derivation: data?.fit_profile?.derivation || "",
+      helpId: "mobile-opportunity-fit"
     }),
     buildMobileInsightCard({
       eyebrow: "Target role priorities",
       title: data?.role_priorities?.observed_title || "Target role priorities",
       copy: data?.role_priorities?.observed_copy || "",
-      derivation: data?.role_priorities?.derivation || ""
+      derivation: data?.role_priorities?.derivation || "",
+      helpId: "mobile-opportunity-role-priorities"
     })
   ].join("");
+  bindInsightHelpPopovers();
 }
 
 function renderDistributionBar(containerId, view) {
@@ -2829,8 +2870,9 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
         <p>No curated feedback examples are available right now.</p>
       </div>
     `;
+    resetModalScrollPosition(modal);
     modal.classList.remove("hidden");
-	syncGlobalBodyLockState();
+    syncGlobalBodyLockState();
     return;
   }
 
@@ -2884,6 +2926,7 @@ function openFeedbackEvidenceModal(groups, activeKey = null) {
     });
   });
 
+  resetModalScrollPosition(modal);
   modal.classList.remove("hidden");
   syncGlobalBodyLockState();
 }
