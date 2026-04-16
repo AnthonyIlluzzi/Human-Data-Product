@@ -55,6 +55,7 @@ function syncGlobalBodyLockState() {
   document.body.classList.toggle("modal-open", shouldLockBody);
   document.body.classList.toggle("has-active-overlay", hasActiveOverlay);
 }
+window.syncGlobalBodyLockState = syncGlobalBodyLockState;
 
 function syncMobileDrawerForCurrentPage() {
   const catalogPage = document.getElementById("catalog-page");
