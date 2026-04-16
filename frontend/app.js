@@ -2636,15 +2636,14 @@ function renderMobileValueInsights(data) {
       copy: "Review curated feedback examples tied to the delivery approaches shown above.",
       derivation: "",
       actionHtml: `
-        <button
-          type="button"
-          class="btn-secondary"
-          id="mobile-feedback-evidence-btn"
-		  bindInsightHelpPopovers();
-        >
-          View Feedback Evidence
-        </button>
-      `
+	    <button
+	      type="button"
+	      class="btn-secondary"
+	      id="mobile-feedback-evidence-btn"
+	    >
+	      View Feedback Evidence
+	    </button>
+	  `
     })
   ].filter(Boolean).join("");
 
@@ -2653,6 +2652,7 @@ function renderMobileValueInsights(data) {
     if (!hasFeedback) return;
     openFeedbackEvidenceModal(valueDeliveryFeedbackGroups);
   });
+  bindInsightHelpPopovers();
 }
 
 function renderMobileCapabilityInsights() {
@@ -2669,15 +2669,14 @@ function renderMobileCapabilityInsights() {
       copy: "Open the current skill inventory table and review the existing depth, experience, and confidence scoring details.",
       derivation: "",
       actionHtml: `
-        <button
-          type="button"
-          class="btn-secondary"
-          id="mobile-capability-inventory-btn"
-		  bindInsightHelpPopovers();
-        >
-          Open Skill Inventory
-        </button>
-      `
+	    <button
+	      type="button"
+	      class="btn-secondary"
+	      id="mobile-capability-inventory-btn"
+	    >
+	      Open Skill Inventory
+	    </button>
+	  `
     }),
     ...(cards || []).map((card, index) => buildMobileInsightCard({
       eyebrow: "Derived Insight",
@@ -2693,6 +2692,7 @@ function renderMobileCapabilityInsights() {
       window.openCapabilityInventoryModal();
     }
   });
+  bindInsightHelpPopovers();
 }
 
 function renderMobileOpportunityInsights(data) {
