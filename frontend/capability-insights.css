@@ -828,6 +828,10 @@ body.modal-open {
   color: #5f7289;
 }
 
+.chart-help-section p strong {
+  display: inline;
+}
+
 .chart-help-section ul {
   list-style: none;
   margin: 4px 0 0;
