@@ -86,6 +86,7 @@ function syncMobileDrawerForCurrentPage() {
   const productPage = document.getElementById("product-page");
   const catalogGroup = document.getElementById("mobile-nav-catalog-group");
   const productGroup = document.getElementById("mobile-nav-product-group");
+  const mobileNavSubtitle = document.getElementById("mobile-nav-subtitle");
 
   if (!catalogGroup || !productGroup || !catalogPage || !productPage) return;
 
@@ -94,6 +95,10 @@ function syncMobileDrawerForCurrentPage() {
 
   catalogGroup.classList.toggle("hidden", !showingCatalog);
   productGroup.classList.toggle("hidden", !showingProduct);
+
+  if (mobileNavSubtitle) {
+    mobileNavSubtitle.textContent = showingCatalog ? "Catalog" : "Workspace";
+  }
 }
 
 const GA_EVENT_NAMES = {
