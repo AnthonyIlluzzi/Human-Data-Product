@@ -102,20 +102,26 @@ function syncMobileDrawerForCurrentPage() {
 }
 
 function syncNavigationActiveState({ page = "catalog", panelId = "overview-panel" } = {}) {
-  const catalogPageButtons = [
-    ...document.querySelectorAll(".landing-nav .landing-link"),
-    ...document.querySelectorAll("#mobile-nav-catalog-group [data-mobile-nav-target='catalog-page']")
-  ];
+  const desktopCatalogButton = document.querySelector(".landing-nav a.landing-link[href='#definition-section']");
+  const mobileCatalogButton = document.querySelector("#mobile-nav-catalog-group [data-mobile-nav-target='catalog-page']");
 
   const workspaceButtons = [
     ...document.querySelectorAll(".side-nav .nav-btn[data-panel]"),
     ...document.querySelectorAll("#mobile-nav-product-group .nav-btn[data-panel]")
   ];
 
-  catalogPageButtons.forEach(btn => {
-    btn.classList.toggle("active", page === "catalog");
-    btn.classList.toggle("active-link", page === "catalog");
+  document.querySelectorAll(".landing-nav .landing-link").forEach(btn => {
+    btn.classList.remove("active", "active-link");
   });
+
+  if (desktopCatalogButton) {
+    desktopCatalogButton.classList.toggle("active-link", page === "catalog");
+    desktopCatalogButton.classList.toggle("active", page === "catalog");
+  }
+
+  if (mobileCatalogButton) {
+    mobileCatalogButton.classList.toggle("active", page === "catalog");
+  }
 
   workspaceButtons.forEach(btn => {
     btn.classList.toggle("active", page === "product" && btn.dataset.panel === panelId);
