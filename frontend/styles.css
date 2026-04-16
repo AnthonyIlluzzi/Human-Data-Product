@@ -4106,6 +4106,9 @@ body.has-active-overlay .mobile-shell-header {
   gap: 12px;
   padding: 14px 16px 12px;
   background: linear-gradient(180deg, #fbfdff 0%, #f5f9fe 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .mobile-insight-card .insight-observed-title-row {
