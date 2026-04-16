@@ -1066,6 +1066,7 @@ function setScoringHelpContent() {
 
   </div>
 `;
+}
   
   function setInventoryRecency() {
     if (!els.inventoryRecency) return;
