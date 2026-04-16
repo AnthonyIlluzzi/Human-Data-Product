@@ -1022,49 +1022,45 @@ function updateDerivedInsight() {
       .join("");
   }
 
-  function setScoringHelpContent() {
-    if (!els.scoringHelpPopover) return;
+function setScoringHelpContent() {
+  if (!els.scoringHelpPopover) return;
 
-    els.scoringHelpPopover.innerHTML = `
-      <p class="chart-help-title">How scoring works</p>
+  els.scoringHelpPopover.innerHTML = `
+    <p class="chart-help-title">How scoring works</p>
 
-      <div class="chart-help-body scoring-help-body">
-        <div class="chart-help-section">
-          <strong>Depth</strong> reflects level of understanding (1–4):
-        </div>
-
-        <div class="chart-help-section">
-          <ul>
-            <li><span class="help-number">1</span> - <strong>Awareness:</strong> understands concepts and terminology</li>
-            <li><span class="help-number">2</span> - <strong>Conceptual:</strong> understands how it works and where it applies</li>
-            <li><span class="help-number">3</span> - <strong>Applied:</strong> has used in real work or design contexts</li>
-            <li><span class="help-number">4</span> - <strong>Expert:</strong> core strength used to shape systems or outcomes</li>
-          </ul>
-        </div>
-
-        <div class="chart-help-section">
-          <strong>Experience</strong> reflects real-world application (0–3):
-        </div>
-
-        <div class="chart-help-section">
-          <ul>
-            <li><span class="help-number">0</span> - <strong>None:</strong> no applied experience</li>
-            <li><span class="help-number">1</span> - <strong>Exposure:</strong> limited hands-on use or learning</li>
-            <li><span class="help-number">2</span> - <strong>Applied:</strong> used in real work with meaningful contribution</li>
-            <li><span class="help-number">3</span> - <strong>Owned:</strong> repeated ownership and decision responsibility</li>
-          </ul>
-        </div>
-
-        <div class="chart-help-section scoring-help-footer">
-          Scores are derived from resume evidence, portfolio artifacts, and supported inference where direct evidence is limited.
-        </div>
-
-        <div class="chart-help-section scoring-help-footer">
-          <strong>Depth and experience are intentionally separated</strong> to distinguish conceptual strength from applied ownership.
-        </div>
+    <div class="chart-help-body scoring-help-body">
+      <div class="chart-help-section">
+        <strong>Depth</strong> reflects level of understanding:
       </div>
-    `;
-  }
+
+      <div class="chart-help-section">
+        <ul>
+          <li><span class="help-number">1</span> Awareness</li>
+          <li><span class="help-number">2</span> Foundational</li>
+          <li><span class="help-number">3</span> Applied</li>
+          <li><span class="help-number">4</span> Expertise</li>
+        </ul>
+      </div>
+
+      <div class="chart-help-section">
+        <strong>Experience</strong> reflects real-world application:
+      </div>
+
+      <div class="chart-help-section">
+        <ul>
+          <li><span class="help-number">0</span> None</li>
+          <li><span class="help-number">1</span> Exposure</li>
+          <li><span class="help-number">2</span> Applied</li>
+          <li><span class="help-number">3</span> Owned</li>
+        </ul>
+      </div>
+
+      <div class="chart-help-section scoring-help-footer">
+        Confidence reflects how strongly the score is supported by resume and portfolio evidence.
+      </div>
+    </div>
+  `;
+}
   
   function setInventoryRecency() {
     if (!els.inventoryRecency) return;
@@ -1081,6 +1077,13 @@ function updateDerivedInsight() {
   function openInventoryModal() {
     if (!els.inventoryModal) return;
     inventoryModalTriggerEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    const tableWrap = els.inventoryModal.querySelector(".inventory-table-wrap");
+    if (tableWrap) {
+      tableWrap.scrollTop = 0;
+      tableWrap.scrollLeft = 0;
+    }
+
     els.inventoryModal.classList.add("is-visible");
     els.inventoryModal.setAttribute("aria-hidden", "false");
     if (typeof window.syncGlobalBodyLockState === "function") {
@@ -1300,8 +1303,7 @@ function updateDerivedInsight() {
       els.chartHelpPopover?.contains(target) ||
       els.chartHelpButton?.contains(target) ||
       els.scoringHelpPopover?.contains(target) ||
-      els.scoringHelpButton?.contains(target) ||
-      els.inventoryModal?.contains(target)
+      els.scoringHelpButton?.contains(target)
     ) {
       return;
     }
