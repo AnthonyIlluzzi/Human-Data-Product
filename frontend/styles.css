@@ -4981,7 +4981,7 @@ body.has-active-overlay .mobile-shell-header {
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 960px) {
   #value-insights-mobile-stack,
   #capability-insights-mobile-stack,
   #opportunity-insights-mobile-stack {
@@ -5037,16 +5037,6 @@ body.has-active-overlay .mobile-shell-header {
     white-space: nowrap;
     padding: 8px 12px;
     width: fit-content;
-  }
-
-  .feedback-detail-modal-card {
-    width: calc(100vw - 20px);
-    max-height: calc(100dvh - 20px);
-  }
-
-  .feedback-detail-modal-body {
-    max-height: min(68vh, 620px);
-    overflow: auto;
   }
   
   .feedback-approach-toggle-row {
