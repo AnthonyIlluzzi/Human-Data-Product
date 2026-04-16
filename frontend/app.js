@@ -101,6 +101,27 @@ function syncMobileDrawerForCurrentPage() {
   }
 }
 
+function syncNavigationActiveState({ page = "catalog", panelId = "overview-panel" } = {}) {
+  const catalogPageButtons = [
+    ...document.querySelectorAll(".landing-nav .landing-link"),
+    ...document.querySelectorAll("#mobile-nav-catalog-group [data-mobile-nav-target='catalog-page']")
+  ];
+
+  const workspaceButtons = [
+    ...document.querySelectorAll(".side-nav .nav-btn[data-panel]"),
+    ...document.querySelectorAll("#mobile-nav-product-group .nav-btn[data-panel]")
+  ];
+
+  catalogPageButtons.forEach(btn => {
+    btn.classList.toggle("active", page === "catalog");
+    btn.classList.toggle("active-link", page === "catalog");
+  });
+
+  workspaceButtons.forEach(btn => {
+    btn.classList.toggle("active", page === "product" && btn.dataset.panel === panelId);
+  });
+}
+
 const GA_EVENT_NAMES = {
   VIEW_OVERVIEW: "view_overview",
   VIEW_VALUE_INSIGHTS: "view_value_insights",
@@ -312,6 +333,10 @@ const loaders = [
     catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
     syncMobileDrawerForCurrentPage();
+	syncNavigationActiveState({
+    page: "product",
+    panelId: appState.panel || "overview-panel"
+  });
 
     const targetPanel = appState.panel || "overview-panel";
     const targetTab =
@@ -333,6 +358,9 @@ const loaders = [
     catalogPage?.classList.remove("hidden");
     productPage?.classList.add("hidden");
     syncMobileDrawerForCurrentPage();
+	syncNavigationActiveState({
+    page: "catalog"
+  });
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -365,13 +393,13 @@ function bindCatalogNavigation() {
     catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
     syncMobileDrawerForCurrentPage();
+	syncNavigationActiveState({
+	  page: "product",
+	  panelId: "overview-panel"
+	});
 
     document.querySelectorAll(".workspace-panel").forEach(panel => {
       panel.classList.remove("active");
-    });
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.panel === "overview-panel");
     });
 
     overviewPanel?.classList.add("active");
@@ -402,6 +430,9 @@ function bindCatalogNavigation() {
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
     syncMobileDrawerForCurrentPage();
+	syncNavigationActiveState({
+	  page: "catalog"
+	});
     syncGlobalBodyLockState();
 
     void catalogPage?.offsetHeight;
@@ -607,6 +638,10 @@ function bindMobileShellNavigation() {
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
 
+	syncNavigationActiveState({
+	  page: "catalog"
+	});
+
     saveAppState({
       page: "catalog",
       panel: "overview-panel",
@@ -637,6 +672,10 @@ function bindMobileShellNavigation() {
 
       productPage?.classList.add("hidden");
       catalogPage?.classList.remove("hidden");
+
+	  syncNavigationActiveState({
+	    page: "catalog"
+	  });
 
       saveAppState({
         page: "catalog",
@@ -704,6 +743,10 @@ function bindMobileShellNavigation() {
     productPage?.classList.add("hidden");
     catalogPage?.classList.remove("hidden");
 
+	syncNavigationActiveState({
+	  page: "catalog"
+	});
+
     saveAppState({
       page: "catalog",
       panel: "overview-panel",
@@ -751,16 +794,16 @@ async function openWorkspacePanel(panelId, tabId = null, options = {}) {
     resetWorkspaceState(panelId);
   }
 
-  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   document.querySelectorAll(".workspace-panel").forEach(panel => panel.classList.remove("active"));
 
   const activePanel = document.getElementById(panelId);
   activePanel?.classList.add("active");
 
-  const matchingNav = Array.from(document.querySelectorAll(".nav-btn"))
-    .find(btn => btn.dataset.panel === panelId);
+  syncNavigationActiveState({
+    page: "product",
+    panelId
+  });
 
-  if (matchingNav) matchingNav.classList.add("active");
   trackPanelView(panelId);
 
   saveAppState({
