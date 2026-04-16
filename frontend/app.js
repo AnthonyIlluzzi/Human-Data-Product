@@ -524,6 +524,10 @@ function bindLandingModals() {
       resetModalScrollPosition(modal);
       modal.classList.remove("hidden");
       syncGlobalBodyLockState();
+
+      requestAnimationFrame(() => {
+        resetModalScrollPosition(modal);
+      });
     });
   });
 
