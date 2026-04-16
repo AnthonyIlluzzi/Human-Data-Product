@@ -271,9 +271,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>GET</td>
+          <td>GET, HEAD</td>
           <td>/health</td>
-          <td>Health check for the API service</td>
+          <td>Health check for the API service. Supports HEAD for uptime monitoring and lightweight availability checks.</td>
         </tr>
         <tr>
           <td>GET</td>
@@ -532,8 +532,8 @@
       </tbody>
     </table>
 
-    <h2 id="get-health">GET /health</h2>
-    <p>Confirms the API service is operational.</p>
+    <h2 id="get-health">GET /health and HEAD /health</h2>
+    <p>Confirms the API service is operational. The endpoint supports both GET and HEAD requests. HEAD is included to support uptime monitoring and lightweight health checks.</p>
 
     <h3>Response Structure</h3>
     <table>
