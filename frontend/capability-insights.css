@@ -1267,6 +1267,30 @@ body.modal-open {
     padding: 3px 6px;
     font-size: 0.74rem;
   }
+
+  /* Mobile header abbreviations for inventory table */
+  .inventory-table thead th.inventory-metric-heading:nth-child(4)::after {
+    content: "Exper";
+  }
+
+  .inventory-table thead th.inventory-metric-heading:nth-child(5)::after {
+    content: "Conf";
+  }
+
+  /* Hide original text visually but keep layout intact */
+  .inventory-table thead th.inventory-metric-heading:nth-child(4),
+  .inventory-table thead th.inventory-metric-heading:nth-child(5) {
+    font-size: 0;
+    line-height: 0;
+  }
+
+  /* Show abbreviated label */
+  .inventory-table thead th.inventory-metric-heading:nth-child(4)::after,
+  .inventory-table thead th.inventory-metric-heading:nth-child(5)::after {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
 }
 
 @media (max-width: 920px) and (orientation: landscape) {
