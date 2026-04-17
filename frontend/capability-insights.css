@@ -1237,27 +1237,27 @@ body.modal-open {
 
   .inventory-table thead th,
   .inventory-table tbody td {
-    padding: 10px 8px;
+    padding: 10px 6px;
     font-size: 0.78rem;
   }
 
   .inventory-table thead th.inventory-domain-heading,
   .inventory-table tbody td.inventory-domain-cell {
-    width: 28%;
+    width: 27%;
     white-space: normal;
     word-break: break-word;
   }
 
   .inventory-table thead th.inventory-skill-heading,
   .inventory-table tbody td.inventory-skill-cell {
-    width: 33%;
+    width: 31%;
     white-space: normal;
     word-break: break-word;
   }
 
   .inventory-table thead th.inventory-metric-heading,
   .inventory-table tbody td.inventory-metric-cell {
-    width: 13%;
+    width: 14%;
     white-space: nowrap;
     text-align: center;
   }
