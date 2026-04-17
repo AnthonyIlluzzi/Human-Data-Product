@@ -2438,6 +2438,7 @@ async function loadContactInfo() {
       phone: "Call",
       linkedin: "LinkedIn"
     };
+	const useSingleActionButtons = window.matchMedia("(max-width: 768px)").matches;
 
     const actionableContacts = contacts.filter(contact =>
       ["email", "phone", "linkedin"].includes(contact.category)
@@ -2461,21 +2462,37 @@ async function loadContactInfo() {
           extraAttrs = ` target="_blank" rel="noopener noreferrer"`;
         }
 
-        return `
-          <div class="contact-detail-item">
-            <div class="contact-detail-icon" aria-hidden="true">${icon}</div>
-            <div class="contact-detail-copy">
-              <a
-                class="contact-detail-action"
-                href="${escapeHtml(href)}"
-                ${extraAttrs}
-                data-contact-action="${escapeHtml(category)}"
-              >
-                ${escapeHtml(actionLabel)}
-              </a>
-            </div>
-          </div>
-        `;
+        if (useSingleActionButtons) {
+  return `
+    <div class="contact-detail-item contact-detail-item--mobile">
+      <a
+        class="contact-detail-action contact-detail-action--mobile"
+        href="${escapeHtml(href)}"
+        ${extraAttrs}
+        data-contact-action="${escapeHtml(category)}"
+      >
+        <span class="contact-detail-action-icon" aria-hidden="true">${icon}</span>
+        <span class="contact-detail-action-text">${escapeHtml(actionLabel)}</span>
+      </a>
+    </div>
+  `;
+}
+
+		return `
+		  <div class="contact-detail-item">
+		    <div class="contact-detail-icon" aria-hidden="true">${icon}</div>
+		    <div class="contact-detail-copy">
+		      <a
+		        class="contact-detail-action"
+		        href="${escapeHtml(href)}"
+		        ${extraAttrs}
+		        data-contact-action="${escapeHtml(category)}"
+		      >
+		        ${escapeHtml(actionLabel)}
+		      </a>
+		    </div>
+		  </div>
+		`;
       })
       .join("");
 
