@@ -1241,6 +1241,10 @@ body.modal-open {
     font-size: 0.78rem;
   }
 
+  .inventory-table thead th {
+    line-height: 1;
+  }
+
   .inventory-table thead th.inventory-domain-heading,
   .inventory-table tbody td.inventory-domain-cell {
     width: 27%;
@@ -1281,15 +1285,18 @@ body.modal-open {
   .inventory-table thead th.inventory-metric-heading:nth-child(4),
   .inventory-table thead th.inventory-metric-heading:nth-child(5) {
     font-size: 0;
-    line-height: 0;
+    line-height: 1;
   }
 
   /* Show abbreviated label */
   .inventory-table thead th.inventory-metric-heading:nth-child(4)::after,
   .inventory-table thead th.inventory-metric-heading:nth-child(5)::after {
+    display: inline-block;
     font-size: 0.78rem;
+    line-height: 1;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    vertical-align: middle;
   }
 }
 
