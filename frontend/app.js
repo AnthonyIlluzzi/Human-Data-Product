@@ -2438,63 +2438,44 @@ async function loadContactInfo() {
       phone: "Call",
       linkedin: "LinkedIn"
     };
-	const useSingleActionButtons = window.matchMedia("(max-width: 768px)").matches;
 
     const actionableContacts = contacts.filter(contact =>
       ["email", "phone", "linkedin"].includes(contact.category)
     );
 
-    const formatted = actionableContacts
-      .map(contact => {
-        const category = contact.category || "";
-        const icon = iconMap[category] || "";
-        const actionLabel = actionLabelMap[category] || capitalize(category);
+const formatted = actionableContacts
+  .map(contact => {
+    const category = contact.category || "";
+    const icon = iconMap[category] || "";
+    const actionLabel = actionLabelMap[category] || capitalize(category);
 
-        let href = "#";
-        let extraAttrs = "";
+    let href = "#";
+    let extraAttrs = "";
 
-        if (category === "email") {
-          href = `mailto:${contact.value}`;
-        } else if (category === "phone") {
-          href = `tel:${contact.value}`;
-        } else if (category === "linkedin") {
-          href = contact.value;
-          extraAttrs = ` target="_blank" rel="noopener noreferrer"`;
-        }
+    if (category === "email") {
+      href = `mailto:${contact.value}`;
+    } else if (category === "phone") {
+      href = `tel:${contact.value}`;
+    } else if (category === "linkedin") {
+      href = contact.value;
+      extraAttrs = ` target="_blank" rel="noopener noreferrer"`;
+    }
 
-        if (useSingleActionButtons) {
-  return `
-    <div class="contact-detail-item contact-detail-item--mobile">
-      <a
-        class="contact-detail-action contact-detail-action--mobile"
-        href="${escapeHtml(href)}"
-        ${extraAttrs}
-        data-contact-action="${escapeHtml(category)}"
-      >
-        <span class="contact-detail-action-icon" aria-hidden="true">${icon}</span>
-        <span class="contact-detail-action-text">${escapeHtml(actionLabel)}</span>
-      </a>
-    </div>
-  `;
-}
-
-		return `
-		  <div class="contact-detail-item">
-		    <div class="contact-detail-icon" aria-hidden="true">${icon}</div>
-		    <div class="contact-detail-copy">
-		      <a
-		        class="contact-detail-action"
-		        href="${escapeHtml(href)}"
-		        ${extraAttrs}
-		        data-contact-action="${escapeHtml(category)}"
-		      >
-		        ${escapeHtml(actionLabel)}
-		      </a>
-		    </div>
-		  </div>
-		`;
-      })
-      .join("");
+    return `
+      <div class="contact-detail-item contact-detail-item--single">
+        <a
+          class="contact-detail-action contact-detail-action--single"
+          href="${escapeHtml(href)}"
+          ${extraAttrs}
+          data-contact-action="${escapeHtml(category)}"
+        >
+          <span class="contact-detail-action-icon" aria-hidden="true">${icon}</span>
+          <span class="contact-detail-action-text">${escapeHtml(actionLabel)}</span>
+        </a>
+      </div>
+    `;
+  })
+  .join("");
 
     const landingList = document.getElementById("landing-contact-list");
     if (landingList) {

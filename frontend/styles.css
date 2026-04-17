@@ -932,6 +932,40 @@ body.modal-open {
   box-shadow: 0 0 0 3px rgba(10, 110, 209, 0.14);
 }
 
+.contact-detail-item--single {
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 10px 0;
+}
+
+.contact-detail-action--single {
+  min-height: 40px;
+  padding: 9px 12px;
+  gap: 10px;
+}
+
+.contact-detail-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.contact-detail-action-text {
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.modal-actions-card .link-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .contact-detail-svg {
   width: 18px;
   height: 18px;
@@ -1758,8 +1792,8 @@ body.has-active-overlay .mobile-shell-header {
   color: var(--primary-dark);
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   text-decoration: none;
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, color 0.18s ease;
 }
@@ -4008,7 +4042,7 @@ body.has-active-overlay .mobile-shell-header {
 
   #contact-modal .modal-card {
     width: 100%;
-    max-height: calc(100dvh - 88px);
+    max-height: calc(100dvh - 56px);
     margin-top: 0;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
@@ -4018,6 +4052,7 @@ body.has-active-overlay .mobile-shell-header {
   #contact-modal .modal-body {
     min-height: 0;
     overflow-y: auto;
+    padding: 10px 14px 14px;
   }
 
   #feedback-detail-modal .feedback-detail-modal-card {
@@ -4078,19 +4113,19 @@ body.has-active-overlay .mobile-shell-header {
   }
 
   .contact-modal-layout {
-    gap: 12px;
+    gap: 10px;
   }
 
   .modal-inner-card {
-    padding: 16px;
+    padding: 14px;
   }
 
   .contact-info-card {
-    gap: 6px;
+    gap: 4px;
   }
 
   .contact-detail-list {
-    gap: 8px;
+    gap: 6px;
   }
 
   .contact-detail-item {
@@ -4105,59 +4140,34 @@ body.has-active-overlay .mobile-shell-header {
     font-size: 15px;
   }
 
-  .contact-detail-item--mobile {
-  grid-template-columns: 1fr;
-  gap: 0;
-}
+  .contact-detail-item--single {
+    padding: 6px 0;
+  }
 
-.contact-detail-action--mobile {
-  width: 100%;
-  min-height: 42px;
-  padding: 8px 12px;
-  justify-content: center;
-  gap: 10px;
-}
+  .contact-detail-action--single {
+    min-height: 40px;
+    padding: 7px 12px;
+    gap: 9px;
+  }
 
-.contact-detail-action-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  flex: 0 0 auto;
-}
+  .output-port-grid .port-card-mini {
+    min-height: 76px;
+    padding: 10px 12px;
+  }
 
-.contact-detail-action-text {
-  display: inline-block;
-  line-height: 1.2;
-}
+  .output-port-grid .interactive-port strong {
+    font-size: 1rem;
+    line-height: 1.14;
+    margin-bottom: 2px;
+  }
 
-.modal-actions-card .link-btn {
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.output-port-grid .port-card-mini {
-  min-height: 76px;
-  padding: 10px 12px;
-}
-
-.output-port-grid .interactive-port strong {
-  font-size: 1.06rem;
-  line-height: 1.15;
-  margin-bottom: 2px;
-}
-
-.output-port-grid .interactive-port p {
-  margin-top: 4px;
-  line-height: 1.35;
-}
+  .output-port-grid .interactive-port p {
+    margin-top: 4px;
+    line-height: 1.35;
+  }
 
   .button-column {
-    gap: 8px;
+    gap: 6px;
   }
 }
 
@@ -4337,6 +4347,12 @@ body.has-active-overlay .mobile-shell-header {
   margin: 0 0 6px;
   color: var(--muted);
   line-height: 1.5;
+}
+
+@media (min-width: 961px) {
+  #value-distribution-observed-copy {
+    min-height: 138px;
+  }
 }
 
 .insight-help {
@@ -5108,6 +5124,17 @@ body.has-active-overlay .mobile-shell-header {
     display: grid;
   }
 
+  .insights-tabs .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .insights-tabs .tab-btn-line {
+    display: inline-block;
+  }
+  
   .insights-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -5118,9 +5145,14 @@ body.has-active-overlay .mobile-shell-header {
     width: 100%;
     min-width: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 2px;
+    padding: 9px 8px;
     text-align: center;
+    line-height: 1.1;
+    white-space: normal;
   }
 
   #visualizations-tab .insights-dashboard-page,
