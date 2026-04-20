@@ -19,6 +19,8 @@
   --space-2: 12px;
   --space-3: 16px;
   --space-4: 24px;
+  --catalog-copy-measure: 34ch;
+  --catalog-copy-measure-tight: 31ch;
 }
 
 * {
@@ -1114,6 +1116,21 @@ body.modal-open {
   font-size: 0.91rem;
   line-height: 1.5;
   color: #475569;
+}
+
+@media (min-width: 961px) {
+  .human-context-summary {
+    max-width: var(--catalog-copy-measure-tight);
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: pretty;
+  }
+
+  .catalog-grid .product-tile .product-summary,
+  .catalog-grid .product-tile .product-summary.secondary {
+    max-width: var(--catalog-copy-measure);
+    text-wrap: pretty;
+  }
 }
 
 .product-tile > h2 {
