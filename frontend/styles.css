@@ -862,7 +862,7 @@ body.modal-open {
 
 .contact-detail-list {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .contact-detail-item {
@@ -870,13 +870,12 @@ body.modal-open {
   grid-template-columns: 36px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
-  padding: 12px 0;
+  padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
 
 .contact-detail-item:last-child {
   border-bottom: none;
-  padding-bottom: 0;
 }
 
 .contact-detail-icon {
@@ -935,13 +934,19 @@ body.modal-open {
 .contact-detail-item--single {
   grid-template-columns: 1fr;
   gap: 0;
-  padding: 10px 0;
+  align-items: stretch;
+  padding: 8px 0;
 }
 
 .contact-detail-action--single {
+  width: 100%;
   min-height: 40px;
-  padding: 9px 12px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
+  text-align: center;
 }
 
 .contact-detail-action-icon {
@@ -4042,7 +4047,7 @@ body.has-active-overlay .mobile-shell-header {
 
   #contact-modal .modal-card {
     width: 100%;
-    max-height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 44px);
     margin-top: 0;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
@@ -4052,7 +4057,7 @@ body.has-active-overlay .mobile-shell-header {
   #contact-modal .modal-body {
     min-height: 0;
     overflow-y: auto;
-    padding: 10px 14px 14px;
+    padding: 8px 14px 12px;
   }
 
   #feedback-detail-modal .feedback-detail-modal-card {
@@ -4113,19 +4118,19 @@ body.has-active-overlay .mobile-shell-header {
   }
 
   .contact-modal-layout {
-    gap: 10px;
+    gap: 8px;
   }
 
   .modal-inner-card {
-    padding: 14px;
+    padding: 13px 14px;
   }
 
   .contact-info-card {
-    gap: 4px;
+    gap: 2px;
   }
 
   .contact-detail-list {
-    gap: 6px;
+    gap: 4px;
   }
 
   .contact-detail-item {
@@ -4144,13 +4149,13 @@ body.has-active-overlay .mobile-shell-header {
     grid-template-columns: 1fr;
     gap: 0;
     align-items: stretch;
-    padding: 4px 0 6px;
+    padding: 4px 0;
   }
-
+  
   .contact-detail-action--single {
     width: 100%;
     min-height: 40px;
-    padding: 7px 12px;
+    padding: 6px 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
