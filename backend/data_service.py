@@ -1184,7 +1184,7 @@ def _build_distribution_view(rows, dimension: str):
         title = "Approach distribution"
     elif dimension == "problem_type":
         observed = [
-            f"Most work addresses {top_labels[0]} and {top_labels[1]}." if len(top_labels) > 1 else "Most work concentrates on one recurring problem type.",
+            f"Most work addresses problems related to {top_labels[0]}s and {top_labels[1]}s." if len(top_labels) > 1 else "Most work concentrates on one recurring problem type.",
             "The problem mix indicates work is primarily driven by structural limitations rather than performance or execution issues."
         ]
         derivation = "Based on factual system improvement records grouped by problem_type and shown as share of total records."
