@@ -542,7 +542,7 @@ function renderAiLoadingState(question) {
   toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
   if (questionEl) questionEl.textContent = question;
-  setAiAnswerBodyState("Typing…", "is-loading");
+  setAiAnswerBodyState("Typing...", "is-loading");
 }
 
 function renderAiError(question, message) {
