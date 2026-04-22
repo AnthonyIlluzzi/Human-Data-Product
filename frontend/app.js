@@ -408,17 +408,52 @@ async function initializeInternalAiMode() {
 function bindAiInterface() {
   const form = document.getElementById("ai-chat-form");
   const input = document.getElementById("ai-question-input");
+  const submitButton = document.getElementById("ai-submit-btn");
   const backButton = document.getElementById("ai-back-to-catalog-btn");
+
+  const syncAiInputState = () => {
+    if (!input || !submitButton) return;
+
+    input.style.height = "auto";
+
+    const computed = window.getComputedStyle(input);
+    const lineHeight = parseFloat(computed.lineHeight) || 24;
+    const paddingTop = parseFloat(computed.paddingTop) || 0;
+    const paddingBottom = parseFloat(computed.paddingBottom) || 0;
+    const borderTop = parseFloat(computed.borderTopWidth) || 0;
+    const borderBottom = parseFloat(computed.borderBottomWidth) || 0;
+    const maxRows = 6;
+
+    const maxHeight =
+      (lineHeight * maxRows) +
+      paddingTop +
+      paddingBottom +
+      borderTop +
+      borderBottom;
+
+    const nextHeight = Math.min(input.scrollHeight, maxHeight);
+    input.style.height = `${nextHeight}px`;
+    input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
+
+    const hasValue = input.value.trim().length > 0;
+    submitButton.classList.toggle("hidden", !hasValue);
+    submitButton.disabled = !hasValue || input.disabled;
+  };
 
   document.querySelectorAll(".ai-prompt-chip[data-ai-prompt]").forEach(btn => {
     btn.addEventListener("click", async () => {
       const prompt = btn.dataset.aiPrompt || "";
       if (input) {
         input.value = prompt;
+        syncAiInputState();
         input.focus();
       }
       await submitAiQuestion(prompt);
     });
+  });
+
+  input?.addEventListener("input", () => {
+    syncAiInputState();
   });
 
   form?.addEventListener("submit", async (event) => {
@@ -431,6 +466,10 @@ function bindAiInterface() {
     nextUrl.searchParams.delete("ai");
     nextUrl.searchParams.delete("internal");
     window.location.href = nextUrl.toString();
+  });
+
+  requestAnimationFrame(() => {
+    syncAiInputState();
   });
 }
 
@@ -522,8 +561,18 @@ async function submitAiQuestion(rawQuestion) {
     console.error("AI request failed:", error);
     renderAiError(question, error.message || "Unable to generate a response right now.");
   } finally {
-    if (button) button.disabled = false;
-    if (input) input.disabled = false;
+    if (input) {
+      input.disabled = false;
+      input.value = "";
+      input.style.height = "auto";
+      input.style.overflowY = "hidden";
+      input.dispatchEvent(new Event("input"));
+    }
+
+    if (button) {
+      button.disabled = true;
+      button.classList.add("hidden");
+    }
   }
 }
 
