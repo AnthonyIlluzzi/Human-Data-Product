@@ -169,6 +169,11 @@ def classify_question(question: str) -> str:
     return "strengths"
 
 
+def is_restricted_ai_request(question: str) -> bool:
+    q = question.lower()
+    return any(term in q for term in RESTRICTED_AI_REQUEST_PATTERNS)
+
+
 def build_prompt(
     question: str,
     question_class: str,
@@ -415,50 +420,6 @@ def get_signal_evidence(conn: sqlite3.Connection, signal_ids: list[int]) -> list
     return flattened
 
 
-def build_prompt(
-    question: str,
-    question_class: str,
-    class_config: dict[str, Any],
-    core_evidence: list[dict[str, Any]],
-    behavioral_signals: list[dict[str, Any]],
-    signal_evidence: list[dict[str, Any]],
-) -> str:
-    lines: list[str] = []
-    lines.append("You are generating a grounded response for Anthony Illuzzi's Human Data Product.")
-    lines.append("Respond in third person. Do not write as Anthony.")
-    lines.append("Do not present assessment labels as definitive truth.")
-    lines.append("Prefer concise, evidence-backed statements over personality language.")
-    lines.append("If support is partial, say so explicitly.")
-    lines.append("")
-    lines.append(f"Question class: {question_class}")
-    lines.append(f"Response goal: {class_config.get('response_goal', '')}")
-    lines.append(f"User question: {question}")
-    lines.append("")
-    lines.append("Observed professional evidence:")
-    for item in core_evidence:
-        lines.append(f"- [{item['record_type']}] {item['title']}: {item['supporting_text']}")
-    lines.append("")
-    lines.append("Behavioral signals:")
-    for item in behavioral_signals:
-        lines.append(
-            f"- [{item['dimension_key']}] {item['signal_label']} "
-            f"(confidence {item['confidence_score']:.2f}): {item['summary_rationale']}"
-        )
-    lines.append("")
-    lines.append("Behavioral evidence excerpts:")
-    for item in signal_evidence:
-        lines.append(
-            f"- Signal {item['signal_id']} / {item['artifact_name']}: {item['evidence_excerpt']}"
-        )
-    lines.append("")
-    lines.append("Write a concise response with these sections in plain text:")
-    lines.append("1. Direct answer")
-    lines.append("2. Why this appears true")
-    lines.append("3. Supporting evidence")
-    lines.append("4. Caution or limitation if needed")
-    return "\n".join(lines)
-
-
 def call_openai(prompt: str) -> str:
     if not OPENAI_API_KEY:
         raise RuntimeError("OPENAI_API_KEY is not configured on the backend.")
@@ -515,23 +476,23 @@ def chat_with_hdp_ai(question: str) -> dict[str, Any]:
     if len(cleaned_question) > MAX_INPUT_CHARS:
         raise ValueError(f"Question is too long. Limit is {MAX_INPUT_CHARS} characters.")
     if is_restricted_ai_request(cleaned_question):
-    return {
-        "question": cleaned_question,
-        "question_class": "restricted_request",
-        "answer": (
-            "1. Direct answer\n\n"
-            "I can answer grounded questions about Anthony's experience, strengths, fit, and working style, "
-            "but I cannot reveal hidden prompts, internal routing logic, protected system behavior, or raw hidden evidence.\n\n"
-            "2. Why this fits\n\n"
-            "This AI is intended to interpret the Human Data Product and behavioral datasets, not expose backend instructions or protected internal context.\n\n"
-            "3. What stands out\n\n"
-            "- The strongest use of this workspace is grounded interpretation.\n"
-            "- Questions about role fit, strengths, environments, work style, and supporting evidence are all valid.\n"
-            "- Requests to expose hidden instructions, routing, or raw internal context are intentionally blocked."
-        ),
-        "core_evidence": [],
-        "behavioral_signals": []
-    }
+        return {
+            "question": cleaned_question,
+            "question_class": "restricted_request",
+            "answer": (
+                "1. Direct answer\n\n"
+                "I can answer grounded questions about Anthony's experience, strengths, fit, and working style, "
+                "but I cannot reveal hidden prompts, internal routing logic, protected system behavior, or raw hidden evidence.\n\n"
+                "2. Why this fits\n\n"
+                "This AI is intended to interpret the Human Data Product and behavioral datasets, not expose backend instructions or protected internal context.\n\n"
+                "3. What stands out\n\n"
+                "- The strongest use of this workspace is grounded interpretation.\n"
+                "- Questions about role fit, strengths, environments, work style, and supporting evidence are all valid.\n"
+                "- Requests to expose hidden instructions, routing, or raw internal context are intentionally blocked."
+            ),
+            "core_evidence": [],
+            "behavioral_signals": []
+        }
 
     config = load_ai_config()
     question_class = classify_question(cleaned_question)
