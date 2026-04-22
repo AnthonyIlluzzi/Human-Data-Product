@@ -1720,6 +1720,69 @@ LIMIT 1;"
   </div>
 </section>
 
+<section id="ai-page" class="page-shell ai-page hidden">
+  <div class="ai-shell">
+    <div class="ai-hero-card">
+      <div class="ai-hero-copy">
+        <span class="hero-eyebrow">INTERNAL AI MODE</span>
+        <h1>This isn’t a resume. It’s a working data product.</h1>
+        <p class="ai-hero-lead">Ask questions and get answers grounded in structured experience, projects, feedback, and behavioral signals.</p>
+        <p class="ai-hero-note">This internal entry state is only available through <code>?ai=true&amp;internal=true</code>.</p>
+      </div>
+      <button id="ai-back-to-catalog-btn" class="btn-secondary ai-back-btn" type="button">Return to Catalog</button>
+    </div>
+
+    <div class="ai-workspace-grid">
+      <section class="card ai-chat-card">
+        <div class="viz-card-header">
+          <h2>Conversational AI</h2>
+          <p class="viz-card-subtitle">Private MVP front door for grounded Q&amp;A over the Human Data Product.</p>
+        </div>
+
+        <div class="ai-prompt-row">
+          <button class="tag-chip ai-prompt-chip" type="button" data-ai-prompt="What roles is Anthony best suited for and why?">Role fit</button>
+          <button class="tag-chip ai-prompt-chip" type="button" data-ai-prompt="What evidence supports Anthony’s architecture orientation?">Architecture evidence</button>
+          <button class="tag-chip ai-prompt-chip" type="button" data-ai-prompt="How does Anthony typically approach ambiguous problems?">Ambiguity approach</button>
+          <button class="tag-chip ai-prompt-chip" type="button" data-ai-prompt="What environments bring out Anthony’s best work?">Environment fit</button>
+        </div>
+
+        <form id="ai-chat-form" class="ai-chat-form">
+          <label class="sr-only" for="ai-question-input">Ask a question</label>
+          <textarea id="ai-question-input" class="ai-question-input" rows="5" placeholder="Ask a grounded question about Anthony’s experience, strengths, fit, or working style."></textarea>
+          <div class="ai-form-actions">
+            <p id="ai-response-status" class="ai-response-status">Use a prompt or ask your own question.</p>
+            <button id="ai-submit-btn" class="btn-primary" type="submit">Generate Answer</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="card ai-response-card-wrap">
+        <div id="ai-empty-state" class="detail-empty-state ai-empty-state">
+          <p>No response yet. Submit a question to populate this panel.</p>
+        </div>
+
+        <div id="ai-response-card" class="ai-response-card hidden">
+          <div class="viz-card-header">
+            <h3 id="ai-response-question">Question</h3>
+            <p class="viz-card-subtitle">Grounded response generated from current HDP and behavioral datasets.</p>
+          </div>
+
+          <div id="ai-answer-body" class="ai-answer-body"></div>
+
+          <div class="ai-evidence-section">
+            <h4>Observed Evidence</h4>
+            <ul id="ai-core-evidence-list" class="ai-evidence-list"></ul>
+          </div>
+
+          <div class="ai-evidence-section">
+            <h4>Behavioral Reinforcement</h4>
+            <ul id="ai-behavioral-signal-list" class="ai-evidence-list"></ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
   <div id="insights-hover-tooltip" class="insights-hover-tooltip hidden" aria-hidden="true"></div>
 		
   <script src="capability-insights.js"></script>

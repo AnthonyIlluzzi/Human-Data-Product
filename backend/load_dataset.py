@@ -9,11 +9,12 @@ from datetime import date
 
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
-DATASET_PATH = PROJECT_ROOT / "data" / "anthony_illuzzi_dataset.json"
+
+CORE_DATASET_PATH = PROJECT_ROOT / "data" / "anthony_illuzzi_dataset.json"
+BEHAVIORAL_DATASET_PATH = PROJECT_ROOT / "data" / "anthony_illuzzi_behavioral_dataset.json"
 DB_PATH = BASE_DIR / "human_data_product.db"
 
-
-TOP_LEVEL_TABLES = [
+CORE_TOP_LEVEL_TABLES = [
     "product_metadata",
     "contact_info",
     "principle",
@@ -27,6 +28,17 @@ TOP_LEVEL_TABLES = [
     "project_skill",
     "feedback",
     "system_improvement",
+]
+
+BEHAVIORAL_TOP_LEVEL_TABLES = [
+    "product_metadata",
+    "source_artifact",
+    "dimension",
+    "artifact_summary",
+    "derived_signal",
+    "signal_evidence_link",
+    "cross_source_alignment",
+    "profile_summary",
 ]
 
 ALLOWED_FEEDBACK_ENTITY_TYPES = {
@@ -45,14 +57,14 @@ def load_json(path: Path) -> dict[str, Any]:
         return json.load(f)
 
 
-def validate_top_level_structure(data: dict[str, Any]) -> None:
-    missing = [key for key in TOP_LEVEL_TABLES if key not in data]
+def require_top_level_lists(data: dict[str, Any], required_keys: list[str], dataset_name: str) -> None:
+    missing = [key for key in required_keys if key not in data]
     if missing:
-        raise ValueError(f"Dataset is missing top-level sections: {missing}")
+        raise ValueError(f"{dataset_name} is missing top-level sections: {missing}")
 
-    for key in TOP_LEVEL_TABLES:
+    for key in required_keys:
         if not isinstance(data[key], list):
-            raise TypeError(f"Top-level key '{key}' must be a list.")
+            raise TypeError(f"{dataset_name} top-level key '{key}' must be a list.")
 
 
 def require_keys(records: Iterable[dict[str, Any]], required: set[str], table_name: str) -> None:
@@ -76,7 +88,7 @@ def build_id_set(records: list[dict[str, Any]], id_key: str) -> set[Any]:
     return ids
 
 
-def validate_referential_integrity(data: dict[str, Any]) -> None:
+def validate_core_referential_integrity(data: dict[str, Any]) -> None:
     experience_ids = build_id_set(data["experience"], "experience_id")
     education_ids = build_id_set(data["education"], "education_id")
     credential_ids = build_id_set(data["credential"], "credential_id")
@@ -106,7 +118,7 @@ def validate_referential_integrity(data: dict[str, Any]) -> None:
             raise ValueError(
                 f"Skill {record['skill_id']} has invalid confidence {record['confidence']} (expected 0-100)"
             )
-    
+
     for record in data["project"]:
         if record["experience_id"] not in experience_ids:
             raise ValueError(
@@ -148,7 +160,7 @@ def validate_referential_integrity(data: dict[str, Any]) -> None:
             raise ValueError(
                 f"system_improvement {improvement_id} references missing project_id {project_id}"
             )
-    
+
     for record in data["feedback"]:
         entity_type = record["entity_type"]
         entity_id = record["entity_id"]
@@ -177,12 +189,12 @@ def validate_referential_integrity(data: dict[str, Any]) -> None:
             )
 
 
-def validate_dataset(data: dict[str, Any]) -> None:
-    validate_top_level_structure(data)
+def validate_core_dataset(data: dict[str, Any]) -> None:
+    require_top_level_lists(data, CORE_TOP_LEVEL_TABLES, "Core dataset")
 
     require_keys(
         data["product_metadata"],
-        {"meta_key", "meta_value"},
+        {"product_scope", "meta_key", "meta_value"},
         "product_metadata",
     )
     require_keys(
@@ -204,7 +216,7 @@ def validate_dataset(data: dict[str, Any]) -> None:
     for record in data["role_preference"]:
         record.setdefault("dimension_weight", 1.0)
         record.setdefault("value_weight", 1.0)
-        
+
     require_keys(
         data["experience"],
         {
@@ -313,22 +325,155 @@ def validate_dataset(data: dict[str, Any]) -> None:
         "system_improvement",
     )
 
-    validate_referential_integrity(data)
+    validate_core_referential_integrity(data)
 
-def apply_runtime_metadata(data: dict[str, Any]) -> None:
+
+def validate_behavioral_dataset(data: dict[str, Any]) -> None:
+    require_top_level_lists(data, BEHAVIORAL_TOP_LEVEL_TABLES, "Behavioral dataset")
+
+    require_keys(
+        data["product_metadata"],
+        {"product_scope", "meta_key", "meta_value"},
+        "behavioral.product_metadata",
+    )
+    require_keys(
+        data["source_artifact"],
+        {
+            "artifact_id",
+            "artifact_type",
+            "artifact_name",
+            "artifact_date",
+            "source_kind",
+            "confidence_weight",
+            "inference_scope",
+            "notes",
+        },
+        "source_artifact",
+    )
+    require_keys(
+        data["dimension"],
+        {
+            "dimension_id",
+            "dimension_key",
+            "dimension_group",
+            "dimension_name",
+            "description",
+        },
+        "dimension",
+    )
+    require_keys(
+        data["artifact_summary"],
+        {
+            "summary_id",
+            "artifact_id",
+            "summary_type",
+            "summary_label",
+            "summary_value",
+            "confidence_weight",
+        },
+        "artifact_summary",
+    )
+    require_keys(
+        data["derived_signal"],
+        {
+            "signal_id",
+            "dimension_id",
+            "signal_key",
+            "signal_label",
+            "signal_value",
+            "confidence_score",
+            "derivation_method",
+            "source_scope",
+            "summary_rationale",
+        },
+        "derived_signal",
+    )
+    require_keys(
+        data["signal_evidence_link"],
+        {
+            "signal_evidence_id",
+            "signal_id",
+            "artifact_id",
+            "evidence_type",
+            "evidence_excerpt",
+            "evidence_weight",
+        },
+        "signal_evidence_link",
+    )
+    require_keys(
+        data["cross_source_alignment"],
+        {
+            "alignment_id",
+            "dimension_id",
+            "signal_id",
+            "source_a_artifact_id",
+            "source_b_artifact_id",
+            "alignment_type",
+            "alignment_score",
+            "alignment_notes",
+        },
+        "cross_source_alignment",
+    )
+    require_keys(
+        data["profile_summary"],
+        {
+            "profile_summary_id",
+            "summary_type",
+            "headline",
+            "body",
+            "confidence_score",
+        },
+        "profile_summary",
+    )
+
+    artifact_ids = build_id_set(data["source_artifact"], "artifact_id")
+    dimension_ids = build_id_set(data["dimension"], "dimension_id")
+    signal_ids = build_id_set(data["derived_signal"], "signal_id")
+
+    for record in data["artifact_summary"]:
+        if record["artifact_id"] not in artifact_ids:
+            raise ValueError(
+                f"artifact_summary {record['summary_id']} references missing artifact_id {record['artifact_id']}"
+            )
+
+    for record in data["derived_signal"]:
+        if record["dimension_id"] not in dimension_ids:
+            raise ValueError(
+                f"derived_signal {record['signal_id']} references missing dimension_id {record['dimension_id']}"
+            )
+
+    for record in data["signal_evidence_link"]:
+        if record["signal_id"] not in signal_ids:
+            raise ValueError(
+                f"signal_evidence_link {record['signal_evidence_id']} references missing signal_id {record['signal_id']}"
+            )
+        if record["artifact_id"] not in artifact_ids:
+            raise ValueError(
+                f"signal_evidence_link {record['signal_evidence_id']} references missing artifact_id {record['artifact_id']}"
+            )
+
+    for record in data["cross_source_alignment"]:
+        if record["dimension_id"] not in dimension_ids:
+            raise ValueError(
+                f"cross_source_alignment {record['alignment_id']} references missing dimension_id {record['dimension_id']}"
+            )
+        if record["signal_id"] not in signal_ids:
+            raise ValueError(
+                f"cross_source_alignment {record['alignment_id']} references missing signal_id {record['signal_id']}"
+            )
+        if record["source_a_artifact_id"] not in artifact_ids or record["source_b_artifact_id"] not in artifact_ids:
+            raise ValueError(
+                f"cross_source_alignment {record['alignment_id']} references missing artifact ids"
+            )
+
+
+def apply_runtime_metadata(core_data: dict[str, Any]) -> None:
     today = date.today().isoformat()
 
-    for record in data["product_metadata"]:
-        if record["meta_key"] == "last_pipeline_refresh":
+    for record in core_data["product_metadata"]:
+        if record["product_scope"] == "platform" and record["meta_key"] == "last_pipeline_refresh":
             record["meta_value"] = today
-            break
-    else:
-        data["product_metadata"].append(
-            {
-                "meta_key": "last_pipeline_refresh",
-                "meta_value": today,
-            }
-        )
+
 
 def get_connection(db_path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path)
@@ -341,8 +486,10 @@ def create_tables(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
         CREATE TABLE IF NOT EXISTS product_metadata (
-            meta_key TEXT PRIMARY KEY,
-            meta_value TEXT
+            product_scope TEXT NOT NULL,
+            meta_key TEXT NOT NULL,
+            meta_value TEXT,
+            PRIMARY KEY (product_scope, meta_key)
         );
 
         CREATE TABLE IF NOT EXISTS contact_info (
@@ -420,7 +567,7 @@ def create_tables(conn: sqlite3.Connection) -> None:
             sort_order INTEGER NOT NULL,
             summary TEXT
         );
-        
+
         CREATE TABLE IF NOT EXISTS skill (
             skill_id INTEGER PRIMARY KEY,
             skill_name TEXT NOT NULL,
@@ -469,14 +616,102 @@ def create_tables(conn: sqlite3.Connection) -> None:
             FOREIGN KEY (experience_id) REFERENCES experience(experience_id),
             FOREIGN KEY (project_id) REFERENCES project(project_id)
         );
+
+        CREATE TABLE IF NOT EXISTS source_artifact (
+            artifact_id INTEGER PRIMARY KEY,
+            artifact_type TEXT,
+            artifact_name TEXT,
+            artifact_date TEXT,
+            source_kind TEXT,
+            confidence_weight REAL,
+            inference_scope TEXT,
+            notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS dimension (
+            dimension_id INTEGER PRIMARY KEY,
+            dimension_key TEXT NOT NULL UNIQUE,
+            dimension_group TEXT,
+            dimension_name TEXT,
+            description TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS artifact_summary (
+            summary_id INTEGER PRIMARY KEY,
+            artifact_id INTEGER NOT NULL,
+            summary_type TEXT,
+            summary_label TEXT,
+            summary_value TEXT,
+            confidence_weight REAL,
+            notes TEXT,
+            FOREIGN KEY (artifact_id) REFERENCES source_artifact(artifact_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS derived_signal (
+            signal_id INTEGER PRIMARY KEY,
+            dimension_id INTEGER NOT NULL,
+            signal_key TEXT NOT NULL UNIQUE,
+            signal_label TEXT,
+            signal_value TEXT,
+            confidence_score REAL,
+            derivation_method TEXT,
+            source_scope TEXT,
+            summary_rationale TEXT,
+            FOREIGN KEY (dimension_id) REFERENCES dimension(dimension_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS signal_evidence_link (
+            signal_evidence_id INTEGER PRIMARY KEY,
+            signal_id INTEGER NOT NULL,
+            artifact_id INTEGER NOT NULL,
+            evidence_type TEXT,
+            evidence_excerpt TEXT,
+            evidence_weight REAL,
+            FOREIGN KEY (signal_id) REFERENCES derived_signal(signal_id),
+            FOREIGN KEY (artifact_id) REFERENCES source_artifact(artifact_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS cross_source_alignment (
+            alignment_id INTEGER PRIMARY KEY,
+            dimension_id INTEGER NOT NULL,
+            signal_id INTEGER NOT NULL,
+            source_a_artifact_id INTEGER NOT NULL,
+            source_b_artifact_id INTEGER NOT NULL,
+            alignment_type TEXT,
+            alignment_score REAL,
+            alignment_notes TEXT,
+            FOREIGN KEY (dimension_id) REFERENCES dimension(dimension_id),
+            FOREIGN KEY (signal_id) REFERENCES derived_signal(signal_id),
+            FOREIGN KEY (source_a_artifact_id) REFERENCES source_artifact(artifact_id),
+            FOREIGN KEY (source_b_artifact_id) REFERENCES source_artifact(artifact_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS profile_summary (
+            profile_summary_id INTEGER PRIMARY KEY,
+            summary_type TEXT,
+            headline TEXT,
+            body TEXT,
+            confidence_score REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS ai_usage_counter (
+            counter_key TEXT PRIMARY KEY,
+            request_count INTEGER NOT NULL DEFAULT 0
+        );
         """
     )
     conn.commit()
 
 
 def clear_tables(conn: sqlite3.Connection) -> None:
-    # Order matters because of FK constraints.
     delete_order = [
+        "cross_source_alignment",
+        "signal_evidence_link",
+        "derived_signal",
+        "artifact_summary",
+        "profile_summary",
+        "dimension",
+        "source_artifact",
         "project_skill",
         "system_improvement",
         "feedback",
@@ -508,16 +743,15 @@ def insert_many(
     placeholders = ", ".join(["?"] * len(columns))
     column_list = ", ".join(columns)
     sql = f"INSERT INTO {table_name} ({column_list}) VALUES ({placeholders})"
-
     values = [tuple(record.get(col) for col in columns) for record in records]
     conn.executemany(sql, values)
 
 
-def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
+def load_core_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
     insert_many(
         conn,
         "product_metadata",
-        ["meta_key", "meta_value"],
+        ["product_scope", "meta_key", "meta_value"],
         data["product_metadata"],
     )
     insert_many(
@@ -655,18 +889,108 @@ def load_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
         data["system_improvement"],
     )
 
-    conn.commit()
+
+def load_behavioral_data(conn: sqlite3.Connection, data: dict[str, Any]) -> None:
+    insert_many(
+        conn,
+        "product_metadata",
+        ["product_scope", "meta_key", "meta_value"],
+        data["product_metadata"],
+    )
+    insert_many(
+        conn,
+        "source_artifact",
+        [
+            "artifact_id",
+            "artifact_type",
+            "artifact_name",
+            "artifact_date",
+            "source_kind",
+            "confidence_weight",
+            "inference_scope",
+            "notes",
+        ],
+        data["source_artifact"],
+    )
+    insert_many(
+        conn,
+        "dimension",
+        ["dimension_id", "dimension_key", "dimension_group", "dimension_name", "description"],
+        data["dimension"],
+    )
+    insert_many(
+        conn,
+        "artifact_summary",
+        ["summary_id", "artifact_id", "summary_type", "summary_label", "summary_value", "confidence_weight", "notes"],
+        data["artifact_summary"],
+    )
+    insert_many(
+        conn,
+        "derived_signal",
+        [
+            "signal_id",
+            "dimension_id",
+            "signal_key",
+            "signal_label",
+            "signal_value",
+            "confidence_score",
+            "derivation_method",
+            "source_scope",
+            "summary_rationale",
+        ],
+        data["derived_signal"],
+    )
+    insert_many(
+        conn,
+        "signal_evidence_link",
+        [
+            "signal_evidence_id",
+            "signal_id",
+            "artifact_id",
+            "evidence_type",
+            "evidence_excerpt",
+            "evidence_weight",
+        ],
+        data["signal_evidence_link"],
+    )
+    insert_many(
+        conn,
+        "cross_source_alignment",
+        [
+            "alignment_id",
+            "dimension_id",
+            "signal_id",
+            "source_a_artifact_id",
+            "source_b_artifact_id",
+            "alignment_type",
+            "alignment_score",
+            "alignment_notes",
+        ],
+        data["cross_source_alignment"],
+    )
+    insert_many(
+        conn,
+        "profile_summary",
+        ["profile_summary_id", "summary_type", "headline", "body", "confidence_score"],
+        data["profile_summary"],
+    )
 
 
 def main() -> None:
-    print(f"Loading dataset from: {DATASET_PATH}")
-    data = load_json(DATASET_PATH)
+    print(f"Loading core dataset from: {CORE_DATASET_PATH}")
+    core_data = load_json(CORE_DATASET_PATH)
 
-    print("Validating dataset...")
-    validate_dataset(data)
+    print(f"Loading behavioral dataset from: {BEHAVIORAL_DATASET_PATH}")
+    behavioral_data = load_json(BEHAVIORAL_DATASET_PATH)
+
+    print("Validating core dataset...")
+    validate_core_dataset(core_data)
+
+    print("Validating behavioral dataset...")
+    validate_behavioral_dataset(behavioral_data)
 
     print("Applying runtime metadata...")
-    apply_runtime_metadata(data)
+    apply_runtime_metadata(core_data)
 
     print(f"Opening database: {DB_PATH}")
     conn = get_connection(DB_PATH)
@@ -675,13 +999,17 @@ def main() -> None:
         print("Creating tables if needed...")
         create_tables(conn)
 
-        print("Clearing existing data...")
+        print("Clearing reloadable data...")
         clear_tables(conn)
 
-        print("Loading fresh data...")
-        load_data(conn, data)
+        print("Loading core data...")
+        load_core_data(conn, core_data)
 
-        print("Done. Dataset successfully loaded into SQLite.")
+        print("Loading behavioral data...")
+        load_behavioral_data(conn, behavioral_data)
+
+        conn.commit()
+        print("Done. Core and behavioral datasets successfully loaded into SQLite.")
     finally:
         conn.close()
 

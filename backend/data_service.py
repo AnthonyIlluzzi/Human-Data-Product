@@ -90,9 +90,16 @@ def get_product_metadata():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT meta_key, meta_value
+            SELECT product_scope, meta_key, meta_value
             FROM product_metadata
-            ORDER BY meta_key
+            WHERE product_scope IN ('core', 'platform')
+            ORDER BY
+                CASE product_scope
+                    WHEN 'core' THEN 0
+                    WHEN 'platform' THEN 1
+                    ELSE 2
+                END,
+                meta_key
         """)
         return rows_to_dicts(cursor.fetchall())
 
@@ -116,7 +123,7 @@ def get_summary():
         cursor.execute("""
             SELECT meta_value
             FROM product_metadata
-            WHERE meta_key = 'owner'
+            WHERE product_scope = 'core' AND meta_key = 'owner'
         """)
         owner_row = cursor.fetchone()
         owner = owner_row["meta_value"] if owner_row else "Unknown"

@@ -3,6 +3,12 @@ const PROD_API_BASE = "https://human-data-product-api.onrender.com";
 const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
+const URL_PARAMS = new URLSearchParams(window.location.search);
+const IS_INTERNAL_AI_MODE =
+  URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
+
+const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
+const AI_SESSION_NUDGE_THRESHOLD = 6;
 
 let capabilityInsightsInitPromise = null;
 let capabilityInsightsInitialized = false;
@@ -302,6 +308,11 @@ const DISTRIBUTION_DEFINITIONS = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
+if (IS_INTERNAL_AI_MODE) {
+    await initializeInternalAiMode();
+    syncGlobalBodyLockState();
+    return;
+  }
   bindCatalogNavigation();
   bindSideNavigation();
   bindMobileShellNavigation();
@@ -382,6 +393,122 @@ const loaders = [
 
   syncGlobalBodyLockState();
 });
+
+async function initializeInternalAiMode() {
+  document.body.classList.add("ai-mode");
+
+  document.getElementById("catalog-page")?.classList.add("hidden");
+  document.getElementById("product-page")?.classList.add("hidden");
+  document.getElementById("mobile-shell-header")?.classList.add("hidden");
+  document.getElementById("mobile-nav-drawer")?.classList.add("hidden");
+  document.getElementById("mobile-nav-backdrop")?.classList.add("hidden");
+  document.getElementById("ai-page")?.classList.remove("hidden");
+
+  bindAiInterface();
+}
+
+function bindAiInterface() {
+  const form = document.getElementById("ai-chat-form");
+  const input = document.getElementById("ai-question-input");
+  const backButton = document.getElementById("ai-back-to-catalog-btn");
+
+  document.querySelectorAll(".ai-prompt-chip[data-ai-prompt]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const prompt = btn.dataset.aiPrompt || "";
+      if (input) input.value = prompt;
+      await submitAiQuestion(prompt);
+    });
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await submitAiQuestion(input?.value || "");
+  });
+
+  backButton?.addEventListener("click", () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+    nextUrl.searchParams.delete("internal");
+    window.location.href = nextUrl.toString();
+  });
+}
+
+function incrementAiSessionPromptCount() {
+  const current = Number(sessionStorage.getItem(AI_SESSION_PROMPT_COUNT_KEY) || "0") + 1;
+  sessionStorage.setItem(AI_SESSION_PROMPT_COUNT_KEY, String(current));
+  return current;
+}
+
+async function submitAiQuestion(rawQuestion) {
+  const question = String(rawQuestion || "").trim();
+  const input = document.getElementById("ai-question-input");
+  const button = document.getElementById("ai-submit-btn");
+  const status = document.getElementById("ai-response-status");
+
+  if (!question) {
+    if (status) status.textContent = "Enter a question to query the internal AI experience.";
+    return;
+  }
+
+  if (button) button.disabled = true;
+  if (input) input.disabled = true;
+  if (status) status.textContent = "Generating grounded response…";
+
+  try {
+    const response = await postJson("/ai/chat", { question });
+    renderAiResponse(response);
+
+    const sessionPromptCount = incrementAiSessionPromptCount();
+    const shouldNudge = sessionPromptCount >= AI_SESSION_NUDGE_THRESHOLD;
+
+    if (status) {
+      status.textContent = shouldNudge
+        ? "Response generated. For deeper exploration, consider reviewing the Insights Workspace."
+        : "Response generated from grounded HDP and behavioral data.";
+    }
+  } catch (error) {
+    console.error("AI request failed:", error);
+    if (status) status.textContent = error.message || "Unable to generate a response right now.";
+  } finally {
+    if (button) button.disabled = false;
+    if (input) input.disabled = false;
+  }
+}
+
+function renderAiResponse(payload) {
+  const coreEvidence = Array.isArray(payload.core_evidence) ? payload.core_evidence : [];
+  const behavioralSignals = Array.isArray(payload.behavioral_signals) ? payload.behavioral_signals : [];
+  const emptyState = document.getElementById("ai-empty-state");
+  const responseCard = document.getElementById("ai-response-card");
+  const questionEl = document.getElementById("ai-response-question");
+  const answerEl = document.getElementById("ai-answer-body");
+  const coreList = document.getElementById("ai-core-evidence-list");
+  const behavioralList = document.getElementById("ai-behavioral-signal-list");
+
+  emptyState?.classList.add("hidden");
+  responseCard?.classList.remove("hidden");
+
+  if (questionEl) questionEl.textContent = payload.question || "";
+  if (answerEl) answerEl.textContent = payload.answer || "";
+
+  if (coreList) {
+    coreList.innerHTML = "";
+    coreEvidence.forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${escapeHtml(item.title || item.record_type || "Evidence")}</strong><span>${escapeHtml(item.supporting_text || "")}</span>`;
+      coreList.appendChild(li);
+    });
+  }
+
+  if (behavioralList) {
+    behavioralList.innerHTML = "";
+    behavioralSignals.forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${escapeHtml(item.signal_label || item.signal_key || "Signal")}</strong><span>${escapeHtml(item.summary_rationale || "")}</span>`;
+      behavioralList.appendChild(li);
+    });
+  }
+}
 
 function bindCatalogNavigation() {
   document.getElementById("open-product-btn")?.addEventListener("click", () => {

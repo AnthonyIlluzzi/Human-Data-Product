@@ -1,0 +1,1342 @@
+{
+  "product_metadata": [
+  { "product_scope": "cognitive", "meta_key": "product_name", "meta_value": "Cognitive.Profile" },
+  { "product_scope": "cognitive", "meta_key": "version", "meta_value": "1.0.0" },
+  { "product_scope": "cognitive", "meta_key": "status", "meta_value": "future" },
+  { "product_scope": "cognitive", "meta_key": "data_product_type", "meta_value": "inference" },
+  { "product_scope": "cognitive", "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
+  { "product_scope": "cognitive", "meta_key": "description", "meta_value": "Structured model of decision-making and behavioral tendencies." }
+ ],
+"source_artifact": [
+    {
+      "artifact_id": 1,
+      "artifact_type": "questionnaire",
+      "artifact_name": "Professional Operating Patterns Questionnaire",
+      "artifact_date": "2026-04",
+      "source_kind": "self_reported",
+      "confidence_weight": 1.0,
+      "inference_scope": "primary",
+      "notes": "Primary source for operating-pattern inference; includes rank, temporal, and free-text items."
+    },
+    {
+      "artifact_id": 2,
+      "artifact_type": "assessment_report",
+      "artifact_name": "MBTI Personal Impact Report",
+      "artifact_date": "2018-07-05",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.65,
+      "inference_scope": "supporting",
+      "notes": "Supportive longitudinal lens; not authoritative. Reported type ISTJ."
+    },
+    {
+      "artifact_id": 3,
+      "artifact_type": "assessment_report",
+      "artifact_name": "Working Styles Questionnaire",
+      "artifact_date": "2019-06",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.55,
+      "inference_scope": "supporting",
+      "notes": "Scores tendencies across Hurry Up, Be Perfect, Please People, Try Hard, and Be Strong."
+    },
+    {
+      "artifact_id": 4,
+      "artifact_type": "reference_framework",
+      "artifact_name": "Working It Out at Work - Working Styles Extract",
+      "artifact_date": "2009",
+      "source_kind": "reference_framework",
+      "confidence_weight": 0.35,
+      "inference_scope": "reflective",
+      "notes": "Framework reference used to interpret working-style results; not a direct assessment result."
+    },
+    {
+      "artifact_id": 5,
+      "artifact_type": "assessment_crosswalk",
+      "artifact_name": "Assessment Crosswalk Notes",
+      "artifact_date": "2023",
+      "source_kind": "self_curated_summary",
+      "confidence_weight": 0.4,
+      "inference_scope": "reflective",
+      "notes": "Legacy aggregation notes across multiple assessments. Keep for lineage only; do not treat as a standalone primary artifact when stronger source reports exist."
+    },
+    {
+      "artifact_id": 6,
+      "artifact_type": "self_framework",
+      "artifact_name": "PRISM Archetype Inference Concept",
+      "artifact_date": "unknown",
+      "source_kind": "self_curated_summary",
+      "confidence_weight": 0.5,
+      "inference_scope": "reflective",
+      "notes": "Non-authoritative self-designed archetype framework included as reflective reference."
+    },
+    {
+      "artifact_id": 7,
+      "artifact_type": "assessment_report",
+      "artifact_name": "CliftonStrengths Signature Theme Report",
+      "artifact_date": "2016-07-15",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.72,
+      "inference_scope": "supporting",
+      "notes": "Top five CliftonStrengths themes from 2016."
+    },
+    {
+      "artifact_id": 8,
+      "artifact_type": "assessment_report",
+      "artifact_name": "CliftonStrengths Strengths Insight Guide",
+      "artifact_date": "2023-05-19",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.74,
+      "inference_scope": "supporting",
+      "notes": "Top five CliftonStrengths themes from 2023."
+    },
+    {
+      "artifact_id": 9,
+      "artifact_type": "assessment_report",
+      "artifact_name": "Strength Deployment Inventory 2.0 Personalized Report",
+      "artifact_date": "2023-08-16",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.8,
+      "inference_scope": "supporting",
+      "notes": "SDI 2.0 report with Motivational Value System, Conflict Sequence, top work strengths, and overdone strengths."
+    },
+    {
+      "artifact_id": 10,
+      "artifact_type": "assessment_report",
+      "artifact_name": "Catalyst Strengths Report",
+      "artifact_date": "2020-04",
+      "source_kind": "third_party_assessment",
+      "confidence_weight": 0.68,
+      "inference_scope": "supporting",
+      "notes": "Catalyst strengths summary from uploaded report screenshot."
+    },
+    {
+      "artifact_id": 11,
+      "artifact_type": "assessment_workbook",
+      "artifact_name": "Communication Styles Questionnaire",
+      "artifact_date": "2026-04",
+      "source_kind": "self_reported",
+      "confidence_weight": 0.78,
+      "inference_scope": "supporting",
+      "notes": "Self-marked worksheet capturing communication-style tendencies on a normal day and under stress."
+    },
+    {
+      "artifact_id": 12,
+      "artifact_type": "reference_framework",
+      "artifact_name": "Communication Styles Strategies",
+      "artifact_date": "2021",
+      "source_kind": "reference_framework",
+      "confidence_weight": 0.45,
+      "inference_scope": "reflective",
+      "notes": "Framework guide for style intersections and communication strategies."
+    }
+  ],
+  "dimension": [
+    {
+      "dimension_id": 1,
+      "dimension_key": "problem_framing_style",
+      "dimension_group": "problem_framing",
+      "dimension_name": "Problem Framing Style",
+      "description": "How problems are approached initially."
+    },
+    {
+      "dimension_id": 2,
+      "dimension_key": "complexity_reduction_style",
+      "dimension_group": "problem_framing",
+      "dimension_name": "Complexity Reduction Style",
+      "description": "How complexity is made manageable."
+    },
+    {
+      "dimension_id": 3,
+      "dimension_key": "decision_style",
+      "dimension_group": "decision_making",
+      "dimension_name": "Decision Style",
+      "description": "How tradeoffs and choices are handled."
+    },
+    {
+      "dimension_id": 4,
+      "dimension_key": "collaboration_mode",
+      "dimension_group": "collaboration",
+      "dimension_name": "Collaboration Mode",
+      "description": "Preferred role and influence style on teams."
+    },
+    {
+      "dimension_id": 5,
+      "dimension_key": "execution_orientation",
+      "dimension_group": "execution",
+      "dimension_name": "Execution Orientation",
+      "description": "Preferred way of contributing to delivery."
+    },
+    {
+      "dimension_id": 6,
+      "dimension_key": "environment_fit",
+      "dimension_group": "environment",
+      "dimension_name": "Environment Fit",
+      "description": "Conditions that support or erode performance."
+    },
+    {
+      "dimension_id": 7,
+      "dimension_key": "communication_style",
+      "dimension_group": "communication",
+      "dimension_name": "Communication Style",
+      "description": "How ideas are conveyed and clarified for others."
+    },
+    {
+      "dimension_id": 8,
+      "dimension_key": "ambiguity_response",
+      "dimension_group": "uncertainty",
+      "dimension_name": "Ambiguity Response",
+      "description": "How ambiguity and uncertainty are handled."
+    },
+    {
+      "dimension_id": 9,
+      "dimension_key": "learning_style",
+      "dimension_group": "learning",
+      "dimension_name": "Learning Style",
+      "description": "How new domains are learned and assimilated."
+    },
+    {
+      "dimension_id": 10,
+      "dimension_key": "growth_orientation",
+      "dimension_group": "growth",
+      "dimension_name": "Growth Orientation",
+      "description": "Preferred developmental direction and stretch areas."
+    },
+    {
+      "dimension_id": 11,
+      "dimension_key": "value_creation_style",
+      "dimension_group": "value_creation",
+      "dimension_name": "Value Creation Style",
+      "description": "How value is most naturally created."
+    },
+    {
+      "dimension_id": 12,
+      "dimension_key": "role_identity",
+      "dimension_group": "role_fit",
+      "dimension_name": "Role Identity",
+      "description": "Natural career identity and posture."
+    },
+    {
+      "dimension_id": 13,
+      "dimension_key": "stress_pattern",
+      "dimension_group": "risk_and_friction",
+      "dimension_name": "Stress Pattern",
+      "description": "What stress amplifies or distorts."
+    },
+    {
+      "dimension_id": 14,
+      "dimension_key": "blind_spot_pattern",
+      "dimension_group": "risk_and_friction",
+      "dimension_name": "Blind Spot Pattern",
+      "description": "Recurring friction, overuse, or likely blind spots."
+    },
+    {
+      "dimension_id": 15,
+      "dimension_key": "self_perception_calibration",
+      "dimension_group": "calibration",
+      "dimension_name": "Self Perception Calibration",
+      "description": "Where self-view may understate or overstate reality."
+    }
+  ],
+  "artifact_summary": [
+    {
+      "summary_id": 1,
+      "artifact_id": 1,
+      "summary_type": "artifact_scope",
+      "summary_label": "question_count",
+      "summary_value": "100",
+      "confidence_weight": 1.0
+    },
+    {
+      "summary_id": 2,
+      "artifact_id": 1,
+      "summary_type": "artifact_scope",
+      "summary_label": "coverage",
+      "summary_value": "Ranked items, temporal comparisons, and open-response reflections focused on problem framing, decision-making, collaboration, execution, environment fit, communication, ambiguity, learning, value creation, role fit, growth, and blind spots.",
+      "confidence_weight": 1.0
+    },
+    {
+      "summary_id": 3,
+      "artifact_id": 2,
+      "summary_type": "reported_type",
+      "summary_label": "MBTI reported type",
+      "summary_value": "ISTJ",
+      "confidence_weight": 0.65,
+      "notes": "Best-estimate assessment result, not treated as ground truth."
+    },
+    {
+      "summary_id": 4,
+      "artifact_id": 2,
+      "summary_type": "reported_type",
+      "summary_label": "MBTI reported type",
+      "summary_value": "ISTJ",
+      "confidence_weight": 0.65,
+      "notes": "Best-estimate assessment result, not treated as ground truth."
+    },
+    {
+      "summary_id": 5,
+      "artifact_id": 2,
+      "summary_type": "assessment_summary",
+      "summary_label": "Preference clarity index",
+      "summary_value": "{\"introversion\": 3, \"sensing\": 9, \"thinking\": 41, \"judging\": 37}",
+      "confidence_weight": 0.65
+    },
+    {
+      "summary_id": 6,
+      "artifact_id": 2,
+      "summary_type": "assessment_summary",
+      "summary_label": "Work style highlights",
+      "summary_value": "dependable; exacting; factual; logical; organized; practical; realistic; reliable; reserved; sensible; steadfast; thorough",
+      "confidence_weight": 0.65
+    },
+    {
+      "summary_id": 7,
+      "artifact_id": 2,
+      "summary_type": "assessment_summary",
+      "summary_label": "Decision style highlights",
+      "summary_value": "structured sequential investigation; preserve what is efficient and useful; clear and detailed options; focus on practical tangible costs; incremental rather than monumental change; responsibility and accountability in implementation",
+      "confidence_weight": 0.65
+    },
+    {
+      "summary_id": 8,
+      "artifact_id": 2,
+      "summary_type": "assessment_summary",
+      "summary_label": "Stress indicators",
+      "summary_value": "catastrophizing from minor errors; misplacing things; impulsive purchases; becoming emotional/tearful; becoming disorganized or inefficient; irritation and anger; becoming more outgoing/talkative than usual",
+      "confidence_weight": 0.65
+    },
+    {
+      "summary_id": 9,
+      "artifact_id": 2,
+      "summary_type": "assessment_summary",
+      "summary_label": "Change needs",
+      "summary_value": "realistic reasons for change; specific accurate data; realistic goals and timelines; detailed plans and structures; ability to apply experience; loyalty from others",
+      "confidence_weight": 0.65
+    },
+    {
+      "summary_id": 10,
+      "artifact_id": 3,
+      "summary_type": "assessment_summary",
+      "summary_label": "Dominant style order",
+      "summary_value": "Be Perfect (26); Hurry Up (25); Please People (25); Try Hard (23); Be Strong (20)",
+      "confidence_weight": 0.55
+    },
+    {
+      "summary_id": 11,
+      "artifact_id": 3,
+      "summary_type": "assessment_summary",
+      "summary_label": "Style descriptions",
+      "summary_value": "Hurry Up: Moves fast, enjoys urgency, can achieve a lot quickly, but may rush, interrupt, and create avoidable mistakes under pressure.; Be Perfect: Values accuracy, detail, organization, and doing things right, but may over-check, over-detail, delay drafts, and struggle to delegate.; Please People: Prioritizes harmony, empathy, and helping others, but may avoid conflict, say yes too often, or under-assert priorities.; Try Hard: Brings enthusiasm, initiative, and exploratory energy, but may over-expand work, chase novelty, or lose interest before finishing.; Be Strong: Stays calm under pressure and copes independently, but may avoid asking for help, hide overload, or appear emotionally detached.",
+      "confidence_weight": 0.55
+    },
+    {
+      "summary_id": 12,
+      "artifact_id": 4,
+      "summary_type": "framework_summary",
+      "summary_label": "Style descriptions",
+      "summary_value": "Hurry Up: Moves fast, enjoys urgency, can achieve a lot quickly, but may rush, interrupt, and create avoidable mistakes under pressure.; Be Perfect: Values accuracy, detail, organization, and doing things right, but may over-check, over-detail, delay drafts, and struggle to delegate.; Please People: Prioritizes harmony, empathy, and helping others, but may avoid conflict, say yes too often, or under-assert priorities.; Try Hard: Brings enthusiasm, initiative, and exploratory energy, but may over-expand work, chase novelty, or lose interest before finishing.; Be Strong: Stays calm under pressure and copes independently, but may avoid asking for help, hide overload, or appear emotionally detached.",
+      "confidence_weight": 0.35,
+      "notes": "Reference framework used only to interpret working-style results."
+    },
+    {
+      "summary_id": 13,
+      "artifact_id": 4,
+      "summary_type": "framework_summary",
+      "summary_label": "Framework takeaways",
+      "summary_value": "Be Perfect combines accuracy, planning, and order with risk of over-checking, too much detail, delayed delivery, and weak delegation.; Be Strong combines calm coping and reliability with risk of hiding overload, refusing help, and seeming detached.; Stress tends to push people deeper into driver behavior rather than balanced strengths.; Different working-style combinations affect collaboration quality, time management, and perceived fit.",
+      "confidence_weight": 0.35
+    },
+    {
+      "summary_id": 14,
+      "artifact_id": 8,
+      "summary_type": "assessment_summary",
+      "summary_label": "Top 5 CliftonStrengths themes",
+      "summary_value": "Consistency; Connectedness; Restorative; Achiever; Harmony",
+      "confidence_weight": 0.74
+    },
+    {
+      "summary_id": 15,
+      "artifact_id": 7,
+      "summary_type": "assessment_summary",
+      "summary_label": "Top 5 CliftonStrengths themes",
+      "summary_value": "Restorative; Individualization; Strategic; Connectedness; Arranger",
+      "confidence_weight": 0.72
+    },
+    {
+      "summary_id": 16,
+      "artifact_id": 10,
+      "summary_type": "assessment_summary",
+      "summary_label": "Catalyst personal strengths",
+      "summary_value": "Empathy and Inclusion; Innovation and Creativity; Customer Focus; Collaboration and Teamwork",
+      "confidence_weight": 0.68
+    },
+    {
+      "summary_id": 17,
+      "artifact_id": 10,
+      "summary_type": "assessment_summary",
+      "summary_label": "Catalyst behavior alignment",
+      "summary_value": "Empathy and Inclusion -> Embrace Differences; Unlock Potential; Make it Happen Together | Innovation and Creativity -> Stay Curious; Explore Possibilities | Customer Focus -> Keep the Promise; Explore Possibilities; Make it Happen Together | Collaboration and Teamwork -> Build Bridges, Not Silos; Unlock Potential; Explore Possibilities; Make it Happen Together",
+      "confidence_weight": 0.68
+    },
+    {
+      "summary_id": 18,
+      "artifact_id": 6,
+      "summary_type": "framework_summary",
+      "summary_label": "PRISM description",
+      "summary_value": "Self-designed cognitive and archetype inference engine with profession-agnostic questions intended to infer archetype distributions.",
+      "confidence_weight": 0.5,
+      "notes": "Reflective self-designed framework, not treated as authoritative."
+    },
+    {
+      "summary_id": 19,
+      "artifact_id": 6,
+      "summary_type": "framework_summary",
+      "summary_label": "Archetypes",
+      "summary_value": "Platform Builder / Architect; System Integrator; Data Explorer / Analyst; Innovation Strategist; People Connector / Facilitator; Operational Executor / Implementer; Technical Deep Diver / Specialist; Customer Advocate / UX Designer; Business Model / Product Designer; Risk & Compliance / Governance Leader",
+      "confidence_weight": 0.5
+    },
+    {
+      "summary_id": 20,
+      "artifact_id": 6,
+      "summary_type": "framework_summary",
+      "summary_label": "Selected prompt themes",
+      "summary_value": "Structure and scalable design; Alignment and cohesion; Data-informed decisions; Long-term value and durability; Risk reduction and control",
+      "confidence_weight": 0.5
+    },
+    {
+      "summary_id": 21,
+      "artifact_id": 7,
+      "summary_type": "assessment_summary",
+      "summary_label": "StrengthsFinder temporal displacement",
+      "summary_value": "2023: Consistency; Connectedness; Restorative; Achiever; Harmony | 2016: Restorative; Individualization; Strategic; Connectedness; Arranger",
+      "confidence_weight": 0.7
+    },
+    {
+      "summary_id": 22,
+      "artifact_id": 5,
+      "summary_type": "lineage",
+      "summary_label": "crosswalk_scope",
+      "summary_value": "Legacy aggregation notes derived from multiple assessments and reflective materials; retained only for lineage and reconciliation.",
+      "confidence_weight": 0.4
+    },
+    {
+      "summary_id": 23,
+      "artifact_id": 7,
+      "summary_type": "assessment_summary",
+      "summary_label": "Theme interpretation highlights",
+      "summary_value": "Restorative -> problem-solving and fixing what is wrong; Individualization -> tailoring to people and strengths; Strategic -> pattern-based pathfinding; Connectedness -> sees links and bridge-building; Arranger -> flexible coordination of variables and resources.",
+      "confidence_weight": 0.72
+    },
+    {
+      "summary_id": 24,
+      "artifact_id": 8,
+      "summary_type": "assessment_summary",
+      "summary_label": "Theme interpretation highlights",
+      "summary_value": "Consistency -> rules, fairness, repeatable process; Connectedness -> links between people and events; Restorative -> improving what is broken; Achiever -> dependable productivity; Harmony -> seeks areas of agreement and reduces friction.",
+      "confidence_weight": 0.74
+    },
+    {
+      "summary_id": 25,
+      "artifact_id": 9,
+      "summary_type": "assessment_summary",
+      "summary_label": "Motivational Value System",
+      "summary_value": "HUB (People 41, Process 30, Performance 29) - flexible, collaborative, consensus-oriented, open to different options and viewpoints.",
+      "confidence_weight": 0.8
+    },
+    {
+      "summary_id": 26,
+      "artifact_id": 9,
+      "summary_type": "assessment_summary",
+      "summary_label": "Conflict Sequence",
+      "summary_value": "[BRG] with Analyze 37, Assert 35, Accommodate 28 - determines the most appropriate response to each situation rather than using one fixed conflict style.",
+      "confidence_weight": 0.8
+    },
+    {
+      "summary_id": 27,
+      "artifact_id": 9,
+      "summary_type": "assessment_summary",
+      "summary_label": "Top work strengths",
+      "summary_value": "Sociable; Analytical; Option-Oriented",
+      "confidence_weight": 0.8
+    },
+    {
+      "summary_id": 28,
+      "artifact_id": 9,
+      "summary_type": "assessment_summary",
+      "summary_label": "Top overdone strengths",
+      "summary_value": "Sociable -> Intrusive; Analytical -> Obsessed; Option-Oriented -> Indecisive",
+      "confidence_weight": 0.8
+    },
+    {
+      "summary_id": 29,
+      "artifact_id": 9,
+      "summary_type": "assessment_summary",
+      "summary_label": "Communication guidance",
+      "summary_value": "Examine situations from multiple perspectives; remain open to ideas/options; include other people and recognize their contributions; be willing to compromise and collaborate; ask open-ended questions; keep multiple solutions available.",
+      "confidence_weight": 0.8
+    },
+    {
+      "summary_id": 30,
+      "artifact_id": 11,
+      "summary_type": "assessment_summary",
+      "summary_label": "Normal day style totals",
+      "summary_value": "P=13; A=12; E=7; T=4",
+      "confidence_weight": 0.78
+    },
+    {
+      "summary_id": 31,
+      "artifact_id": 11,
+      "summary_type": "assessment_summary",
+      "summary_label": "Under stress style totals",
+      "summary_value": "A=6; T=5; E=4; P=3",
+      "confidence_weight": 0.78
+    },
+    {
+      "summary_id": 32,
+      "artifact_id": 11,
+      "summary_type": "assessment_summary",
+      "summary_label": "Communication style interpretation",
+      "summary_value": "Normal-day profile shows a near-even blend of People (P) and Analytical (A), with lower Expressive (E) and Driver/Task (T). Under stress, the profile shifts toward Analytical (A) and Task/Driver (T), with reduced People (P).",
+      "confidence_weight": 0.78
+    },
+    {
+      "summary_id": 33,
+      "artifact_id": 12,
+      "summary_type": "framework_summary",
+      "summary_label": "Style interaction guidance",
+      "summary_value": "P/A interactions emphasize getting down to business, writing things down, discussing pros/cons, asking what data is needed, and stressing logic, accuracy, and quality. P/T and A/T interactions emphasize factual, concise, goal-focused communication with clear objectives and summary-form facts.",
+      "confidence_weight": 0.45
+    }
+  ],
+  "derived_signal": [
+    {
+      "signal_id": 1,
+      "dimension_id": 1,
+      "signal_key": "clarifies_before_acting",
+      "signal_label": "Clarifies before acting",
+      "signal_value": "high",
+      "confidence_score": 0.95,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Repeatedly chooses clarifying questions, stakeholder context, and problem-definition before solutioning."
+    },
+    {
+      "signal_id": 2,
+      "dimension_id": 1,
+      "signal_key": "problem_first_orientation",
+      "signal_label": "Problem-first orientation",
+      "signal_value": "high",
+      "confidence_score": 0.94,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Consistently wants to identify the real problem rather than move directly into execution."
+    },
+    {
+      "signal_id": 3,
+      "dimension_id": 2,
+      "signal_key": "systems_and_structure_bias",
+      "signal_label": "Uses structure to reduce complexity",
+      "signal_value": "high",
+      "confidence_score": 0.91,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Strong recurring preference for categorization, structure, models, and making ambiguity manageable through frameworks."
+    },
+    {
+      "signal_id": 4,
+      "dimension_id": 7,
+      "signal_key": "translates_complexity_for_others",
+      "signal_label": "Translates complexity for others",
+      "signal_value": "high",
+      "confidence_score": 0.91,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Strong tendency to simplify, clarify, and make issues understandable and usable to other people."
+    },
+    {
+      "signal_id": 5,
+      "dimension_id": 3,
+      "signal_key": "decision_quality_focus",
+      "signal_label": "Decision quality focus",
+      "signal_value": "high",
+      "confidence_score": 0.9,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Prioritizes better decisions, cleaner rationale, and structural soundness over motion for motion's sake."
+    },
+    {
+      "signal_id": 6,
+      "dimension_id": 11,
+      "signal_key": "usability_over_raw_execution",
+      "signal_label": "Creates value through usability",
+      "signal_value": "high",
+      "confidence_score": 0.93,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Most natural value repeatedly centers on making data, systems, and outputs usable for others."
+    },
+    {
+      "signal_id": 7,
+      "dimension_id": 11,
+      "signal_key": "invisible_context_provider",
+      "signal_label": "Provides invisible context",
+      "signal_value": "high",
+      "confidence_score": 0.92,
+      "derivation_method": "manual_synthesis",
+      "source_scope": "self_reported",
+      "summary_rationale": "Self-description emphasizes adding hidden context that improves understanding, decisions, and problem solving."
+    },
+    {
+      "signal_id": 8,
+      "dimension_id": 4,
+      "signal_key": "collaborative_lane_awareness",
+      "signal_label": "Prefers complementary teams with clear lanes",
+      "signal_value": "medium_high",
+      "confidence_score": 0.81,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Works best with collaborative teams that understand complementary strengths, lanes, and RASCI-like role clarity."
+    },
+    {
+      "signal_id": 9,
+      "dimension_id": 4,
+      "signal_key": "reasoning_based_influence",
+      "signal_label": "Influences through reasoning",
+      "signal_value": "high",
+      "confidence_score": 0.84,
+      "derivation_method": "questionnaire_rule",
+      "source_scope": "self_reported",
+      "summary_rationale": "Explicitly prefers influencing through reasoning, structural clarity, and better framing rather than performative visibility."
+    },
+    {
+      "signal_id": 10,
+      "dimension_id": 5,
+      "signal_key": "upstream_midstream_preference",
+      "signal_label": "Prefers upstream and midstream work",
+      "signal_value": "high",
+      "confidence_score": 0.86,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Strongest fit appears in framing, structuring, refining, enabling, and selectively executing rather than repetitive downstream execution."
+    },
+    {
+      "signal_id": 11,
+      "dimension_id": 6,
+      "signal_key": "low_chaos_tolerance",
+      "signal_label": "Low tolerance for chaos",
+      "signal_value": "high",
+      "confidence_score": 0.94,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Strong aversion to chaotic, reactive, politically noisy, or constantly shifting environments."
+    },
+    {
+      "signal_id": 12,
+      "dimension_id": 6,
+      "signal_key": "high_trust_low_noise_preference",
+      "signal_label": "Prefers high-trust, low-noise environments",
+      "signal_value": "high",
+      "confidence_score": 0.83,
+      "derivation_method": "questionnaire_rule",
+      "source_scope": "self_reported",
+      "summary_rationale": "Ideal environment emphasizes quality problems, role clarity, room to think, and manageable pace over urgency and political friction."
+    },
+    {
+      "signal_id": 13,
+      "dimension_id": 7,
+      "signal_key": "calm_reasoning_preference",
+      "signal_label": "Calm reasoning preference",
+      "signal_value": "medium_high",
+      "confidence_score": 0.82,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Communication is strongest when grounded in calm reasoning, synthesis, and practical structure rather than emotional or polished rhetoric."
+    },
+    {
+      "signal_id": 14,
+      "dimension_id": 8,
+      "signal_key": "reduces_ambiguity_through_questions",
+      "signal_label": "Reduces ambiguity through questions",
+      "signal_value": "high",
+      "confidence_score": 0.89,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Typically responds to ambiguity by asking focused questions and narrowing unknowns rather than waiting passively."
+    },
+    {
+      "signal_id": 15,
+      "dimension_id": 9,
+      "signal_key": "structure_first_learning",
+      "signal_label": "Learns through structure and real relevance",
+      "signal_value": "high",
+      "confidence_score": 0.84,
+      "derivation_method": "questionnaire_rule",
+      "source_scope": "self_reported",
+      "summary_rationale": "Learning accelerates through structure, real-world relevance, repeated use, and understanding how pieces relate."
+    },
+    {
+      "signal_id": 16,
+      "dimension_id": 10,
+      "signal_key": "role_fit_over_advancement",
+      "signal_label": "Role fit over raw advancement",
+      "signal_value": "medium_high",
+      "confidence_score": 0.78,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Increasing preference for fit, sustainability, and leverage over simple advancement, visibility, or ladder climbing."
+    },
+    {
+      "signal_id": 17,
+      "dimension_id": 10,
+      "signal_key": "technical_breadth_adjacent_to_strengths",
+      "signal_label": "Stretches into adjacent technical breadth",
+      "signal_value": "medium",
+      "confidence_score": 0.7,
+      "derivation_method": "questionnaire_rule",
+      "source_scope": "self_reported",
+      "summary_rationale": "Willing to stretch into technical breadth and adjacent concepts without wanting a role dominated by repetitive implementation."
+    },
+    {
+      "signal_id": 18,
+      "dimension_id": 12,
+      "signal_key": "strategic_ic_fit",
+      "signal_label": "Strategic IC fit",
+      "signal_value": "high",
+      "confidence_score": 0.88,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Strong fit for strategic individual-contributor roles with architecture, platform, and data-product shape."
+    },
+    {
+      "signal_id": 19,
+      "dimension_id": 12,
+      "signal_key": "architecture_orientation",
+      "signal_label": "Architecture orientation",
+      "signal_value": "high",
+      "confidence_score": 0.87,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Role identity repeatedly resolves toward data/solution architect, systems thinker, and productized information systems."
+    },
+    {
+      "signal_id": 20,
+      "dimension_id": 12,
+      "signal_key": "management_misalignment",
+      "signal_label": "Heavy management misalignment",
+      "signal_value": "high",
+      "confidence_score": 0.86,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Heavy people management, political advancement, and customer-facing pressure repeatedly appear as misaligned role shapes."
+    },
+    {
+      "signal_id": 21,
+      "dimension_id": 12,
+      "signal_key": "repetitive_operational_misalignment",
+      "signal_label": "Repetitive operational misalignment",
+      "signal_value": "high",
+      "confidence_score": 0.88,
+      "derivation_method": "manual_synthesis",
+      "source_scope": "self_reported",
+      "summary_rationale": "Pure implementation, repetitive operations, and data-engineering-only execution are described as likely poor long-term fits."
+    },
+    {
+      "signal_id": 22,
+      "dimension_id": 13,
+      "signal_key": "stress_amplifies_control_behaviors",
+      "signal_label": "Stress amplifies control behaviors",
+      "signal_value": "medium_high",
+      "confidence_score": 0.8,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Under stress, tendencies likely intensify around over-structuring, over-checking, coping alone, and trying to control uncertainty."
+    },
+    {
+      "signal_id": 23,
+      "dimension_id": 14,
+      "signal_key": "high_information_threshold",
+      "signal_label": "High information threshold",
+      "signal_value": "high",
+      "confidence_score": 0.93,
+      "derivation_method": "manual_synthesis",
+      "source_scope": "self_reported",
+      "summary_rationale": "Self-described need for high-quality or near-perfect information before feeling confident in a decision."
+    },
+    {
+      "signal_id": 24,
+      "dimension_id": 14,
+      "signal_key": "overvalidation_risk",
+      "signal_label": "Overvalidation risk",
+      "signal_value": "medium_high",
+      "confidence_score": 0.85,
+      "derivation_method": "manual_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Can over-invest in data validation and analysis even when the problem is already directionally understood or the outcome is low-control."
+    },
+    {
+      "signal_id": 25,
+      "dimension_id": 15,
+      "signal_key": "self_underestimation_risk",
+      "signal_label": "Self-underestimation risk",
+      "signal_value": "medium",
+      "confidence_score": 0.72,
+      "derivation_method": "manual_synthesis",
+      "source_scope": "self_reported",
+      "summary_rationale": "Self-report suggests a tendency to underrate strengths relative to external or industry reality."
+    },
+    {
+      "signal_id": 26,
+      "dimension_id": 4,
+      "signal_key": "consensus_and_inclusion_orientation",
+      "signal_label": "Consensus and inclusion orientation",
+      "signal_value": "high",
+      "confidence_score": 0.83,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Multiple sources indicate a recurring desire to include others, build consensus, respect different perspectives, and keep people connected around shared work."
+    },
+    {
+      "signal_id": 27,
+      "dimension_id": 8,
+      "signal_key": "situational_flexibility",
+      "signal_label": "Situational flexibility",
+      "signal_value": "high",
+      "confidence_score": 0.82,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Shows a recurring tendency to keep options open, adapt to changing conditions, and choose a response based on the specifics of the situation rather than a single rigid default."
+    },
+    {
+      "signal_id": 28,
+      "dimension_id": 13,
+      "signal_key": "adaptive_conflict_response",
+      "signal_label": "Adaptive conflict response",
+      "signal_value": "medium_high",
+      "confidence_score": 0.79,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "In conflict, tends to assess context first and then flex between accommodating, asserting, or analyzing depending on what seems most appropriate."
+    },
+    {
+      "signal_id": 29,
+      "dimension_id": 7,
+      "signal_key": "collaborative_analytical_communication_blend",
+      "signal_label": "Collaborative-analytical communication blend",
+      "signal_value": "high",
+      "confidence_score": 0.81,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Communication-style results suggest a normal-state blend of people-oriented collaboration and analytical precision, shifting toward more analytical and task-focused communication under stress."
+    },
+    {
+      "signal_id": 30,
+      "dimension_id": 11,
+      "signal_key": "customer_and_service_orientation",
+      "signal_label": "Customer and service orientation",
+      "signal_value": "medium_high",
+      "confidence_score": 0.76,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Catalyst strengths indicate meaningful customer/service orientation expressed through customer focus, collaboration, and practical problem-solving."
+    },
+    {
+      "signal_id": 31,
+      "dimension_id": 11,
+      "signal_key": "restorative_improvement_drive",
+      "signal_label": "Restorative improvement drive",
+      "signal_value": "high",
+      "confidence_score": 0.84,
+      "derivation_method": "cross_source_synthesis",
+      "source_scope": "cross_source",
+      "summary_rationale": "Across Gallup and questionnaire material, there is a strong recurring tendency to fix what is not working, improve systems, and create better ways of operating."
+    }
+  ],
+  "signal_evidence_link": [
+    {
+      "signal_evidence_id": 1,
+      "signal_id": 1,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q1 rank 1: Ask clarifying questions to define the problem; Q2 rank 1: Gather more context from stakeholders; Q7 rank 1: Clarify what problem is actually being solved.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 2,
+      "signal_id": 2,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q3 rank 1: What the real problem actually is; Q5 rank 1: Defining the right framing; Q21 rank 1: Clarify the problem definition.",
+      "evidence_weight": 0.95
+    },
+    {
+      "signal_evidence_id": 3,
+      "signal_id": 3,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q8 rank 1: Categorize and segment; Q54 rank 1: Better definitions; Q88 rank 1: I reduce ambiguity through structure.",
+      "evidence_weight": 0.9
+    },
+    {
+      "signal_evidence_id": 4,
+      "signal_id": 4,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q4 rank 1: Translate complexity into simpler language; Q43 rank 1: Translate complexity; Q49 rank 1: Better shared understanding.",
+      "evidence_weight": 0.95
+    },
+    {
+      "signal_evidence_id": 5,
+      "signal_id": 5,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q69 rank 1: He improved the way we worked; Q67 rank 2: Better thinking and decisions; Q73 rank 1: Clarity.",
+      "evidence_weight": 0.88
+    },
+    {
+      "signal_evidence_id": 6,
+      "signal_id": 6,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q66 rank 1: Make data more usable; Q68 rank 1: It makes complex things usable; Q70 rank 1: Enablement impact.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 7,
+      "signal_id": 7,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q98: I add hidden or invisible context that inform how well business challenges are understood, offering a better foundation for decisions and problem solving.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 8,
+      "signal_id": 8,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q91 describes teams with complementary strengths, clear lanes, and different RASCI roles across the lifecycle.",
+      "evidence_weight": 0.95
+    },
+    {
+      "signal_evidence_id": 9,
+      "signal_id": 9,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q23 rank 1: Through reasoning; Q24 rank 2: Calm decision-maker; Q44 rank 1: Calm reasoning.",
+      "evidence_weight": 0.86
+    },
+    {
+      "signal_evidence_id": 10,
+      "signal_id": 10,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q29 rank 1: Iterative refinement, Q30 rank 1: Turning ambiguity into structure, Q33 rank 1: shape direction and selectively engage execution.",
+      "evidence_weight": 0.85
+    },
+    {
+      "signal_evidence_id": 11,
+      "signal_id": 11,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q37 rank 1: Constant context switching erodes effectiveness fastest; Q41 rank 1: Constant chaos least tolerable; Q92 free text: highly political, overly slow, missing autonomy and unreasonable pivoting bring out worst tendencies.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 12,
+      "signal_id": 12,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q35 rank 1: Structured but flexible; Q36 rank 1: High-quality problems; Q39 rank 1: Role clarity with meaningful complexity.",
+      "evidence_weight": 0.86
+    },
+    {
+      "signal_evidence_id": 13,
+      "signal_id": 13,
+      "artifact_id": 2,
+      "evidence_type": "assessment_label",
+      "evidence_excerpt": "MBTI communication style emphasizes straightforward, practical, logical, efficient communication grounded in facts, structure, and logical evidence.",
+      "evidence_weight": 0.7
+    },
+    {
+      "signal_evidence_id": 14,
+      "signal_id": 14,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q51 rank 1: Narrow the unknowns; Q56 rank 2: I ask questions until the real issue becomes visible.",
+      "evidence_weight": 0.87
+    },
+    {
+      "signal_evidence_id": 15,
+      "signal_id": 15,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q58 rank 1: Study the structure behind it; Q59 rank 1: Relevance to real work; Q61 rank 1: Learn the language first / rank 2 map relationships.",
+      "evidence_weight": 0.82
+    },
+    {
+      "signal_evidence_id": 16,
+      "signal_id": 16,
+      "artifact_id": 1,
+      "evidence_type": "temporal_rank",
+      "evidence_excerpt": "Q79 current state rank 1: Finding the right fit; Q82 current state rank 2: Preference for role fit over raw advancement; Q83 rank 1 current state: became less interested in chaos.",
+      "evidence_weight": 0.84
+    },
+    {
+      "signal_evidence_id": 17,
+      "signal_id": 17,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q64 rank 1: More technical breadth; Q77 rank 3: Structured AI/data enablement.",
+      "evidence_weight": 0.68
+    },
+    {
+      "signal_evidence_id": 18,
+      "signal_id": 18,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q42 rank 1: Platform/data strategist; Q75 rank 3: Senior IC with strategic value; Q88 rank 3: I operate best as a strategic IC.",
+      "evidence_weight": 0.86
+    },
+    {
+      "signal_evidence_id": 19,
+      "signal_id": 19,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q72 top responses include Data/solution architect and Platform/data strategist; Q75 rank 1: Systems thinker with product orientation; Q77 rank 2: Productized information systems.",
+      "evidence_weight": 0.88
+    },
+    {
+      "signal_evidence_id": 20,
+      "signal_id": 20,
+      "artifact_id": 1,
+      "evidence_type": "rank_pattern",
+      "evidence_excerpt": "Q65 rank 2: Growth through heavy management least attractive; Q76 rank 1: Political advancement as the main game would make a role misaligned; Q76 rank 5: Heavy people management.",
+      "evidence_weight": 0.89
+    },
+    {
+      "signal_evidence_id": 21,
+      "signal_id": 21,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q94: Data engineering sounds good on paper but could become boring, tedious, repetitive, and uninterested in the underlying data.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 22,
+      "signal_id": 22,
+      "artifact_id": 3,
+      "evidence_type": "assessment_label",
+      "evidence_excerpt": "Working styles scores show Be Perfect highest at 26 and Be Strong lowest but present at 20, suggesting stress may tilt toward thoroughness/control and coping tendencies.",
+      "evidence_weight": 0.75
+    },
+    {
+      "signal_evidence_id": 23,
+      "signal_id": 22,
+      "artifact_id": 2,
+      "evidence_type": "assessment_label",
+      "evidence_excerpt": "MBTI stress section highlights over-detailing, catastrophizing, disorganization under stress, and reluctance to accept illogical change.",
+      "evidence_weight": 0.7
+    },
+    {
+      "signal_evidence_id": 24,
+      "signal_id": 23,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q93: I tend to prefer perfect information and establish a subconscious information quality threshold before I can be confident in a decision.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 25,
+      "signal_id": 24,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q90: My natural working style to find data to validate and make decisions is often unnecessary and creates energy and frustration beyond the value returned.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 26,
+      "signal_id": 25,
+      "artifact_id": 1,
+      "evidence_type": "free_text",
+      "evidence_excerpt": "Q96: I may unrealistically self-evaluate a skill I have at 2, but in the eyes of others or the domain it is likely closer to a 3.",
+      "evidence_weight": 1.0
+    },
+    {
+      "signal_evidence_id": 27,
+      "signal_id": 19,
+      "artifact_id": 7,
+      "evidence_type": "summary_text",
+      "evidence_excerpt": "StrengthsFinder temporal displacement lists Consistency, Restorative, Connectedness, Achiever/Harmony and earlier Restorative, Individualization, Strategic, Connectedness, Arranger.",
+      "evidence_weight": 0.6
+    },
+    {
+      "signal_evidence_id": 28,
+      "signal_id": 11,
+      "artifact_id": 5,
+      "evidence_type": "summary_text",
+      "evidence_excerpt": "Core values include Efficiency/Optimization and Resourcefulness; innate traits include Efficient, Logical/Rational, Disciplined, Proactive.",
+      "evidence_weight": 0.55
+    },
+    {
+      "signal_evidence_id": 29,
+      "signal_id": 26,
+      "artifact_id": 9,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "SDI HUB emphasizes collaborating with others, remaining open to different options and viewpoints, bringing people together, and valuing consensus.",
+      "evidence_weight": 0.8
+    },
+    {
+      "signal_evidence_id": 30,
+      "signal_id": 26,
+      "artifact_id": 10,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Catalyst strengths: Empathy and Inclusion; Collaboration and Teamwork.",
+      "evidence_weight": 0.68
+    },
+    {
+      "signal_evidence_id": 31,
+      "signal_id": 26,
+      "artifact_id": 8,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Gallup 2023 includes Harmony and Connectedness, reinforcing agreement-seeking and bridge-building.",
+      "evidence_weight": 0.74
+    },
+    {
+      "signal_evidence_id": 32,
+      "signal_id": 27,
+      "artifact_id": 9,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "SDI HUB: flexible and adapting to others or situations; open to different options and viewpoints. Option-Oriented appears in top work strengths.",
+      "evidence_weight": 0.8
+    },
+    {
+      "signal_evidence_id": 33,
+      "signal_id": 28,
+      "artifact_id": 9,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "SDI Conflict Sequence [BRG]: determine the most appropriate response to each situation and choose accommodating, assertive, or analytical approaches depending on context.",
+      "evidence_weight": 0.8
+    },
+    {
+      "signal_evidence_id": 34,
+      "signal_id": 29,
+      "artifact_id": 11,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Communication Styles Questionnaire normal-day totals P=13, A=12, E=7, T=4; under stress A=6, T=5, E=4, P=3.",
+      "evidence_weight": 0.78
+    },
+    {
+      "signal_evidence_id": 35,
+      "signal_id": 29,
+      "artifact_id": 12,
+      "evidence_type": "framework_summary",
+      "evidence_excerpt": "Communication Styles guidance emphasizes written information, pros/cons, logic and quality, combined with collaborative tone and support.",
+      "evidence_weight": 0.45
+    },
+    {
+      "signal_evidence_id": 36,
+      "signal_id": 30,
+      "artifact_id": 10,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Catalyst strengths include Customer Focus plus Collaboration and Teamwork.",
+      "evidence_weight": 0.68
+    },
+    {
+      "signal_evidence_id": 37,
+      "signal_id": 31,
+      "artifact_id": 7,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Gallup 2016 top themes include Restorative, Strategic, and Arranger.",
+      "evidence_weight": 0.72
+    },
+    {
+      "signal_evidence_id": 38,
+      "signal_id": 31,
+      "artifact_id": 8,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Gallup 2023 top themes include Restorative, Consistency, and Achiever.",
+      "evidence_weight": 0.74
+    },
+    {
+      "signal_evidence_id": 39,
+      "signal_id": 3,
+      "artifact_id": 8,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Gallup 2023 Consistency emphasizes clear rules, repeatable process, and orderly execution.",
+      "evidence_weight": 0.74
+    },
+    {
+      "signal_evidence_id": 40,
+      "signal_id": 11,
+      "artifact_id": 9,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "SDI conflict triggers include rigid single-solution behavior, exclusion, not being heard, and being locked into inflexible futures; user also dislikes constant chaos in questionnaire.",
+      "evidence_weight": 0.7
+    },
+    {
+      "signal_evidence_id": 41,
+      "signal_id": 4,
+      "artifact_id": 7,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "Gallup 2016 Strategic and Arranger support pattern-recognition, pathfinding, and reconfiguring complexity into workable options.",
+      "evidence_weight": 0.68
+    },
+    {
+      "signal_evidence_id": 42,
+      "signal_id": 8,
+      "artifact_id": 9,
+      "evidence_type": "assessment_summary",
+      "evidence_excerpt": "SDI emphasizes coordinating efforts with others while maintaining clear lines of authority and opportunities for self-reliance.",
+      "evidence_weight": 0.72
+    }
+  ],
+  "cross_source_alignment": [
+    {
+      "alignment_id": 1,
+      "dimension_id": 1,
+      "signal_id": 1,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 2,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.84,
+      "alignment_notes": "Questionnaire clarifying-question pattern aligns with MBTI themes of thoughtful, logical, structured decision-making."
+    },
+    {
+      "alignment_id": 2,
+      "dimension_id": 2,
+      "signal_id": 3,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 5,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.86,
+      "alignment_notes": "Brings structure to complexity and efficiency/optimization values reinforce questionnaire structure-orientation."
+    },
+    {
+      "alignment_id": 3,
+      "dimension_id": 12,
+      "signal_id": 19,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 2,
+      "alignment_type": "partial",
+      "alignment_score": 0.72,
+      "alignment_notes": "MBTI does not name architecture directly but supports structured, systematic, process-improvement tendencies compatible with architecture roles."
+    },
+    {
+      "alignment_id": 4,
+      "dimension_id": 13,
+      "signal_id": 22,
+      "source_a_artifact_id": 3,
+      "source_b_artifact_id": 2,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.78,
+      "alignment_notes": "Working Styles Be Perfect tendencies and MBTI stress indicators both point toward over-control, over-checking, and rigidity under stress."
+    },
+    {
+      "alignment_id": 5,
+      "dimension_id": 14,
+      "signal_id": 23,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 4,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.74,
+      "alignment_notes": "Questionnaire self-description of needing high-quality information aligns with Be Perfect driver description of over-checking and wanting everything exactly right."
+    },
+    {
+      "alignment_id": 6,
+      "dimension_id": 12,
+      "signal_id": 21,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 5,
+      "alignment_type": "partial",
+      "alignment_score": 0.67,
+      "alignment_notes": "Self-described role misfit with repetitive implementation aligns with values around learning, optimization, and meaningful leverage."
+    },
+    {
+      "alignment_id": 7,
+      "dimension_id": 11,
+      "signal_id": 6,
+      "source_a_artifact_id": 1,
+      "source_b_artifact_id": 6,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.71,
+      "alignment_notes": "PRISM selections emphasize systems that work smoothly, better decisions with data, and building something that lasts."
+    },
+    {
+      "alignment_id": 8,
+      "dimension_id": 4,
+      "signal_id": 26,
+      "source_a_artifact_id": 9,
+      "source_b_artifact_id": 10,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.82,
+      "alignment_notes": "SDI HUB collaboration/consensus pattern aligns with Catalyst strengths in empathy, inclusion, and teamwork."
+    },
+    {
+      "alignment_id": 9,
+      "dimension_id": 7,
+      "signal_id": 29,
+      "source_a_artifact_id": 11,
+      "source_b_artifact_id": 12,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.8,
+      "alignment_notes": "The self-scored worksheet and communication-style guidance both point to a collaborative but data-aware communication posture."
+    },
+    {
+      "alignment_id": 10,
+      "dimension_id": 11,
+      "signal_id": 31,
+      "source_a_artifact_id": 7,
+      "source_b_artifact_id": 8,
+      "alignment_type": "reinforcing",
+      "alignment_score": 0.84,
+      "alignment_notes": "Gallup 2016 and 2023 both retain Restorative, indicating a stable problem-solving and improvement orientation across time."
+    },
+    {
+      "alignment_id": 11,
+      "dimension_id": 8,
+      "signal_id": 27,
+      "source_a_artifact_id": 9,
+      "source_b_artifact_id": 7,
+      "alignment_type": "partial",
+      "alignment_score": 0.72,
+      "alignment_notes": "SDI flexibility and option-orientation align with Gallup Arranger/Strategic themes, though the questionnaire still indicates a strong need for structure."
+    },
+    {
+      "alignment_id": 12,
+      "dimension_id": 13,
+      "signal_id": 28,
+      "source_a_artifact_id": 9,
+      "source_b_artifact_id": 11,
+      "alignment_type": "partial",
+      "alignment_score": 0.69,
+      "alignment_notes": "SDI suggests adaptive conflict selection by context, while the communication-styles worksheet shows a stress shift toward analytical/task focus."
+    }
+  ],
+  "profile_summary": [
+    {
+      "profile_summary_id": 1,
+      "summary_type": "operating_style",
+      "headline": "Structured ambiguity reducer",
+      "body": "Consistently brings clarity, structure, and decision quality to complex problems by clarifying the real issue, reconciling context with evidence, and making outputs usable to others. Additional assessment evidence suggests he also works to preserve inclusion, consensus, and cross-functional cohesion while doing so.",
+      "confidence_score": 0.92
+    },
+    {
+      "profile_summary_id": 2,
+      "summary_type": "best_fit_environment",
+      "headline": "High-trust, low-noise complexity",
+      "body": "Best in roles with meaningful complexity, clear purpose, room to think, and low political noise. Poor fit for chaotic, overly reactive, or heavily political environments.",
+      "confidence_score": 0.89
+    },
+    {
+      "profile_summary_id": 3,
+      "summary_type": "role_fit",
+      "headline": "Architecture-oriented strategic IC",
+      "body": "Strongest fit appears in architecture, platform/data strategy, and productized information systems where value comes from framing, structuring, enabling, and selectively executing rather than managing people or grinding through repetitive implementation.",
+      "confidence_score": 0.9
+    },
+    {
+      "profile_summary_id": 4,
+      "summary_type": "blind_spot",
+      "headline": "Information threshold and overvalidation",
+      "body": "The clearest recurring risk is needing very high information quality before feeling confident enough to decide, which can lead to overvalidation and lower-than-ideal speed when ambiguity is unavoidable. Additional assessment evidence suggests option-seeking and analytical depth can compound this when many viable paths remain open.",
+      "confidence_score": 0.88
+    }
+  ]
+}

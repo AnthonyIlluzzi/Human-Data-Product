@@ -1,0 +1,289 @@
+{
+  "ai_inference_metadata": {
+    "name": "HDP AI Inference Configuration",
+    "version": "2.1.0",
+    "generated_at": "2026-04-21",
+    "purpose": "Configuration-only file that governs how the AI layer retrieves, weighs, and presents grounded information from the HDP core dataset and the behavioral dataset.",
+    "boundary_note": "This file does not store behavioral source content, normalized signals, or raw evidence. Those remain in the source datasets and normalized backend tables."
+  },
+  "depends_on_source_datasets": {
+    "core_dataset": {
+      "expected_source_file": "anthony_illuzzi_dataset.json",
+      "required_sections": [
+        "product_metadata",
+        "experience",
+        "projects",
+        "skills",
+        "feedback",
+        "role_preferences",
+        "system_improvements"
+      ]
+    },
+    "behavioral_dataset": {
+      "expected_source_file": "anthony_illuzzi_behavioral_dataset.json",
+      "required_sections": [
+        "source_artifact",
+        "dimension",
+        "artifact_summary",
+        "derived_signal",
+        "signal_evidence_link",
+        "cross_source_alignment",
+        "profile_summary"
+      ]
+    }
+  },
+  "source_governance": {
+    "source_priority_order": [
+      "observed_professional_evidence",
+      "cross_source_behavioral_signal",
+      "single_source_behavioral_signal",
+      "artifact_summary",
+      "profile_summary"
+    ],
+    "artifact_handling_rules": {
+      "min_behavioral_confidence_weight_for_normal_use": 0.5,
+      "min_behavioral_confidence_weight_for_primary_support": 0.65,
+      "allow_low_confidence_artifacts_as_secondary_context_only": true,
+      "never_treat_framework_labels_as_ground_truth": true,
+      "framework_labels_to_downweight": [
+        "MBTI type",
+        "working style label",
+        "archetype label"
+      ]
+    },
+    "signal_handling_rules": {
+      "min_signal_confidence_for_direct_claim": 0.75,
+      "min_signal_confidence_for_supporting_claim": 0.6,
+      "prefer_cross_source_signals_over_single_source": true,
+      "prefer_signal_keys_over_assessment_labels": true,
+      "max_behavioral_signals_per_answer": 4,
+      "max_behavioral_dimensions_per_answer": 3
+    }
+  },
+  "question_routing": {
+    "question_classes": [
+      {
+        "question_class": "role_fit",
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "core_priority_entities": [
+          "role_preferences",
+          "experience",
+          "projects",
+          "feedback"
+        ],
+        "behavioral_priority_dimensions": [
+          "role_identity",
+          "environment_fit",
+          "value_creation_style"
+        ],
+        "response_goal": "Explain what roles fit best and why, anchored first in observed work and then reinforced by behavioral patterns."
+      },
+      {
+        "question_class": "strengths",
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "core_priority_entities": [
+          "skills",
+          "projects",
+          "feedback",
+          "system_improvements"
+        ],
+        "behavioral_priority_dimensions": [
+          "value_creation_style",
+          "problem_framing_style",
+          "communication_style"
+        ],
+        "response_goal": "Identify recurring strengths with evidence from both work history and normalized behavioral signals."
+      },
+      {
+        "question_class": "work_style",
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "core_priority_entities": [
+          "feedback",
+          "projects"
+        ],
+        "behavioral_priority_dimensions": [
+          "communication_style",
+          "collaboration_mode",
+          "decision_style",
+          "ambiguity_response"
+        ],
+        "response_goal": "Describe how Anthony tends to work, communicate, decide, and collaborate."
+      },
+      {
+        "question_class": "environment_fit",
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "core_priority_entities": [
+          "role_preferences",
+          "experience",
+          "feedback"
+        ],
+        "behavioral_priority_dimensions": [
+          "environment_fit",
+          "stress_pattern",
+          "blind_spot_pattern"
+        ],
+        "response_goal": "Describe the environments that likely support or erode performance."
+      },
+      {
+        "question_class": "career_evolution",
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "core_priority_entities": [
+          "experience",
+          "projects",
+          "skills"
+        ],
+        "behavioral_priority_dimensions": [
+          "growth_orientation",
+          "role_identity"
+        ],
+        "response_goal": "Explain how trajectory and professional identity evolved over time."
+      },
+      {
+        "question_class": "blind_spots_or_risks",
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "core_priority_entities": [
+          "feedback"
+        ],
+        "behavioral_priority_dimensions": [
+          "blind_spot_pattern",
+          "stress_pattern",
+          "self_perception_calibration"
+        ],
+        "response_goal": "Surface likely risks carefully, with explicit caution and confidence language."
+      },
+      {
+        "question_class": "evidence_request",
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "core_priority_entities": [
+          "projects",
+          "feedback",
+          "system_improvements"
+        ],
+        "behavioral_priority_dimensions": [
+          "all_relevant"
+        ],
+        "response_goal": "Return the strongest supporting evidence rather than a broad synthesis."
+      }
+    ]
+  },
+  "retrieval_strategy": {
+    "order_of_operations": [
+      "Classify the user question into the closest supported question_class.",
+      "Retrieve directly relevant professional evidence from the HDP core dataset first.",
+      "Retrieve matching derived_signal rows from the behavioral dataset by behavioral_priority_dimensions.",
+      "Filter behavioral signals using signal confidence thresholds and artifact confidence rules.",
+      "Retrieve supporting signal_evidence_link rows for each retained behavioral signal.",
+      "Check cross_source_alignment to determine reinforcement, partial support, or contradiction.",
+      "Assemble the response while explicitly separating observed evidence from behavioral interpretation."
+    ],
+    "retrieval_limits": {
+      "max_core_records_before_synthesis": 8,
+      "max_behavioral_signals_before_synthesis": 4,
+      "max_signal_evidence_links_per_signal": 2,
+      "prefer_recent_or_higher_weighted_sources_when_tied": true
+    }
+  },
+  "answer_contract": {
+    "required_sections_by_default": [
+      "direct_answer",
+      "why_this_appears_true",
+      "supporting_evidence"
+    ],
+    "optional_sections_when_needed": [
+      "behavioral_reinforcement",
+      "caution_or_limitation",
+      "deeper_hdp_redirect"
+    ],
+    "style_rules": [
+      "Respond in third person when describing Anthony.",
+      "Do not write as if the system is Anthony.",
+      "Do not present assessment labels as definitive truth.",
+      "Prefer concise evidence-backed statements over personality language.",
+      "Use explicit uncertainty language when support is partial, weak, or mostly self-reported."
+    ],
+    "evidence_labeling_rules": [
+      "Label observed professional evidence separately from behavioral signals when both are used.",
+      "If a point is supported mainly by self-reported or assessment-derived evidence, say so.",
+      "If multiple behavioral artifacts reinforce a signal, describe it as cross-source reinforcement.",
+      "If sources disagree or support is weak, state that clearly instead of smoothing it over."
+    ]
+  },
+  "confidence_and_limitation_rules": {
+    "confidence_language": {
+      "high": "strong evidence suggests",
+      "medium": "available evidence suggests",
+      "low": "there are some indications, but support is limited"
+    },
+    "limitation_triggers": [
+      "behavioral support is from a single low-confidence artifact only",
+      "signal confidence falls below direct-claim threshold",
+      "observed professional evidence does not reinforce the behavioral signal",
+      "question asks for certainty beyond what the data supports"
+    ],
+    "limitation_behavior": [
+      "downgrade certainty",
+      "name the limitation explicitly",
+      "avoid absolute or diagnostic phrasing"
+    ]
+  },
+  "cross_domain_response_rules": {
+    "when_to_blend_domains": [
+      "role fit questions",
+      "how Anthony works questions",
+      "environment fit questions",
+      "questions about alignment between self-perception and observed work"
+    ],
+    "when_to_prefer_core_dataset_only": [
+      "project history",
+      "experience chronology",
+      "skills inventory",
+      "specific system improvement examples"
+    ],
+    "when_to_prefer_behavioral_dataset_only": [
+      "communication tendencies",
+      "decision style",
+      "conflict approach",
+      "behavioral blind spots",
+      "assessment pattern questions"
+    ]
+  },
+  "supported_ui_behaviors": {
+    "allow_follow_up_prompt_suggestions": true,
+    "allow_deeper_hdp_redirects": true,
+    "deeper_hdp_redirect_targets": [
+      "Overview",
+      "Insights Workspace",
+      "SQL Workspace",
+      "API Workspace",
+      "Documentation Hub"
+    ]
+  },
+  "non_goals": [
+    "persona simulation",
+    "diagnosis",
+    "unsupported career predictions",
+    "ungrounded personality claims",
+    "using the behavioral dataset as a substitute for professional evidence"
+  ]
+}

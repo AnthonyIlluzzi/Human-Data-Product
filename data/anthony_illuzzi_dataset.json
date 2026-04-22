@@ -1,46 +1,17 @@
 {
   "product_metadata": [
-    {
-      "meta_key": "product_name",
-      "meta_value": "Anthony.Profile"
-    },
-    {
-      "meta_key": "version",
-      "meta_value": "1.0.0"
-    },
-    {
-      "meta_key": "status",
-      "meta_value": "active"
-    },
-    {
-      "meta_key": "data_product_type",
-      "meta_value": "derived"
-    },
-    {
-      "meta_key": "owner",
-      "meta_value": "Anthony Illuzzi"
-    },
-    {
-      "meta_key": "description",
-      "meta_value": "Structured data product representing Anthony Illuzzi's professional experience."
-    },
-    {
-      "meta_key": "last_pipeline_refresh",
-      "meta_value": "2026-03-05"
-    },
-    {
-      "meta_key": "api_status",
-      "meta_value": "Operational"
-    },
-    {
-      "meta_key": "schema_validation",
-      "meta_value": "PASS"
-    },
-    {
-      "meta_key": "query_engine",
-      "meta_value": "active"
-    }
-  ],
+  { "product_scope": "core", "meta_key": "product_name", "meta_value": "Anthony.Profile" },
+  { "product_scope": "core", "meta_key": "version", "meta_value": "1.0.0" },
+  { "product_scope": "core", "meta_key": "status", "meta_value": "active" },
+  { "product_scope": "core", "meta_key": "data_product_type", "meta_value": "derived" },
+  { "product_scope": "core", "meta_key": "owner", "meta_value": "Anthony Illuzzi" },
+  { "product_scope": "core", "meta_key": "description", "meta_value": "Structured data product representing Anthony Illuzzi's professional experience." },
+
+  { "product_scope": "platform", "meta_key": "last_pipeline_refresh", "meta_value": "2026-03-05" },
+  { "product_scope": "platform", "meta_key": "api_status", "meta_value": "Operational" },
+  { "product_scope": "platform", "meta_key": "schema_validation", "meta_value": "PASS" },
+  { "product_scope": "platform", "meta_key": "query_engine", "meta_value": "active" }
+],
   "contact_info": [
     {
       "contact_id": 1,
