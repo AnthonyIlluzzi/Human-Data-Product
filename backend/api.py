@@ -40,6 +40,7 @@ from data_service import (
     get_opportunity_insights_dashboard,
     execute_readonly_query,
 )
+from ai_service import chat_with_hdp_ai, AiLimitError
 
 app = FastAPI(
     title="Human Data Product API",
@@ -49,6 +50,9 @@ app = FastAPI(
 
 class SqlQueryRequest(BaseModel):
     sql: str
+
+class AiChatRequest(BaseModel):
+    question: str
 
 app.add_middleware(
     CORSMiddleware,
@@ -133,13 +137,24 @@ def skills(domain_id: int | None = None):
 @app.get("/skill-domains")
 def skill_domains():
     return get_skill_domains()
-    
+
 @app.post("/query/execute")
 def query_execute(payload: SqlQueryRequest):
     try:
         return execute_readonly_query(payload.sql)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+
+@app.post("/ai/chat")
+def ai_chat(payload: AiChatRequest):
+    try:
+        return chat_with_hdp_ai(payload.question)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except AiLimitError as exc:
+        raise HTTPException(status_code=429, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
 
 @app.get("/search/projects")
 def search_projects_endpoint(q: str = Query(..., min_length=2)):
@@ -258,8 +273,3 @@ def capability_insights_dashboard():
 @app.get("/analytics/opportunity-insights-dashboard")
 def opportunity_insights_dashboard():
     return get_opportunity_insights_dashboard()
-
-
-@app.get("/insights")
-def insights():
-    return get_insights()
