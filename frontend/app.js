@@ -516,6 +516,12 @@ function clearAiEvidenceLists() {
   if (behavioralList) behavioralList.innerHTML = "";
 }
 
+function clearAiAnswerNoteState() {
+  const noteBody = document.getElementById("ai-answer-note-body");
+  if (noteBody) noteBody.innerHTML = "";
+  document.getElementById("ai-answer-note-section")?.classList.add("hidden");
+}
+
 function setAiAnswerBodyState(text, stateClass = "") {
   const answerEl = document.getElementById("ai-answer-body");
   if (!answerEl) return;
@@ -532,12 +538,134 @@ function toggleAiEvidenceSection(sectionId, isVisible) {
   document.getElementById(sectionId)?.classList.toggle("hidden", !isVisible);
 }
 
+function parseAiAnswerSections(answer) {
+  const normalized = String(answer || "").replace(/\r/g, "").trim();
+  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Context note)\s*$/gim;
+  const matches = [...normalized.matchAll(headingPattern)];
+
+  if (!matches.length) {
+    return {
+      sections: [
+        {
+          number: "1",
+          title: "Response",
+          body: normalized
+        }
+      ],
+      note: null
+    };
+  }
+
+  const sections = matches.map((match, index) => {
+    const start = (match.index ?? 0) + match[0].length;
+    const end = index + 1 < matches.length ? (matches[index + 1].index ?? normalized.length) : normalized.length;
+    return {
+      number: match[1],
+      title: match[2],
+      body: normalized.slice(start, end).trim()
+    };
+  });
+
+  const note = sections.find(section => section.title.toLowerCase() === "context note") || null;
+  const primarySections = sections.filter(section => section.title.toLowerCase() !== "context note");
+
+  return {
+    sections: primarySections,
+    note
+  };
+}
+
+function renderAiRichText(text) {
+  const lines = String(text || "").split("\n");
+  const blocks = [];
+  let paragraphLines = [];
+  let listItems = [];
+
+  const flushParagraph = () => {
+    if (!paragraphLines.length) return;
+    blocks.push(`<p>${escapeHtml(paragraphLines.join(" ").trim())}</p>`);
+    paragraphLines = [];
+  };
+
+  const flushList = () => {
+    if (!listItems.length) return;
+    const itemsHtml = listItems
+      .map(item => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+    blocks.push(`<ul>${itemsHtml}</ul>`);
+    listItems = [];
+  };
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      return;
+    }
+
+    if (/^[-•]\s+/.test(trimmed)) {
+      flushParagraph();
+      listItems.push(trimmed.replace(/^[-•]\s+/, "").trim());
+      return;
+    }
+
+    flushList();
+    paragraphLines.push(trimmed);
+  });
+
+  flushParagraph();
+  flushList();
+
+  return blocks.join("") || `<p>${escapeHtml(String(text || "").trim())}</p>`;
+}
+
+function renderAiAnswerContent(answer) {
+  const answerEl = document.getElementById("ai-answer-body");
+  const noteSection = document.getElementById("ai-answer-note-section");
+  const noteBody = document.getElementById("ai-answer-note-body");
+
+  if (!answerEl) return;
+
+  answerEl.classList.remove("is-loading", "is-error");
+
+  const parsed = parseAiAnswerSections(answer);
+
+  const sectionsHtml = parsed.sections
+    .map((section, index) => {
+      const number = section.number || String(index + 1);
+      return `
+        <section class="ai-answer-section">
+          <div class="ai-answer-section-header">
+            <span class="ai-answer-section-number">${escapeHtml(number)}</span>
+            <h4 class="ai-answer-section-title">${escapeHtml(section.title)}</h4>
+          </div>
+          <div class="ai-answer-section-content">
+            ${renderAiRichText(section.body)}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+
+  answerEl.innerHTML = sectionsHtml || `<p>${escapeHtml(String(answer || "").trim())}</p>`;
+
+  if (parsed.note?.body && noteSection && noteBody) {
+    noteBody.innerHTML = renderAiRichText(parsed.note.body);
+    noteSection.classList.remove("hidden");
+  } else {
+    clearAiAnswerNoteState();
+  }
+}
+
 function renderAiLoadingState(question) {
   const questionEl = document.getElementById("ai-response-question");
 
   hideAiDefaultPrompts();
   revealAiResponseCard();
   clearAiEvidenceLists();
+  clearAiAnswerNoteState();
   toggleAiEvidenceSection("ai-core-evidence-section", false);
   toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
@@ -551,52 +679,12 @@ function renderAiError(question, message) {
   hideAiDefaultPrompts();
   revealAiResponseCard();
   clearAiEvidenceLists();
+  clearAiAnswerNoteState();
   toggleAiEvidenceSection("ai-core-evidence-section", false);
   toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
   if (questionEl) questionEl.textContent = question || "Request failed";
   setAiAnswerBodyState(message || "Unable to generate a response right now.", "is-error");
-}
-
-async function submitAiQuestion(rawQuestion) {
-  const question = String(rawQuestion || "").trim();
-  const input = document.getElementById("ai-question-input");
-  const button = document.getElementById("ai-submit-btn");
-
-  if (!question) {
-    input?.focus();
-    return;
-  }
-
-  if (button) {
-    button.disabled = true;
-    button.classList.add("hidden");
-  }
-  if (input) input.disabled = true;
-
-  renderAiLoadingState(question);
-
-  try {
-    const response = await postJson("/ai/chat", { question });
-    renderAiResponse(response);
-    incrementAiSessionPromptCount();
-  } catch (error) {
-    console.error("AI request failed:", error);
-    renderAiError(question, error.message || "Unable to generate a response right now.");
-  } finally {
-    if (input) {
-      input.disabled = false;
-      input.value = "";
-      input.style.height = "auto";
-      input.style.overflowY = "hidden";
-      input.dispatchEvent(new Event("input"));
-    }
-
-    if (button) {
-      button.disabled = true;
-      button.classList.add("hidden");
-    }
-  }
 }
 
 function renderAiResponse(payload) {
@@ -609,9 +697,10 @@ function renderAiResponse(payload) {
   hideAiDefaultPrompts();
   revealAiResponseCard();
   clearAiEvidenceLists();
+  clearAiAnswerNoteState();
 
   if (questionEl) questionEl.textContent = payload.question || "Question";
-  setAiAnswerBodyState(payload.answer || "");
+  renderAiAnswerContent(payload.answer || "");
 
   if (coreList) {
     coreEvidence.forEach(item => {
