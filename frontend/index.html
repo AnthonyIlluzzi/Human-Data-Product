@@ -1734,25 +1734,32 @@ LIMIT 1;"
     </div>
 
     <aside id="ai-response-card-wrap" class="card ai-response-card-wrap hidden">
-      <div id="ai-response-card" class="ai-response-card hidden">
-        <div class="viz-card-header">
-          <h3 id="ai-response-question">Question</h3>
-          <p class="viz-card-subtitle">Grounded response generated from current HDP and behavioral datasets.</p>
-        </div>
-
-        <div id="ai-answer-body" class="ai-answer-body"></div>
-
-        <div id="ai-core-evidence-section" class="ai-evidence-section hidden">
-          <h4>Observed Evidence</h4>
-          <ul id="ai-core-evidence-list" class="ai-evidence-list"></ul>
-        </div>
-
-        <div id="ai-behavioral-evidence-section" class="ai-evidence-section hidden">
-          <h4>Behavioral Reinforcement</h4>
-          <ul id="ai-behavioral-signal-list" class="ai-evidence-list"></ul>
-        </div>
-      </div>
-    </aside>
+	  <div id="ai-response-card" class="ai-response-card hidden">
+	    <div class="viz-card-header">
+	      <h3 id="ai-response-question">Question</h3>
+	      <p class="viz-card-subtitle">Grounded response generated from current HDP and behavioral datasets.</p>
+	    </div>
+	
+	    <div class="ai-response-window">
+	      <div id="ai-answer-body" class="ai-answer-body"></div>
+	
+	      <div id="ai-core-evidence-section" class="ai-evidence-section hidden">
+	        <h4>Observed Evidence</h4>
+	        <ul id="ai-core-evidence-list" class="ai-evidence-list"></ul>
+	      </div>
+	
+	      <div id="ai-behavioral-evidence-section" class="ai-evidence-section hidden">
+	        <h4>Behavioral Reinforcement</h4>
+	        <ul id="ai-behavioral-signal-list" class="ai-evidence-list"></ul>
+	      </div>
+	
+	      <div id="ai-answer-note-section" class="ai-answer-note-section hidden">
+	        <h4 id="ai-answer-note-heading">Context Note</h4>
+	        <div id="ai-answer-note-body" class="ai-answer-note-body"></div>
+	      </div>
+	    </div>
+	  </div>
+	</aside>
 
     <div class="ai-workspace-stack">
       <section class="card ai-chat-card">
