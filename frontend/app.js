@@ -722,6 +722,51 @@ function renderAiResponse(payload) {
   toggleAiEvidenceSection("ai-behavioral-evidence-section", behavioralSignals.length > 0);
 }
 
+async function submitAiQuestion(rawQuestion) {
+  const input = document.getElementById("ai-question-input");
+  const submitButton = document.getElementById("ai-submit-btn");
+
+  const question = String(rawQuestion || "").trim();
+  if (!question) return;
+
+  const setSubmittingState = (isSubmitting) => {
+    if (input) {
+      input.disabled = isSubmitting;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = isSubmitting;
+      submitButton.classList.toggle("hidden", false);
+    }
+  };
+
+  renderAiLoadingState(question);
+  setSubmittingState(true);
+
+  try {
+    const payload = await postJson("/ai/chat", { question });
+
+    incrementAiSessionPromptCount();
+    renderAiResponse(payload);
+
+    if (input) {
+      input.value = "";
+      input.style.height = "auto";
+      input.style.overflowY = "hidden";
+      input.closest(".ai-input-shell")?.classList.remove("is-expanded");
+    }
+
+    if (submitButton) {
+      submitButton.classList.add("hidden");
+    }
+  } catch (error) {
+    renderAiError(question, error.message || "Unable to generate a response right now.");
+  } finally {
+    setSubmittingState(false);
+    input?.focus();
+  }
+}
+
 function bindCatalogNavigation() {
   document.getElementById("open-product-btn")?.addEventListener("click", () => {
     const catalogPage = document.getElementById("catalog-page");
