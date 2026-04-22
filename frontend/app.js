@@ -8,8 +8,6 @@ const IS_INTERNAL_AI_MODE =
   URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
-const AI_SESSION_NUDGE_THRESHOLD = 6;
-
 let capabilityInsightsInitPromise = null;
 let capabilityInsightsInitialized = false;
 const DEFAULT_SQL_QUERY = `SELECT experience_id, company, role, start_date, end_date, domain
@@ -415,7 +413,10 @@ function bindAiInterface() {
   document.querySelectorAll(".ai-prompt-chip[data-ai-prompt]").forEach(btn => {
     btn.addEventListener("click", async () => {
       const prompt = btn.dataset.aiPrompt || "";
-      if (input) input.value = prompt;
+      if (input) {
+        input.value = prompt;
+        input.focus();
+      }
       await submitAiQuestion(prompt);
     });
   });
@@ -439,36 +440,87 @@ function incrementAiSessionPromptCount() {
   return current;
 }
 
+function revealAiResponseCard() {
+  document.getElementById("ai-response-card-wrap")?.classList.remove("hidden");
+  document.getElementById("ai-response-card")?.classList.remove("hidden");
+}
+
+function hideAiDefaultPrompts() {
+  document.getElementById("ai-default-prompts")?.classList.add("hidden");
+}
+
+function clearAiEvidenceLists() {
+  const coreList = document.getElementById("ai-core-evidence-list");
+  const behavioralList = document.getElementById("ai-behavioral-signal-list");
+
+  if (coreList) coreList.innerHTML = "";
+  if (behavioralList) behavioralList.innerHTML = "";
+}
+
+function setAiAnswerBodyState(text, stateClass = "") {
+  const answerEl = document.getElementById("ai-answer-body");
+  if (!answerEl) return;
+
+  answerEl.classList.remove("is-loading", "is-error");
+  if (stateClass) {
+    answerEl.classList.add(stateClass);
+  }
+
+  answerEl.textContent = text;
+}
+
+function toggleAiEvidenceSection(sectionId, isVisible) {
+  document.getElementById(sectionId)?.classList.toggle("hidden", !isVisible);
+}
+
+function renderAiLoadingState(question) {
+  const questionEl = document.getElementById("ai-response-question");
+
+  hideAiDefaultPrompts();
+  revealAiResponseCard();
+  clearAiEvidenceLists();
+  toggleAiEvidenceSection("ai-core-evidence-section", false);
+  toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
+
+  if (questionEl) questionEl.textContent = question;
+  setAiAnswerBodyState("Generating grounded response…", "is-loading");
+}
+
+function renderAiError(question, message) {
+  const questionEl = document.getElementById("ai-response-question");
+
+  hideAiDefaultPrompts();
+  revealAiResponseCard();
+  clearAiEvidenceLists();
+  toggleAiEvidenceSection("ai-core-evidence-section", false);
+  toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
+
+  if (questionEl) questionEl.textContent = question || "Request failed";
+  setAiAnswerBodyState(message || "Unable to generate a response right now.", "is-error");
+}
+
 async function submitAiQuestion(rawQuestion) {
   const question = String(rawQuestion || "").trim();
   const input = document.getElementById("ai-question-input");
   const button = document.getElementById("ai-submit-btn");
-  const status = document.getElementById("ai-response-status");
 
   if (!question) {
-    if (status) status.textContent = "Enter a question to query the internal AI experience.";
+    input?.focus();
     return;
   }
 
   if (button) button.disabled = true;
   if (input) input.disabled = true;
-  if (status) status.textContent = "Generating grounded response…";
+
+  renderAiLoadingState(question);
 
   try {
     const response = await postJson("/ai/chat", { question });
     renderAiResponse(response);
-
-    const sessionPromptCount = incrementAiSessionPromptCount();
-    const shouldNudge = sessionPromptCount >= AI_SESSION_NUDGE_THRESHOLD;
-
-    if (status) {
-      status.textContent = shouldNudge
-        ? "Response generated. For deeper exploration, consider reviewing the Insights Workspace."
-        : "Response generated from grounded HDP and behavioral data.";
-    }
+    incrementAiSessionPromptCount();
   } catch (error) {
     console.error("AI request failed:", error);
-    if (status) status.textContent = error.message || "Unable to generate a response right now.";
+    renderAiError(question, error.message || "Unable to generate a response right now.");
   } finally {
     if (button) button.disabled = false;
     if (input) input.disabled = false;
@@ -478,21 +530,18 @@ async function submitAiQuestion(rawQuestion) {
 function renderAiResponse(payload) {
   const coreEvidence = Array.isArray(payload.core_evidence) ? payload.core_evidence : [];
   const behavioralSignals = Array.isArray(payload.behavioral_signals) ? payload.behavioral_signals : [];
-  const emptyState = document.getElementById("ai-empty-state");
-  const responseCard = document.getElementById("ai-response-card");
   const questionEl = document.getElementById("ai-response-question");
-  const answerEl = document.getElementById("ai-answer-body");
   const coreList = document.getElementById("ai-core-evidence-list");
   const behavioralList = document.getElementById("ai-behavioral-signal-list");
 
-  emptyState?.classList.add("hidden");
-  responseCard?.classList.remove("hidden");
+  hideAiDefaultPrompts();
+  revealAiResponseCard();
+  clearAiEvidenceLists();
 
-  if (questionEl) questionEl.textContent = payload.question || "";
-  if (answerEl) answerEl.textContent = payload.answer || "";
+  if (questionEl) questionEl.textContent = payload.question || "Question";
+  setAiAnswerBodyState(payload.answer || "");
 
   if (coreList) {
-    coreList.innerHTML = "";
     coreEvidence.forEach(item => {
       const li = document.createElement("li");
       li.innerHTML = `<strong>${escapeHtml(item.title || item.record_type || "Evidence")}</strong><span>${escapeHtml(item.supporting_text || "")}</span>`;
@@ -501,13 +550,15 @@ function renderAiResponse(payload) {
   }
 
   if (behavioralList) {
-    behavioralList.innerHTML = "";
     behavioralSignals.forEach(item => {
       const li = document.createElement("li");
       li.innerHTML = `<strong>${escapeHtml(item.signal_label || item.signal_key || "Signal")}</strong><span>${escapeHtml(item.summary_rationale || "")}</span>`;
       behavioralList.appendChild(li);
     });
   }
+
+  toggleAiEvidenceSection("ai-core-evidence-section", coreEvidence.length > 0);
+  toggleAiEvidenceSection("ai-behavioral-evidence-section", behavioralSignals.length > 0);
 }
 
 function bindCatalogNavigation() {
