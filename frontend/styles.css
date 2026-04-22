@@ -5417,10 +5417,14 @@ body.ai-mode {
 }
 
 .ai-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   padding: 24px 28px 32px;
 }
 
 .ai-shell {
+  width: 100%;
   max-width: var(--max-content);
   margin: 0 auto;
   display: grid;
@@ -5705,7 +5709,9 @@ body.ai-mode {
 
 @media (max-width: 960px) {
   .ai-page {
-    padding: 16px;
+    min-height: 100vh;
+    align-items: center;
+   padding: 16px;
   }
 
   .ai-hero-card {
