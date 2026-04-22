@@ -1726,7 +1726,7 @@ LIMIT 1;"
   <div class="ai-shell">
     <div class="ai-hero-card">
       <div class="ai-hero-copy">
-        <span class="hero-eyebrow">INTERNAL AI MODE</span>
+        <span class="hero-eyebrow">Human Data Product AI</span>
         <h1>This isn’t a resume. It’s a working data product.</h1>
         <p class="ai-hero-lead">Ask questions and get answers grounded in structured experience, projects, feedback, and behavioral signals.</p>
       </div>
@@ -1764,39 +1764,65 @@ LIMIT 1;"
         </div>
 
         <form id="ai-chat-form" class="ai-chat-form">
-          <label class="sr-only" for="ai-question-input">Ask a question</label>
-          <p class="ai-input-prompt">Ask a grounded question about Anthony’s experience, strengths, fit, or working style.</p>
-          <textarea id="ai-question-input" class="ai-question-input" rows="4" placeholder="Ask the data"></textarea>
-          <div class="ai-form-actions">
-            <button id="ai-submit-btn" class="btn-primary" type="submit">Generate Answer</button>
-          </div>
-        </form>
+		  <label class="sr-only" for="ai-question-input">Ask a question</label>
+		  <p class="ai-input-prompt">Ask a grounded question about Anthony’s experience, strengths, fit, or working style.</p>
+		
+		  <div class="ai-input-shell">
+		    <textarea
+		      id="ai-question-input"
+		      class="ai-question-input"
+		      rows="1"
+		      placeholder="Ask the data"
+		    ></textarea>
+		
+		    <button
+		      id="ai-submit-btn"
+		      class="ai-submit-icon-btn hidden"
+		      type="submit"
+		      aria-label="Generate answer"
+		    >
+		      <svg viewBox="0 0 24 24" class="ai-submit-icon" aria-hidden="true">
+		        <path
+		          d="M12 5v11"
+		          fill="none"
+		          stroke="currentColor"
+		          stroke-width="2"
+		          stroke-linecap="round"
+		        ></path>
+		        <path
+		          d="M7 10l5-5 5 5"
+		          fill="none"
+		          stroke="currentColor"
+		          stroke-width="2"
+		          stroke-linecap="round"
+		          stroke-linejoin="round"
+		        ></path>
+		      </svg>
+		    </button>
+		  </div>
+		</form>
 
         <div id="ai-default-prompts" class="ai-default-prompts">
-          <p class="ai-default-prompts-header">Try a predefined question</p>
-
-          <div class="ai-suggestion-grid">
-            <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What roles is Anthony best suited for and why?">
-              <span class="ai-suggestion-title">Role fit</span>
-              <span class="ai-suggestion-text">What roles is Anthony best suited for and why?</span>
-            </button>
-
-            <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What evidence supports Anthony’s architecture orientation?">
-              <span class="ai-suggestion-title">Architecture evidence</span>
-              <span class="ai-suggestion-text">What evidence supports Anthony’s architecture orientation?</span>
-            </button>
-
-            <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="How does Anthony typically approach ambiguous problems?">
-              <span class="ai-suggestion-title">Ambiguity approach</span>
-              <span class="ai-suggestion-text">How does Anthony typically approach ambiguous problems?</span>
-            </button>
-
-            <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What environments bring out Anthony’s best work?">
-              <span class="ai-suggestion-title">Environment fit</span>
-              <span class="ai-suggestion-text">What environments bring out Anthony’s best work?</span>
-            </button>
-          </div>
-        </div>
+		  <p class="ai-default-prompts-header">Try a predefined question</p>
+		
+		  <div class="ai-suggestion-grid">
+		    <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What roles is Anthony best suited for and why?">
+		      <span class="ai-suggestion-title">Role fit</span>
+		    </button>
+		
+		    <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What evidence supports Anthony’s architecture orientation?">
+		      <span class="ai-suggestion-title">Architecture evidence</span>
+		    </button>
+		
+		    <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="How does Anthony typically approach ambiguous problems?">
+		      <span class="ai-suggestion-title">Ambiguity approach</span>
+		    </button>
+		
+		    <button class="ai-suggestion-card ai-prompt-chip" type="button" data-ai-prompt="What environments bring out Anthony’s best work?">
+		      <span class="ai-suggestion-title">Environment fit</span>
+		    </button>
+		  </div>
+		</div>
       </section>
     </div>
   </div>
