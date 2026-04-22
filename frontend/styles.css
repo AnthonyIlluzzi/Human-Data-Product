@@ -5419,7 +5419,7 @@ body.ai-mode {
 .ai-page {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 20px 28px 24px;
 }
 
