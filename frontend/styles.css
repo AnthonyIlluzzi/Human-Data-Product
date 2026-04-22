@@ -5564,12 +5564,13 @@ body.ai-mode {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transform: translateY(2px);
   transition: background 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
 }
 
 .ai-submit-icon-btn:hover {
   background: var(--primary-dark);
-  transform: translateY(-1px);
+  transform: translateY(1px);
 }
 
 .ai-submit-icon-btn:disabled {
