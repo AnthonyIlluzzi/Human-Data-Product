@@ -5552,7 +5552,7 @@ body.ai-mode {
 .ai-submit-icon-btn {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  top: 50%;
   width: 38px;
   height: 38px;
   padding: 0;
@@ -5564,13 +5564,18 @@ body.ai-mode {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transform: translateY(2px);
+  transform: translateY(-50%);
   transition: background 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+}
+
+.ai-input-shell.is-expanded .ai-submit-icon-btn {
+  top: auto;
+  bottom: 12px;
+  transform: none;
 }
 
 .ai-submit-icon-btn:hover {
   background: var(--primary-dark);
-  transform: translateY(1px);
 }
 
 .ai-submit-icon-btn:disabled {
