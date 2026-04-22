@@ -559,7 +559,10 @@ async function submitAiQuestion(rawQuestion) {
     return;
   }
 
-  if (button) button.disabled = true;
+  if (button) {
+    button.disabled = true;
+    button.classList.add("hidden");
+  }
   if (input) input.disabled = true;
 
   renderAiLoadingState(question);
