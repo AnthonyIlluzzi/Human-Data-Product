@@ -467,6 +467,15 @@ function bindAiInterface() {
     syncAiInputState();
   });
 
+  input?.addEventListener("keydown", async (event) => {
+    if (event.key !== "Enter") return;
+    if (event.shiftKey) return;
+    if (event.isComposing) return;
+
+    event.preventDefault();
+    await submitAiQuestion(input.value || "");
+  });
+
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     await submitAiQuestion(input?.value || "");
@@ -533,7 +542,7 @@ function renderAiLoadingState(question) {
   toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
   if (questionEl) questionEl.textContent = question;
-  setAiAnswerBodyState("Generating grounded response…", "is-loading");
+  setAiAnswerBodyState("Typing…", "is-loading");
 }
 
 function renderAiError(question, message) {
