@@ -60,284 +60,285 @@
       "max_behavioral_dimensions_per_answer": 3
     }
   },
-  "question_routing": {
+    "question_routing": {
     "question_classes": [
-  {
-    "behavioral_priority_dimensions": [
-      "role_identity",
-      "environment_fit",
-      "value_creation_style"
-    ],
-    "behavioral_signal_limit": 2,
-    "core_priority_entities": [
-      "role_preferences",
-      "experience",
-      "projects",
-      "skills",
-      "feedback"
-    ],
-    "entity_quotas": {
-      "role_preference": 2,
-      "experience": 2,
-      "project": 2,
-      "skill": 1,
-      "feedback": 1
-    },
-    "primary_sources": [
-      "core_dataset",
-      "behavioral_dataset"
-    ],
-    "question_class": "role_fit",
-    "response_goal": "Explain what roles fit best and why, anchored first in observed work and then reinforced by behavioral patterns.",
-    "answer_lenses": [
-      "role_alignment",
-      "career_signal",
-      "environmental_fit"
+      {
+        "behavioral_priority_dimensions": [
+          "role_identity",
+          "environment_fit",
+          "value_creation_style"
+        ],
+        "behavioral_signal_limit": 2,
+        "core_priority_entities": [
+          "role_preferences",
+          "experience",
+          "projects",
+          "skills",
+          "feedback"
+        ],
+        "entity_quotas": {
+          "role_preference": 2,
+          "experience": 2,
+          "project": 2,
+          "skill": 1,
+          "feedback": 1
+        },
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "question_class": "role_fit",
+        "response_goal": "Explain what roles fit best and why, anchored first in observed work and then reinforced by behavioral patterns.",
+        "answer_lenses": [
+          "role_alignment",
+          "career_signal",
+          "environmental_fit"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "value_creation_style",
+          "problem_framing_style",
+          "communication_style"
+        ],
+        "behavioral_signal_limit": 2,
+        "core_priority_entities": [
+          "skills",
+          "system_improvements",
+          "projects",
+          "feedback",
+          "experience"
+        ],
+        "entity_quotas": {
+          "skill": 2,
+          "system_improvement": 2,
+          "project": 2,
+          "feedback": 1,
+          "experience": 1
+        },
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "question_class": "strengths",
+        "response_goal": "Identify recurring strengths using raw skill, system improvement, project, and feedback evidence before behavioral reinforcement.",
+        "answer_lenses": [
+          "technical_differentiators",
+          "system_design_pattern",
+          "value_creation_pattern"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "communication_style",
+          "collaboration_mode",
+          "decision_style",
+          "ambiguity_response"
+        ],
+        "behavioral_signal_limit": 3,
+        "core_priority_entities": [
+          "feedback",
+          "projects",
+          "experience"
+        ],
+        "entity_quotas": {
+          "feedback": 2,
+          "project": 2,
+          "experience": 1
+        },
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "question_class": "work_style",
+        "response_goal": "Describe how Anthony tends to work, communicate, decide, and collaborate, using professional evidence and then behavioral reinforcement.",
+        "answer_lenses": [
+          "execution_style",
+          "collaboration_pattern",
+          "decision_style"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "environment_fit",
+          "stress_pattern",
+          "blind_spot_pattern"
+        ],
+        "behavioral_signal_limit": 3,
+        "core_priority_entities": [
+          "role_preferences",
+          "experience",
+          "feedback"
+        ],
+        "entity_quotas": {
+          "role_preference": 2,
+          "experience": 2,
+          "feedback": 2
+        },
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "question_class": "environment_fit",
+        "response_goal": "Describe the environments that likely support or erode performance.",
+        "answer_lenses": [
+          "environmental_fit",
+          "stress_pattern",
+          "risk_condition"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "growth_orientation",
+          "role_identity"
+        ],
+        "behavioral_signal_limit": 2,
+        "core_priority_entities": [
+          "experience",
+          "projects",
+          "skills",
+          "system_improvements"
+        ],
+        "entity_quotas": {
+          "experience": 2,
+          "project": 2,
+          "skill": 1,
+          "system_improvement": 1
+        },
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "question_class": "career_evolution",
+        "response_goal": "Explain how trajectory and professional identity evolved over time.",
+        "answer_lenses": [
+          "trajectory_pattern",
+          "capability_expansion",
+          "role_identity"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "blind_spot_pattern",
+          "stress_pattern",
+          "self_perception_calibration"
+        ],
+        "behavioral_signal_limit": 3,
+        "core_priority_entities": [
+          "feedback",
+          "experience",
+          "role_preferences"
+        ],
+        "entity_quotas": {
+          "feedback": 2,
+          "experience": 1,
+          "role_preference": 1
+        },
+        "primary_sources": [
+          "behavioral_dataset",
+          "core_dataset"
+        ],
+        "question_class": "blind_spots_or_risks",
+        "response_goal": "Surface likely risks carefully, with explicit caution and confidence language.",
+        "answer_lenses": [
+          "risk_pattern",
+          "stress_response",
+          "mitigating_context"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "all_relevant"
+        ],
+        "behavioral_signal_limit": 2,
+        "core_priority_entities": [
+          "system_improvements",
+          "projects",
+          "feedback",
+          "skills"
+        ],
+        "entity_quotas": {
+          "system_improvement": 3,
+          "project": 2,
+          "feedback": 2,
+          "skill": 1
+        },
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "question_class": "evidence_request",
+        "response_goal": "Return the strongest supporting evidence rather than a broad synthesis.",
+        "answer_lenses": [
+          "proof_points",
+          "cross_source_support",
+          "concrete_examples"
+        ]
+      }
     ]
   },
-  {
-    "behavioral_priority_dimensions": [
-      "value_creation_style",
-      "problem_framing_style",
-      "communication_style"
-    ],
-    "behavioral_signal_limit": 2,
-    "core_priority_entities": [
-      "skills",
-      "system_improvements",
-      "projects",
-      "feedback",
-      "experience"
-    ],
-    "entity_quotas": {
-      "skill": 2,
-      "system_improvement": 2,
-      "project": 2,
-      "feedback": 1,
-      "experience": 1
-    },
-    "primary_sources": [
-      "core_dataset",
-      "behavioral_dataset"
-    ],
-    "question_class": "strengths",
-    "response_goal": "Identify recurring strengths using raw skill, system improvement, project, and feedback evidence before behavioral reinforcement.",
-    "answer_lenses": [
-      "technical_differentiators",
-      "system_design_pattern",
-      "value_creation_pattern"
-    ]
-  },
-  {
-    "behavioral_priority_dimensions": [
-      "communication_style",
-      "collaboration_mode",
-      "decision_style",
-      "ambiguity_response"
-    ],
-    "behavioral_signal_limit": 3,
-    "core_priority_entities": [
-      "feedback",
-      "projects",
-      "experience"
-    ],
-    "entity_quotas": {
-      "feedback": 2,
-      "project": 2,
-      "experience": 1
-    },
-    "primary_sources": [
-      "behavioral_dataset",
-      "core_dataset"
-    ],
-    "question_class": "work_style",
-    "response_goal": "Describe how Anthony tends to work, communicate, decide, and collaborate, using professional evidence and then behavioral reinforcement.",
-    "answer_lenses": [
-      "execution_style",
-      "collaboration_pattern",
-      "decision_style"
-    ]
-  },
-  {
-    "behavioral_priority_dimensions": [
-      "environment_fit",
-      "stress_pattern",
-      "blind_spot_pattern"
-    ],
-    "behavioral_signal_limit": 3,
-    "core_priority_entities": [
-      "role_preferences",
-      "experience",
-      "feedback"
-    ],
-    "entity_quotas": {
-      "role_preference": 2,
-      "experience": 2,
-      "feedback": 2
-    },
-    "primary_sources": [
-      "behavioral_dataset",
-      "core_dataset"
-    ],
-    "question_class": "environment_fit",
-    "response_goal": "Describe the environments that likely support or erode performance.",
-    "answer_lenses": [
-      "environmental_fit",
-      "stress_pattern",
-      "risk_condition"
-    ]
-  },
-  {
-    "behavioral_priority_dimensions": [
-      "growth_orientation",
-      "role_identity"
-    ],
-    "behavioral_signal_limit": 2,
-    "core_priority_entities": [
-      "experience",
-      "projects",
-      "skills",
-      "system_improvements"
-    ],
-    "entity_quotas": {
-      "experience": 2,
-      "project": 2,
-      "skill": 1,
-      "system_improvement": 1
-    },
-    "primary_sources": [
-      "core_dataset",
-      "behavioral_dataset"
-    ],
-    "question_class": "career_evolution",
-    "response_goal": "Explain how trajectory and professional identity evolved over time.",
-    "answer_lenses": [
-      "trajectory_pattern",
-      "capability_expansion",
-      "role_identity"
-    ]
-  },
-  {
-    "behavioral_priority_dimensions": [
-      "blind_spot_pattern",
-      "stress_pattern",
-      "self_perception_calibration"
-    ],
-    "behavioral_signal_limit": 3,
-    "core_priority_entities": [
-      "feedback",
-      "experience",
-      "role_preferences"
-    ],
-    "entity_quotas": {
-      "feedback": 2,
-      "experience": 1,
-      "role_preference": 1
-    },
-    "primary_sources": [
-      "behavioral_dataset",
-      "core_dataset"
-    ],
-    "question_class": "blind_spots_or_risks",
-    "response_goal": "Surface likely risks carefully, with explicit caution and confidence language.",
-    "answer_lenses": [
-      "risk_pattern",
-      "stress_response",
-      "mitigating_context"
-    ]
-  },
-  {
-    "behavioral_priority_dimensions": [
-      "all_relevant"
-    ],
-    "behavioral_signal_limit": 2,
-    "core_priority_entities": [
-      "system_improvements",
-      "projects",
-      "feedback",
-      "skills"
-    ],
-    "entity_quotas": {
-      "system_improvement": 3,
-      "project": 2,
-      "feedback": 2,
-      "skill": 1
-    },
-    "primary_sources": [
-      "core_dataset",
-      "behavioral_dataset"
-    ],
-    "question_class": "evidence_request",
-    "response_goal": "Return the strongest supporting evidence rather than a broad synthesis.",
-    "answer_lenses": [
-      "proof_points",
-      "cross_source_support",
-      "concrete_examples"
-    ]
-  }
-],
   "retrieval_strategy": {
-  "order_of_operations": [
-    "Classify the user question into the closest supported question_class.",
-    "Extract meaningful question terms and concept synonyms.",
-    "Retrieve directly relevant professional evidence from the configured core entities first.",
-    "Apply entity quotas so the evidence pack includes multiple evidence types instead of one repeated theme.",
-    "Retrieve matching derived_signal rows from the behavioral dataset by behavioral_priority_dimensions.",
-    "Use cross_source_alignment and question relevance to rank behavioral signals.",
-    "Assemble the response while explicitly separating observed evidence from behavioral interpretation."
-  ],
-  "retrieval_limits": {
-    "max_behavioral_signals_before_synthesis": 4,
-    "max_core_records_before_synthesis": 8,
-    "max_signal_evidence_links_per_signal": 2,
-    "prefer_recent_or_higher_weighted_sources_when_tied": true
+    "order_of_operations": [
+      "Classify the user question into the closest supported question_class.",
+      "Extract meaningful question terms and concept synonyms.",
+      "Retrieve directly relevant professional evidence from the configured core entities first.",
+      "Apply entity quotas so the evidence pack includes multiple evidence types instead of one repeated theme.",
+      "Retrieve matching derived_signal rows from the behavioral dataset by behavioral_priority_dimensions.",
+      "Use cross_source_alignment and question relevance to rank behavioral signals.",
+      "Assemble the response while explicitly separating observed evidence from behavioral interpretation."
+    ],
+    "retrieval_limits": {
+      "max_behavioral_signals_before_synthesis": 4,
+      "max_core_records_before_synthesis": 8,
+      "max_signal_evidence_links_per_signal": 2,
+      "prefer_recent_or_higher_weighted_sources_when_tied": true
+    },
+    "concept_synonyms": {
+      "strength": ["strengths", "strongest", "differentiator", "advantage"],
+      "value": ["impact", "outcome", "contribution", "value creation"],
+      "technical": ["architecture", "platform", "data", "analytics", "integration"],
+      "fit": ["alignment", "suited", "best suited", "match"],
+      "work style": ["communication", "decision", "collaboration", "ambiguity"],
+      "risk": ["blind spot", "friction", "stress", "overdo"]
+    }
   },
-  "concept_synonyms": {
-    "strength": ["strengths", "strongest", "differentiator", "advantage"],
-    "value": ["impact", "outcome", "contribution", "value creation"],
-    "technical": ["architecture", "platform", "data", "analytics", "integration"],
-    "fit": ["alignment", "suited", "best suited", "match"],
-    "work style": ["communication", "decision", "collaboration", "ambiguity"],
-    "risk": ["blind spot", "friction", "stress", "overdo"]
-  }
-},
   "answer_contract": {
-  "evidence_labeling_rules": [
-    "Label observed professional evidence separately from behavioral signals when both are used.",
-    "If a point is supported mainly by self-reported or assessment-derived evidence, say so.",
-    "If multiple behavioral artifacts reinforce a signal, describe it as cross-source reinforcement.",
-    "If sources disagree or support is weak, state that clearly instead of smoothing it over."
-  ],
-  "optional_sections_when_needed": [
-    "behavioral_reinforcement",
-    "caution_or_limitation",
-    "deeper_hdp_redirect"
-  ],
-  "required_sections_by_default": [
-    "direct_answer",
-    "differentiated_observations",
-    "supporting_evidence"
-  ],
-  "style_rules": [
-    "Respond in third person when describing Anthony.",
-    "Do not write as if the system is Anthony.",
-    "Do not present assessment labels as definitive truth.",
-    "Prefer concise evidence-backed statements over personality language.",
-    "Use explicit uncertainty language when support is partial, weak, or mostly self-reported."
-  ],
-  "response_composition_rules": [
-    "Answer the question directly before summarizing patterns.",
-    "Use at least two different evidence types when the data supports it.",
-    "Prefer raw structured evidence over portfolio-level summaries.",
-    "Do not cite the HDP itself or the Capability Model as primary proof when underlying data exists."
-  ],
-  "overused_themes_to_avoid": [
-    "reduces ambiguity",
-    "simplifies complexity",
-    "brings structure",
-    "clarity"
-  ]
-},
+    "evidence_labeling_rules": [
+      "Label observed professional evidence separately from behavioral signals when both are used.",
+      "If a point is supported mainly by self-reported or assessment-derived evidence, say so.",
+      "If multiple behavioral artifacts reinforce a signal, describe it as cross-source reinforcement.",
+      "If sources disagree or support is weak, state that clearly instead of smoothing it over."
+    ],
+    "optional_sections_when_needed": [
+      "behavioral_reinforcement",
+      "caution_or_limitation",
+      "deeper_hdp_redirect"
+    ],
+    "required_sections_by_default": [
+      "direct_answer",
+      "differentiated_observations",
+      "supporting_evidence"
+    ],
+    "style_rules": [
+      "Respond in third person when describing Anthony.",
+      "Do not write as if the system is Anthony.",
+      "Do not present assessment labels as definitive truth.",
+      "Prefer concise evidence-backed statements over personality language.",
+      "Use explicit uncertainty language when support is partial, weak, or mostly self-reported."
+    ],
+    "response_composition_rules": [
+      "Answer the question directly before summarizing patterns.",
+      "Use at least two different evidence types when the data supports it.",
+      "Prefer raw structured evidence over portfolio-level summaries.",
+      "Do not cite the HDP itself or the Capability Model as primary proof when underlying data exists."
+    ],
+    "overused_themes_to_avoid": [
+      "reduces ambiguity",
+      "simplifies complexity",
+      "brings structure",
+      "clarity"
+    ]
+  },
   "confidence_and_limitation_rules": {
     "confidence_language": {
       "high": "strong evidence suggests",
@@ -376,6 +377,17 @@
       "behavioral blind spots",
       "assessment pattern questions"
     ]
+  },
+  "behavioral_usage_rules": {
+    "default_mode": "reinforcing",
+    "behavioral_lead_question_classes": [
+      "work_style",
+      "environment_fit",
+      "blind_spots_or_risks"
+    ],
+    "max_behavioral_signals_if_core_evidence_present": 2,
+    "prefer_behavioral_signals_with_cross_source_alignment": true,
+    "deprioritize_behavioral_signals_when_core_evidence_already_supports_same_theme": true
   },
   "supported_ui_behaviors": {
     "allow_follow_up_prompt_suggestions": true,
