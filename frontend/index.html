@@ -1735,146 +1735,137 @@ LIMIT 1;"
     </section>
 
     <div id="ai-main-workspace" class="ai-main-workspace hidden">
-      <div class="ai-hero-card">
-        <div class="ai-hero-copy">
-          <span class="hero-eyebrow">Human Data Product AI</span>
-          <h1>This isn’t a resume. It’s a working data product.</h1>
-          <p class="ai-hero-lead">
-            Ask questions and get answers grounded in structured experience, projects, feedback, and behavioral signals.
-          </p>
-        </div>
-        <button id="ai-back-to-catalog-btn" class="btn-secondary ai-back-btn" type="button">
-          HDP Catalog
-        </button>
-      </div>
-
-      <aside id="ai-response-card-wrap" class="card ai-response-card-wrap hidden">
-        <div id="ai-response-card" class="ai-response-card hidden">
-          <div class="viz-card-header">
-            <h3 id="ai-response-question">Question</h3>
-            <p class="viz-card-subtitle">
-              Grounded response generated from current HDP and behavioral datasets.
-            </p>
-          </div>
-
-          <div class="ai-response-window">
-            <div id="ai-answer-body" class="ai-answer-body"></div>
-
-            <div id="ai-core-evidence-section" class="ai-evidence-section hidden">
-              <h4>Observed Evidence</h4>
-              <ul id="ai-core-evidence-list" class="ai-evidence-list"></ul>
-            </div>
-
-            <div id="ai-behavioral-evidence-section" class="ai-evidence-section hidden">
-              <h4>Behavioral Reinforcement</h4>
-              <ul id="ai-behavioral-signal-list" class="ai-evidence-list"></ul>
-            </div>
-
-            <div id="ai-answer-note-section" class="ai-answer-note-section hidden">
-              <h4 id="ai-answer-note-heading">Context Note</h4>
-              <div id="ai-answer-note-body" class="ai-answer-note-body"></div>
-            </div>
-
-            <div id="ai-catalog-nudge" class="ai-catalog-nudge hidden">
-              <p class="ai-catalog-nudge-text">
-                You’ve seen how the AI responds. You can also explore the full data product behind these answers.
-              </p>
-              <button id="ai-catalog-nudge-btn" class="btn-secondary" type="button">
-                Explore Data Product
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <div class="ai-workspace-stack">
-        <section class="card ai-chat-card">
-          <div class="viz-card-header">
-            <div class="ai-chat-title-row">
-              <div class="brand-badge ai-header-badge">HDP</div>
-              <h2>Conversational AI</h2>
-            </div>
-          </div>
-
-          <form id="ai-chat-form" class="ai-chat-form">
-            <label class="sr-only" for="ai-question-input">Ask a question</label>
-            <p class="ai-input-prompt">Ask about experience, strengths, fit, or working style.</p>
-
-            <div class="ai-input-shell">
-              <textarea
-                id="ai-question-input"
-                class="ai-question-input"
-                rows="1"
-                placeholder="Ask the data"
-              ></textarea>
-
-              <button
-                id="ai-submit-btn"
-                class="ai-submit-icon-btn hidden"
-                type="submit"
-                aria-label="Generate answer"
-              >
-                <svg viewBox="0 0 24 24" class="ai-submit-icon" aria-hidden="true">
-                  <path
-                    d="M12 5v11"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                  ></path>
-                  <path
-                    d="M7 10l5-5 5 5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </form>
-
-          <div id="ai-default-prompts" class="ai-default-prompts">
-            <p class="ai-default-prompts-header">Try a predefined question</p>
-
-            <div class="ai-suggestion-grid">
-              <button
-                class="ai-suggestion-card ai-prompt-chip"
-                type="button"
-                data-ai-prompt="What roles is Anthony best suited for and why?"
-              >
-                <span class="ai-suggestion-title">Role fit</span>
-              </button>
-
-              <button
-                class="ai-suggestion-card ai-prompt-chip"
-                type="button"
-                data-ai-prompt="What evidence supports Anthony’s architecture orientation?"
-              >
-                <span class="ai-suggestion-title">Architecture evidence</span>
-              </button>
-
-              <button
-                class="ai-suggestion-card ai-prompt-chip"
-                type="button"
-                data-ai-prompt="How does Anthony typically approach ambiguous problems?"
-              >
-                <span class="ai-suggestion-title">Ambiguity approach</span>
-              </button>
-
-              <button
-                class="ai-suggestion-card ai-prompt-chip"
-                type="button"
-                data-ai-prompt="What environments bring out Anthony’s best work?"
-              >
-                <span class="ai-suggestion-title">Environment fit</span>
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
+	  <aside id="ai-response-card-wrap" class="card ai-response-card-wrap hidden">
+	    <div id="ai-response-card" class="ai-response-card hidden">
+	      <div class="viz-card-header">
+	        <h3 id="ai-response-question">Question</h3>
+	        <p class="viz-card-subtitle">
+	          Grounded response generated from current HDP and behavioral datasets.
+	        </p>
+	      </div>
+	
+	      <div class="ai-response-window">
+	        <div id="ai-answer-body" class="ai-answer-body"></div>
+	
+	        <div id="ai-core-evidence-section" class="ai-evidence-section hidden">
+	          <h4>Observed Evidence</h4>
+	          <ul id="ai-core-evidence-list" class="ai-evidence-list"></ul>
+	        </div>
+	
+	        <div id="ai-behavioral-evidence-section" class="ai-evidence-section hidden">
+	          <h4>Behavioral Reinforcement</h4>
+	          <ul id="ai-behavioral-signal-list" class="ai-evidence-list"></ul>
+	        </div>
+	
+	        <div id="ai-answer-note-section" class="ai-answer-note-section hidden">
+	          <h4 id="ai-answer-note-heading">Context Note</h4>
+	          <div id="ai-answer-note-body" class="ai-answer-note-body"></div>
+	        </div>
+	
+	        <div id="ai-catalog-nudge" class="ai-catalog-nudge hidden">
+	          <p class="ai-catalog-nudge-text">
+	            You’ve seen how the AI responds. You can also explore the full data product behind these answers.
+	          </p>
+	          <button id="ai-catalog-nudge-btn" class="btn-secondary" type="button">
+	            Explore Data Product
+	          </button>
+	        </div>
+	      </div>
+	    </div>
+	  </aside>
+	
+	  <div class="ai-workspace-stack">
+	    <section class="card ai-chat-card">
+	      <div class="viz-card-header ai-chat-header">
+	        <div class="ai-chat-title-row">
+	          <div class="brand-badge ai-header-badge">HDP</div>
+	          <h2>Conversational AI</h2>
+	        </div>
+	
+	        <button id="ai-back-to-catalog-btn" class="btn-secondary ai-back-btn" type="button">
+	          HDP Catalog
+	        </button>
+	      </div>
+	
+	      <form id="ai-chat-form" class="ai-chat-form">
+	        <label class="sr-only" for="ai-question-input">Ask a question</label>
+	        <p class="ai-input-prompt">Ask about experience, strengths, fit, or working style.</p>
+	
+	        <div class="ai-input-shell">
+	          <textarea
+	            id="ai-question-input"
+	            class="ai-question-input"
+	            rows="1"
+	            placeholder="Ask the data"
+	          ></textarea>
+	
+	          <button
+	            id="ai-submit-btn"
+	            class="ai-submit-icon-btn hidden"
+	            type="submit"
+	            aria-label="Generate answer"
+	          >
+	            <svg viewBox="0 0 24 24" class="ai-submit-icon" aria-hidden="true">
+	              <path
+	                d="M12 5v11"
+	                fill="none"
+	                stroke="currentColor"
+	                stroke-width="2"
+	                stroke-linecap="round"
+	              ></path>
+	              <path
+	                d="M7 10l5-5 5 5"
+	                fill="none"
+	                stroke="currentColor"
+	                stroke-width="2"
+	                stroke-linecap="round"
+	                stroke-linejoin="round"
+	              ></path>
+	            </svg>
+	          </button>
+	        </div>
+	      </form>
+	
+	      <div id="ai-default-prompts" class="ai-default-prompts">
+	        <p class="ai-default-prompts-header">Try a predefined question</p>
+	
+	        <div class="ai-suggestion-grid">
+	          <button
+	            class="ai-suggestion-card ai-prompt-chip"
+	            type="button"
+	            data-ai-prompt="What roles is Anthony best suited for and why?"
+	          >
+	            <span class="ai-suggestion-title">Role fit</span>
+	          </button>
+	
+	          <button
+	            class="ai-suggestion-card ai-prompt-chip"
+	            type="button"
+	            data-ai-prompt="What is the strongest evidence that Anthony thinks like an architect?"
+	          >
+	            <span class="ai-suggestion-title">Architecture evidence</span>
+	          </button>
+	
+	          <button
+	            class="ai-suggestion-card ai-prompt-chip"
+	            type="button"
+	            data-ai-prompt="How does Anthony tend to operate in ambiguity?"
+	          >
+	            <span class="ai-suggestion-title">Ambiguity approach</span>
+	          </button>
+	
+	          <button
+	            class="ai-suggestion-card ai-prompt-chip"
+	            type="button"
+	            data-ai-prompt="What type of environment is Anthony most likely to thrive in?"
+	          >
+	            <span class="ai-suggestion-title">Environment fit</span>
+	          </button>
+	        </div>
+	      </div>
+	    </section>
+	  </div>
+	</div>
   </div>
 </section>
   <div id="insights-hover-tooltip" class="insights-hover-tooltip hidden" aria-hidden="true"></div>
