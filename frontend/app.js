@@ -8,6 +8,9 @@ const IS_INTERNAL_AI_MODE =
   URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
+const AI_INTRO_DELAY_MS = 1600;
+const AI_CATALOG_NUDGE_THRESHOLD = 3;
+const AI_CATALOG_NUDGE_SEEN_KEY = "hdp_ai_catalog_nudge_seen";
 let capabilityInsightsInitPromise = null;
 let capabilityInsightsInitialized = false;
 const DEFAULT_SQL_QUERY = `SELECT experience_id, company, role, start_date, end_date, domain
@@ -402,7 +405,18 @@ async function initializeInternalAiMode() {
   document.getElementById("mobile-nav-backdrop")?.classList.add("hidden");
   document.getElementById("ai-page")?.classList.remove("hidden");
 
+  syncAiConversationMode();
   bindAiInterface();
+
+  if (getAiSessionPromptCount() > 0) {
+    revealAiMainWorkspace();
+    maybeShowAiCatalogNudge();
+    return;
+  }
+
+  window.setTimeout(() => {
+    revealAiMainWorkspace();
+  }, AI_INTRO_DELAY_MS);
 }
 
 function bindAiInterface() {
@@ -487,6 +501,12 @@ function bindAiInterface() {
     nextUrl.searchParams.delete("internal");
     window.location.href = nextUrl.toString();
   });
+  document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+    nextUrl.searchParams.delete("internal");
+    window.location.href = nextUrl.toString();
+  });
 
   requestAnimationFrame(() => {
     syncAiInputState();
@@ -497,6 +517,44 @@ function incrementAiSessionPromptCount() {
   const current = Number(sessionStorage.getItem(AI_SESSION_PROMPT_COUNT_KEY) || "0") + 1;
   sessionStorage.setItem(AI_SESSION_PROMPT_COUNT_KEY, String(current));
   return current;
+}
+
+function getAiSessionPromptCount() {
+  return Number(sessionStorage.getItem(AI_SESSION_PROMPT_COUNT_KEY) || "0");
+}
+
+function hasSeenAiCatalogNudge() {
+  return sessionStorage.getItem(AI_CATALOG_NUDGE_SEEN_KEY) === "true";
+}
+
+function markAiCatalogNudgeSeen() {
+  sessionStorage.setItem(AI_CATALOG_NUDGE_SEEN_KEY, "true");
+}
+
+function syncAiConversationMode() {
+  const aiPage = document.getElementById("ai-page");
+  if (!aiPage) return;
+
+  aiPage.classList.toggle("ai-conversation-mode", getAiSessionPromptCount() > 0);
+}
+
+function maybeShowAiCatalogNudge() {
+  const nudge = document.getElementById("ai-catalog-nudge");
+  if (!nudge) return;
+
+  const shouldShow =
+    getAiSessionPromptCount() >= AI_CATALOG_NUDGE_THRESHOLD &&
+    !hasSeenAiCatalogNudge();
+
+  if (!shouldShow) return;
+
+  nudge.classList.remove("hidden");
+  markAiCatalogNudgeSeen();
+}
+
+function revealAiMainWorkspace() {
+  document.getElementById("ai-intro-screen")?.classList.add("hidden");
+  document.getElementById("ai-main-workspace")?.classList.remove("hidden");
 }
 
 function revealAiResponseCard() {
@@ -720,6 +778,7 @@ function renderAiResponse(payload) {
 
   toggleAiEvidenceSection("ai-core-evidence-section", coreEvidence.length > 0);
   toggleAiEvidenceSection("ai-behavioral-evidence-section", behavioralSignals.length > 0);
+  maybeShowAiCatalogNudge();
 }
 
 async function submitAiQuestion(rawQuestion) {
@@ -747,6 +806,7 @@ async function submitAiQuestion(rawQuestion) {
     const payload = await postJson("/ai/chat", { question });
 
     incrementAiSessionPromptCount();
+    syncAiConversationMode();
     renderAiResponse(payload);
 
     if (input) {

@@ -5462,6 +5462,114 @@ body.ai-mode {
   flex: 0 0 auto;
 }
 
+.ai-main-workspace {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.ai-intro-screen {
+  width: 100%;
+  min-height: min(62vh, 520px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 28px 24px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0964c0 0%, #0a58ad 58%, #084892 100%);
+  box-shadow: 0 14px 36px rgba(12, 36, 68, 0.18);
+  color: #fff;
+}
+
+.ai-intro-copy {
+  max-width: 760px;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.ai-intro-copy h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.ai-intro-copy .ai-hero-lead {
+  margin: 0;
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.ai-catalog-nudge {
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.ai-catalog-nudge-text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.ai-page.ai-conversation-mode {
+  min-height: 100vh;
+  align-items: stretch;
+  padding: 16px 28px 16px;
+}
+
+.ai-page.ai-conversation-mode .ai-shell {
+  height: calc(100vh - 32px);
+  max-width: var(--max-content);
+}
+
+.ai-page.ai-conversation-mode .ai-main-workspace {
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 14px;
+}
+
+.ai-page.ai-conversation-mode .ai-hero-card {
+  display: none;
+}
+
+.ai-page.ai-conversation-mode .ai-workspace-stack {
+  order: 2;
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  background: linear-gradient(to top, var(--bg) 72%, rgba(245, 247, 251, 0));
+  padding-top: 12px;
+}
+
+.ai-page.ai-conversation-mode .ai-chat-card {
+  padding: 12px 14px;
+  box-shadow: 0 10px 28px rgba(20, 38, 63, 0.16);
+}
+
+.ai-page.ai-conversation-mode .ai-chat-card .viz-card-header,
+.ai-page.ai-conversation-mode .ai-chat-card .ai-input-prompt,
+.ai-page.ai-conversation-mode .ai-chat-card .ai-default-prompts {
+  display: none;
+}
+
+.ai-page.ai-conversation-mode .ai-chat-form {
+  gap: 0;
+}
+
+.ai-page.ai-conversation-mode .ai-response-card-wrap,
+.ai-page.ai-conversation-mode .ai-response-card {
+  height: 100%;
+}
+
+.ai-page.ai-conversation-mode .ai-response-window {
+  min-height: 0;
+  max-height: none;
+  height: 100%;
+}
+
 .ai-workspace-stack {
   display: grid;
   gap: 16px;
@@ -5797,8 +5905,22 @@ body.ai-mode {
 @media (max-width: 960px) {
   .ai-page {
     min-height: 100vh;
-    align-items: flex-start;
+    align-items: center;
     padding: 16px;
+  }
+
+  .ai-shell {
+    gap: 14px;
+  }
+
+  .ai-intro-screen {
+    min-height: min(56vh, 420px);
+    padding: 24px 18px;
+  }
+
+  .ai-intro-copy h1 {
+    font-size: 1.9rem;
+    line-height: 1.08;
   }
 
   .ai-hero-card {
@@ -5815,12 +5937,8 @@ body.ai-mode {
     max-height: none;
   }
 
-  .ai-suggestion-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .ai-input-shell {
-    padding: 12px 12px;
+  .ai-default-prompts {
+    display: none !important;
   }
 
   .ai-question-input {
@@ -5831,6 +5949,17 @@ body.ai-mode {
     right: 10px;
     bottom: 10px;
   }
-}
 
+  .ai-page.ai-conversation-mode {
+    padding: 12px;
+  }
+
+  .ai-page.ai-conversation-mode .ai-shell {
+    height: calc(100vh - 24px);
+  }
+
+  .ai-page.ai-conversation-mode .ai-workspace-stack {
+    padding-top: 10px;
+  }
+}
 
