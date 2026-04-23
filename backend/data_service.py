@@ -18,6 +18,219 @@ def get_connection():
 def rows_to_dicts(rows):
     return [dict(row) for row in rows]
 
+
+def _ai_normalize_text(value):
+    return re.sub(r"\s+", " ", (value or "").strip().lower())
+
+
+def _ai_score_text_relevance(text, query_terms):
+    normalized = _ai_normalize_text(text)
+    score = 0.0
+    for term in query_terms:
+        if not term:
+            continue
+        term = _ai_normalize_text(term)
+        if " " in term and term in normalized:
+            score += 2.0
+        elif term in normalized:
+            score += 1.0
+    return score
+
+
+def get_ai_skill_evidence(query_terms=None, limit=8):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT
+                s.skill_id,
+                s.skill_name,
+                d.domain,
+                s.depth,
+                s.experience,
+                s.confidence,
+                COALESCE(s.notes, '') AS notes,
+                COUNT(ps.project_id) AS project_count
+            FROM skill s
+            JOIN skills_domain d
+              ON s.domain_id = d.domain_id
+            LEFT JOIN project_skill ps
+              ON s.skill_id = ps.skill_id
+            GROUP BY s.skill_id, s.skill_name, d.domain, s.depth, s.experience, s.confidence, s.notes
+            ORDER BY project_count DESC, s.confidence DESC, s.depth DESC, s.experience DESC, s.skill_name ASC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            f"{row['skill_name']} {row['domain']} {row['notes']}",
+            query_terms,
+        )
+        row["evidence_type"] = "skill"
+        row["evidence_summary"] = (
+            f"Domain: {row['domain']}; depth: {row['depth']}; experience: {row['experience']}; "
+            f"confidence: {row['confidence']}; mapped to {row['project_count']} projects."
+        )
+
+    rows.sort(key=lambda item: (item["relevance_score"], item["project_count"], item["confidence"], item["depth"]), reverse=True)
+    return rows[:limit]
+
+
+def get_ai_system_improvement_evidence(query_terms=None, limit=8):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT
+                si.improvement_id,
+                si.description,
+                si.system_layer,
+                si.problem_type,
+                si.solution_type,
+                si.impact_type,
+                si.delivered_date,
+                COALESCE(p.name, '') AS project_name,
+                COALESCE(e.role, '') AS role_name
+            FROM system_improvement si
+            LEFT JOIN project p
+              ON si.project_id = p.project_id
+            LEFT JOIN experience e
+              ON si.experience_id = e.experience_id
+            ORDER BY si.delivered_date DESC, si.sort_order ASC, si.improvement_id ASC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            " ".join([
+                row["description"],
+                row["system_layer"],
+                row["problem_type"],
+                row["solution_type"],
+                row["impact_type"],
+                row["project_name"],
+                row["role_name"],
+            ]),
+            query_terms,
+        )
+        row["evidence_type"] = "system_improvement"
+        row["evidence_summary"] = (
+            f"Layer: {row['system_layer']}; problem: {row['problem_type']}; solution: {row['solution_type']}; "
+            f"impact: {row['impact_type']}; project: {row['project_name'] or 'N/A'}"
+        )
+
+    rows.sort(key=lambda item: (item["relevance_score"], item["delivered_date"] or ""), reverse=True)
+    return rows[:limit]
+
+
+def get_ai_feedback_evidence(query_terms=None, limit=6):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT feedback_id, entity_type, entity_id, theme, quote, year
+            FROM feedback
+            ORDER BY year DESC, viz_display_rank ASC, feedback_id DESC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            f"{row['theme']} {row['quote']} {row['entity_type']}",
+            query_terms,
+        )
+        row["evidence_type"] = "feedback"
+        row["evidence_summary"] = row["quote"]
+
+    rows.sort(key=lambda item: (item["relevance_score"], item["year"] or 0), reverse=True)
+    return rows[:limit]
+
+
+def get_ai_project_evidence(query_terms=None, limit=6):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT p.project_id, p.name, p.domain, p.value, COALESCE(e.role, '') AS role_name
+            FROM project p
+            LEFT JOIN experience e
+              ON p.experience_id = e.experience_id
+            ORDER BY p.project_id DESC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            f"{row['name']} {row['domain']} {row['value']} {row['role_name']}",
+            query_terms,
+        )
+        row["evidence_type"] = "project"
+        row["evidence_summary"] = f"Domain: {row['domain']}; outcome: {row['value']}; role context: {row['role_name']}"
+
+    rows.sort(key=lambda item: (item["relevance_score"], item["project_id"]), reverse=True)
+    return rows[:limit]
+
+
+def get_ai_experience_evidence(query_terms=None, limit=5):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT experience_id, company, role, domain, focus_area, impact, sort_order
+            FROM experience
+            ORDER BY sort_order ASC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            f"{row['company']} {row['role']} {row['domain']} {row['focus_area']} {row['impact']}",
+            query_terms,
+        )
+        row["evidence_type"] = "experience"
+        row["evidence_summary"] = f"Domain: {row['domain']}; focus: {row['focus_area']}; impact: {row['impact']}"
+
+    rows.sort(key=lambda item: (item["relevance_score"], -(item["sort_order"] or 999)), reverse=True)
+    return rows[:limit]
+
+
+def get_ai_role_preference_evidence(query_terms=None, limit=5):
+    query_terms = query_terms or []
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT preference_id, dimension, category, value, priority, dimension_weight, value_weight
+            FROM role_preference
+            ORDER BY CASE priority WHEN 'high' THEN 0 WHEN 'medium' THEN 1 ELSE 2 END, preference_id ASC
+            """
+        )
+        rows = rows_to_dicts(cursor.fetchall())
+
+    priority_rank = {"high": 3, "medium": 2, "low": 1}
+    for row in rows:
+        row["relevance_score"] = _ai_score_text_relevance(
+            f"{row['dimension']} {row['category']} {row['value']}",
+            query_terms,
+        )
+        row["evidence_type"] = "role_preference"
+        row["evidence_summary"] = f"Dimension: {row['dimension']}; category: {row['category']}; priority: {row['priority']}"
+        row["priority_rank"] = priority_rank.get((row["priority"] or "").lower(), 0)
+
+    rows.sort(key=lambda item: (item["relevance_score"], item["priority_rank"], item["value_weight"] or 0), reverse=True)
+    return rows[:limit]
+
+
 def depth_label(depth: int) -> str:
     if depth >= 4:
         return "Expertise"
