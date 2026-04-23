@@ -578,9 +578,8 @@ function clearAiEvidenceLists() {
 }
 
 function clearAiAnswerNoteState() {
-  const noteBody = document.getElementById("ai-answer-note-body");
-  if (noteBody) noteBody.innerHTML = "";
-  document.getElementById("ai-answer-note-section")?.classList.add("hidden");
+  // Intentionally retained as a no-op for compatibility after removing
+  // the standalone note section from the UI.
 }
 
 function setAiAnswerBodyState(text, stateClass = "") {
@@ -595,14 +594,15 @@ function setAiAnswerBodyState(text, stateClass = "") {
   answerEl.textContent = text;
 }
 
-function toggleAiEvidenceSection(sectionId, isVisible) {
-  document.getElementById(sectionId)?.classList.toggle("hidden", !isVisible);
+function toggleAiEvidenceSection() {
+  // Intentionally retained as a no-op for compatibility after removing
+  // standalone evidence sections from the UI.
 }
 
 function parseAiAnswerSections(answer) {
   const normalized = String(answer || "").replace(/\r/g, "").trim();
 
-  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Context note|Differentiated observations|Supporting evidence|Caution or limitation)\s*$/gim;
+  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Additional Context|Context note|Differentiated observations|Supporting evidence|Caution or limitation)\s*$/gim;
   const matches = [...normalized.matchAll(headingPattern)];
 
   if (!matches.length) {
@@ -613,15 +613,15 @@ function parseAiAnswerSections(answer) {
           title: "Response",
           body: normalized
         }
-      ],
-      note: null
+      ]
     };
   }
 
   const titleMap = {
     "differentiated observations": "Why this fits",
     "supporting evidence": "What stands out",
-    "caution or limitation": "Context note"
+    "caution or limitation": "Additional Context",
+    "context note": "Additional Context"
   };
 
   const sections = matches.map((match, index) => {
@@ -637,16 +637,65 @@ function parseAiAnswerSections(answer) {
     };
   });
 
-  const note = sections.find(section => section.title.toLowerCase() === "context note") || null;
-  const primarySections = sections.filter(section => section.title.toLowerCase() !== "context note");
-
-  return {
-    sections: primarySections,
-    note
-  };
+  return { sections };
 }
 
-function renderAiRichText(text) {
+function buildAiCitationLookup(payload) {
+  const lookup = {};
+
+  const coreEvidence = Array.isArray(payload?.core_evidence) ? payload.core_evidence : [];
+  const behavioralSignals = Array.isArray(payload?.behavioral_signals) ? payload.behavioral_signals : [];
+
+  coreEvidence.forEach((item, index) => {
+    lookup[`P${index + 1}`] = {
+      label: item.title || item.record_type || `P${index + 1}`,
+      detail: item.supporting_text || ""
+    };
+  });
+
+  behavioralSignals.forEach((item, index) => {
+    lookup[`B${index + 1}`] = {
+      label: item.signal_label || item.signal_key || `B${index + 1}`,
+      detail: item.summary_rationale || ""
+    };
+  });
+
+  return lookup;
+}
+
+function renderAiInlineTextWithCitations(text, citationLookup = {}) {
+  const raw = String(text || "");
+  const parts = raw.split(/(\[(?:P|B)\d+\])/g);
+
+  return parts
+    .map(part => {
+      const match = part.match(/^\[((?:P|B)\d+)\]$/);
+      if (!match) {
+        return escapeHtml(part);
+      }
+
+      const citationId = match[1];
+      const citation = citationLookup[citationId];
+
+      if (!citation) {
+        return escapeHtml(part);
+      }
+
+      return `
+        <button
+          type="button"
+          class="ai-inline-citation-chip"
+          data-ai-citation-id="${escapeHtml(citationId)}"
+          aria-label="View supporting detail for ${escapeHtml(citation.label)}"
+        >
+          ${escapeHtml(citation.label)}
+        </button>
+      `;
+    })
+    .join("");
+}
+
+function renderAiRichText(text, citationLookup = {}) {
   const lines = String(text || "").split("\n");
   const blocks = [];
   let paragraphLines = [];
@@ -654,14 +703,14 @@ function renderAiRichText(text) {
 
   const flushParagraph = () => {
     if (!paragraphLines.length) return;
-    blocks.push(`<p>${escapeHtml(paragraphLines.join(" ").trim())}</p>`);
+    blocks.push(`<p>${renderAiInlineTextWithCitations(paragraphLines.join(" ").trim(), citationLookup)}</p>`);
     paragraphLines = [];
   };
 
   const flushList = () => {
     if (!listItems.length) return;
     const itemsHtml = listItems
-      .map(item => `<li>${escapeHtml(item)}</li>`)
+      .map(item => `<li>${renderAiInlineTextWithCitations(item, citationLookup)}</li>`)
       .join("");
     blocks.push(`<ul>${itemsHtml}</ul>`);
     listItems = [];
@@ -689,14 +738,11 @@ function renderAiRichText(text) {
   flushParagraph();
   flushList();
 
-  return blocks.join("") || `<p>${escapeHtml(String(text || "").trim())}</p>`;
+  return blocks.join("") || `<p>${renderAiInlineTextWithCitations(String(text || "").trim(), citationLookup)}</p>`;
 }
 
-function renderAiAnswerContent(answer) {
+function renderAiAnswerContent(answer, citationLookup = {}) {
   const answerEl = document.getElementById("ai-answer-body");
-  const noteSection = document.getElementById("ai-answer-note-section");
-  const noteBody = document.getElementById("ai-answer-note-body");
-
   if (!answerEl) return;
 
   answerEl.classList.remove("is-loading", "is-error");
@@ -713,21 +759,28 @@ function renderAiAnswerContent(answer) {
             <h4 class="ai-answer-section-title">${escapeHtml(section.title)}</h4>
           </div>
           <div class="ai-answer-section-content">
-            ${renderAiRichText(section.body)}
+            ${renderAiRichText(section.body, citationLookup)}
           </div>
         </section>
       `;
     })
     .join("");
 
-  answerEl.innerHTML = sectionsHtml || `<p>${escapeHtml(String(answer || "").trim())}</p>`;
+  answerEl.innerHTML = sectionsHtml || `<p>${renderAiRichText(String(answer || "").trim(), citationLookup)}</p>`;
 
-  if (parsed.note?.body && noteSection && noteBody) {
-    noteBody.innerHTML = renderAiRichText(parsed.note.body);
-    noteSection.classList.remove("hidden");
-  } else {
-    clearAiAnswerNoteState();
-  }
+  answerEl.querySelectorAll(".ai-inline-citation-chip[data-ai-citation-id]").forEach(chip => {
+    const citationId = chip.dataset.aiCitationId;
+    const citation = citationLookup[citationId];
+    if (!citation) return;
+
+    attachFloatingTooltip(
+      chip,
+      `
+        <span class="insights-hover-tooltip-title">${escapeHtml(citation.label)}</span>
+        <span class="insights-hover-tooltip-body">${escapeHtml(citation.detail)}</span>
+      `
+    );
+  });
 }
 
 function renderAiLoadingState(question) {
@@ -737,8 +790,6 @@ function renderAiLoadingState(question) {
   revealAiResponseCard();
   clearAiEvidenceLists();
   clearAiAnswerNoteState();
-  toggleAiEvidenceSection("ai-core-evidence-section", false);
-  toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
   if (questionEl) questionEl.textContent = question;
   setAiAnswerBodyState("Typing...", "is-loading");
@@ -751,8 +802,6 @@ function renderAiError(question, message) {
   revealAiResponseCard();
   clearAiEvidenceLists();
   clearAiAnswerNoteState();
-  toggleAiEvidenceSection("ai-core-evidence-section", false);
-  toggleAiEvidenceSection("ai-behavioral-evidence-section", false);
 
   if (questionEl) questionEl.textContent = question || "Request failed";
   setAiAnswerBodyState(message || "Unable to generate a response right now.", "is-error");
