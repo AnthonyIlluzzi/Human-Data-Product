@@ -726,6 +726,30 @@ def call_openai(prompt: str) -> str:
 
 def chat_with_hdp_ai(question: str) -> dict[str, Any]:
     cleaned_question = (question or "").strip()
+    # --- SECURITY / MISUSE GUARD ---
+    if (
+        is_restricted_ai_request(cleaned_question)
+        or (
+            len(cleaned_question) > 300
+            and any(term in cleaned_question.lower() for term in ["dump", "all", "everything"])
+        )
+    ):
+        return {
+            "question": cleaned_question,
+            "question_class": "restricted",
+            "answer": (
+                "I’m here to answer questions about Anthony’s experience, strengths, and fit "
+                "based on available data. I can’t provide internal system details or raw data dumps, "
+                "but I’m happy to help with any relevant professional or analytical questions."
+            ),
+            "core_evidence": [],
+            "behavioral_signals": [],
+            "evidence_summary": {
+                "core_record_count": 0,
+                "behavioral_signal_count": 0,
+                "core_record_types": []
+            },
+        }
 
     if not cleaned_question:
         raise ValueError("Question is required.")
