@@ -808,11 +808,7 @@ function renderAiError(question, message) {
 }
 
 function renderAiResponse(payload) {
-  const coreEvidence = Array.isArray(payload.core_evidence) ? payload.core_evidence : [];
-  const behavioralSignals = Array.isArray(payload.behavioral_signals) ? payload.behavioral_signals : [];
   const questionEl = document.getElementById("ai-response-question");
-  const coreList = document.getElementById("ai-core-evidence-list");
-  const behavioralList = document.getElementById("ai-behavioral-signal-list");
 
   hideAiDefaultPrompts();
   revealAiResponseCard();
@@ -820,25 +816,10 @@ function renderAiResponse(payload) {
   clearAiAnswerNoteState();
 
   if (questionEl) questionEl.textContent = payload.question || "Question";
-  renderAiAnswerContent(payload.answer || "");
 
-if (coreList) {
-  coreEvidence.slice(0, 4).forEach(item => {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${escapeHtml(item.title || item.record_type || "Evidence")}</strong><span>${escapeHtml(item.supporting_text || "")}</span>`;
-    coreList.appendChild(li);
-  });
-}
+  const citationLookup = buildAiCitationLookup(payload);
+  renderAiAnswerContent(payload.answer || "", citationLookup);
 
-if (behavioralList) {
-  behavioralSignals.slice(0, 2).forEach(item => {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${escapeHtml(item.signal_label || item.signal_key || "Signal")}</strong><span>${escapeHtml(item.summary_rationale || "")}</span>`;
-    behavioralList.appendChild(li);
-  });
-}
-  toggleAiEvidenceSection("ai-core-evidence-section", coreEvidence.length > 0);
-  toggleAiEvidenceSection("ai-behavioral-evidence-section", behavioralSignals.length > 0);
   maybeShowAiCatalogNudge();
 }
 
