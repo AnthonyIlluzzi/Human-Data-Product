@@ -682,12 +682,13 @@ def build_prompt(
     lines.append("4. Context note")
     lines.append("")
     lines.append("Section requirements:")
-    lines.append("- Keep the total response concise. Target roughly 160 to 220 words unless the user explicitly asks for more detail.")
-    lines.append("- Direct answer: 2 to 3 sentences that answer the question clearly and specifically.")
-    lines.append("- Why this fits: 1 to 2 concise bullets that explain the strongest grounded reasons.")
-    lines.append("- What stands out: 1 to 2 concise bullets focused on differentiated patterns, not repeated evidence.")
+    lines.append("- Keep the response focused but not overly compressed. Target roughly 220 to 320 words unless the user explicitly asks for more detail.")
+    lines.append("- Direct answer: 2 to 4 sentences that answer the question clearly and specifically.")
+    lines.append("- Why this fits: 2 to 4 concise bullets that explain the strongest grounded reasons.")
+    lines.append("- What stands out: 2 concise bullets focused on differentiated patterns, not repeated evidence.")
     lines.append("- Context note: optional, and only 1 short sentence if needed for nuance or limitation.")
-    lines.append("- Do not restate more than 2 concrete evidence points in the narrative because detailed evidence is shown separately.")
+    lines.append("- Use the narrative sections as the primary value. The separate evidence list is only supporting reference.")
+    lines.append("- Do not copy long evidence lists into the narrative, but do make the narrative meaningfully explanatory.")
     return "\n".join(lines)
     
 
