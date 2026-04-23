@@ -773,22 +773,21 @@ function renderAiResponse(payload) {
   if (questionEl) questionEl.textContent = payload.question || "Question";
   renderAiAnswerContent(payload.answer || "");
 
-  if (coreList) {
-    coreEvidence.forEach(item => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${escapeHtml(item.title || item.record_type || "Evidence")}</strong><span>${escapeHtml(item.supporting_text || "")}</span>`;
-      coreList.appendChild(li);
-    });
-  }
+if (coreList) {
+  coreEvidence.slice(0, 4).forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${escapeHtml(item.title || item.record_type || "Evidence")}</strong><span>${escapeHtml(item.supporting_text || "")}</span>`;
+    coreList.appendChild(li);
+  });
+}
 
-  if (behavioralList) {
-    behavioralSignals.forEach(item => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${escapeHtml(item.signal_label || item.signal_key || "Signal")}</strong><span>${escapeHtml(item.summary_rationale || "")}</span>`;
-      behavioralList.appendChild(li);
-    });
-  }
-
+if (behavioralList) {
+  behavioralSignals.slice(0, 2).forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${escapeHtml(item.signal_label || item.signal_key || "Signal")}</strong><span>${escapeHtml(item.summary_rationale || "")}</span>`;
+    behavioralList.appendChild(li);
+  });
+}
   toggleAiEvidenceSection("ai-core-evidence-section", coreEvidence.length > 0);
   toggleAiEvidenceSection("ai-behavioral-evidence-section", behavioralSignals.length > 0);
   maybeShowAiCatalogNudge();
@@ -798,26 +797,34 @@ async function submitAiQuestion(rawQuestion) {
   const input = document.getElementById("ai-question-input");
   const submitButton = document.getElementById("ai-submit-btn");
 
-  const question = String(rawQuestion || "").trim();
-  if (!question) return;
+const question = String(rawQuestion || "").trim();
+if (!question) return;
 
-  const setSubmittingState = (isSubmitting) => {
-    if (input) {
-      input.disabled = isSubmitting;
+const setSubmittingState = (isSubmitting) => {
+  if (input) {
+    input.disabled = isSubmitting;
+  }
+
+  if (submitButton) {
+    if (isSubmitting) {
+      submitButton.classList.add("hidden");
+      submitButton.disabled = true;
+    } else {
+      syncAiInputState();
     }
+  }
+};
 
-    if (submitButton) {
-      if (isSubmitting) {
-        submitButton.classList.remove("hidden");
-        submitButton.disabled = true;
-      } else {
-        syncAiInputState();
-      }
-    }
-  };
+if (input) {
+  input.value = "";
+  input.style.height = "auto";
+  input.style.overflowY = "hidden";
+  input.closest(".ai-input-shell")?.classList.remove("is-expanded");
+  syncAiInputState();
+}
 
-  renderAiLoadingState(question);
-  setSubmittingState(true);
+renderAiLoadingState(question);
+setSubmittingState(true);
 
   try {
     const payload = await postJson("/ai/chat", { question });
@@ -825,13 +832,6 @@ async function submitAiQuestion(rawQuestion) {
     incrementAiSessionPromptCount();
     syncAiConversationMode();
     renderAiResponse(payload);
-
-    if (input) {
-      input.value = "";
-      input.style.height = "auto";
-      input.style.overflowY = "hidden";
-      input.closest(".ai-input-shell")?.classList.remove("is-expanded");
-    }
 
     syncAiInputState();
   } catch (error) {
