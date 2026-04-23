@@ -501,6 +501,12 @@ function bindAiInterface() {
     nextUrl.searchParams.delete("internal");
     window.location.href = nextUrl.toString();
   });
+  document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+    nextUrl.searchParams.delete("internal");
+    window.location.href = nextUrl.toString();
+  });
 
   requestAnimationFrame(() => {
     syncAiInputState();
