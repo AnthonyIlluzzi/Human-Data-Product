@@ -640,6 +640,17 @@ function parseAiAnswerSections(answer) {
   return { sections };
 }
 
+function formatAiCitationLabel(rawLabel, maxLength = 34) {
+  const label = String(rawLabel || "").replace(/\s+/g, " ").trim();
+  if (!label) return "Evidence";
+  return truncateText(label, maxLength);
+}
+
+function formatAiCitationDetail(rawDetail, maxLength = 220) {
+  const detail = String(rawDetail || "").replace(/\s+/g, " ").trim();
+  return truncateText(detail, maxLength);
+}
+
 function buildAiCitationLookup(payload) {
   const lookup = {};
 
@@ -647,16 +658,22 @@ function buildAiCitationLookup(payload) {
   const behavioralSignals = Array.isArray(payload?.behavioral_signals) ? payload.behavioral_signals : [];
 
   coreEvidence.forEach((item, index) => {
+    const fullLabel = item.title || item.record_type || `P${index + 1}`;
+
     lookup[`P${index + 1}`] = {
-      label: item.title || item.record_type || `P${index + 1}`,
-      detail: item.supporting_text || ""
+      label: formatAiCitationLabel(fullLabel, 34),
+      fullLabel,
+      detail: formatAiCitationDetail(item.supporting_text || "", 220)
     };
   });
 
   behavioralSignals.forEach((item, index) => {
+    const fullLabel = item.signal_label || item.signal_key || `B${index + 1}`;
+
     lookup[`B${index + 1}`] = {
-      label: item.signal_label || item.signal_key || `B${index + 1}`,
-      detail: item.summary_rationale || ""
+      label: formatAiCitationLabel(fullLabel, 30),
+      fullLabel,
+      detail: formatAiCitationDetail(item.summary_rationale || "", 180)
     };
   });
 
@@ -686,7 +703,7 @@ function renderAiInlineTextWithCitations(text, citationLookup = {}) {
           type="button"
           class="ai-inline-citation-chip"
           data-ai-citation-id="${escapeHtml(citationId)}"
-          aria-label="View supporting detail for ${escapeHtml(citation.label)}"
+          aria-label="View supporting detail for ${escapeHtml(citation.fullLabel || citation.label)}"
         >
           ${escapeHtml(citation.label)}
         </button>
@@ -776,7 +793,7 @@ function renderAiAnswerContent(answer, citationLookup = {}) {
     attachFloatingTooltip(
       chip,
       `
-        <span class="insights-hover-tooltip-title">${escapeHtml(citation.label)}</span>
+        <span class="insights-hover-tooltip-title">${escapeHtml(citation.fullLabel || citation.label)}</span>
         <span class="insights-hover-tooltip-body">${escapeHtml(citation.detail)}</span>
       `
     );
