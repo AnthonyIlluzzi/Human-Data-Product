@@ -22,7 +22,7 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini").strip()
 PUBLIC_AI_ENABLED = os.getenv("PUBLIC_AI_ENABLED", "false").strip().lower() == "true"
 
 MAX_INPUT_CHARS = 1000
-MAX_OUTPUT_TOKENS = 500
+MAX_OUTPUT_TOKENS = 360
 MAX_CORE_RECORDS = 8
 MAX_BEHAVIORAL_SIGNALS = 4
 MAX_SIGNAL_EVIDENCE_LINKS = 2
@@ -153,6 +153,16 @@ def register_successful_ai_call(conn: sqlite3.Connection) -> None:
 
 def classify_question(question: str) -> str:
     q = question.lower()
+
+    if any(term in q for term in [
+        "summary",
+        "summarize",
+        "what do you know about anthony",
+        "tell me about anthony",
+        "who is anthony",
+        "overview"
+    ]):
+        return "summary_overview"
 
     if any(term in q for term in ["role", "fit", "best suited", "suited", "aligned", "alignment"]):
         return "role_fit"
@@ -636,7 +646,8 @@ def build_prompt(
     lines.append("Answer directly and use the evidence below instead of generic summaries.")
     lines.append("Prefer raw structured evidence over abstract personality phrasing.")
     lines.append("Behavioral signals should reinforce the answer unless the question is explicitly about work style, environment, or risks.")
-    lines.append("Do not repeat the same core theme across observations.")
+    lines.append("Do not repeat the same core theme across sections.")
+    lines.append("Do not restate long evidence lists because supporting evidence renders separately in the UI.")
     if overused_themes:
         lines.append(f"Actively avoid overusing these abstractions unless the evidence truly requires them: {', '.join(overused_themes)}.")
     lines.append("")
@@ -666,16 +677,19 @@ def build_prompt(
     lines.append("")
     lines.append("Write the response in plain text with these exact sections:")
     lines.append("1. Direct answer")
-    lines.append("2. Differentiated observations")
-    lines.append("3. Supporting evidence")
-    lines.append("4. Caution or limitation")
+    lines.append("2. Why this fits")
+    lines.append("3. What stands out")
+    lines.append("4. Context note")
     lines.append("")
     lines.append("Section requirements:")
-    lines.append("- Direct answer: 2 to 4 sentences that answer the question clearly and specifically.")
-    lines.append("- Differentiated observations: exactly 3 bullets. Each bullet must use a different primary evidence type when possible.")
-    lines.append("- Supporting evidence: reference the strongest concrete underlying evidence, not the HDP itself or the Capability Model.")
-    lines.append("- Caution or limitation: keep brief, and include only if support is partial or mostly behavioral.")
+    lines.append("- Keep the total response concise. Target roughly 160 to 220 words unless the user explicitly asks for more detail.")
+    lines.append("- Direct answer: 2 to 3 sentences that answer the question clearly and specifically.")
+    lines.append("- Why this fits: 1 to 2 concise bullets that explain the strongest grounded reasons.")
+    lines.append("- What stands out: 1 to 2 concise bullets focused on differentiated patterns, not repeated evidence.")
+    lines.append("- Context note: optional, and only 1 short sentence if needed for nuance or limitation.")
+    lines.append("- Do not restate more than 2 concrete evidence points in the narrative because detailed evidence is shown separately.")
     return "\n".join(lines)
+    
 
 def call_openai(prompt: str) -> str:
     if not OPENAI_API_KEY:
