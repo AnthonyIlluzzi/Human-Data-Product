@@ -699,13 +699,18 @@ def build_prompt(
     lines.append("")
     lines.append("Important section rules:")
     lines.append("- Section 1 should answer the question immediately.")
-    lines.append("- Section 2 should explain the reasoning using 2 to 3 concise bullet points when possible.")
-    lines.append("- Section 3 should highlight the strongest implications or patterns using 1 to 2 concise bullet points when helpful.")
+    lines.append("- Section 2 should explain the reasoning without repeating Section 1.")
+    lines.append("- Section 3 should highlight the strongest implications or patterns, not dump evidence.")
     lines.append("- Section 4 is optional. Include it only if it adds meaningful nuance, uncertainty, anti-fit clarification, or scope boundaries.")
     lines.append("- If Section 4 would just repeat earlier content, omit it entirely.")
     lines.append("- Keep the response focused but complete. The answer should stand on its own even without opening citations.")
     lines.append("- Do not create separate sections called Observed Evidence, Behavioral Reinforcement, Supporting Evidence, Context Note, or Caution or Limitation.")
     lines.append("- Use inline citations like [P1], [P2], [B1] at the end of the sentence or bullet they support.")
+    lines.append("- Keep citations selective. Not every sentence needs a citation chip.")
+    lines.append("- Prefer the single strongest citation for a claim. Add a second citation only when it adds distinct support.")
+    lines.append("- Use no more than 2 citation tags per paragraph or bullet.")
+    if question_class == "summary_overview":
+        lines.append("- For broad summary questions, keep citation density light. Prefer 1 citation per paragraph or bullet, and avoid citation stacking.")
     return "\n".join(lines)
     
 
