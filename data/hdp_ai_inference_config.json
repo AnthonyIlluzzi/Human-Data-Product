@@ -120,6 +120,39 @@
           "core_dataset",
           "behavioral_dataset"
         ],
+        {
+  "behavioral_priority_dimensions": [
+    "role_identity",
+    "value_creation_style",
+    "communication_style"
+  ],
+  "behavioral_signal_limit": 1,
+  "core_priority_entities": [
+    "experience",
+    "skills",
+    "system_improvements",
+    "feedback",
+    "role_preferences"
+  ],
+  "entity_quotas": {
+    "experience": 2,
+    "skill": 2,
+    "system_improvement": 2,
+    "feedback": 1,
+    "role_preference": 1
+  },
+  "primary_sources": [
+    "core_dataset",
+    "behavioral_dataset"
+  ],
+  "question_class": "summary_overview",
+  "response_goal": "Provide a concise, balanced summary of Anthony using the strongest observed work signals first, then reinforce with one high-value behavioral signal if helpful.",
+  "answer_lenses": [
+    "broad_profile",
+    "technical_differentiator",
+    "value_creation_pattern"
+  ]
+}
         "question_class": "strengths",
         "response_goal": "Identify recurring strengths using raw skill, system improvement, project, and feedback evidence before behavioral reinforcement.",
         "answer_lenses": [
@@ -294,6 +327,7 @@
       "prefer_recent_or_higher_weighted_sources_when_tied": true
     },
     "concept_synonyms": {
+      "summary": ["overview", "what do you know", "tell me about anthony", "who is anthony"],
       "strength": ["strengths", "strongest", "differentiator", "advantage"],
       "value": ["impact", "outcome", "contribution", "value creation"],
       "technical": ["architecture", "platform", "data", "analytics", "integration"],
