@@ -5466,15 +5466,16 @@ body.ai-mode {
   display: grid;
   gap: 16px;
   width: 100%;
+  padding-bottom: 96px;
 }
 
 .ai-intro-screen {
   width: 100%;
-  min-height: min(62vh, 520px);
+  min-height: min(70vh, 620px);
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 28px 24px;
+  padding: 32px 28px;
   border-radius: 22px;
   background: linear-gradient(135deg, #0964c0 0%, #0a58ad 58%, #084892 100%);
   box-shadow: 0 14px 36px rgba(12, 36, 68, 0.18);
@@ -5482,7 +5483,7 @@ body.ai-mode {
 }
 
 .ai-intro-copy {
-  max-width: 760px;
+  max-width: 980px;
   display: grid;
   gap: 14px;
   justify-items: center;
@@ -5497,7 +5498,7 @@ body.ai-mode {
 
 .ai-intro-copy .ai-hero-lead {
   margin: 0;
-  max-width: 720px;
+  max-width: none;
   color: rgba(255, 255, 255, 0.96);
 }
 
@@ -5589,15 +5590,11 @@ body.ai-mode {
   display: grid;
   gap: 18px;
   min-height: 320px;
-  max-height: clamp(320px, 42vh, 460px);
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: #f8fafc;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
 }
 
 .ai-chat-title-row {
@@ -5609,6 +5606,14 @@ body.ai-mode {
 
 .ai-chat-title-row h2 {
   margin: 0;
+}
+
+.ai-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .ai-header-badge {
@@ -5869,6 +5874,14 @@ body.ai-mode {
   margin: 0;
 }
 
+.ai-answer-body.is-loading {
+  min-height: clamp(280px, 48vh, 560px);
+  display: grid;
+  align-content: start;
+  color: var(--muted);
+  font-style: italic;
+}
+
 .ai-evidence-section + .ai-evidence-section {
   margin-top: 0;
 }
@@ -5896,9 +5909,72 @@ body.ai-mode {
   margin-bottom: 2px;
 }
 
+/* ==========================================
+   Conversation Mode (Desktop + Global)
+========================================== */
+
+.ai-page.ai-conversation-mode {
+  min-height: 100vh;
+  align-items: stretch;
+  padding: 16px 28px 24px;
+}
+
+.ai-page.ai-conversation-mode .ai-shell {
+  height: auto;
+  min-height: calc(100vh - 40px);
+  max-width: var(--max-content);
+}
+
+.ai-page.ai-conversation-mode .ai-main-workspace {
+  height: auto;
+  grid-template-rows: auto auto;
+  gap: 14px;
+  padding-bottom: 110px;
+}
+
+.ai-page.ai-conversation-mode .ai-hero-card {
+  display: none;
+}
+
+.ai-page.ai-conversation-mode .ai-workspace-stack {
+  order: 2;
+  position: sticky;
+  bottom: 16px;
+  z-index: 30;
+  background: linear-gradient(to top, var(--bg) 72%, rgba(245, 247, 251, 0));
+  padding-top: 12px;
+}
+
+.ai-page.ai-conversation-mode .ai-chat-card {
+  padding: 12px 14px;
+  box-shadow: 0 10px 28px rgba(20, 38, 63, 0.16);
+}
+
+.ai-page.ai-conversation-mode .ai-chat-card .ai-input-prompt,
+.ai-page.ai-conversation-mode .ai-chat-card .ai-default-prompts {
+  display: none;
+}
+
+.ai-page.ai-conversation-mode .ai-chat-form {
+  gap: 0;
+}
+
+.ai-page.ai-conversation-mode .ai-response-card-wrap,
+.ai-page.ai-conversation-mode .ai-response-card {
+  height: auto;
+}
+
+.ai-page.ai-conversation-mode .ai-response-window {
+  min-height: calc(100vh - 250px);
+  max-height: none;
+  height: auto;
+  overflow: visible;
+}
+
 @media (min-width: 961px) {
   .ai-intro-copy .ai-hero-lead {
     white-space: nowrap;
+    max-width: none;
   }
 }
 
@@ -5920,7 +5996,7 @@ body.ai-mode {
   }
 
   .ai-intro-screen {
-    min-height: min(56vh, 420px);
+    min-height: min(60vh, 460px);
     padding: 24px 18px;
   }
 
@@ -5939,6 +6015,10 @@ body.ai-mode {
     padding: 18px;
   }
 
+  .ai-chat-header {
+    align-items: flex-start;
+  }
+
   .ai-response-window {
     max-height: none;
   }
@@ -5949,6 +6029,27 @@ body.ai-mode {
 
   .ai-question-input {
     padding-right: 50px;
+  }
+
+  .ai-page.ai-conversation-mode {
+    padding: 12px;
+  }
+  
+  .ai-page.ai-conversation-mode .ai-shell {
+    min-height: calc(100vh - 24px);
+  }
+
+  .ai-page.ai-conversation-mode .ai-main-workspace {
+    padding-bottom: 96px;
+  }
+
+  .ai-page.ai-conversation-mode .ai-workspace-stack {
+    padding-top: 10px;
+    bottom: 12px;
+  }
+
+  .ai-page.ai-conversation-mode .ai-response-window {
+    min-height: calc(100vh - 220px);
   }
 
   .ai-submit-icon-btn {
