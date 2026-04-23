@@ -657,6 +657,16 @@ function buildAiCitationLookup(payload) {
   const coreEvidence = Array.isArray(payload?.core_evidence) ? payload.core_evidence : [];
   const behavioralSignals = Array.isArray(payload?.behavioral_signals) ? payload.behavioral_signals : [];
 
+  coreEvidence.forEach((item, index) => {
+    const shortLabel = formatAiCitationLabel(item.title || item.record_type || `P${index + 1}`, 34);
+
+    lookup[`P${index + 1}`] = {
+      label: shortLabel,
+      fullLabel: shortLabel,
+      detail: formatAiCitationDetail(item.supporting_text || "", 220)
+    };
+  });
+
   behavioralSignals.forEach((item, index) => {
     const shortLabel = formatAiCitationLabel(item.signal_label || item.signal_key || `B${index + 1}`, 30);
 
@@ -667,38 +677,26 @@ function buildAiCitationLookup(payload) {
     };
   });
 
-  behavioralSignals.forEach((item, index) => {
-    const fullLabel = item.signal_label || item.signal_key || `B${index + 1}`;
-
-    lookup[`B${index + 1}`] = {
-      label: formatAiCitationLabel(fullLabel, 30),
-      fullLabel,
-      detail: formatAiCitationDetail(item.summary_rationale || "", 180)
-    };
-  });
-
   return lookup;
 }
 
 function renderAiInlineTextWithCitations(text, citationLookup = {}) {
   const raw = String(text || "");
-  const parts = raw.split(/(\[(?:P|B)\d+\])/g);
+  const tokenPattern = /\[(P|B)\d+\]/g;
 
-  return parts
-    .map(part => {
-      const match = part.match(/^\[((?:P|B)\d+)\]$/);
-      if (!match) {
-        return escapeHtml(part);
-      }
+  let result = "";
+  let lastIndex = 0;
 
-      const citationId = match[1];
-      const citation = citationLookup[citationId];
+  raw.replace(tokenPattern, (match, _prefix, offset) => {
+    result += escapeHtml(raw.slice(lastIndex, offset));
 
-      if (!citation) {
-        return escapeHtml(part);
-      }
+    const citationId = match.slice(1, -1);
+    const citation = citationLookup[citationId];
 
-      return `
+    if (!citation) {
+      result += escapeHtml(match);
+    } else {
+      result += `
         <button
           type="button"
           class="ai-inline-citation-chip"
@@ -708,8 +706,14 @@ function renderAiInlineTextWithCitations(text, citationLookup = {}) {
           ${escapeHtml(citation.label)}
         </button>
       `;
-    })
-    .join("");
+    }
+
+    lastIndex = offset + match.length;
+    return match;
+  });
+
+  result += escapeHtml(raw.slice(lastIndex));
+  return result;
 }
 
 function renderAiRichText(text, citationLookup = {}) {
