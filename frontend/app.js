@@ -3826,12 +3826,6 @@ function renderOpportunityTreemap(containerId, segments) {
     hideFloatingInsightsTooltip();
     renderOpportunityTreemap(containerId, sourceItems);
   });
-  document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.delete("internal");
-    window.location.href = nextUrl.toString();
-  });
 
   const canvas = document.getElementById(`${containerId}-canvas`);
   if (!canvas) return;
