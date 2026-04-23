@@ -5896,6 +5896,12 @@ body.ai-mode {
   margin-bottom: 2px;
 }
 
+@media (min-width: 961px) {
+  .ai-intro-copy .ai-hero-lead {
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 1160px) {
   .ai-suggestion-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
