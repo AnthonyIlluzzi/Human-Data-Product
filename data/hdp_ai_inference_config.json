@@ -1,8 +1,8 @@
 {
   "ai_inference_metadata": {
     "name": "HDP AI Inference Configuration",
-    "version": "2.1.0",
-    "generated_at": "2026-04-21",
+    "version": "2.2.0",
+    "generated_at": "2026-04-23",
     "purpose": "Configuration-only file that governs how the AI layer retrieves, weighs, and presents grounded information from the HDP core dataset and the behavioral dataset.",
     "boundary_note": "This file does not store behavioral source content, normalized signals, or raw evidence. Those remain in the source datasets and normalized backend tables."
   },
@@ -60,7 +60,7 @@
       "max_behavioral_dimensions_per_answer": 3
     }
   },
-    "question_routing": {
+  "question_routing": {
     "question_classes": [
       {
         "behavioral_priority_dimensions": [
@@ -93,6 +93,39 @@
           "role_alignment",
           "career_signal",
           "environmental_fit"
+        ]
+      },
+      {
+        "behavioral_priority_dimensions": [
+          "role_identity",
+          "value_creation_style",
+          "communication_style"
+        ],
+        "behavioral_signal_limit": 1,
+        "core_priority_entities": [
+          "experience",
+          "skills",
+          "system_improvements",
+          "feedback",
+          "role_preferences"
+        ],
+        "entity_quotas": {
+          "experience": 2,
+          "skill": 2,
+          "system_improvement": 2,
+          "feedback": 1,
+          "role_preference": 1
+        },
+        "primary_sources": [
+          "core_dataset",
+          "behavioral_dataset"
+        ],
+        "question_class": "summary_overview",
+        "response_goal": "Provide a concise, balanced summary of Anthony using the strongest observed work signals first, then reinforce with one high-value behavioral signal if helpful.",
+        "answer_lenses": [
+          "broad_profile",
+          "technical_differentiator",
+          "value_creation_pattern"
         ]
       },
       {
@@ -299,7 +332,8 @@
       "technical": ["architecture", "platform", "data", "analytics", "integration"],
       "fit": ["alignment", "suited", "best suited", "match"],
       "work style": ["communication", "decision", "collaboration", "ambiguity"],
-      "risk": ["blind spot", "friction", "stress", "overdo"]
+      "risk": ["blind spot", "friction", "stress", "overdo"],
+      "summary": ["overview", "what do you know", "tell me about anthony", "who is anthony"]
     }
   },
   "answer_contract": {
@@ -310,14 +344,14 @@
       "If sources disagree or support is weak, state that clearly instead of smoothing it over."
     ],
     "optional_sections_when_needed": [
+      "context_note",
       "behavioral_reinforcement",
-      "caution_or_limitation",
       "deeper_hdp_redirect"
     ],
     "required_sections_by_default": [
       "direct_answer",
-      "differentiated_observations",
-      "supporting_evidence"
+      "why_this_fits",
+      "what_stands_out"
     ],
     "style_rules": [
       "Respond in third person when describing Anthony.",
@@ -338,6 +372,17 @@
       "brings structure",
       "clarity"
     ]
+  },
+  "behavioral_usage_rules": {
+    "default_mode": "reinforcing",
+    "behavioral_lead_question_classes": [
+      "work_style",
+      "environment_fit",
+      "blind_spots_or_risks"
+    ],
+    "max_behavioral_signals_if_core_evidence_present": 2,
+    "prefer_behavioral_signals_with_cross_source_alignment": true,
+    "deprioritize_behavioral_signals_when_core_evidence_already_supports_same_theme": true
   },
   "confidence_and_limitation_rules": {
     "confidence_language": {
@@ -377,17 +422,6 @@
       "behavioral blind spots",
       "assessment pattern questions"
     ]
-  },
-  "behavioral_usage_rules": {
-    "default_mode": "reinforcing",
-    "behavioral_lead_question_classes": [
-      "work_style",
-      "environment_fit",
-      "blind_spots_or_risks"
-    ],
-    "max_behavioral_signals_if_core_evidence_present": 2,
-    "prefer_behavioral_signals_with_cross_source_alignment": true,
-    "deprioritize_behavioral_signals_when_core_evidence_already_supports_same_theme": true
   },
   "supported_ui_behaviors": {
     "allow_follow_up_prompt_suggestions": true,
