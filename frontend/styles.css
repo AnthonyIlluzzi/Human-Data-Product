@@ -5532,13 +5532,14 @@ body.ai-mode {
 
 .ai-response-window {
   display: grid;
-  gap: 18px;
+  gap: 14px;
   min-height: 320px;
-  padding: 18px;
+  padding: 16px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: #f8fafc;
   overflow: visible;
+  align-content: start;
 }
 
 .ai-chat-title-row {
@@ -5728,10 +5729,12 @@ body.ai-mode {
 
 .ai-answer-body {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   color: var(--text);
   font-size: 1rem;
   line-height: 1.65;
+  align-content: start;
+  justify-items: stretch;
 }
 
 .ai-answer-body.is-error {
@@ -5744,17 +5747,18 @@ body.ai-mode {
 
 .ai-answer-section {
   display: grid;
-  gap: 10px;
-  padding: 16px;
+  gap: 8px;
+  padding: 14px 16px;
   border: 1px solid #e2eaf3;
   border-radius: 14px;
   background: #ffffff;
+  align-content: start;
 }
 
 .ai-answer-section-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .ai-answer-section-number {
@@ -5780,38 +5784,48 @@ body.ai-mode {
 
 .ai-answer-section-content {
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  align-content: start;
+  justify-items: start;
 }
 
 .ai-answer-section-content p {
   margin: 0;
   line-height: 1.55;
+  align-self: start;
 }
 
 .ai-answer-section-content p + p {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .ai-answer-section-content ul {
-  margin: 0;
+  margin: 2px 0 0;
   padding-left: 18px;
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  align-content: start;
+}
+
+.ai-answer-section-content li {
+  margin: 0;
+  line-height: 1.5;
 }
 
 .ai-inline-citation-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 6px;
+  margin-left: 4px;
+  margin-top: 2px;
   padding: 2px 8px;
   border: 1px solid #cfe0f5;
   border-radius: 999px;
   background: #edf5ff;
   color: var(--primary-dark);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   cursor: pointer;
   vertical-align: middle;
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
@@ -5893,6 +5907,7 @@ body.ai-mode {
   max-height: none;
   height: auto;
   overflow: visible;
+  align-content: start;
 }
 
 @media (min-width: 961px) {
