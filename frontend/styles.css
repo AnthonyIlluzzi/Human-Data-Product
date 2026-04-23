@@ -5780,11 +5780,16 @@ body.ai-mode {
 
 .ai-answer-section-content {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .ai-answer-section-content p {
   margin: 0;
+  line-height: 1.55;
+}
+
+.ai-answer-section-content p + p {
+  margin-top: 6px;
 }
 
 .ai-answer-section-content ul {
