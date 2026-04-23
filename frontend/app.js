@@ -8,7 +8,7 @@ const IS_INTERNAL_AI_MODE =
   URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
-const AI_INTRO_DELAY_MS = 1600;
+const AI_INTRO_DELAY_MS = 2800;
 const AI_CATALOG_NUDGE_THRESHOLD = 3;
 const AI_CATALOG_NUDGE_SEEN_KEY = "hdp_ai_catalog_nudge_seen";
 let capabilityInsightsInitPromise = null;
@@ -419,51 +419,54 @@ async function initializeInternalAiMode() {
   }, AI_INTRO_DELAY_MS);
 }
 
+function syncAiInputState() {
+  const input = document.getElementById("ai-question-input");
+  const submitButton = document.getElementById("ai-submit-btn");
+
+  if (!input || !submitButton) return;
+
+  input.style.height = "auto";
+
+  const shell = input.closest(".ai-input-shell");
+  const computed = window.getComputedStyle(input);
+  const lineHeight = parseFloat(computed.lineHeight) || 24;
+  const paddingTop = parseFloat(computed.paddingTop) || 0;
+  const paddingBottom = parseFloat(computed.paddingBottom) || 0;
+  const borderTop = parseFloat(computed.borderTopWidth) || 0;
+  const borderBottom = parseFloat(computed.borderBottomWidth) || 0;
+  const maxRows = 6;
+
+  const singleRowHeight =
+    lineHeight +
+    paddingTop +
+    paddingBottom +
+    borderTop +
+    borderBottom;
+
+  const maxHeight =
+    (lineHeight * maxRows) +
+    paddingTop +
+    paddingBottom +
+    borderTop +
+    borderBottom;
+
+  const nextHeight = Math.min(input.scrollHeight, maxHeight);
+  input.style.height = `${nextHeight}px`;
+  input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
+
+  const isExpanded = nextHeight > singleRowHeight + 2;
+  shell?.classList.toggle("is-expanded", isExpanded);
+
+  const hasValue = input.value.trim().length > 0;
+  submitButton.classList.toggle("hidden", !hasValue);
+  submitButton.disabled = !hasValue || input.disabled;
+}
+
 function bindAiInterface() {
   const form = document.getElementById("ai-chat-form");
   const input = document.getElementById("ai-question-input");
   const submitButton = document.getElementById("ai-submit-btn");
   const backButton = document.getElementById("ai-back-to-catalog-btn");
-
-  const syncAiInputState = () => {
-	  if (!input || !submitButton) return;
-	
-	  input.style.height = "auto";
-	
-	  const shell = input.closest(".ai-input-shell");
-	  const computed = window.getComputedStyle(input);
-	  const lineHeight = parseFloat(computed.lineHeight) || 24;
-	  const paddingTop = parseFloat(computed.paddingTop) || 0;
-	  const paddingBottom = parseFloat(computed.paddingBottom) || 0;
-	  const borderTop = parseFloat(computed.borderTopWidth) || 0;
-	  const borderBottom = parseFloat(computed.borderBottomWidth) || 0;
-	  const maxRows = 6;
-	
-	  const singleRowHeight =
-	    lineHeight +
-	    paddingTop +
-	    paddingBottom +
-	    borderTop +
-	    borderBottom;
-	
-	  const maxHeight =
-	    (lineHeight * maxRows) +
-	    paddingTop +
-	    paddingBottom +
-	    borderTop +
-	    borderBottom;
-	
-	  const nextHeight = Math.min(input.scrollHeight, maxHeight);
-	  input.style.height = `${nextHeight}px`;
-	  input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
-	
-	  const isExpanded = nextHeight > singleRowHeight + 2;
-	  shell?.classList.toggle("is-expanded", isExpanded);
-	
-	  const hasValue = input.value.trim().length > 0;
-	  submitButton.classList.toggle("hidden", !hasValue);
-	  submitButton.disabled = !hasValue || input.disabled;
-	};
 
   document.querySelectorAll(".ai-prompt-chip[data-ai-prompt]").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -598,7 +601,8 @@ function toggleAiEvidenceSection(sectionId, isVisible) {
 
 function parseAiAnswerSections(answer) {
   const normalized = String(answer || "").replace(/\r/g, "").trim();
-  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Context note)\s*$/gim;
+
+  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Context note|Differentiated observations|Supporting evidence|Caution or limitation)\s*$/gim;
   const matches = [...normalized.matchAll(headingPattern)];
 
   if (!matches.length) {
@@ -614,12 +618,21 @@ function parseAiAnswerSections(answer) {
     };
   }
 
+  const titleMap = {
+    "differentiated observations": "Why this fits",
+    "supporting evidence": "What stands out",
+    "caution or limitation": "Context note"
+  };
+
   const sections = matches.map((match, index) => {
     const start = (match.index ?? 0) + match[0].length;
     const end = index + 1 < matches.length ? (matches[index + 1].index ?? normalized.length) : normalized.length;
+    const rawTitle = match[2].trim();
+    const normalizedTitle = titleMap[rawTitle.toLowerCase()] || rawTitle;
+
     return {
       number: match[1],
-      title: match[2],
+      title: normalizedTitle,
       body: normalized.slice(start, end).trim()
     };
   });
@@ -794,8 +807,12 @@ async function submitAiQuestion(rawQuestion) {
     }
 
     if (submitButton) {
-      submitButton.disabled = isSubmitting;
-      submitButton.classList.toggle("hidden", false);
+      if (isSubmitting) {
+        submitButton.classList.remove("hidden");
+        submitButton.disabled = true;
+      } else {
+        syncAiInputState();
+      }
     }
   };
 
@@ -816,11 +833,10 @@ async function submitAiQuestion(rawQuestion) {
       input.closest(".ai-input-shell")?.classList.remove("is-expanded");
     }
 
-    if (submitButton) {
-      submitButton.classList.add("hidden");
-    }
+    syncAiInputState();
   } catch (error) {
     renderAiError(question, error.message || "Unable to generate a response right now.");
+    syncAiInputState();
   } finally {
     setSubmittingState(false);
     input?.focus();
