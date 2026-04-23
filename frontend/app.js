@@ -682,21 +682,17 @@ function buildAiCitationLookup(payload) {
 
 function renderAiInlineTextWithCitations(text, citationLookup = {}) {
   const raw = String(text || "");
-  const tokenPattern = /\[(P|B)\d+\]/g;
 
-  let result = "";
-  let lastIndex = 0;
+  return escapeHtml(raw).replace(
+    /\[\s*((?:P|B)\d+)\s*\]?/g,
+    (_match, citationId) => {
+      const citation = citationLookup[citationId];
 
-  raw.replace(tokenPattern, (match, _prefix, offset) => {
-    result += escapeHtml(raw.slice(lastIndex, offset));
+      if (!citation) {
+        return "";
+      }
 
-    const citationId = match.slice(1, -1);
-    const citation = citationLookup[citationId];
-
-    if (!citation) {
-      result += escapeHtml(match);
-    } else {
-      result += `
+      return `
         <button
           type="button"
           class="ai-inline-citation-chip"
@@ -707,13 +703,7 @@ function renderAiInlineTextWithCitations(text, citationLookup = {}) {
         </button>
       `;
     }
-
-    lastIndex = offset + match.length;
-    return match;
-  });
-
-  result += escapeHtml(raw.slice(lastIndex));
-  return result;
+  );
 }
 
 function renderAiRichText(text, citationLookup = {}) {
@@ -759,7 +749,8 @@ function renderAiRichText(text, citationLookup = {}) {
   flushParagraph();
   flushList();
 
-  return blocks.join("") || `<p>${renderAiInlineTextWithCitations(String(text || "").trim(), citationLookup)}</p>`;
+  const html = blocks.join("") || `<p>${renderAiInlineTextWithCitations(String(text || "").trim(), citationLookup)}</p>`;
+  return html.replace(/\s{2,}/g, " ");
 }
 
 function renderAiAnswerContent(answer, citationLookup = {}) {
