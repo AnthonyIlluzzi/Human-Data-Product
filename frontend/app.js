@@ -657,13 +657,13 @@ function buildAiCitationLookup(payload) {
   const coreEvidence = Array.isArray(payload?.core_evidence) ? payload.core_evidence : [];
   const behavioralSignals = Array.isArray(payload?.behavioral_signals) ? payload.behavioral_signals : [];
 
-  coreEvidence.forEach((item, index) => {
-    const fullLabel = item.title || item.record_type || `P${index + 1}`;
+  behavioralSignals.forEach((item, index) => {
+    const shortLabel = formatAiCitationLabel(item.signal_label || item.signal_key || `B${index + 1}`, 30);
 
-    lookup[`P${index + 1}`] = {
-      label: formatAiCitationLabel(fullLabel, 34),
-      fullLabel,
-      detail: formatAiCitationDetail(item.supporting_text || "", 220)
+    lookup[`B${index + 1}`] = {
+      label: shortLabel,
+      fullLabel: shortLabel,
+      detail: formatAiCitationDetail(item.summary_rationale || "", 180)
     };
   });
 
@@ -793,7 +793,7 @@ function renderAiAnswerContent(answer, citationLookup = {}) {
     attachFloatingTooltip(
       chip,
       `
-        <span class="insights-hover-tooltip-title">${escapeHtml(citation.fullLabel || citation.label)}</span>
+        <span class="insights-hover-tooltip-title">${escapeHtml(citation.label)}</span>
         <span class="insights-hover-tooltip-body">${escapeHtml(citation.detail)}</span>
       `
     );
