@@ -406,6 +406,7 @@ async function initializeInternalAiMode() {
   document.getElementById("ai-page")?.classList.remove("hidden");
 
   syncAiConversationMode();
+  syncAiIdentityBanner();
   bindAiInterface();
 
   if (getAiSessionPromptCount() > 0) {
@@ -539,6 +540,15 @@ function syncAiConversationMode() {
   if (!aiPage) return;
 
   aiPage.classList.toggle("ai-conversation-mode", getAiSessionPromptCount() > 0);
+}
+
+function syncAiIdentityBanner() {
+  const banner = document.getElementById("ai-identity-banner");
+  if (!banner) return;
+
+  const shouldHide = getAiSessionPromptCount() > 0;
+  banner.classList.toggle("is-hidden", shouldHide);
+  banner.setAttribute("aria-hidden", shouldHide ? "true" : "false");
 }
 
 function maybeShowAiCatalogNudge() {
@@ -873,6 +883,7 @@ setSubmittingState(true);
 
     incrementAiSessionPromptCount();
     syncAiConversationMode();
+    syncAiIdentityBanner();
     renderAiResponse(payload);
 
     syncAiInputState();
