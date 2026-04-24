@@ -5520,6 +5520,39 @@ body.ai-mode {
   gap: 16px;
 }
 
+.ai-identity-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+  margin-bottom: 6px;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    min-height 0.28s ease,
+    margin-bottom 0.28s ease;
+}
+
+.ai-identity-banner.is-hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+  min-height: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+.ai-identity-banner-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
 .ai-chat-card,
 .ai-response-card-wrap {
   padding: 20px 22px;
