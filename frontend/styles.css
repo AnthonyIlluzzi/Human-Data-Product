@@ -1474,6 +1474,10 @@ body.modal-open {
   border-bottom: 1px solid rgba(217, 225, 236, 0.92);
 }
 
+body.ai-mode #mobile-shell-header {
+  background: rgba(255, 255, 255, 0.94);
+}
+
 body.has-active-overlay .mobile-shell-header {
   visibility: hidden;
   pointer-events: none;
@@ -5430,6 +5434,10 @@ body.ai-mode {
 
 .ai-sidebar {
   display: block;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  min-height: 100vh;
 }
 
 .ai-content {
@@ -5871,6 +5879,11 @@ body.ai-mode {
 
 .ai-page.ai-conversation-mode .ai-content {
   align-items: stretch;
+}
+
+.ai-page.ai-conversation-mode .ai-shell {
+  display: grid;
+  min-height: calc(100vh - 56px);
 }
 
 .ai-page.ai-conversation-mode .ai-empty-state {
