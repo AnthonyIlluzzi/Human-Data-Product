@@ -8,7 +8,7 @@ const IS_INTERNAL_AI_MODE =
   URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
-const AI_INTRO_DELAY_MS = 2800;
+const AI_INTRO_DELAY_MS = 1600;
 const AI_CATALOG_NUDGE_THRESHOLD = 3;
 const AI_CATALOG_NUDGE_SEEN_KEY = "hdp_ai_catalog_nudge_seen";
 let capabilityInsightsInitPromise = null;
@@ -409,14 +409,28 @@ async function initializeInternalAiMode() {
   syncMobileDrawerForCurrentPage();
   syncAiConversationMode();
 
-  if (getAiSessionPromptCount() > 0) {
+    if (getAiSessionPromptCount() > 0) {
     revealAiMainWorkspace();
     maybeShowAiCatalogNudge();
     return;
   }
 
-  window.setTimeout(() => {
+  const introScreen = document.getElementById("ai-intro-screen");
+  let introTimer = null;
+
+  const advanceIntro = () => {
+    if (introTimer) {
+      window.clearTimeout(introTimer);
+      introTimer = null;
+    }
+
     revealAiMainWorkspace();
+  };
+
+  introScreen?.addEventListener("click", advanceIntro, { once: true });
+
+  introTimer = window.setTimeout(() => {
+    advanceIntro();
   }, AI_INTRO_DELAY_MS);
 }
 
