@@ -1199,28 +1199,32 @@ function bindMobileShellNavigation() {
   });
 
   drawer.querySelectorAll("[data-mobile-nav-target='ai-page']").forEach(btn => {
-  btn.addEventListener("click", () => {
-    setDrawerOpen(false);
+    btn.addEventListener("click", () => {
+      setDrawerOpen(false);
 
-    const aiPage = document.getElementById("ai-page");
-    const catalogPage = document.getElementById("catalog-page");
-    const productPage = document.getElementById("product-page");
+      const aiPage = document.getElementById("ai-page");
+      const catalogPage = document.getElementById("catalog-page");
+      const productPage = document.getElementById("product-page");
 
-    productPage?.classList.add("hidden");
-    catalogPage?.classList.add("hidden");
-    aiPage?.classList.remove("hidden");
+      productPage?.classList.add("hidden");
+      catalogPage?.classList.add("hidden");
+      aiPage?.classList.remove("hidden");
 
-    document.body.classList.add("ai-mode");
+      document.body.classList.add("ai-mode");
 
-    syncNavigationActiveState({ page: "ai" });
-    syncMobileDrawerForCurrentPage();
-    syncGlobalBodyLockState();
+      revealAiMainWorkspace();
+      syncAiConversationMode();
+      maybeShowAiCatalogNudge();
 
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      syncNavigationActiveState({ page: "ai" });
+      syncMobileDrawerForCurrentPage();
+      syncGlobalBodyLockState();
+
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      });
     });
   });
-});
   drawer.querySelectorAll("[data-mobile-nav-target='catalog-page']").forEach(btn => {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
