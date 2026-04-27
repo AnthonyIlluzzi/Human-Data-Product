@@ -5450,7 +5450,7 @@ body.ai-mode {
 }
 
 .ai-shell {
-  width: min(100%, 760px);
+  width: min(100%, 920px);
   margin: 0 auto;
 }
 
@@ -5468,17 +5468,20 @@ body.ai-mode {
 }
 
 .ai-intro-copy {
-  max-width: 980px;
+  width: 100%;
+  max-width: 760px;
   display: grid;
   gap: 14px;
   justify-items: center;
 }
 
 .ai-intro-copy h1 {
+  width: 100%;
   margin: 0;
-  font-size: 34px;
-  line-height: 1.06;
+  font-size: clamp(2rem, 3.2vw, 34px);
+  line-height: 1.08;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .ai-intro-copy .ai-hero-lead {
@@ -5491,7 +5494,7 @@ body.ai-mode {
   width: 100%;
   min-height: calc(100vh - 56px);
   display: grid;
-  grid-template-rows: 1fr auto;
+  place-items: center;
   gap: 18px;
 }
 
@@ -5532,9 +5535,9 @@ body.ai-mode {
 
 .ai-message-bubble {
   max-width: min(680px, calc(100% - 44px));
-  border: 1px solid var(--border);
+  border: 1px solid #dbe4ef;
   border-radius: 16px;
-  background: #f7f6f1;
+  background: #f8fafc;
   box-shadow: 0 8px 22px rgba(20, 38, 63, 0.08);
 }
 
@@ -5570,16 +5573,16 @@ body.ai-mode {
 }
 
 .ai-composer-wrap {
-  position: sticky;
-  bottom: 18px;
+  width: min(100%, 820px);
+  position: static;
   z-index: 30;
 }
 
 .ai-chat-card {
-  padding: 22px 24px;
-  border-radius: 18px;
+  padding: 26px 28px;
+  border-radius: 20px;
   background: #ffffff;
-  box-shadow: 0 10px 28px rgba(20, 38, 63, 0.12);
+  box-shadow: 0 12px 32px rgba(20, 38, 63, 0.13);
 }
 
 .ai-empty-state {
@@ -5633,9 +5636,9 @@ body.ai-mode {
   display: flex;
   align-items: flex-end;
   width: 100%;
-  border: 1px solid var(--border);
+  border: 1px solid #dbe4ef;
   border-radius: 999px;
-  background: #fbfaf6;
+  background: #f8fafc;
   padding: 10px 52px 10px 16px;
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
@@ -5892,6 +5895,15 @@ body.ai-mode {
 
 .ai-page.ai-conversation-mode .ai-main-workspace {
   min-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: stretch;
+}
+
+.ai-page.ai-conversation-mode .ai-composer-wrap {
+  position: sticky;
+  bottom: 18px;
+  width: 100%;
 }
 
 .ai-page.ai-conversation-mode .ai-chat-thread {
@@ -5910,9 +5922,9 @@ body.ai-mode {
   gap: 14px;
   margin-top: 14px;
   padding: 14px 16px;
-  border: 1px solid var(--border);
+  border: 1px solid #dbe4ef;
   border-radius: 14px;
-  background: #f7f6f1;
+  background: #f8fafc;
 }
 
 .ai-catalog-nudge.hidden {
@@ -5941,8 +5953,9 @@ body.ai-mode {
 
 @media (min-width: 961px) {
   .ai-intro-copy .ai-hero-lead {
-    white-space: nowrap;
-    max-width: none;
+    max-width: 760px;
+    white-space: normal;
+    text-wrap: balance;
   }
 }
 

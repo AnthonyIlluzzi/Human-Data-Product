@@ -889,14 +889,15 @@ if (input) {
   syncAiInputState();
 }
 
+incrementAiSessionPromptCount();
+syncAiConversationMode();
+
 renderAiLoadingState(question);
 setSubmittingState(true);
 
   try {
     const payload = await postJson("/ai/chat", { question });
 
-    incrementAiSessionPromptCount();
-    syncAiConversationMode();
     renderAiResponse(payload);
 
     syncAiInputState();
