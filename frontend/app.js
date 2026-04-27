@@ -557,6 +557,18 @@ function syncAiConversationMode() {
   aiPage.classList.toggle("ai-conversation-mode", getAiSessionPromptCount() > 0);
 }
 
+function scrollAiConversationToUserQuestion() {
+  const userQuestion = document.querySelector(".ai-message-row-user .ai-user-bubble");
+  if (!userQuestion) return;
+
+  requestAnimationFrame(() => {
+    userQuestion.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+}
+
 function syncAiIdentityBanner() {
   // Retained as a no-op because the floating AI identity banner was removed from the AI page.
 }
@@ -874,6 +886,7 @@ function renderAiResponse(payload) {
   renderAiAnswerContent(payload.answer || "", citationLookup);
 
   maybeShowAiCatalogNudge();
+  scrollAiConversationToUserQuestion();
 }
 
 async function submitAiQuestion(rawQuestion) {
