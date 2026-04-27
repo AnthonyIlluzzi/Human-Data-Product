@@ -6003,13 +6003,28 @@ body.ai-mode {
 
 @media (max-width: 960px) {
 
+  body.ai-mode {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
   body.ai-mode #mobile-shell-header {
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .ai-page {
+    min-height: 100dvh;
   }
 
   .ai-layout {
     display: block;
-    min-height: calc(100vh - 58px);
+    min-height: 100dvh;
+    padding-top: calc(58px + env(safe-area-inset-top));
   }
 
   .ai-sidebar {
@@ -6017,8 +6032,10 @@ body.ai-mode {
   }
 
   .ai-content {
-    min-height: calc(100vh - 58px);
+    min-height: calc(100dvh - 58px - env(safe-area-inset-top));
     padding: 12px;
+    align-items: center;
+    justify-content: center;
   }
 
   .ai-shell {
@@ -6026,7 +6043,7 @@ body.ai-mode {
   }
 
   .ai-intro-screen {
-    min-height: min(60vh, 460px);
+    min-height: min(58dvh, 460px);
     padding: 24px 18px;
   }
 
@@ -6036,7 +6053,7 @@ body.ai-mode {
   }
 
   .ai-main-workspace {
-    min-height: calc(100vh - 82px);
+    min-height: calc(100dvh - 82px - env(safe-area-inset-top));
     gap: 12px;
   }
 
@@ -6082,6 +6099,7 @@ body.ai-mode {
     max-width: 78%;
     padding: 10px 12px;
     font-size: 0.86rem;
+    scroll-margin-top: 76px;
   }
 
   .ai-response-window {
@@ -6108,7 +6126,7 @@ body.ai-mode {
   }
 
   .ai-question-input {
-    font-size: 0.88rem;
+    font-size: 16px;
   }
 
   .ai-submit-icon-btn {
@@ -6119,6 +6137,19 @@ body.ai-mode {
     top: auto;
     bottom: 8px;
     transform: none;
+  }
+
+  .ai-page.ai-conversation-mode .ai-content {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .ai-page.ai-conversation-mode .ai-shell {
+    min-height: calc(100dvh - 82px - env(safe-area-inset-top));
+  }
+
+  .ai-page.ai-conversation-mode .ai-main-workspace {
+    min-height: calc(100dvh - 82px - env(safe-area-inset-top));
   }
 }
 
