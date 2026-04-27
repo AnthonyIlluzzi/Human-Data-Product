@@ -5947,9 +5947,6 @@ body.ai-mode {
 }
 
 @media (max-width: 960px) {
-  body.ai-mode {
-    padding-top: 58px;
-  }
 
   body.ai-mode #mobile-shell-header {
     display: flex;
