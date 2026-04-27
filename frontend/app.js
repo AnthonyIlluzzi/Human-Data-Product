@@ -638,8 +638,11 @@ function parseAiAnswerSections(answer) {
   }
 
   const titleMap = {
-    "differentiated observations": "Why this fits",
-    "supporting evidence": "What stands out",
+    "why this fits": "Supporting evidence",
+    "what stands out": "Notable pattern(s)",
+    "differentiated observations": "Supporting evidence",
+    "supporting evidence": "Supporting evidence",
+    "notable pattern(s)": "Notable pattern(s)",
     "caution or limitation": "Additional Context",
     "context note": "Additional Context"
   };
