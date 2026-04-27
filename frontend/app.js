@@ -1267,11 +1267,15 @@ function bindMobileShellNavigation() {
       setDrawerOpen(false);
 
       const catalogPage = document.getElementById("catalog-page");
-      const productPage = document.getElementById("product-page");
-
-      catalogPage?.classList.add("hidden");
-      productPage?.classList.remove("hidden");
-      syncMobileDrawerForCurrentPage();
+	  const productPage = document.getElementById("product-page");
+	  const aiPage = document.getElementById("ai-page");
+	
+	  catalogPage?.classList.add("hidden");
+	  aiPage?.classList.add("hidden");
+	  productPage?.classList.remove("hidden");
+	  document.body.classList.remove("ai-mode");
+	
+	  syncMobileDrawerForCurrentPage();
 
       await openWorkspacePanel(
         panelId,
