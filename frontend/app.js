@@ -394,10 +394,20 @@ async function initializeInternalAiMode() {
   document.getElementById("mobile-nav-backdrop")?.classList.add("hidden");
   document.getElementById("ai-page")?.classList.remove("hidden");
 
+  bindMobileShellNavigation();
+  bindLandingModals();
+  bindAnalyticsLinks();
+  bindAiInterface();
+
+  try {
+    await loadContactInfo();
+  } catch (error) {
+    console.error("AI mode contact loader failed:", error);
+  }
+
   syncNavigationActiveState({ page: "ai" });
   syncMobileDrawerForCurrentPage();
   syncAiConversationMode();
-  bindAiInterface();
 
   if (getAiSessionPromptCount() > 0) {
     revealAiMainWorkspace();
@@ -805,6 +815,20 @@ function renderAiUserMessage(question) {
   `;
 
   thread.prepend(row);
+}
+
+function renderAiLoadingState(question) {
+  const questionEl = document.getElementById("ai-response-question");
+
+  hideAiDefaultPrompts();
+  revealAiResponseCard();
+  clearAiEvidenceLists();
+  clearAiAnswerNoteState();
+  renderAiUserMessage(question);
+
+  if (questionEl) questionEl.textContent = question || "Question";
+
+  setAiAnswerBodyState("Typing...", "is-loading");
 }
 
 function renderAiError(question, message) {
@@ -1274,10 +1298,13 @@ function bindMobileShellNavigation() {
     setDrawerOpen(false);
 
     const productPage = document.getElementById("product-page");
-    const catalogPage = document.getElementById("catalog-page");
-
-    productPage?.classList.add("hidden");
-    catalogPage?.classList.remove("hidden");
+	const catalogPage = document.getElementById("catalog-page");
+	const aiPage = document.getElementById("ai-page");
+	
+	productPage?.classList.add("hidden");
+	aiPage?.classList.add("hidden");
+	catalogPage?.classList.remove("hidden");
+	document.body.classList.remove("ai-mode");
 
 	syncNavigationActiveState({
 	  page: "catalog"
