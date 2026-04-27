@@ -151,6 +151,8 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
   bindInventoryModalEvents();
   bindCapabilityEvents();
 
+  initialized = true;
+  
   const tabIsActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
   if (tabIsActive) {
     window.refreshCapabilityInsights();
@@ -180,8 +182,6 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
     document.addEventListener("keydown", handleGlobalKeydown);
     resizeHandlerBound = true;
   }
-
-  initialized = true;
 };
 
 window.refreshCapabilityInsights = function refreshCapabilityInsights() {
