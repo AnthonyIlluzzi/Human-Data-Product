@@ -1477,10 +1477,6 @@ function activateTab(tabId) {
   document.querySelectorAll(".tab-panel").forEach(panel => {
     panel.classList.toggle("active", panel.id === tabId);
   });
-
-  if (tabId === "capability-insights-tab" && typeof window.refreshCapabilityInsights === "function") {
-    scheduleCapabilityInsightsRefresh();
-  }
 }
 
 function scheduleCapabilityInsightsRefresh() {
