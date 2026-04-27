@@ -199,6 +199,8 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   const chartCard = els.chart.closest(".capability-chart-card");
 
   const renderWhenReady = (attempt = 0) => {
+    syncChartCardHeight();
+
     const chartRect = els.chart.getBoundingClientRect();
     const cardRect = chartCard?.getBoundingClientRect();
 
@@ -211,17 +213,16 @@ window.refreshCapabilityInsights = function refreshCapabilityInsights() {
       getComputedStyle(chartCard).display !== "none";
 
     if (ready) {
-      syncChartCardHeight();
       renderChart();
 
       if (isChartHelpOpen) {
         requestAnimationFrame(() => setChartHelpOpen(true));
       }
-      
+
       if (isScoringHelpOpen) {
         requestAnimationFrame(() => setScoringHelpOpen(true));
       }
-      
+
       return;
     }
 
