@@ -1775,7 +1775,12 @@ async function loadVisualizations() {
 }
 
 async function loadCapabilityInsights() {
-  if (typeof window.initCapabilityInsights !== "function") return;
+  if (typeof window.initCapabilityInsights !== "function") {
+    throw new Error(
+      "Capability Insights module was not loaded. Confirm frontend/capability-insights.js exists and is referenced before app.js in index.html."
+    );
+  }
+
   await window.initCapabilityInsights(API_BASE);
 }
 
