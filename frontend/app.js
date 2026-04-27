@@ -622,7 +622,7 @@ function toggleAiEvidenceSection() {
 function parseAiAnswerSections(answer) {
   const normalized = String(answer || "").replace(/\r/g, "").trim();
 
-  const headingPattern = /^(\d+)\.\s+(Direct answer|Why this fits|What stands out|Additional Context|Context note|Differentiated observations|Supporting evidence|Caution or limitation)\s*$/gim;
+  const headingPattern = /^(\d+)\.\s+(Direct answer|Supporting evidence|Notable pattern(?:\(s\)|s)?|Why this fits|What stands out|Additional Context|Context note|Differentiated observations|Caution or limitation)\s*$/gim;
   const matches = [...normalized.matchAll(headingPattern)];
 
   if (!matches.length) {
