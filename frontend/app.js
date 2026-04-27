@@ -91,6 +91,7 @@ function resetModalScrollPosition(modal) {
 function syncMobileDrawerForCurrentPage() {
   const catalogPage = document.getElementById("catalog-page");
   const productPage = document.getElementById("product-page");
+  const aiPage = document.getElementById("ai-page");
   const catalogGroup = document.getElementById("mobile-nav-catalog-group");
   const productGroup = document.getElementById("mobile-nav-product-group");
   const mobileNavSubtitle = document.getElementById("mobile-nav-subtitle");
@@ -99,17 +100,19 @@ function syncMobileDrawerForCurrentPage() {
 
   const showingCatalog = !catalogPage.classList.contains("hidden");
   const showingProduct = !productPage.classList.contains("hidden");
+  const showingAi = !!aiPage && !aiPage.classList.contains("hidden");
 
-  catalogGroup.classList.toggle("hidden", !showingCatalog);
+  catalogGroup.classList.toggle("hidden", showingProduct);
   productGroup.classList.toggle("hidden", !showingProduct);
 
   if (mobileNavSubtitle) {
-    mobileNavSubtitle.textContent = showingCatalog ? "Catalog" : "Workspace";
+    mobileNavSubtitle.textContent = showingAi ? "Anthony Illuzzi" : showingCatalog ? "Catalog" : "Workspace";
   }
 }
 
 function syncNavigationActiveState({ page = "catalog", panelId = "overview-panel" } = {}) {
   const desktopCatalogButton = document.querySelector(".landing-nav a.landing-link[href='#definition-section']");
+  const mobileAskButton = document.querySelector("#mobile-nav-catalog-group [data-mobile-nav-target='ai-page']");
   const mobileCatalogButton = document.querySelector("#mobile-nav-catalog-group [data-mobile-nav-target='catalog-page']");
 
   const workspaceButtons = [
@@ -121,9 +124,22 @@ function syncNavigationActiveState({ page = "catalog", panelId = "overview-panel
     btn.classList.remove("active", "active-link");
   });
 
+  document.querySelectorAll("#mobile-nav-catalog-group .mobile-nav-link").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  document.querySelectorAll("[data-ai-nav-target='ask']").forEach(btn => {
+    btn.classList.toggle("active-link", page === "ai");
+    btn.classList.toggle("active", page === "ai");
+  });
+
   if (desktopCatalogButton) {
     desktopCatalogButton.classList.toggle("active-link", page === "catalog");
     desktopCatalogButton.classList.toggle("active", page === "catalog");
+  }
+
+  if (mobileAskButton) {
+    mobileAskButton.classList.toggle("active", page === "ai");
   }
 
   if (mobileCatalogButton) {
@@ -134,33 +150,6 @@ function syncNavigationActiveState({ page = "catalog", panelId = "overview-panel
     btn.classList.toggle("active", page === "product" && btn.dataset.panel === panelId);
   });
 }
-
-const GA_EVENT_NAMES = {
-  VIEW_OVERVIEW: "view_overview",
-  VIEW_VALUE_INSIGHTS: "view_value_insights",
-  VIEW_CAPABILITY_INSIGHTS: "view_capability_insights",
-  VIEW_OPPORTUNITY_INSIGHTS: "view_opportunity_insights",
-  VIEW_SQL_WORKSPACE: "view_sql_workspace",
-  VIEW_API_WORKSPACE: "view_api_workspace",
-  VIEW_DOCUMENTATION: "view_documentation",
-  CLICK_LINKEDIN: "click_linkedin",
-  CLICK_GITHUB: "click_github",
-  EXECUTE_SQL_QUERY: "execute_sql_query",
-  EXECUTE_API_CALL: "execute_api_call",
-  PERSONA_SIGNAL: "persona_signal",
-  INTEREST_SIGNAL: "interest_signal"
-};
-
-const sessionAnalyticsState = {
-  trackedViews: new Set(),
-  hasTechnicalEngagement: false,
-  hasMeaningfulEngagement: false,
-  hasProfessionalFollowup: false,
-  personaSignalFired: false,
-  interestSignalFired: false,
-  sqlWorkspaceViewed: false,
-  apiWorkspaceViewed: false
-};
 
 function analyticsEnabled() {
   return typeof window.gtag === "function";
@@ -400,13 +389,14 @@ async function initializeInternalAiMode() {
 
   document.getElementById("catalog-page")?.classList.add("hidden");
   document.getElementById("product-page")?.classList.add("hidden");
-  document.getElementById("mobile-shell-header")?.classList.add("hidden");
+  document.getElementById("mobile-shell-header")?.classList.remove("hidden");
   document.getElementById("mobile-nav-drawer")?.classList.add("hidden");
   document.getElementById("mobile-nav-backdrop")?.classList.add("hidden");
   document.getElementById("ai-page")?.classList.remove("hidden");
 
+  syncNavigationActiveState({ page: "ai" });
+  syncMobileDrawerForCurrentPage();
   syncAiConversationMode();
-  syncAiIdentityBanner();
   bindAiInterface();
 
   if (getAiSessionPromptCount() > 0) {
@@ -466,8 +456,6 @@ function syncAiInputState() {
 function bindAiInterface() {
   const form = document.getElementById("ai-chat-form");
   const input = document.getElementById("ai-question-input");
-  const submitButton = document.getElementById("ai-submit-btn");
-  const backButton = document.getElementById("ai-back-to-catalog-btn");
 
   document.querySelectorAll(".ai-prompt-chip[data-ai-prompt]").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -478,6 +466,15 @@ function bindAiInterface() {
         input.focus();
       }
       await submitAiQuestion(prompt);
+    });
+  });
+
+  document.querySelectorAll("[data-ai-nav-target='catalog']").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.delete("ai");
+      nextUrl.searchParams.delete("internal");
+      window.location.href = nextUrl.toString();
     });
   });
 
@@ -499,12 +496,6 @@ function bindAiInterface() {
     await submitAiQuestion(input?.value || "");
   });
 
-  backButton?.addEventListener("click", () => {
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.delete("internal");
-    window.location.href = nextUrl.toString();
-  });
   document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
@@ -543,12 +534,7 @@ function syncAiConversationMode() {
 }
 
 function syncAiIdentityBanner() {
-  const banner = document.getElementById("ai-identity-banner");
-  if (!banner) return;
-
-  const shouldHide = getAiSessionPromptCount() > 0;
-  banner.classList.toggle("is-hidden", shouldHide);
-  banner.setAttribute("aria-hidden", shouldHide ? "true" : "false");
+  // Retained as a no-op because the floating AI identity banner was removed from the AI page.
 }
 
 function maybeShowAiCatalogNudge() {
@@ -805,16 +791,20 @@ function renderAiAnswerContent(answer, citationLookup = {}) {
   });
 }
 
-function renderAiLoadingState(question) {
-  const questionEl = document.getElementById("ai-response-question");
+function renderAiUserMessage(question) {
+  const thread = document.querySelector(".ai-chat-thread");
+  if (!thread) return;
 
-  hideAiDefaultPrompts();
-  revealAiResponseCard();
-  clearAiEvidenceLists();
-  clearAiAnswerNoteState();
+  const existingUserMessage = thread.querySelector(".ai-message-row-user");
+  existingUserMessage?.remove();
 
-  if (questionEl) questionEl.textContent = question;
-  setAiAnswerBodyState("Typing...", "is-loading");
+  const row = document.createElement("div");
+  row.className = "ai-message-row ai-message-row-user";
+  row.innerHTML = `
+    <div class="ai-user-bubble">${escapeHtml(question)}</div>
+  `;
+
+  thread.prepend(row);
 }
 
 function renderAiError(question, message) {
@@ -883,7 +873,6 @@ setSubmittingState(true);
 
     incrementAiSessionPromptCount();
     syncAiConversationMode();
-    syncAiIdentityBanner();
     renderAiResponse(payload);
 
     syncAiInputState();
@@ -1152,10 +1141,13 @@ function bindMobileShellNavigation() {
     setDrawerOpen(false);
 
     const productPage = document.getElementById("product-page");
-    const catalogPage = document.getElementById("catalog-page");
-
-    productPage?.classList.add("hidden");
-    catalogPage?.classList.remove("hidden");
+	const catalogPage = document.getElementById("catalog-page");
+	const aiPage = document.getElementById("ai-page");
+	
+	productPage?.classList.add("hidden");
+	aiPage?.classList.add("hidden");
+	catalogPage?.classList.remove("hidden");
+	document.body.classList.remove("ai-mode");
 
 	syncNavigationActiveState({
 	  page: "catalog"
@@ -1181,7 +1173,30 @@ function bindMobileShellNavigation() {
       });
     });
   });
-	
+
+  drawer.querySelectorAll("[data-mobile-nav-target='ai-page']").forEach(btn => {
+  btn.addEventListener("click", () => {
+    setDrawerOpen(false);
+
+    const aiPage = document.getElementById("ai-page");
+    const catalogPage = document.getElementById("catalog-page");
+    const productPage = document.getElementById("product-page");
+
+    productPage?.classList.add("hidden");
+    catalogPage?.classList.add("hidden");
+    aiPage?.classList.remove("hidden");
+
+    document.body.classList.add("ai-mode");
+
+    syncNavigationActiveState({ page: "ai" });
+    syncMobileDrawerForCurrentPage();
+    syncGlobalBodyLockState();
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
+  });
+});
   drawer.querySelectorAll("[data-mobile-nav-target='catalog-page']").forEach(btn => {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
@@ -1190,7 +1205,9 @@ function bindMobileShellNavigation() {
       const catalogPage = document.getElementById("catalog-page");
 
       productPage?.classList.add("hidden");
-      catalogPage?.classList.remove("hidden");
+	  document.getElementById("ai-page")?.classList.add("hidden");
+	  catalogPage?.classList.remove("hidden");
+	  document.body.classList.remove("ai-mode");
 
 	  syncNavigationActiveState({
 	    page: "catalog"
