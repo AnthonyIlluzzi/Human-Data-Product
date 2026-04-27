@@ -187,6 +187,8 @@ window.initCapabilityInsights = async function initCapabilityInsights(apiBase) {
 window.refreshCapabilityInsights = function refreshCapabilityInsights() {
   cacheElements();
 
+  if (!initialized) return;
+
   const insightsPanelActive = document.getElementById("insights-panel")?.classList.contains("active");
   const tabActive = document.getElementById("capability-insights-tab")?.classList.contains("active");
 
