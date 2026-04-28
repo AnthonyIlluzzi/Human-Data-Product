@@ -26,6 +26,33 @@ const APP_STATE_STORAGE_KEY = "hdp_app_state_v1";
 const MOBILE_INSIGHTS_OVERLAY_SESSION_KEY = "hdp_mobile_insights_overlay_seen";
 const MOBILE_LAYOUT_BREAKPOINT = 960;
 
+const GA_EVENT_NAMES = {
+  VIEW_OVERVIEW: "view_overview",
+  VIEW_SQL_WORKSPACE: "view_sql_workspace",
+  VIEW_API_WORKSPACE: "view_api_workspace",
+  VIEW_VALUE_INSIGHTS: "view_value_insights",
+  VIEW_CAPABILITY_INSIGHTS: "view_capability_insights",
+  VIEW_OPPORTUNITY_INSIGHTS: "view_opportunity_insights",
+  VIEW_DOCUMENTATION: "view_documentation",
+  CLICK_LINKEDIN: "click_linkedin",
+  CLICK_GITHUB: "click_github",
+  EXECUTE_SQL_QUERY: "execute_sql_query",
+  EXECUTE_API_CALL: "execute_api_call",
+  PERSONA_SIGNAL: "persona_signal",
+  INTEREST_SIGNAL: "interest_signal"
+};
+
+const sessionAnalyticsState = {
+  trackedViews: new Set(),
+  sqlWorkspaceViewed: false,
+  apiWorkspaceViewed: false,
+  hasTechnicalEngagement: false,
+  hasMeaningfulEngagement: false,
+  hasProfessionalFollowup: false,
+  personaSignalFired: false,
+  interestSignalFired: false
+};
+
 const APP_STATE_STORAGE = window.sessionStorage;
 
 function saveAppState(nextState = {}) {
