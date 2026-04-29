@@ -6030,7 +6030,7 @@ body.ai-mode {
 
   .ai-content {
     min-height: calc(100dvh - 58px - env(safe-area-inset-top));
-    padding: 12px;
+    padding: 12px 12px calc(22px + env(safe-area-inset-bottom));
     align-items: center;
     justify-content: center;
   }
@@ -6039,8 +6039,12 @@ body.ai-mode {
     width: min(100%, 420px);
   }
 
+  .ai-page:not(.ai-conversation-mode) .ai-shell {
+    transform: translateY(-4vh);
+  }
+
   .ai-intro-screen {
-    min-height: min(58dvh, 460px);
+    min-height: min(54dvh, 440px);
     padding: 24px 18px;
   }
 
@@ -6124,6 +6128,11 @@ body.ai-mode {
 
   .ai-question-input {
     font-size: 16px;
+  }
+
+  .ai-composer-wrap {
+    scroll-margin-top: 84px;
+    scroll-margin-bottom: 28dvh;
   }
 
   .ai-submit-icon-btn {

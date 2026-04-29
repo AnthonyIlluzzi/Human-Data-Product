@@ -4,8 +4,7 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const IS_INTERNAL_AI_MODE =
-  URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
+const IS_INTERNAL_AI_MODE = URL_PARAMS.get("internal") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
 const AI_INTRO_DELAY_MS = 1600;
@@ -102,6 +101,47 @@ function getStickyPageOffset() {
 
   const headerHeight = mobileHeader.getBoundingClientRect().height || 0;
   return Math.max(headerHeight + 12, 68);
+}
+
+function isMobileLayout() {
+  return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
+}
+
+function scrollElementToTopBelowHeader(element, behavior = "auto") {
+  if (!element) return;
+
+  const top =
+    window.scrollY +
+    element.getBoundingClientRect().top -
+    getStickyPageOffset();
+
+  window.scrollTo({
+    top: Math.max(top, 0),
+    behavior
+  });
+}
+
+function scrollAiComposerIntoMobileView() {
+  if (!isMobileLayout()) return;
+
+  const composer = document.querySelector(".ai-composer-wrap");
+  if (!composer) return;
+
+  window.setTimeout(() => {
+    composer.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest"
+    });
+  }, 90);
+
+  window.setTimeout(() => {
+    composer.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest"
+    });
+  }, 320);
 }
 
 function resetModalScrollPosition(modal) {
@@ -398,12 +438,7 @@ const loaders = [
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "auto" });
-        catalogPage?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
+        scrollElementToTopBelowHeader(catalogPage, "auto");
       });
     });
   }
@@ -522,15 +557,31 @@ function bindAiInterface() {
 
   document.querySelectorAll("[data-ai-nav-target='catalog']").forEach(btn => {
     btn.addEventListener("click", () => {
+      saveAppState({
+        page: "catalog",
+        panel: "overview-panel",
+        insightsTab: DEFAULT_INSIGHTS_TAB_ID
+      });
+
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.delete("ai");
-      nextUrl.searchParams.delete("internal");
+      nextUrl.searchParams.set("internal", "false");
       window.location.href = nextUrl.toString();
     });
   });
 
   input?.addEventListener("input", () => {
     syncAiInputState();
+  });
+
+  input?.addEventListener("focus", () => {
+    scrollAiComposerIntoMobileView();
+  });
+
+  window.visualViewport?.addEventListener("resize", () => {
+    if (document.activeElement === input) {
+      scrollAiComposerIntoMobileView();
+    }
   });
 
   input?.addEventListener("keydown", async (event) => {
@@ -548,9 +599,15 @@ function bindAiInterface() {
   });
 
   document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
+    saveAppState({
+      page: "catalog",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
+
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.delete("internal");
+    nextUrl.searchParams.set("internal", "false");
     window.location.href = nextUrl.toString();
   });
 
@@ -968,7 +1025,14 @@ setSubmittingState(true);
 }
 
 function bindCatalogNavigation() {
-  document.getElementById("open-product-btn")?.addEventListener("click", () => {
+  document.getElementById("ask-data-btn")?.addEventListener("click", () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+	nextUrl.searchParams.set("internal", "true");
+	window.location.href = nextUrl.toString();
+  });
+	
+	document.getElementById("open-product-btn")?.addEventListener("click", () => {
     const catalogPage = document.getElementById("catalog-page");
     const productPage = document.getElementById("product-page");
     const overviewPanel = document.getElementById("overview-panel");
@@ -1029,12 +1093,7 @@ function bindCatalogNavigation() {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-        catalogPage?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
+        scrollElementToTopBelowHeader(catalogPage, "auto");
       });
     });
   });
@@ -1206,6 +1265,26 @@ function bindMobileShellNavigation() {
     syncGlobalBodyLockState();
   };
 
+  const redirectToCatalog = () => {
+    saveAppState({
+      page: "catalog",
+      panel: "overview-panel",
+      insightsTab: DEFAULT_INSIGHTS_TAB_ID
+    });
+
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+    nextUrl.searchParams.set("internal", "false");
+    window.location.href = nextUrl.toString();
+  };
+
+  const redirectToAi = () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+    nextUrl.searchParams.set("internal", "true");
+    window.location.href = nextUrl.toString();
+  };
+
   openBtn.addEventListener("click", () => {
     syncMobileDrawerForCurrentPage();
     setDrawerOpen(true);
@@ -1221,103 +1300,20 @@ function bindMobileShellNavigation() {
 
   mobileHomeBtn?.addEventListener("click", () => {
     setDrawerOpen(false);
-
-    const productPage = document.getElementById("product-page");
-	const catalogPage = document.getElementById("catalog-page");
-	const aiPage = document.getElementById("ai-page");
-	
-	productPage?.classList.add("hidden");
-	aiPage?.classList.add("hidden");
-	catalogPage?.classList.remove("hidden");
-	document.body.classList.remove("ai-mode");
-
-	syncNavigationActiveState({
-	  page: "catalog"
-	});
-
-    saveAppState({
-      page: "catalog",
-      panel: "overview-panel",
-      insightsTab: DEFAULT_INSIGHTS_TAB_ID
-    });
-
-    syncMobileDrawerForCurrentPage();
-    syncGlobalBodyLockState();
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "auto" });
-        catalogPage?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
-      });
-    });
+    redirectToCatalog();
   });
 
   drawer.querySelectorAll("[data-mobile-nav-target='ai-page']").forEach(btn => {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
-
-      const aiPage = document.getElementById("ai-page");
-      const catalogPage = document.getElementById("catalog-page");
-      const productPage = document.getElementById("product-page");
-
-      productPage?.classList.add("hidden");
-      catalogPage?.classList.add("hidden");
-      aiPage?.classList.remove("hidden");
-
-      document.body.classList.add("ai-mode");
-
-      revealAiMainWorkspace();
-      syncAiConversationMode();
-      maybeShowAiCatalogNudge();
-
-      syncNavigationActiveState({ page: "ai" });
-      syncMobileDrawerForCurrentPage();
-      syncGlobalBodyLockState();
-
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "auto" });
-      });
+      redirectToAi();
     });
   });
+
   drawer.querySelectorAll("[data-mobile-nav-target='catalog-page']").forEach(btn => {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
-
-      const productPage = document.getElementById("product-page");
-      const catalogPage = document.getElementById("catalog-page");
-
-      productPage?.classList.add("hidden");
-	  document.getElementById("ai-page")?.classList.add("hidden");
-	  catalogPage?.classList.remove("hidden");
-	  document.body.classList.remove("ai-mode");
-
-	  syncNavigationActiveState({
-	    page: "catalog"
-	  });
-
-      saveAppState({
-        page: "catalog",
-        panel: "overview-panel",
-        insightsTab: DEFAULT_INSIGHTS_TAB_ID
-      });
-
-      syncMobileDrawerForCurrentPage();
-      syncGlobalBodyLockState();
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo({ top: 0, behavior: "auto" });
-          catalogPage?.scrollIntoView({
-            block: "start",
-            inline: "nearest",
-            behavior: "auto"
-          });
-        });
-      });
+      redirectToCatalog();
     });
   });
 
@@ -1329,15 +1325,15 @@ function bindMobileShellNavigation() {
       setDrawerOpen(false);
 
       const catalogPage = document.getElementById("catalog-page");
-	  const productPage = document.getElementById("product-page");
-	  const aiPage = document.getElementById("ai-page");
-	
-	  catalogPage?.classList.add("hidden");
-	  aiPage?.classList.add("hidden");
-	  productPage?.classList.remove("hidden");
-	  document.body.classList.remove("ai-mode");
-	
-	  syncMobileDrawerForCurrentPage();
+      const productPage = document.getElementById("product-page");
+      const aiPage = document.getElementById("ai-page");
+
+      catalogPage?.classList.add("hidden");
+      aiPage?.classList.add("hidden");
+      productPage?.classList.remove("hidden");
+      document.body.classList.remove("ai-mode");
+
+      syncMobileDrawerForCurrentPage();
 
       await openWorkspacePanel(
         panelId,
@@ -1362,39 +1358,7 @@ function bindMobileShellNavigation() {
 
   mobileBackToCatalogBtn?.addEventListener("click", () => {
     setDrawerOpen(false);
-
-    const productPage = document.getElementById("product-page");
-	const catalogPage = document.getElementById("catalog-page");
-	const aiPage = document.getElementById("ai-page");
-	
-	productPage?.classList.add("hidden");
-	aiPage?.classList.add("hidden");
-	catalogPage?.classList.remove("hidden");
-	document.body.classList.remove("ai-mode");
-
-	syncNavigationActiveState({
-	  page: "catalog"
-	});
-
-    saveAppState({
-      page: "catalog",
-      panel: "overview-panel",
-      insightsTab: DEFAULT_INSIGHTS_TAB_ID
-    });
-
-    syncMobileDrawerForCurrentPage();
-    syncGlobalBodyLockState();
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "auto" });
-        catalogPage?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
-      });
-    });
+    redirectToCatalog();
   });
 
   document.addEventListener("keydown", event => {
@@ -1471,11 +1435,11 @@ function scrollPanelToTop(panel, behavior = "smooth") {
   if (!panel) return;
 
   const target = panel.querySelector(".panel-header") || panel;
-  const top = window.scrollY + target.getBoundingClientRect().top - getStickyPageOffset();
 
-  window.scrollTo({
-    top: Math.max(top, 0),
-    behavior
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollElementToTopBelowHeader(target, behavior);
+    });
   });
 }
 
