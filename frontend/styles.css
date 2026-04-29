@@ -5898,16 +5898,20 @@ body.ai-mode {
 .ai-page.ai-conversation-mode .ai-main-workspace {
   min-height: calc(100vh - 56px);
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   place-items: stretch;
   gap: 18px;
+  padding-bottom: 140px;
 }
 
 .ai-page.ai-conversation-mode .ai-composer-wrap {
-  position: sticky;
-  bottom: 18px;
-  width: min(100%, 960px);
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  width: min(640px, calc(100vw - 32px));
+  transform: translateX(-50%);
   justify-self: center;
+  z-index: 90;
 }
 
 .ai-page.ai-conversation-mode .ai-chat-thread {
@@ -5915,6 +5919,7 @@ body.ai-mode {
   align-content: end;
   justify-items: stretch;
   padding-top: 20px;
+  padding-bottom: 16px;
   width: 100%;
 }
 
@@ -5932,6 +5937,9 @@ body.ai-mode {
   padding: 14px;
 }
 
+.ai-page.ai-conversation-mode .ai-question-input {
+  min-height: 24px;
+}
 .ai-catalog-nudge {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -6145,7 +6153,7 @@ body.ai-mode {
     transform: none;
   }
 
-  .ai-page.ai-conversation-mode .ai-content {
+    .ai-page.ai-conversation-mode .ai-content {
     align-items: stretch;
     justify-content: flex-start;
   }
@@ -6155,7 +6163,35 @@ body.ai-mode {
   }
 
   .ai-page.ai-conversation-mode .ai-main-workspace {
-    min-height: calc(100dvh - 82px - env(safe-area-inset-top));
+    min-height: calc(100dvh - 68px);
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    padding: 16px 12px calc(112px + env(safe-area-inset-bottom));
+  }
+
+  .ai-page.ai-conversation-mode .ai-composer-wrap {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: auto;
+    transform: none;
+    z-index: 90;
+  }
+
+  .ai-page.ai-conversation-mode .ai-chat-thread {
+    padding-top: 12px;
+    padding-bottom: 0;
+  }
+
+  .ai-page.ai-conversation-mode .ai-question-input {
+    min-height: 24px;
+    max-height: 24px;
+    overflow-y: hidden;
+  }
+
+  .ai-page.ai-conversation-mode .ai-input-shell.is-expanded .ai-question-input {
+    max-height: 24px;
   }
 }
 
