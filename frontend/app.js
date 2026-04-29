@@ -4,7 +4,6 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const IS_AI_MODE = URL_PARAMS.get("ai") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
 const AI_INTRO_DELAY_MS = 1600;
@@ -97,6 +96,137 @@ function resetAiInterfaceState() {
 
   syncAiConversationMode();
   syncAiInputState({ forceBaseHeight: true });
+}
+
+let aiIntroTimer = null;
+
+function clearAiIntroTimer() {
+  if (aiIntroTimer) {
+    window.clearTimeout(aiIntroTimer);
+    aiIntroTimer = null;
+  }
+}
+
+function closeMobileDrawer() {
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const openBtn = document.getElementById("mobile-nav-open");
+
+  drawer?.classList.add("hidden");
+  drawer?.setAttribute("aria-hidden", "true");
+  openBtn?.setAttribute("aria-expanded", "false");
+}
+
+function showAskTheDataPage({ resetSession = false, showIntro = false } = {}) {
+  const catalogPage = document.getElementById("catalog-page");
+  const productPage = document.getElementById("product-page");
+  const aiPage = document.getElementById("ai-page");
+  const introScreen = document.getElementById("ai-intro-screen");
+  const mainWorkspace = document.getElementById("ai-main-workspace");
+
+  if (!aiPage) return;
+
+  clearAiIntroTimer();
+  closeMobileDrawer();
+
+  if (resetSession) {
+    resetAiSessionState();
+  }
+
+  saveAppState({
+    page: "ai",
+    panel: "overview-panel",
+    insightsTab: DEFAULT_INSIGHTS_TAB_ID
+  });
+
+  document.body.classList.add("ai-mode");
+  showMobileShellHeader();
+
+  catalogPage?.classList.add("hidden");
+  productPage?.classList.add("hidden");
+  aiPage.classList.remove("hidden");
+
+  syncNavigationActiveState({ page: "ai" });
+  syncMobileDrawerForCurrentPage();
+
+  if (showIntro) {
+    introScreen?.classList.remove("hidden");
+    mainWorkspace?.classList.add("hidden");
+
+    const advanceIntro = () => {
+      clearAiIntroTimer();
+      revealAiMainWorkspace();
+      syncAiInputState({ forceBaseHeight: true });
+    };
+
+    introScreen?.addEventListener("click", advanceIntro, { once: true });
+
+    aiIntroTimer = window.setTimeout(() => {
+      advanceIntro();
+    }, AI_INTRO_DELAY_MS);
+  } else {
+    resetAiInterfaceState();
+  }
+
+  syncGlobalBodyLockState();
+
+  requestAnimationFrame(() => {
+    syncAiInputState({ forceBaseHeight: true });
+  });
+}
+
+function showCatalogPage() {
+  const catalogPage = document.getElementById("catalog-page");
+  const productPage = document.getElementById("product-page");
+  const aiPage = document.getElementById("ai-page");
+
+  clearAiIntroTimer();
+  closeMobileDrawer();
+
+  saveAppState({
+    page: "catalog",
+    panel: "overview-panel",
+    insightsTab: DEFAULT_INSIGHTS_TAB_ID
+  });
+
+  document.body.classList.remove("ai-mode");
+  showMobileShellHeader();
+
+  aiPage?.classList.add("hidden");
+  productPage?.classList.add("hidden");
+  catalogPage?.classList.remove("hidden");
+
+  syncMobileDrawerForCurrentPage();
+  syncNavigationActiveState({ page: "catalog" });
+  syncGlobalBodyLockState();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollElementToTopBelowHeader(catalogPage, "auto");
+    });
+  });
+}
+
+function showProductPage(panelId = "overview-panel", tabId = null) {
+  const catalogPage = document.getElementById("catalog-page");
+  const productPage = document.getElementById("product-page");
+  const aiPage = document.getElementById("ai-page");
+
+  clearAiIntroTimer();
+  closeMobileDrawer();
+
+  document.body.classList.remove("ai-mode");
+  showMobileShellHeader();
+
+  catalogPage?.classList.add("hidden");
+  aiPage?.classList.add("hidden");
+  productPage?.classList.remove("hidden");
+
+  syncMobileDrawerForCurrentPage();
+  syncGlobalBodyLockState();
+
+  return openWorkspacePanel(panelId, tabId, {
+    scrollBehavior: "auto"
+  });
 }
 
 function showMobileShellHeader() {
@@ -400,11 +530,8 @@ const DISTRIBUTION_DEFINITIONS = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (IS_AI_MODE) {
-    await initializeInternalAiMode();
-    syncGlobalBodyLockState();
-    return;
-  }
+  showMobileShellHeader();
+
   bindCatalogNavigation();
   bindSideNavigation();
   bindMobileShellNavigation();
@@ -416,9 +543,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindInsightHelpPopovers();
   bindAnalyticsLinks();
   bindMobileInsightsEntryOverlay();
+  bindAiInterface();
   initLandingContextRotator();
 
-const loaders = [
+  const loaders = [
     loadMetadata,
     loadOverview,
     loadVisualizations,
@@ -434,104 +562,13 @@ const loaders = [
     }
   }
 
-  const appState = loadAppState();
-  const catalogPage = document.getElementById("catalog-page");
-  const productPage = document.getElementById("product-page");
-
-  if (appState.page === "product") {
-    catalogPage?.classList.add("hidden");
-    productPage?.classList.remove("hidden");
-    syncMobileDrawerForCurrentPage();
-	syncNavigationActiveState({
-    page: "product",
-    panelId: appState.panel || "overview-panel"
+  showAskTheDataPage({
+    resetSession: getAiSessionPromptCount() === 0,
+    showIntro: getAiSessionPromptCount() === 0
   });
-
-    const targetPanel = appState.panel || "overview-panel";
-    const targetTab =
-      targetPanel === "insights-panel"
-        ? (appState.insightsTab || DEFAULT_INSIGHTS_TAB_ID)
-        : null;
-
-    await openWorkspacePanel(targetPanel, targetTab, {
-      scrollBehavior: "auto"
-    });
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const restoredPanel = document.getElementById(targetPanel);
-        scrollPanelToTop(restoredPanel, "auto");
-      });
-    });
-  } else {
-    catalogPage?.classList.remove("hidden");
-    productPage?.classList.add("hidden");
-    syncMobileDrawerForCurrentPage();
-	syncNavigationActiveState({
-    page: "catalog"
-  });
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollElementToTopBelowHeader(catalogPage, "auto");
-      });
-    });
-  }
 
   syncGlobalBodyLockState();
 });
-
-async function initializeInternalAiMode() {
-  document.body.classList.add("ai-mode");
-  showMobileShellHeader();
-
-  document.getElementById("catalog-page")?.classList.add("hidden");
-  document.getElementById("product-page")?.classList.add("hidden");
-  document.getElementById("mobile-shell-header")?.classList.remove("hidden");
-  document.getElementById("mobile-nav-drawer")?.classList.add("hidden");
-  document.getElementById("mobile-nav-backdrop")?.classList.remove("hidden");
-  document.getElementById("ai-page")?.classList.remove("hidden");
-
-  bindMobileShellNavigation();
-  bindLandingModals();
-  bindAnalyticsLinks();
-  bindAiInterface();
-
-  try {
-    await loadContactInfo();
-  } catch (error) {
-    console.error("AI mode contact loader failed:", error);
-  }
-
-  syncNavigationActiveState({ page: "ai" });
-  syncMobileDrawerForCurrentPage();
-  syncAiConversationMode();
-
-    if (getAiSessionPromptCount() > 0) {
-    revealAiMainWorkspace();
-    maybeShowAiCatalogNudge();
-    syncAiInputState({ forceBaseHeight: true });
-    return;
-  }
-
-  const introScreen = document.getElementById("ai-intro-screen");
-  let introTimer = null;
-
-  const advanceIntro = () => {
-    if (introTimer) {
-      window.clearTimeout(introTimer);
-      introTimer = null;
-    }
-
-    revealAiMainWorkspace();
-  };
-
-  introScreen?.addEventListener("click", advanceIntro, { once: true });
-
-  introTimer = window.setTimeout(() => {
-    advanceIntro();
-  }, AI_INTRO_DELAY_MS);
-}
 
 function syncAiInputState(options = {}) {
   const { forceBaseHeight = false } = options;
@@ -601,22 +638,17 @@ function bindAiInterface() {
     });
   });
 
-  document.querySelectorAll("[data-ai-nav-target='catalog']").forEach(btn => {
+  document.querySelectorAll("[data-ai-nav-target='ask']").forEach(btn => {
     btn.addEventListener("click", () => {
-      saveAppState({
-        page: "catalog",
-        panel: "overview-panel",
-        insightsTab: DEFAULT_INSIGHTS_TAB_ID
-      });
-
-	  resetAiSessionState();
-
-      const nextUrl = new URL(window.location.href);
-      nextUrl.searchParams.delete("ai");
-	  window.location.href = nextUrl.toString();
+      showAskTheDataPage({ resetSession: true, showIntro: false });
     });
   });
 
+  document.querySelectorAll("[data-ai-nav-target='catalog']").forEach(btn => {
+    btn.addEventListener("click", () => {
+      showCatalogPage();
+    });
+  });
   input?.addEventListener("input", () => {
     syncAiInputState();
   });
@@ -646,17 +678,7 @@ function bindAiInterface() {
   });
 
   document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
-    saveAppState({
-      page: "catalog",
-      panel: "overview-panel",
-      insightsTab: DEFAULT_INSIGHTS_TAB_ID
-    });
-
-	resetAiSessionState();
-
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-	window.location.href = nextUrl.toString();
+    showCatalogPage();
   });
 
   requestAnimationFrame(() => {
@@ -1075,24 +1097,18 @@ async function submitAiQuestion(rawQuestion) {
 
 function bindCatalogNavigation() {
   document.getElementById("ask-data-btn")?.addEventListener("click", () => {
-    resetAiSessionState();
-
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set("ai", "true");
-    window.location.href = nextUrl.toString();
+    showAskTheDataPage({ resetSession: true, showIntro: false });
   });
 	
-	document.getElementById("open-product-btn")?.addEventListener("click", () => {
-    const catalogPage = document.getElementById("catalog-page");
-    const productPage = document.getElementById("product-page");
-    const overviewPanel = document.getElementById("overview-panel");
-    const workspace = document.querySelector(".workspace");
-
+  document.getElementById("open-product-btn")?.addEventListener("click", () => {
     saveAppState({
       page: "product",
       panel: "overview-panel",
       insightsTab: DEFAULT_INSIGHTS_TAB_ID
     });
+
+    showProductPage("overview-panel", null);
+  });
 
     catalogPage?.classList.add("hidden");
     productPage?.classList.remove("hidden");
@@ -1122,30 +1138,7 @@ function bindCatalogNavigation() {
   });
 
   document.getElementById("back-to-catalog-btn")?.addEventListener("click", () => {
-    const productPage = document.getElementById("product-page");
-    const catalogPage = document.getElementById("catalog-page");
-
-    saveAppState({
-      page: "catalog",
-      panel: "overview-panel",
-      insightsTab: DEFAULT_INSIGHTS_TAB_ID
-    });
-
-    productPage?.classList.add("hidden");
-    catalogPage?.classList.remove("hidden");
-    syncMobileDrawerForCurrentPage();
-	syncNavigationActiveState({
-	  page: "catalog"
-	});
-    syncGlobalBodyLockState();
-
-    void catalogPage?.offsetHeight;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollElementToTopBelowHeader(catalogPage, "auto");
-      });
-    });
+    showCatalogPage();
   });
 }
 
@@ -1315,25 +1308,13 @@ function bindMobileShellNavigation() {
     syncGlobalBodyLockState();
   };
 
-    const redirectToCatalog = () => {
-      saveAppState({
-        page: "catalog",
-        panel: "overview-panel",
-        insightsTab: DEFAULT_INSIGHTS_TAB_ID
-      });
+  redirectToCatalog = () => {
+    showCatalogPage();
+  };
 
-      const nextUrl = new URL(window.location.href);
-      nextUrl.searchParams.delete("ai");
-      window.location.href = nextUrl.toString();
-    };
-
-    const redirectToAi = () => {
-      resetAiSessionState();
-
-      const nextUrl = new URL(window.location.href);
-      nextUrl.searchParams.set("ai", "true");
-      window.location.href = nextUrl.toString();
-    };
+  const redirectToAi = () => {
+    showAskTheDataPage({ resetSession: true, showIntro: false });
+  };
 
   openBtn.addEventListener("click", () => {
     syncMobileDrawerForCurrentPage();
@@ -1374,22 +1355,9 @@ function bindMobileShellNavigation() {
 
       setDrawerOpen(false);
 
-      const catalogPage = document.getElementById("catalog-page");
-      const productPage = document.getElementById("product-page");
-      const aiPage = document.getElementById("ai-page");
-
-      catalogPage?.classList.add("hidden");
-      aiPage?.classList.add("hidden");
-      productPage?.classList.remove("hidden");
-      document.body.classList.remove("ai-mode");
-	  showMobileShellHeader();
-
-      syncMobileDrawerForCurrentPage();
-
-      await openWorkspacePanel(
+      await showProductPage(
         panelId,
-        panelId === "insights-panel" ? DEFAULT_INSIGHTS_TAB_ID : null,
-        { scrollBehavior: "auto" }
+        panelId === "insights-panel" ? DEFAULT_INSIGHTS_TAB_ID : null
       );
     });
   });
