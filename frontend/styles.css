@@ -5901,14 +5901,14 @@ body.ai-mode {
   grid-template-rows: minmax(0, 1fr);
   place-items: stretch;
   gap: 18px;
-  padding-bottom: 140px;
+  padding-bottom: 132px;
 }
 
 .ai-page.ai-conversation-mode .ai-composer-wrap {
   position: fixed;
   left: 50%;
   bottom: 24px;
-  width: min(640px, calc(100vw - 32px));
+  width: min(760px, calc(100vw - 48px));
   transform: translateX(-50%);
   justify-self: center;
   z-index: 90;
@@ -5917,20 +5917,24 @@ body.ai-mode {
 .ai-page.ai-conversation-mode .ai-chat-thread {
   display: grid;
   align-content: end;
-  justify-items: stretch;
+  justify-items: center;
   padding-top: 20px;
   padding-bottom: 16px;
   width: 100%;
 }
 
+.ai-page.ai-conversation-mode .ai-message-row {
+  width: min(760px, 100%);
+}
+
 .ai-page.ai-conversation-mode .ai-message-row-assistant {
   justify-content: flex-start;
-  padding-left: 4px;
+  padding-left: 0;
 }
 
 .ai-page.ai-conversation-mode .ai-message-row-user {
   justify-content: flex-end;
-  padding-right: 8px;
+  padding-right: 0;
 }
 
 .ai-page.ai-conversation-mode .ai-chat-card {
@@ -6153,12 +6157,14 @@ body.ai-mode {
     transform: none;
   }
 
-    .ai-page.ai-conversation-mode .ai-content {
+  .ai-page.ai-conversation-mode .ai-content {
     align-items: stretch;
     justify-content: flex-start;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
   }
 
   .ai-page.ai-conversation-mode .ai-shell {
+    width: 100%;
     min-height: calc(100dvh - 82px - env(safe-area-inset-top));
   }
 
@@ -6166,7 +6172,7 @@ body.ai-mode {
     min-height: calc(100dvh - 68px);
     display: grid;
     grid-template-rows: minmax(0, 1fr);
-    padding: 16px 12px calc(112px + env(safe-area-inset-bottom));
+    padding: 12px 0 calc(104px + env(safe-area-inset-bottom));
   }
 
   .ai-page.ai-conversation-mode .ai-composer-wrap {
@@ -6176,12 +6182,16 @@ body.ai-mode {
     bottom: calc(12px + env(safe-area-inset-bottom));
     width: auto;
     transform: none;
-    z-index: 90;
+    z-index: 900;
   }
 
   .ai-page.ai-conversation-mode .ai-chat-thread {
-    padding-top: 12px;
-    padding-bottom: 0;
+    justify-items: stretch;
+    padding: 12px 0 0;
+  }
+
+  .ai-page.ai-conversation-mode .ai-message-row {
+    width: 100%;
   }
 
   .ai-page.ai-conversation-mode .ai-question-input {
