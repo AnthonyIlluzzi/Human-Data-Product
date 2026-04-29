@@ -5421,6 +5421,19 @@ body.has-active-overlay .mobile-shell-header {
   border: 0;
 }
 
+html.hdp-ai-boot #catalog-page,
+html.hdp-ai-boot #product-page {
+  display: none !important;
+}
+
+html.hdp-ai-boot #ai-page.hidden {
+  display: block !important;
+}
+
+html.hdp-ai-boot #mobile-shell-header.hidden {
+  display: flex !important;
+}
+
 body.ai-mode {
   background: #ffffff;
 }
@@ -5934,13 +5947,10 @@ body.has-active-overlay .ai-composer-wrap {
 .ai-page.ai-conversation-mode .ai-chat-thread {
   display: grid;
   align-content: start;
-  justify-items: center;
-  gap: 16px;
+  justify-items: stretch;
+  padding-top: 20px;
+  padding-bottom: 16px;
   width: 100%;
-  min-height: 0;
-  overflow-y: auto;
-  padding: clamp(18px, 7vh, 72px) 0 28px;
-  scrollbar-gutter: stable;
 }
 
 .ai-page.ai-conversation-mode .ai-message-row {
@@ -6057,7 +6067,11 @@ body.has-active-overlay .ai-composer-wrap {
     overflow-x: hidden;
   }
 
-  #mobile-shell-header:not(.hidden) {
+  body.ai-mode:not(.ai-conversation-active) {
+    overflow: hidden;
+  }
+
+  body.ai-mode #mobile-shell-header {
     display: flex;
     position: fixed;
     top: 0;
@@ -6091,13 +6105,27 @@ body.has-active-overlay .ai-composer-wrap {
     width: min(100%, 420px);
   }
 
+  .ai-page:not(.ai-conversation-mode) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .ai-page:not(.ai-conversation-mode) .ai-content {
+    height: calc(100dvh - 58px - env(safe-area-inset-top));
+  }
+
   .ai-page:not(.ai-conversation-mode) .ai-shell {
-    transform: translateY(-4vh);
+    transform: none;
   }
 
   .ai-intro-screen {
     min-height: min(54dvh, 440px);
     padding: 24px 18px;
+    align-items: center;
+  }
+
+  .ai-intro-copy {
+    align-self: center;
   }
 
   .ai-intro-copy h1 {
@@ -6182,11 +6210,6 @@ body.has-active-overlay .ai-composer-wrap {
     font-size: 16px;
   }
 
-  .ai-composer-wrap {
-    scroll-margin-top: 84px;
-    scroll-margin-bottom: 120px;
-  }
-  
   .ai-submit-icon-btn {
     right: 8px;
   }
@@ -6200,48 +6223,17 @@ body.has-active-overlay .ai-composer-wrap {
   .ai-page.ai-conversation-mode .ai-content {
     align-items: stretch;
     justify-content: flex-start;
-    height: calc(100dvh - 58px - env(safe-area-inset-top));
-    min-height: calc(100dvh - 58px - env(safe-area-inset-top));
-    overflow: hidden;
-    padding: 76px 12px 0;
   }
 
   .ai-page.ai-conversation-mode .ai-shell {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    transform: none;
+    min-height: calc(100dvh - 82px - env(safe-area-inset-top));
   }
 
   .ai-page.ai-conversation-mode .ai-main-workspace {
-    height: 100%;
-    min-height: 0;
+    min-height: calc(100dvh - 68px);
     display: grid;
     grid-template-rows: minmax(0, 1fr);
-    overflow: hidden;
-    padding: 8px 0 calc(104px + env(safe-area-inset-bottom));
-  }
-
-  .ai-page.ai-conversation-mode .ai-chat-thread {
-    align-content: start;
-    justify-items: stretch;
-    gap: 12px;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 12px 0 18px;
-    scrollbar-gutter: stable;
-  }
-
-  .ai-page.ai-conversation-mode .ai-message-row {
-    width: 100%;
-  }
-
-  .ai-page.ai-conversation-mode .ai-message-bubble {
-    max-width: calc(100% - 36px);
-  }
-
-  .ai-page.ai-conversation-mode .ai-user-bubble {
-    max-width: calc(100% - 48px);
+    padding: 16px 12px calc(112px + env(safe-area-inset-bottom));
   }
 
   .ai-page.ai-conversation-mode .ai-composer-wrap {
@@ -6251,12 +6243,13 @@ body.has-active-overlay .ai-composer-wrap {
     bottom: calc(12px + env(safe-area-inset-bottom));
     width: auto;
     transform: none;
-    z-index: 1001;
+    z-index: 90;
   }
 
-  .ai-page.ai-conversation-mode .ai-chat-card {
-    background: #ffffff;
-    box-shadow: 0 12px 34px rgba(20, 38, 63, 0.16);
+  .ai-page.ai-conversation-mode .ai-chat-thread {
+    align-content: start;
+    padding-top: 12px;
+    padding-bottom: 0;
   }
 
   .ai-page.ai-conversation-mode .ai-question-input {
