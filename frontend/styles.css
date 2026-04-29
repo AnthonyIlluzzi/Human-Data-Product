@@ -6130,6 +6130,11 @@ body.ai-mode {
     font-size: 16px;
   }
 
+  .ai-composer-wrap {
+    scroll-margin-top: 84px;
+    scroll-margin-bottom: 28dvh;
+  }
+
   .ai-submit-icon-btn {
     right: 8px;
   }
