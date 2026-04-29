@@ -593,10 +593,10 @@ function bindAiInterface() {
     btn.addEventListener("click", async () => {
       const prompt = btn.dataset.aiPrompt || "";
       if (input) {
-        input.value = prompt;
-        syncAiInputState();
-        input.focus();
-      }
+	    input.value = prompt;
+	    syncAiInputState();
+	    input.focus();
+	  }
       await submitAiQuestion(prompt);
     });
   });
@@ -1027,49 +1027,50 @@ async function submitAiQuestion(rawQuestion) {
   const input = document.getElementById("ai-question-input");
   const submitButton = document.getElementById("ai-submit-btn");
 
-const question = String(rawQuestion || "").trim();
-if (!question) return;
+  const question = String(rawQuestion || "").trim();
+  if (!question) return;
 
-const setSubmittingState = (isSubmitting) => {
-  if (input) {
-    input.disabled = isSubmitting;
-  }
-
-  if (submitButton) {
-    if (isSubmitting) {
-      submitButton.classList.add("hidden");
-      submitButton.disabled = true;
-    } else {
-      syncAiInputState();
+  const setSubmittingState = (isSubmitting) => {
+    if (input) {
+      input.disabled = isSubmitting;
     }
+
+    if (submitButton) {
+      if (isSubmitting) {
+        submitButton.classList.add("hidden");
+        submitButton.disabled = true;
+      } else {
+        syncAiInputState({ forceBaseHeight: true });
+      }
+    }
+  };
+
+  if (input) {
+    input.value = "";
+    input.style.height = "";
+    input.style.overflowY = "hidden";
+    input.closest(".ai-input-shell")?.classList.remove("is-expanded");
+    syncAiInputState({ forceBaseHeight: true });
   }
-};
 
-if (input) {
-  input.value = "";
-  input.style.height = "auto";
-  input.style.overflowY = "hidden";
-  input.closest(".ai-input-shell")?.classList.remove("is-expanded");
-  syncAiInputState();
-}
+  incrementAiSessionPromptCount();
+  syncAiConversationMode();
 
-incrementAiSessionPromptCount();
-syncAiConversationMode();
-
-renderAiLoadingState(question);
-setSubmittingState(true);
+  renderAiLoadingState(question);
+  setSubmittingState(true);
+  syncAiInputState({ forceBaseHeight: true });
 
   try {
     const payload = await postJson("/ai/chat", { question });
 
     renderAiResponse(payload);
-
-    syncAiInputState();
+    syncAiInputState({ forceBaseHeight: true });
   } catch (error) {
     renderAiError(question, error.message || "Unable to generate a response right now.");
-    syncAiInputState();
+    syncAiInputState({ forceBaseHeight: true });
   } finally {
     setSubmittingState(false);
+    syncAiInputState({ forceBaseHeight: true });
     input?.focus();
   }
 }
