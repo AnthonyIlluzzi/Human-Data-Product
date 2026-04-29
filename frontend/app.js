@@ -1099,7 +1099,7 @@ function bindCatalogNavigation() {
   document.getElementById("ask-data-btn")?.addEventListener("click", () => {
     showAskTheDataPage({ resetSession: true, showIntro: false });
   });
-	
+
   document.getElementById("open-product-btn")?.addEventListener("click", () => {
     saveAppState({
       page: "product",
@@ -1108,33 +1108,6 @@ function bindCatalogNavigation() {
     });
 
     showProductPage("overview-panel", null);
-  });
-
-    catalogPage?.classList.add("hidden");
-    productPage?.classList.remove("hidden");
-    syncMobileDrawerForCurrentPage();
-	syncNavigationActiveState({
-	  page: "product",
-	  panelId: "overview-panel"
-	});
-
-    document.querySelectorAll(".workspace-panel").forEach(panel => {
-      panel.classList.remove("active");
-    });
-
-    overviewPanel?.classList.add("active");
-    trackViewOnce(GA_EVENT_NAMES.VIEW_OVERVIEW);
-    syncGlobalBodyLockState();
-
-    void productPage?.offsetHeight;
-    void overviewPanel?.offsetHeight;
-    void workspace?.offsetHeight;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollPanelToTop(overviewPanel, "auto");
-      });
-    });
   });
 
   document.getElementById("back-to-catalog-btn")?.addEventListener("click", () => {
@@ -1308,7 +1281,7 @@ function bindMobileShellNavigation() {
     syncGlobalBodyLockState();
   };
 
-  redirectToCatalog = () => {
+  const redirectToCatalog = () => {
     showCatalogPage();
   };
 
