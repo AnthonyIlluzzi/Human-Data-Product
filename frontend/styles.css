@@ -3922,13 +3922,18 @@ body.has-active-overlay .mobile-shell-header {
   }
 
   #catalog-page,
-  #product-page {
-    scroll-margin-top: 72px;
+  #product-page,
+  #ai-page {
+    scroll-margin-top: 84px;
   }
 
   #catalog-page .landing-content,
   #product-page .workspace {
-    padding-top: 16px;
+    padding-top: 76px;
+  }
+
+  #ai-page .ai-content {
+    padding-top: 76px;
   }
 
   .catalog-grid {
@@ -5590,6 +5595,11 @@ body.ai-mode {
   z-index: 30;
 }
 
+body.has-active-overlay .ai-composer-wrap {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .ai-chat-card {
   padding: 30px 34px;
   border-radius: 20px;
@@ -6187,13 +6197,13 @@ body.ai-mode {
     transform: none;
   }
 
-    .ai-page.ai-conversation-mode .ai-content {
+  .ai-page.ai-conversation-mode .ai-content {
     align-items: stretch;
     justify-content: flex-start;
     height: calc(100dvh - 58px - env(safe-area-inset-top));
     min-height: calc(100dvh - 58px - env(safe-area-inset-top));
     overflow: hidden;
-    padding: 0 12px;
+    padding: 76px 12px 0;
   }
 
   .ai-page.ai-conversation-mode .ai-shell {
