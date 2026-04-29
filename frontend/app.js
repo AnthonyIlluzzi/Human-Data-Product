@@ -489,7 +489,7 @@ async function initializeInternalAiMode() {
   document.getElementById("product-page")?.classList.add("hidden");
   document.getElementById("mobile-shell-header")?.classList.remove("hidden");
   document.getElementById("mobile-nav-drawer")?.classList.add("hidden");
-  document.getElementById("mobile-nav-backdrop")?.classList.add("hidden");
+  document.getElementById("mobile-nav-backdrop")?.classList.remove("hidden");
   document.getElementById("ai-page")?.classList.remove("hidden");
 
   bindMobileShellNavigation();
