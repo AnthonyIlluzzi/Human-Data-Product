@@ -595,8 +595,8 @@ function bindAiInterface() {
   document.getElementById("ai-catalog-nudge-btn")?.addEventListener("click", () => {
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.delete("internal");
-    window.location.href = nextUrl.toString();
+	nextUrl.searchParams.set("internal", "false");
+	window.location.href = nextUrl.toString();
   });
 
   requestAnimationFrame(() => {
@@ -1016,7 +1016,7 @@ function bindCatalogNavigation() {
   document.getElementById("ask-data-btn")?.addEventListener("click", () => {
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
-	nextUrl.searchParams.set("internal", "false");
+	nextUrl.searchParams.set("internal", "true");
 	window.location.href = nextUrl.toString();
   });
 	
