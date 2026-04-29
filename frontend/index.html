@@ -30,6 +30,18 @@
     }
   });
 </script>
+<script>
+  const hdpUrlParams = new URLSearchParams(window.location.search);
+  const hdpIsInternal =
+    hdpUrlParams.get("internal") === "true" ||
+    hdpUrlParams.get("is_internal") === "true";
+
+  if (typeof gtag === "function") {
+    gtag("set", "user_properties", {
+      is_internal: hdpIsInternal ? "true" : "false"
+    });
+  }
+</script>
 </head>
 <body>
 	<header id="mobile-shell-header" class="mobile-shell-header hidden" aria-label="Mobile navigation">
