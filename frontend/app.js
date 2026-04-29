@@ -4,7 +4,7 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://127.0.0.1:8000"
   : PROD_API_BASE;
 const URL_PARAMS = new URLSearchParams(window.location.search);
-const IS_INTERNAL_AI_MODE = URL_PARAMS.get("internal") === "true";
+const IS_AI_MODE = URL_PARAMS.get("ai") === "true";
 
 const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
 const AI_INTRO_DELAY_MS = 1600;
@@ -400,7 +400,7 @@ const DISTRIBUTION_DEFINITIONS = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-if (IS_INTERNAL_AI_MODE) {
+  if (IS_AI_MODE) {
     await initializeInternalAiMode();
     syncGlobalBodyLockState();
     return;
@@ -613,8 +613,7 @@ function bindAiInterface() {
 
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.delete("ai");
-      nextUrl.searchParams.set("internal", "false");
-      window.location.href = nextUrl.toString();
+	  window.location.href = nextUrl.toString();
     });
   });
 
@@ -657,8 +656,7 @@ function bindAiInterface() {
 
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.set("internal", "false");
-    window.location.href = nextUrl.toString();
+	window.location.href = nextUrl.toString();
   });
 
   requestAnimationFrame(() => {
@@ -1080,8 +1078,7 @@ function bindCatalogNavigation() {
     resetAiSessionState();
 
     const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.set("internal", "true");
+    nextUrl.searchParams.set("ai", "true");
     window.location.href = nextUrl.toString();
   });
 	
@@ -1318,27 +1315,25 @@ function bindMobileShellNavigation() {
     syncGlobalBodyLockState();
   };
 
-  const redirectToCatalog = () => {
-    saveAppState({
-      page: "catalog",
-      panel: "overview-panel",
-      insightsTab: DEFAULT_INSIGHTS_TAB_ID
-    });
+    const redirectToCatalog = () => {
+      saveAppState({
+        page: "catalog",
+        panel: "overview-panel",
+        insightsTab: DEFAULT_INSIGHTS_TAB_ID
+      });
 
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.set("internal", "false");
-    window.location.href = nextUrl.toString();
-  };
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.delete("ai");
+      window.location.href = nextUrl.toString();
+    };
 
-  const redirectToAi = () => {
-    resetAiSessionState();
+    const redirectToAi = () => {
+      resetAiSessionState();
 
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.set("internal", "true");
-    window.location.href = nextUrl.toString();
-  };
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set("ai", "true");
+      window.location.href = nextUrl.toString();
+    };
 
   openBtn.addEventListener("click", () => {
     syncMobileDrawerForCurrentPage();
