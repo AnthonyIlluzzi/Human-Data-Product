@@ -1013,18 +1013,18 @@ setSubmittingState(true);
 }
 
 function bindCatalogNavigation() {
-  document.getElementById("open-product-btn")?.addEventListener("click", () => {
+  document.getElementById("ask-data-btn")?.addEventListener("click", () => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("ai");
+	nextUrl.searchParams.set("internal", "false");
+	window.location.href = nextUrl.toString();
+  });
+	
+	document.getElementById("open-product-btn")?.addEventListener("click", () => {
     const catalogPage = document.getElementById("catalog-page");
     const productPage = document.getElementById("product-page");
     const overviewPanel = document.getElementById("overview-panel");
     const workspace = document.querySelector(".workspace");
-
-  document.getElementById("ask-data-btn")?.addEventListener("click", () => {
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.delete("ai");
-    nextUrl.searchParams.set("internal", "true");
-    window.location.href = nextUrl.toString();
-  });
 
     saveAppState({
       page: "product",
@@ -1081,12 +1081,7 @@ function bindCatalogNavigation() {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-        catalogPage?.scrollIntoView({
-          block: "start",
-          inline: "nearest",
-          behavior: "auto"
-        });
+        scrollElementToTopBelowHeader(catalogPage, "auto");
       });
     });
   });
@@ -1316,6 +1311,10 @@ function bindMobileShellNavigation() {
       aiPage?.classList.remove("hidden");
 
       document.body.classList.add("ai-mode");
+	  const nextUrl = new URL(window.location.href);
+	  nextUrl.searchParams.delete("ai");
+	  nextUrl.searchParams.set("internal", "true");
+	  window.history.replaceState({}, "", nextUrl.toString());
 
       revealAiMainWorkspace();
       syncAiConversationMode();
