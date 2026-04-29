@@ -292,24 +292,19 @@ function scrollElementToTopBelowHeader(element, behavior = "auto") {
 function scrollAiComposerIntoMobileView() {
   if (!isMobileLayout()) return;
 
+  const aiPage = document.getElementById("ai-page");
+  if (!aiPage?.classList.contains("ai-conversation-mode")) return;
+
   const composer = document.querySelector(".ai-composer-wrap");
   if (!composer) return;
 
   window.setTimeout(() => {
     composer.scrollIntoView({
       behavior: "smooth",
-      block: "center",
+      block: "nearest",
       inline: "nearest"
     });
   }, 90);
-
-  window.setTimeout(() => {
-    composer.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "nearest"
-    });
-  }, 320);
 }
 
 function resetModalScrollPosition(modal) {
@@ -711,17 +706,27 @@ function syncAiConversationMode() {
   const aiPage = document.getElementById("ai-page");
   if (!aiPage) return;
 
-  aiPage.classList.toggle("ai-conversation-mode", getAiSessionPromptCount() > 0);
+  const isConversationMode = getAiSessionPromptCount() > 0;
+
+  aiPage.classList.toggle("ai-conversation-mode", isConversationMode);
+  document.body.classList.toggle("ai-conversation-active", isConversationMode);
 }
 
 function scrollAiConversationToUserQuestion() {
-  const userQuestion = document.querySelector(".ai-message-row-user .ai-user-bubble");
-  if (!userQuestion) return;
+  const thread = document.querySelector(".ai-chat-thread");
+  if (!thread) return;
 
   requestAnimationFrame(() => {
-    userQuestion.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+    requestAnimationFrame(() => {
+      const top =
+        window.scrollY +
+        thread.getBoundingClientRect().top -
+        getStickyPageOffset();
+
+      window.scrollTo({
+        top: Math.max(top, 0),
+        behavior: "smooth"
+      });
     });
   });
 }
@@ -2278,7 +2283,26 @@ function getInsightsTooltipBounds(element) {
     element.closest(".card") ||
     element.closest(".tab-panel");
 
-  return boundedSurface?.getBoundingClientRect() || null;
+  const bounds = boundedSurface?.getBoundingClientRect() || null;
+
+  if (
+    isMobileLayout() &&
+    element.closest(".ai-response-card")
+  ) {
+    const composer = document.querySelector(".ai-composer-wrap");
+    const composerRect = composer?.getBoundingClientRect();
+
+    if (bounds && composerRect) {
+      return {
+        left: bounds.left,
+        top: bounds.top,
+        right: bounds.right,
+        bottom: Math.min(bounds.bottom, composerRect.top - 12)
+      };
+    }
+  }
+
+  return bounds;
 }
 
 function attachFloatingTooltip(element, html) {
