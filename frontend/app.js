@@ -1269,9 +1269,10 @@ function bindMobileShellNavigation() {
   mobileHomeBtn?.addEventListener("click", () => {
     setDrawerOpen(false);
 
-    const productPage = document.getElementById("product-page");
-	const catalogPage = document.getElementById("catalog-page");
-	const aiPage = document.getElementById("ai-page");
+    const nextUrl = new URL(window.location.href);
+	nextUrl.searchParams.delete("ai");
+	nextUrl.searchParams.set("internal", "false");
+	window.location.href = nextUrl.toString();
 	
 	productPage?.classList.add("hidden");
 	aiPage?.classList.add("hidden");
@@ -1333,8 +1334,10 @@ function bindMobileShellNavigation() {
     btn.addEventListener("click", () => {
       setDrawerOpen(false);
 
-      const productPage = document.getElementById("product-page");
-      const catalogPage = document.getElementById("catalog-page");
+      const nextUrl = new URL(window.location.href);
+	  nextUrl.searchParams.delete("ai");
+	  nextUrl.searchParams.set("internal", "false");
+	  window.location.href = nextUrl.toString();
 
       productPage?.classList.add("hidden");
 	  document.getElementById("ai-page")?.classList.add("hidden");
@@ -1404,9 +1407,10 @@ function bindMobileShellNavigation() {
   mobileBackToCatalogBtn?.addEventListener("click", () => {
     setDrawerOpen(false);
 
-    const productPage = document.getElementById("product-page");
-	const catalogPage = document.getElementById("catalog-page");
-	const aiPage = document.getElementById("ai-page");
+    const nextUrl = new URL(window.location.href);
+	nextUrl.searchParams.delete("ai");
+	nextUrl.searchParams.set("internal", "false");
+	window.location.href = nextUrl.toString();
 	
 	productPage?.classList.add("hidden");
 	aiPage?.classList.add("hidden");
