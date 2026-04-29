@@ -68,6 +68,41 @@ function loadAppState() {
   }
 }
 
+function resetAiSessionState() {
+  sessionStorage.removeItem(AI_SESSION_PROMPT_COUNT_KEY);
+  sessionStorage.removeItem(AI_CATALOG_NUDGE_SEEN_KEY);
+}
+
+function resetAiInterfaceState() {
+  resetAiSessionState();
+
+  document.getElementById("ai-intro-screen")?.classList.add("hidden");
+  document.getElementById("ai-main-workspace")?.classList.remove("hidden");
+  document.getElementById("ai-response-card-wrap")?.classList.add("hidden");
+  document.getElementById("ai-response-card")?.classList.add("hidden");
+  document.getElementById("ai-default-prompts")?.classList.remove("hidden");
+  document.getElementById("ai-catalog-nudge")?.classList.add("hidden");
+
+  const thread = document.querySelector(".ai-chat-thread");
+  thread?.querySelector(".ai-message-row-user")?.remove();
+
+  const input = document.getElementById("ai-question-input");
+  if (input) {
+    input.value = "";
+    input.disabled = false;
+    input.style.height = "";
+    input.style.overflowY = "hidden";
+    input.closest(".ai-input-shell")?.classList.remove("is-expanded");
+  }
+
+  syncAiConversationMode();
+  syncAiInputState({ forceBaseHeight: true });
+}
+
+function showMobileShellHeader() {
+  document.getElementById("mobile-shell-header")?.classList.remove("hidden");
+}
+
 function syncGlobalBodyLockState() {
   const hasVisibleModalOverlay = Array.from(document.querySelectorAll(".modal-overlay"))
     .some(overlay => !overlay.classList.contains("hidden"));
@@ -448,6 +483,7 @@ const loaders = [
 
 async function initializeInternalAiMode() {
   document.body.classList.add("ai-mode");
+  showMobileShellHeader();
 
   document.getElementById("catalog-page")?.classList.add("hidden");
   document.getElementById("product-page")?.classList.add("hidden");
@@ -474,6 +510,7 @@ async function initializeInternalAiMode() {
     if (getAiSessionPromptCount() > 0) {
     revealAiMainWorkspace();
     maybeShowAiCatalogNudge();
+    syncAiInputState({ forceBaseHeight: true });
     return;
   }
 
@@ -496,13 +533,13 @@ async function initializeInternalAiMode() {
   }, AI_INTRO_DELAY_MS);
 }
 
-function syncAiInputState() {
+function syncAiInputState(options = {}) {
+  const { forceBaseHeight = false } = options;
+
   const input = document.getElementById("ai-question-input");
   const submitButton = document.getElementById("ai-submit-btn");
 
   if (!input || !submitButton) return;
-
-  input.style.height = "auto";
 
   const shell = input.closest(".ai-input-shell");
   const computed = window.getComputedStyle(input);
@@ -520,21 +557,30 @@ function syncAiInputState() {
     borderTop +
     borderBottom;
 
-  const maxHeight =
-    (lineHeight * maxRows) +
-    paddingTop +
-    paddingBottom +
-    borderTop +
-    borderBottom;
-
-  const nextHeight = Math.min(input.scrollHeight, maxHeight);
-  input.style.height = `${nextHeight}px`;
-  input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
-
-  const isExpanded = nextHeight > singleRowHeight + 2;
-  shell?.classList.toggle("is-expanded", isExpanded);
-
   const hasValue = input.value.trim().length > 0;
+
+  if (forceBaseHeight || !hasValue) {
+    input.style.height = `${singleRowHeight}px`;
+    input.style.overflowY = "hidden";
+    shell?.classList.remove("is-expanded");
+  } else {
+    input.style.height = "auto";
+
+    const maxHeight =
+      (lineHeight * maxRows) +
+      paddingTop +
+      paddingBottom +
+      borderTop +
+      borderBottom;
+
+    const nextHeight = Math.min(input.scrollHeight, maxHeight);
+    input.style.height = `${nextHeight}px`;
+    input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
+
+    const isExpanded = nextHeight > singleRowHeight + 2;
+    shell?.classList.toggle("is-expanded", isExpanded);
+  }
+
   submitButton.classList.toggle("hidden", !hasValue);
   submitButton.disabled = !hasValue || input.disabled;
 }
@@ -562,6 +608,8 @@ function bindAiInterface() {
         panel: "overview-panel",
         insightsTab: DEFAULT_INSIGHTS_TAB_ID
       });
+
+	  resetAiSessionState();
 
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.delete("ai");
@@ -604,6 +652,8 @@ function bindAiInterface() {
       panel: "overview-panel",
       insightsTab: DEFAULT_INSIGHTS_TAB_ID
     });
+
+	resetAiSessionState();
 
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
@@ -1026,10 +1076,12 @@ setSubmittingState(true);
 
 function bindCatalogNavigation() {
   document.getElementById("ask-data-btn")?.addEventListener("click", () => {
+    resetAiSessionState();
+
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
-	nextUrl.searchParams.set("internal", "true");
-	window.location.href = nextUrl.toString();
+    nextUrl.searchParams.set("internal", "true");
+    window.location.href = nextUrl.toString();
   });
 	
 	document.getElementById("open-product-btn")?.addEventListener("click", () => {
@@ -1279,6 +1331,8 @@ function bindMobileShellNavigation() {
   };
 
   const redirectToAi = () => {
+    resetAiSessionState();
+
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.delete("ai");
     nextUrl.searchParams.set("internal", "true");
@@ -1332,6 +1386,7 @@ function bindMobileShellNavigation() {
       aiPage?.classList.add("hidden");
       productPage?.classList.remove("hidden");
       document.body.classList.remove("ai-mode");
+	  showMobileShellHeader();
 
       syncMobileDrawerForCurrentPage();
 
