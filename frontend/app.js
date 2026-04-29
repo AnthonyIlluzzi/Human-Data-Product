@@ -262,10 +262,10 @@ function getStickyPageOffset() {
   if (window.innerWidth > MOBILE_LAYOUT_BREAKPOINT) return 12;
 
   const mobileHeader = document.getElementById("mobile-shell-header");
-  if (!mobileHeader) return 12;
+  if (!mobileHeader || mobileHeader.classList.contains("hidden")) return 12;
 
   const headerHeight = mobileHeader.getBoundingClientRect().height || 0;
-  return Math.max(headerHeight + 12, 68);
+  return Math.max(headerHeight + 18, 78);
 }
 
 function isMobileLayout() {
@@ -275,10 +275,13 @@ function isMobileLayout() {
 function scrollElementToTopBelowHeader(element, behavior = "auto") {
   if (!element) return;
 
+  const offset = getStickyPageOffset();
+  const rect = element.getBoundingClientRect();
+
   const top =
     window.scrollY +
-    element.getBoundingClientRect().top -
-    getStickyPageOffset();
+    rect.top -
+    offset;
 
   window.scrollTo({
     top: Math.max(top, 0),
