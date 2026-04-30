@@ -9,6 +9,7 @@ const AI_SESSION_PROMPT_COUNT_KEY = "hdp_ai_session_prompt_count";
 const AI_INTRO_DELAY_MS = 1600;
 const AI_CATALOG_NUDGE_THRESHOLD = 3;
 const AI_CATALOG_NUDGE_SEEN_KEY = "hdp_ai_catalog_nudge_seen";
+const AI_INTRO_SHOWN_SESSION_KEY = "hdp_ai_intro_shown_session";
 let capabilityInsightsInitPromise = null;
 let capabilityInsightsInitialized = false;
 const DEFAULT_SQL_QUERY = `SELECT experience_id, company, role, start_date, end_date, domain
@@ -549,9 +550,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else if (savedState.page === "catalog") {
     showCatalogPage();
   } else {
+    const shouldShowAiIntro = sessionStorage.getItem(AI_INTRO_SHOWN_SESSION_KEY) !== "true";
+
+    if (shouldShowAiIntro) {
+      sessionStorage.setItem(AI_INTRO_SHOWN_SESSION_KEY, "true");
+    }
+
     showAskTheDataPage({
-      resetSession: true,
-      showIntro: true
+      resetSession: shouldShowAiIntro,
+      showIntro: shouldShowAiIntro
     });
   }
 
