@@ -5679,7 +5679,11 @@ body.has-active-overlay .ai-composer-wrap {
   border-radius: 999px;
   background: #f8fafc;
   padding: 10px 52px 10px 16px;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, border-radius 0.18s ease;
+}
+
+.ai-input-shell.is-expanded {
+  border-radius: 22px;
 }
 
 .ai-input-shell:focus-within {
@@ -6283,14 +6287,14 @@ body.has-active-overlay .ai-composer-wrap {
     z-index: 900;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-question-input {
+  .ai-page.ai-conversation-mode .ai-question-input {
     min-height: 24px;
-    max-height: 24px;
+    max-height: 144px;
     overflow-y: hidden;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-input-shell.is-expanded .ai-question-input {
-    max-height: 24px;
+  .ai-page.ai-conversation-mode .ai-input-shell.is-expanded .ai-question-input {
+    max-height: 144px;
   }
 
   body.ai-mode .insights-hover-tooltip {
