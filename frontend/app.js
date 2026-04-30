@@ -542,21 +542,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  showAskTheDataPage({
-    resetSession: true,
-    showIntro: true
-  });
-
-  syncGlobalBodyLockState();
-});
-} else {
   const savedState = loadAppState();
+
   if (savedState.page === "product") {
     await showProductPage(savedState.panel || "overview-panel", savedState.insightsTab || null);
-  } else {
+  } else if (savedState.page === "catalog") {
     showCatalogPage();
+  } else {
+    showAskTheDataPage({
+      resetSession: true,
+      showIntro: true
+    });
   }
-}
 
   syncGlobalBodyLockState();
 });
