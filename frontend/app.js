@@ -289,16 +289,6 @@ function scrollElementToTopBelowHeader(element, behavior = "auto") {
   });
 }
 
-function syncAiConversationMode() {
-  const aiPage = document.getElementById("ai-page");
-  if (!aiPage) return;
-
-  const isConversationMode = getAiSessionPromptCount() > 0;
-
-  aiPage.classList.toggle("ai-conversation-mode", isConversationMode);
-  document.body.classList.toggle("ai-conversation-active", isConversationMode);
-}
-
 function resetModalScrollPosition(modal) {
   if (!modal) return;
 
@@ -552,10 +542,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  const shouldOpenAi =
+  URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
+
+if (shouldOpenAi) {
   showAskTheDataPage({
     resetSession: getAiSessionPromptCount() === 0,
     showIntro: getAiSessionPromptCount() === 0
   });
+} else {
+  const savedState = loadAppState();
+  if (savedState.page === "product") {
+    await showProductPage(savedState.panel || "overview-panel", savedState.insightsTab || null);
+  } else {
+    showCatalogPage();
+  }
+}
 
   syncGlobalBodyLockState();
 });
@@ -2283,9 +2285,6 @@ function getInsightsTooltipBounds(element) {
     element.closest(".tab-panel");
 
   return boundedSurface?.getBoundingClientRect() || null;
-}
-
-  return bounds;
 }
 
 function attachFloatingTooltip(element, html) {
