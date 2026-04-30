@@ -542,14 +542,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  const shouldOpenAi =
-  URL_PARAMS.get("ai") === "true" && URL_PARAMS.get("internal") === "true";
-
-if (shouldOpenAi) {
   showAskTheDataPage({
-    resetSession: getAiSessionPromptCount() === 0,
-    showIntro: getAiSessionPromptCount() === 0
+    resetSession: true,
+    showIntro: true
   });
+
+  syncGlobalBodyLockState();
+});
 } else {
   const savedState = loadAppState();
   if (savedState.page === "product") {
@@ -573,41 +572,23 @@ function syncAiInputState(options = {}) {
   const shell = input.closest(".ai-input-shell");
   const computed = window.getComputedStyle(input);
   const lineHeight = parseFloat(computed.lineHeight) || 24;
-  const paddingTop = parseFloat(computed.paddingTop) || 0;
-  const paddingBottom = parseFloat(computed.paddingBottom) || 0;
-  const borderTop = parseFloat(computed.borderTopWidth) || 0;
-  const borderBottom = parseFloat(computed.borderBottomWidth) || 0;
   const maxRows = 6;
-
-  const singleRowHeight =
-    lineHeight +
-    paddingTop +
-    paddingBottom +
-    borderTop +
-    borderBottom;
-
+  const singleRowHeight = lineHeight;
+  const maxHeight = lineHeight * maxRows;
   const hasValue = input.value.trim().length > 0;
+
+  input.style.height = "auto";
 
   if (forceBaseHeight || !hasValue) {
     input.style.height = `${singleRowHeight}px`;
     input.style.overflowY = "hidden";
     shell?.classList.remove("is-expanded");
   } else {
-    input.style.height = "auto";
-
-    const maxHeight =
-      (lineHeight * maxRows) +
-      paddingTop +
-      paddingBottom +
-      borderTop +
-      borderBottom;
-
     const nextHeight = Math.min(input.scrollHeight, maxHeight);
     input.style.height = `${nextHeight}px`;
     input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
 
-    const isExpanded = nextHeight > singleRowHeight + 2;
-    shell?.classList.toggle("is-expanded", isExpanded);
+    shell?.classList.toggle("is-expanded", nextHeight > singleRowHeight + 2);
   }
 
   submitButton.classList.toggle("hidden", !hasValue);
