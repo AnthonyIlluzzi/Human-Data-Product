@@ -289,22 +289,14 @@ function scrollElementToTopBelowHeader(element, behavior = "auto") {
   });
 }
 
-function scrollAiComposerIntoMobileView() {
-  if (!isMobileLayout()) return;
-
+function syncAiConversationMode() {
   const aiPage = document.getElementById("ai-page");
-  if (!aiPage?.classList.contains("ai-conversation-mode")) return;
+  if (!aiPage) return;
 
-  const composer = document.querySelector(".ai-composer-wrap");
-  if (!composer) return;
+  const isConversationMode = getAiSessionPromptCount() > 0;
 
-  window.setTimeout(() => {
-    composer.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "nearest"
-    });
-  }, 90);
+  aiPage.classList.toggle("ai-conversation-mode", isConversationMode);
+  document.body.classList.toggle("ai-conversation-active", isConversationMode);
 }
 
 function resetModalScrollPosition(modal) {
@@ -718,15 +710,7 @@ function scrollAiConversationToUserQuestion() {
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      const top =
-        window.scrollY +
-        thread.getBoundingClientRect().top -
-        getStickyPageOffset();
-
-      window.scrollTo({
-        top: Math.max(top, 0),
-        behavior: "smooth"
-      });
+      scrollElementToTopBelowHeader(thread, "smooth");
     });
   });
 }
@@ -2277,30 +2261,29 @@ function bindGlobalInsightsTooltipDismiss() {
 }
 
 function getInsightsTooltipBounds(element) {
+  if (isMobileLayout() && element.closest(".ai-response-card")) {
+    const composer = document.querySelector(".ai-page.ai-conversation-mode .ai-composer-wrap");
+    const composerRect = composer?.getBoundingClientRect();
+    const topOffset = getStickyPageOffset();
+
+    if (composerRect) {
+      return {
+        left: 8,
+        top: topOffset,
+        right: window.innerWidth - 8,
+        bottom: Math.max(topOffset + 120, composerRect.top - 14)
+      };
+    }
+  }
+
   const boundedSurface =
     element.closest(".insight-surface-card") ||
     element.closest(".insight-observed-card") ||
     element.closest(".card") ||
     element.closest(".tab-panel");
 
-  const bounds = boundedSurface?.getBoundingClientRect() || null;
-
-  if (
-    isMobileLayout() &&
-    element.closest(".ai-response-card")
-  ) {
-    const composer = document.querySelector(".ai-composer-wrap");
-    const composerRect = composer?.getBoundingClientRect();
-
-    if (bounds && composerRect) {
-      return {
-        left: bounds.left,
-        top: bounds.top,
-        right: bounds.right,
-        bottom: Math.min(bounds.bottom, composerRect.top - 12)
-      };
-    }
-  }
+  return boundedSurface?.getBoundingClientRect() || null;
+}
 
   return bounds;
 }
