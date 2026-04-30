@@ -3927,9 +3927,12 @@ body.has-active-overlay .mobile-shell-header {
     scroll-margin-top: 84px;
   }
 
-  #catalog-page .landing-content,
+  #catalog-page .landing-content {
+    padding-top: 6px;
+  }
+
   #product-page .workspace {
-    padding-top: 76px;
+    padding-top: 16px;
   }
 
   body:not(.ai-mode) #ai-page .ai-content {
