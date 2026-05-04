@@ -6303,9 +6303,14 @@ body.has-active-overlay .ai-composer-wrap {
     padding: 10px;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-form,
+  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-form {
+    width: 100%;
+  }
+
   body.ai-mode .ai-page.ai-conversation-mode .ai-input-shell {
     width: 100%;
+    padding: 10px 48px 10px 12px; /* reduce left/right padding */
+    border-radius: 14px; /* remove pill constraint */
   }
 
   .ai-page.ai-conversation-mode .ai-question-input {
