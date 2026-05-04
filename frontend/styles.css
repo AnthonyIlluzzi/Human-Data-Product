@@ -1462,6 +1462,7 @@ body.modal-open {
 }
 
 .mobile-shell-header {
+  display: none;
   position: sticky;
   top: 0;
   z-index: 70;
@@ -5439,9 +5440,11 @@ html.hdp-ai-boot #ai-page.hidden {
   display: block !important;
 }
 
-html.hdp-ai-boot #mobile-shell-header,
-html.hdp-ai-boot #mobile-shell-header.hidden {
-  display: flex !important;
+@media (max-width: 960px) {
+  html.hdp-ai-boot #mobile-shell-header,
+  html.hdp-ai-boot #mobile-shell-header.hidden {
+    display: flex !important;
+  }
 }
 
 body.ai-mode {
@@ -5962,6 +5965,8 @@ body.has-active-overlay .ai-composer-wrap {
   display: grid;
   align-content: start;
   justify-items: stretch;
+  gap: 28px;
+  row-gap: 28px;
   padding-top: 20px;
   padding-bottom: 16px;
   width: 100%;
@@ -6282,8 +6287,8 @@ body.has-active-overlay .ai-composer-wrap {
 
   body.ai-mode .ai-page.ai-conversation-mode .ai-composer-wrap {
     position: fixed;
-    left: 12px;
-    right: 12px;
+    left: 8px;
+    right: 8px;
     bottom: calc(12px + env(safe-area-inset-bottom));
     width: auto;
     transform: none;
