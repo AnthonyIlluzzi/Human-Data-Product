@@ -6255,7 +6255,8 @@ body.has-active-overlay .ai-composer-wrap {
 
   body.ai-mode .ai-page.ai-conversation-mode .ai-shell {
     display: grid;
-    width: min(100%, 420px);
+    width: 100%;
+    max-width: none;
     height: 100%;
     min-height: 0;
   }
@@ -6288,10 +6289,11 @@ body.has-active-overlay .ai-composer-wrap {
 
   body.ai-mode .ai-page.ai-conversation-mode .ai-composer-wrap {
     position: fixed;
-    left: 8px;
-    right: 8px;
+    left: 6px;
+    right: 6px;
     bottom: calc(12px + env(safe-area-inset-bottom));
     width: auto;
+    max-width: none;
     transform: none;
     z-index: 900;
   }
