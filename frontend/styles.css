@@ -6323,9 +6323,14 @@ body.has-active-overlay .ai-composer-wrap {
     max-width: max-content;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-response-card {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-response-card:has(.ai-answer-body:not(.is-loading)) {
     width: calc(100vw - 60px);
     max-width: calc(100vw - 60px);
+  }
+
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-response-card:has(.ai-answer-body.is-loading) {
+    width: fit-content;
+    max-width: max-content;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-answer-body.is-loading {
