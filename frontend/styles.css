@@ -6287,30 +6287,34 @@ body.has-active-overlay .ai-composer-wrap {
     -webkit-overflow-scrolling: touch;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-composer-wrap {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-composer-wrap {
     position: fixed;
-    left: 10px;
-    right: 10px;
+    left: 12px;
+    right: auto;
     bottom: calc(12px + env(safe-area-inset-bottom));
-    width: auto;
+    width: calc(100vw - 24px);
     max-width: none;
     transform: none;
     z-index: 900;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-card {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-card {
     width: 100%;
-    padding: 10px;
+    max-width: none;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-form {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-form,
+  body.ai-mode #ai-page.ai-conversation-mode .ai-input-shell {
     width: 100%;
+    max-width: none;
   }
 
-  body.ai-mode .ai-page.ai-conversation-mode .ai-input-shell {
-    width: 100%;
-    padding: 10px 48px 10px 12px; /* reduce left/right padding */
-    border-radius: 14px; /* remove pill constraint */
+  body.ai-mode #ai-page.ai-conversation-mode .ai-input-shell {
+    padding: 10px 48px 10px 16px;
+    border-radius: 999px;
   }
 
   .ai-page.ai-conversation-mode .ai-question-input {
