@@ -5615,6 +5615,11 @@ body.ai-mode {
   align-content: start;
 }
 
+/* Reduce padding specifically for typing/loading bubble */
+.ai-response-card:has(.ai-answer-body.is-loading) .ai-response-window {
+  padding: 12px 16px;
+}
+
 .ai-composer-wrap {
   width: min(100%, 900px);
   position: static;
