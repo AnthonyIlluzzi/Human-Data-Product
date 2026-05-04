@@ -6296,6 +6296,8 @@ body.has-active-overlay .ai-composer-wrap {
     max-width: none;
     min-width: 0;
     flex: 0 0 auto;
+    align-self: stretch;
+    box-sizing: border-box;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant {
@@ -6313,6 +6315,12 @@ body.has-active-overlay .ai-composer-wrap {
     margin-left: 0;
     margin-right: auto;
     max-width: calc(100% - 36px);
+  }
+
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-message-bubble.ai-typing-bubble {
+    width: fit-content;
+    min-width: 0;
+    max-width: max-content;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-response-card {
