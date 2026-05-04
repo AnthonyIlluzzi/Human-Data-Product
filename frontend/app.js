@@ -543,25 +543,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  const savedState = loadAppState();
+  sessionStorage.setItem(AI_INTRO_SHOWN_SESSION_KEY, "true");
 
-  if (savedState.page === "product") {
-    await showProductPage(savedState.panel || "overview-panel", savedState.insightsTab || null);
-  } else if (savedState.page === "catalog") {
-    showCatalogPage();
-  } else {
-    const shouldShowAiIntro = sessionStorage.getItem(AI_INTRO_SHOWN_SESSION_KEY) !== "true";
-
-    if (shouldShowAiIntro) {
-      sessionStorage.setItem(AI_INTRO_SHOWN_SESSION_KEY, "true");
-    }
-
-    showAskTheDataPage({
-      resetSession: shouldShowAiIntro,
-      showIntro: shouldShowAiIntro
-    });
-  }
-
+  showAskTheDataPage({
+    resetSession: true,
+    showIntro: true
+  });
   syncGlobalBodyLockState();
 });
 
