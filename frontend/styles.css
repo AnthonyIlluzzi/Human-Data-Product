@@ -6379,14 +6379,20 @@ body.has-active-overlay .ai-composer-wrap {
     border-radius: 999px;
   }
 
+  body.ai-mode #ai-page.ai-conversation-mode .ai-input-shell.is-expanded {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+  }
+
   .ai-page.ai-conversation-mode .ai-question-input {
     min-height: 24px;
-    max-height: 144px;
+    max-height: 96px;
     overflow-y: hidden;
   }
 
   .ai-page.ai-conversation-mode .ai-input-shell.is-expanded .ai-question-input {
-    max-height: 144px;
+    max-height: 96px;
   }
 
   body.ai-mode .insights-hover-tooltip {
