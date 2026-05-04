@@ -6247,7 +6247,7 @@ body.has-active-overlay .ai-composer-wrap {
   body.ai-mode #ai-page.ai-conversation-mode .ai-content {
     height: calc(100dvh - 56px - env(safe-area-inset-top));
     min-height: calc(100dvh - 56px - env(safe-area-inset-top));
-    padding: 0 12px calc(84px + env(safe-area-inset-bottom));
+    padding: 0 12px calc(65px + env(safe-area-inset-bottom));
     align-items: stretch;
     justify-content: flex-start;
     overflow: hidden;
