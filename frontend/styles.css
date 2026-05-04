@@ -6278,11 +6278,11 @@ body.has-active-overlay .ai-composer-wrap {
     justify-items: stretch;
     gap: 12px;
     row-gap: 14px;
-    width: 100% !important;
-    max-width: none !important;
+    width: 100%;
+    max-width: none;
     height: 100%;
     min-height: 0;
-    margin: 0 !important;
+    margin: 0;
     padding: 14px 0 12px;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -6290,34 +6290,34 @@ body.has-active-overlay .ai-composer-wrap {
   }
 
   body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row {
-    display: flex !important;
-    width: 100% !important;
-    max-width: none !important;
+    display: flex;
+    width: 100%;
+    max-width: none;
     min-width: 0;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant {
-    justify-content: flex-start !important;
-    padding-left: 0;
-    padding-right: 0;
+    justify-content: flex-start;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user {
-    justify-content: flex-end !important;
-    padding-left: 44px;
-    padding-right: 0;
+    justify-content: flex-end;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant .ai-message-bubble {
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0;
+    margin-right: auto;
     max-width: calc(100% - 36px);
   }
 
   body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user .ai-user-bubble {
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    max-width: 100%;
+    width: max-content;
+    max-width: min(78%, calc(100vw - 96px));
+    margin-left: auto;
+    margin-right: 0;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-composer-wrap {
