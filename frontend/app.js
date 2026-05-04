@@ -549,6 +549,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     resetSession: true,
     showIntro: true
   });
+
+  document.documentElement.classList.remove("hdp-ai-boot");
+
   syncGlobalBodyLockState();
 });
 
