@@ -6307,6 +6307,7 @@ body.has-active-overlay .ai-composer-wrap {
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-message-bubble {
+    width: calc(100% - 36px);
     margin-left: 0;
     margin-right: auto;
     max-width: calc(100% - 36px);
