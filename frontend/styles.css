@@ -6289,13 +6289,23 @@ body.has-active-overlay .ai-composer-wrap {
 
   body.ai-mode .ai-page.ai-conversation-mode .ai-composer-wrap {
     position: fixed;
-    left: 6px;
-    right: 6px;
+    left: 10px;
+    right: 10px;
     bottom: calc(12px + env(safe-area-inset-bottom));
     width: auto;
     max-width: none;
     transform: none;
     z-index: 900;
+  }
+
+  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-card {
+    width: 100%;
+    padding: 10px;
+  }
+
+  body.ai-mode .ai-page.ai-conversation-mode .ai-chat-form,
+  body.ai-mode .ai-page.ai-conversation-mode .ai-input-shell {
+    width: 100%;
   }
 
   .ai-page.ai-conversation-mode .ai-question-input {
