@@ -257,7 +257,7 @@ function syncGlobalBodyLockState() {
   document.body.classList.toggle("modal-open", shouldLockBody);
   document.body.classList.toggle("has-active-overlay", hasActiveOverlay);
 }
-window.syncGlobalBodyLockState = syncGlobalBodyLockState
+window.syncGlobalBodyLockState = syncGlobalBodyLockState;
 
 function getStickyPageOffset() {
   if (window.innerWidth > MOBILE_LAYOUT_BREAKPOINT) return 12;
@@ -566,7 +566,8 @@ function syncAiInputState(options = {}) {
   const shell = input.closest(".ai-input-shell");
   const computed = window.getComputedStyle(input);
   const lineHeight = parseFloat(computed.lineHeight) || 24;
-  const maxRows = 6;
+  const isMobile = window.matchMedia("(max-width: 960px)").matches;
+  const maxRows = isMobile ? 4 : 6;
   const singleRowHeight = lineHeight;
   const maxHeight = lineHeight * maxRows;
   const hasValue = input.value.trim().length > 0;
