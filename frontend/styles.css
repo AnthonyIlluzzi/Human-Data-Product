@@ -6272,53 +6272,52 @@ body.has-active-overlay .ai-composer-wrap {
     padding: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread {
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread {
     display: grid;
     align-content: start;
     justify-items: stretch;
     gap: 12px;
     row-gap: 14px;
-    width: 100%;
-    max-width: none;
+    width: 100% !important;
+    max-width: none !important;
     height: 100%;
     min-height: 0;
-    margin: 0;
+    margin: 0 !important;
     padding: 14px 0 12px;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row {
-    display: flex;
-    width: 100%;
-    max-width: none;
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row {
+    display: flex !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-assistant {
-    justify-content: flex-start;
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant {
+    justify-content: flex-start !important;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-user {
-    justify-content: flex-end;
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user {
+    justify-content: flex-end !important;
+    padding-left: 44px;
+    padding-right: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-user .ai-user-bubble {
-    margin-left: auto;
-    margin-right: 0;
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant .ai-message-bubble {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    max-width: calc(100% - 36px);
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-assistant .ai-message-bubble {
-    margin-left: 0;
-    margin-right: auto;
-  }
-
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-assistant .ai-message-bubble {
-    max-width: min(860px, calc(100% - 36px));
-  }
-
-  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-user .ai-user-bubble {
-    max-width: 78%;
+  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user .ai-user-bubble {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    max-width: 100%;
   }
 
   body.ai-mode #ai-page.ai-conversation-mode .ai-composer-wrap {
