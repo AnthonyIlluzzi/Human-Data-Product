@@ -6272,12 +6272,11 @@ body.has-active-overlay .ai-composer-wrap {
     padding: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread {
-    display: grid;
-    align-content: start;
-    justify-items: stretch;
-    gap: 12px;
-    row-gap: 14px;
+    body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
     width: 100%;
     max-width: none;
     height: 100%;
@@ -6289,34 +6288,34 @@ body.has-active-overlay .ai-composer-wrap {
     -webkit-overflow-scrolling: touch;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row {
     display: flex;
     width: 100%;
     max-width: none;
     min-width: 0;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant {
     justify-content: flex-start;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-user {
     justify-content: flex-end;
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-assistant .ai-message-bubble {
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-assistant .ai-message-bubble {
     margin-left: 0;
     margin-right: auto;
     max-width: calc(100% - 36px);
   }
 
-  body.ai-mode #ai-page.ai-conversation-mode #ai-chat-thread > .ai-message-row-user .ai-user-bubble {
-    width: max-content;
-    max-width: min(78%, calc(100vw - 96px));
+  body.ai-mode #ai-page.ai-conversation-mode .ai-chat-thread > .ai-message-row-user .ai-user-bubble {
+    width: auto;
+    max-width: 78%;
     margin-left: auto;
     margin-right: 0;
     white-space: normal;
-    overflow-wrap: normal;
+    overflow-wrap: break-word;
     word-break: normal;
   }
 
