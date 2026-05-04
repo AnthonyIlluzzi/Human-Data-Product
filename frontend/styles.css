@@ -6305,6 +6305,14 @@ body.has-active-overlay .ai-composer-wrap {
     margin-right: auto;
   }
 
+  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-assistant .ai-message-bubble {
+    max-width: min(860px, calc(100% - 36px));
+  }
+
+  body.ai-mode #ai-page.ai-conversation-mode .ai-message-row-user .ai-user-bubble {
+    max-width: 78%;
+  }
+
   body.ai-mode #ai-page.ai-conversation-mode .ai-composer-wrap {
     position: fixed;
     left: 12px;
