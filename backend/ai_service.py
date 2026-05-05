@@ -290,6 +290,11 @@ def format_user_response_constraints(constraints: dict[str, Any]) -> list[str]:
         formatted.append(
             f"Each bullet point must stay under {constraints['max_words_per_bullet']} words."
         )
+    
+    if constraints.get("expected_bullet_count") or constraints.get("max_words_per_bullet"):
+        formatted.append(
+            "When exact bullet or word-count constraints are requested, use bullets only in Section 1. Use short paragraphs, not bullets, in Sections 2, 3, and 4."
+        )
 
     if constraints.get("expected_pattern_count"):
         formatted.append(
@@ -324,7 +329,7 @@ def get_bullet_lines(answer: str) -> list[str]:
     return [
         line.strip()
         for line in answer.splitlines()
-        if re.match(r"^\s*[-*•]\s+", line)
+        if re.match(r"^\s*(?:[-*•]|\d+[\.)])\s+", line)
     ]
 
 
@@ -356,7 +361,7 @@ def validate_ai_answer(
     max_words_per_bullet = constraints.get("max_words_per_bullet")
     if max_words_per_bullet is not None:
         for bullet in bullet_lines:
-            bullet_text = re.sub(r"^\s*[-*•]\s+", "", bullet)
+            bullet_text = re.sub(r"^\s*(?:[-*•]|\d+[\.)])\s+", "", bullet)
             bullet_text = re.sub(r"\[[PB]\d+\]", "", bullet_text).strip()
             word_count = count_words(bullet_text)
             if word_count >= max_words_per_bullet:
@@ -392,7 +397,7 @@ def build_repair_prompt(
         original_prompt,
         "",
         "The draft answer below failed validation.",
-        "Revise it once so it satisfies every validation issue while preserving the required section headings, citation rules, and evidence grounding.",
+        "Revise it once so it satisfies every validation issue while preserving the required section headings, citation rules, and evidence grounding. If the issue involves exact bullet or word-count constraints, remove extra list items rather than preserving the prior structure.",
         "Do not add unsupported claims. Do not add citation IDs that were not provided.",
         "",
         "Validation issues:",
@@ -899,8 +904,9 @@ def build_prompt(
     lines.append("- Section 1 should answer the question immediately and obey any user-requested format constraints.")
     lines.append("- Section 2 should provide 2 to 3 concise evidence-backed bullet points unless the user requested an exact bullet count.")
     lines.append("- Section 3 should highlight the strongest recurring pattern or implication using 1 to 2 concise bullet points unless doing so would violate a user-requested exact bullet count.")
-    lines.append("- Section 4 is optional. Include it only if it adds meaningful nuance, uncertainty, anti-fit clarification, or scope boundaries.")
-    lines.append("- Do not include Section 4 if it risks repeating earlier points or making the response feel padded.")
+    lines.append("- Section 3 must add interpretation beyond Section 1 and Section 2; do not restate the same pattern using different wording.")
+    lines.append("- Section 4 is optional and should usually be omitted. Include it only when it introduces a new scope boundary, caveat, or anti-fit clarification not already covered in Sections 1 to 3.")
+    lines.append("- Do not include Section 4 for general summary, reinforcement, or repeated caveats.")
     lines.append("- If Section 4 is included, use either 1 short paragraph or 1 concise bullet point.")
     lines.append("- When the user asks for patterns, structure the answer as distinct pattern-to-evidence mappings, not a blended synthesis.")
     lines.append("- When the user asks for examples, make each example clearly separate and tied to a business or professional outcome.")
