@@ -293,7 +293,7 @@ def format_user_response_constraints(constraints: dict[str, Any]) -> list[str]:
     
     if constraints.get("expected_bullet_count") or constraints.get("max_words_per_bullet"):
         formatted.append(
-            "When exact bullet or word-count constraints are requested, use bullets only in Section 1. Use short paragraphs, not bullets, in Sections 2, 3, and 4."
+            "When exact bullet or word-count constraints are requested, place the constrained bullets only in Section 1. Do not use bullet markers or numbered lists in Sections 2, 3, or 4."
         )
 
     if constraints.get("expected_pattern_count"):
@@ -397,7 +397,7 @@ def build_repair_prompt(
         original_prompt,
         "",
         "The draft answer below failed validation.",
-        "Revise it once so it satisfies every validation issue while preserving the required section headings, citation rules, and evidence grounding. If the issue involves exact bullet or word-count constraints, remove extra list items rather than preserving the prior structure.",
+        "Revise it once so it satisfies every validation issue while preserving the required section headings, citation rules, and evidence grounding. If the issue involves exact bullet or word-count constraints, remove extra list items rather than preserving the prior structure. If the issue involves patterns, use system-level pattern labels rather than surface traits, tools, or isolated skills.",
         "Do not add unsupported claims. Do not add citation IDs that were not provided.",
         "",
         "Validation issues:",
@@ -832,7 +832,7 @@ def build_prompt(
         "environment_fit": "Explain where he is most likely to thrive, including what kind of structure, ambiguity, and team setting best supports performance.",
         "career_evolution": "Explain how the work has evolved over time and what direction the trajectory suggests.",
         "blind_spots_or_risks": "Be measured and concrete. Focus on likely friction patterns, not character flaws.",
-        "evidence_request": "Lead with the strongest supporting points, not a broad synthesis."
+        "evidence_request": "Lead with the strongest supporting points, but synthesize system-level patterns before naming individual skills, tools, or behaviors."
     }
 
     focus_guidance = focus_guidance_by_class.get(
@@ -842,6 +842,10 @@ def build_prompt(
 
     user_constraints = extract_user_response_constraints(question)
     formatted_constraints = format_user_response_constraints(user_constraints)
+    strict_format_requested = bool(
+        user_constraints.get("expected_bullet_count")
+        or user_constraints.get("max_words_per_bullet")
+    )
     
     lines: list[str] = []
     lines.append("You are generating a grounded response for Anthony Illuzzi's Human Data Product.")
@@ -901,19 +905,31 @@ def build_prompt(
     lines.append("4. Additional Context")
     lines.append("")
     lines.append("Important section rules:")
-    lines.append("- Section 1 should answer the question immediately and obey any user-requested format constraints.")
-    lines.append("- Section 2 should provide 2 to 3 concise evidence-backed bullet points unless the user requested an exact bullet count.")
-    lines.append("- Section 3 should highlight the strongest recurring pattern or implication using 1 to 2 concise bullet points unless doing so would violate a user-requested exact bullet count.")
+
+    if strict_format_requested:
+        lines.append("- Strict-format mode is active because the user requested an exact bullet count or word limit.")
+        lines.append("- Section 1 must contain the exact requested bullets and must satisfy every word-count constraint.")
+        lines.append("- Sections 2 and 3 must use short paragraphs, not bullets or numbered lists.")
+        lines.append("- Omit Section 4 unless it adds a necessary scope boundary that is not already covered.")
+    else:
+        lines.append("- Section 1 should answer the question immediately and directly.")
+        lines.append("- Section 2 should provide 2 to 3 concise evidence-backed bullet points.")
+        lines.append("- Section 3 should highlight the strongest recurring pattern or implication using 1 to 2 concise bullet points.")
+        lines.append("- Section 4 is optional and should usually be omitted. Include it only when it introduces a new scope boundary, caveat, or anti-fit clarification not already covered in Sections 1 to 3.")
+        lines.append("- Do not include Section 4 for general summary, reinforcement, or repeated caveats.")
+        lines.append("- If Section 4 is included, use either 1 short paragraph or 1 concise bullet point.")
+
     lines.append("- Section 3 must add interpretation beyond Section 1 and Section 2; do not restate the same pattern using different wording.")
-    lines.append("- Section 4 is optional and should usually be omitted. Include it only when it introduces a new scope boundary, caveat, or anti-fit clarification not already covered in Sections 1 to 3.")
-    lines.append("- Do not include Section 4 for general summary, reinforcement, or repeated caveats.")
-    lines.append("- If Section 4 is included, use either 1 short paragraph or 1 concise bullet point.")
-    lines.append("- When the user asks for patterns, structure the answer as distinct pattern-to-evidence mappings, not a blended synthesis.")
+    lines.append("- When the user asks for patterns, identify system-level patterns first, then map each pattern to supporting evidence.")
+    lines.append("- A pattern should describe how work repeatedly gets done or how value repeatedly shows up, not just name a skill, tool, metric, or trait.")
+    lines.append("- Do not label a single skill such as SQL, execution, communication, or impact as a top pattern unless it is framed inside a broader operating pattern.")
+    lines.append("- Strong pattern labels should be specific and synthesized, such as architecture-oriented problem solving, productized decision support, metadata-governed platform enablement, or rapid operational translation.")
     lines.append("- When the user asks for examples, make each example clearly separate and tied to a business or professional outcome.")
     lines.append("- Keep the response focused but complete. The answer should stand on its own even without opening citations.")
     lines.append("- Do not create separate sections called Observed Evidence, Behavioral Reinforcement, Supporting Evidence, Context Note, or Caution or Limitation.")
     lines.append("- Do not over-hedge. Use scoped confidence, but avoid unnecessary phrases like 'appears to' when the evidence directly supports the claim.")
     lines.append("- Prefer concrete nouns and outcomes over broad abstractions such as 'clarity,' 'structure,' or 'complexity' unless the evidence specifically supports them.")
+    lines.append("- Do not surface raw scoring metadata such as depth, experience, confidence, or project counts unless the user specifically asks for scoring details. Translate those into plain-language evidence.")
     lines.append("- Use inline citations like [P1], [P2], [B1] at the end of the sentence or bullet they support.")
     lines.append("- Keep citations selective. Not every sentence needs a citation chip.")
     lines.append("- Prefer the single strongest citation for a claim. Add a second citation only when it adds distinct support.")
