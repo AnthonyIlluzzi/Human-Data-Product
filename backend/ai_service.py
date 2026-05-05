@@ -22,7 +22,7 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini").strip()
 PUBLIC_AI_ENABLED = os.getenv("PUBLIC_AI_ENABLED", "false").strip().lower() == "true"
 
 MAX_INPUT_CHARS = 1000
-MAX_OUTPUT_TOKENS = 360
+MAX_OUTPUT_TOKENS = 480
 MAX_CORE_RECORDS = 8
 MAX_BEHAVIORAL_SIGNALS = 4
 MAX_SIGNAL_EVIDENCE_LINKS = 2
@@ -155,17 +155,44 @@ def classify_question(question: str) -> str:
     q = question.lower()
 
     if any(term in q for term in [
+        "pattern",
+        "patterns",
+        "specific evidence",
+        "supporting evidence",
+        "proof",
+        "system improvement",
+        "system improvements",
+        "business impact",
+        "clear example",
+        "clear examples",
+        "map to",
+        "maps to",
+    ]):
+        return "evidence_request"
+
+    if any(term in q for term in [
+        "hire",
+        "hiring",
+        "would you hire",
+        "senior data architect",
+        "role",
+        "fit",
+        "best suited",
+        "suited",
+        "aligned",
+        "alignment",
+    ]):
+        return "role_fit"
+
+    if any(term in q for term in [
         "summary",
         "summarize",
         "what do you know about anthony",
         "tell me about anthony",
         "who is anthony",
-        "overview"
+        "overview",
     ]):
         return "summary_overview"
-
-    if any(term in q for term in ["role", "fit", "best suited", "suited", "aligned", "alignment"]):
-        return "role_fit"
 
     if any(term in q for term in ["strength", "strongest", "good at", "best at", "value", "differentiat"]):
         return "strengths"
@@ -181,9 +208,6 @@ def classify_question(question: str) -> str:
 
     if any(term in q for term in ["blind spot", "risk", "friction", "weakness", "overdo", "stress"]):
         return "blind_spots_or_risks"
-
-    if any(term in q for term in ["evidence", "proof", "show me", "supporting"]):
-        return "evidence_request"
 
     return "strengths"
 
@@ -217,6 +241,168 @@ def extract_query_terms(question: str, config: dict[str, Any], question_class: s
             term_set.update(normalize_text(term) for term in all_terms)
 
     return sorted(term_set)
+
+
+def extract_user_response_constraints(question: str) -> dict[str, Any]:
+    normalized = normalize_text(question)
+
+    constraints: dict[str, Any] = {
+        "expected_bullet_count": None,
+        "max_words_per_bullet": None,
+        "expected_pattern_count": None,
+        "expected_example_count": None,
+        "requires_pattern_evidence_mapping": False,
+        "requires_concise_response": "concise" in normalized,
+    }
+
+    exact_bullet_match = re.search(r"exactly\s+(\d+)\s+bullet", normalized)
+    if exact_bullet_match:
+        constraints["expected_bullet_count"] = int(exact_bullet_match.group(1))
+
+    word_limit_match = re.search(r"(?:under|fewer than|less than)\s+(\d+)\s+words", normalized)
+    if word_limit_match:
+        constraints["max_words_per_bullet"] = int(word_limit_match.group(1))
+
+    pattern_match = re.search(r"top\s+(\d+)\s+pattern", normalized)
+    if pattern_match:
+        constraints["expected_pattern_count"] = int(pattern_match.group(1))
+        constraints["requires_pattern_evidence_mapping"] = True
+
+    example_match = re.search(r"(\d+)\s+clear\s+example", normalized)
+    if example_match:
+        constraints["expected_example_count"] = int(example_match.group(1))
+
+    if "pattern" in normalized and ("evidence" in normalized or "support" in normalized):
+        constraints["requires_pattern_evidence_mapping"] = True
+
+    return constraints
+
+
+def format_user_response_constraints(constraints: dict[str, Any]) -> list[str]:
+    formatted: list[str] = []
+
+    if constraints.get("expected_bullet_count"):
+        formatted.append(
+            f"Use exactly {constraints['expected_bullet_count']} bullet points in the answer body."
+        )
+
+    if constraints.get("max_words_per_bullet"):
+        formatted.append(
+            f"Each bullet point must stay under {constraints['max_words_per_bullet']} words."
+        )
+
+    if constraints.get("expected_pattern_count"):
+        formatted.append(
+            f"Identify exactly {constraints['expected_pattern_count']} distinct patterns."
+        )
+
+    if constraints.get("expected_example_count"):
+        formatted.append(
+            f"Provide exactly {constraints['expected_example_count']} clear examples."
+        )
+
+    if constraints.get("requires_pattern_evidence_mapping"):
+        formatted.append(
+            "Map each pattern directly to its own supporting evidence instead of blending evidence together."
+        )
+
+    if constraints.get("requires_concise_response"):
+        formatted.append(
+            "Prioritize brevity over explanation unless the user explicitly asks for detail."
+        )
+
+    return formatted
+
+
+def get_valid_citation_ids(core_evidence: list[dict[str, Any]], behavioral_signals: list[dict[str, Any]]) -> set[str]:
+    valid_ids = {f"P{index}" for index, _ in enumerate(core_evidence, start=1)}
+    valid_ids.update({f"B{index}" for index, _ in enumerate(behavioral_signals, start=1)})
+    return valid_ids
+
+
+def get_bullet_lines(answer: str) -> list[str]:
+    return [
+        line.strip()
+        for line in answer.splitlines()
+        if re.match(r"^\s*[-*•]\s+", line)
+    ]
+
+
+def count_words(text: str) -> int:
+    return len(re.findall(r"\b[\w'-]+\b", text))
+
+
+def validate_ai_answer(
+    answer: str,
+    constraints: dict[str, Any],
+    valid_citation_ids: set[str],
+) -> list[str]:
+    errors: list[str] = []
+    normalized_answer = normalize_text(answer)
+
+    required_headings = ["1. direct answer", "2. supporting evidence", "3. notable pattern(s)"]
+    for heading in required_headings:
+        if heading not in normalized_answer:
+            errors.append(f"Missing required section heading: {heading}")
+
+    bullet_lines = get_bullet_lines(answer)
+
+    expected_bullet_count = constraints.get("expected_bullet_count")
+    if expected_bullet_count is not None and len(bullet_lines) != expected_bullet_count:
+        errors.append(
+            f"Expected exactly {expected_bullet_count} bullet points, but found {len(bullet_lines)}."
+        )
+
+    max_words_per_bullet = constraints.get("max_words_per_bullet")
+    if max_words_per_bullet is not None:
+        for bullet in bullet_lines:
+            bullet_text = re.sub(r"^\s*[-*•]\s+", "", bullet)
+            bullet_text = re.sub(r"\[[PB]\d+\]", "", bullet_text).strip()
+            word_count = count_words(bullet_text)
+            if word_count >= max_words_per_bullet:
+                errors.append(
+                    f"Bullet exceeds word limit: {word_count} words found, must be under {max_words_per_bullet}."
+                )
+                break
+
+    used_citation_ids = set(re.findall(r"\[([PB]\d+)\]", answer))
+    unsupported_citations = sorted(used_citation_ids - valid_citation_ids)
+    if unsupported_citations:
+        errors.append(f"Unsupported citation IDs used: {', '.join(unsupported_citations)}.")
+
+    stripped_answer = answer.strip()
+    if stripped_answer and not re.search(r"[.!?)](?:\s*\[[PB]\d+\])*$", stripped_answer):
+        errors.append("Response appears incomplete or does not end cleanly.")
+
+    if constraints.get("requires_pattern_evidence_mapping"):
+        if "pattern" in normalized_answer and "evidence" not in normalized_answer and "support" not in normalized_answer:
+            errors.append("Pattern response does not clearly map patterns to supporting evidence.")
+
+    return errors
+
+
+def build_repair_prompt(
+    original_prompt: str,
+    draft_answer: str,
+    validation_errors: list[str],
+) -> str:
+    error_lines = "\n".join(f"- {error}" for error in validation_errors)
+
+    return "\n".join([
+        original_prompt,
+        "",
+        "The draft answer below failed validation.",
+        "Revise it once so it satisfies every validation issue while preserving the required section headings, citation rules, and evidence grounding.",
+        "Do not add unsupported claims. Do not add citation IDs that were not provided.",
+        "",
+        "Validation issues:",
+        error_lines,
+        "",
+        "Draft answer:",
+        draft_answer,
+        "",
+        "Return only the corrected final answer.",
+    ])
 
 
 def _score_text_relevance(text: str, query_terms: list[str]) -> float:
@@ -649,6 +835,9 @@ def build_prompt(
         "Answer the specific question directly and keep the explanation tightly aligned to that angle."
     )
 
+    user_constraints = extract_user_response_constraints(question)
+    formatted_constraints = format_user_response_constraints(user_constraints)
+    
     lines: list[str] = []
     lines.append("You are generating a grounded response for Anthony Illuzzi's Human Data Product.")
     lines.append("Respond in third person. Do not write as Anthony.")
@@ -666,6 +855,15 @@ def build_prompt(
     lines.append(f"Response goal: {class_config.get('response_goal', '')}")
     lines.append(f"Question-specific guidance: {focus_guidance}")
     lines.append(f"User question: {question}")
+
+    if formatted_constraints:
+        lines.append("")
+        lines.append("User-requested constraints:")
+        for constraint in formatted_constraints:
+            lines.append(f"- {constraint}")
+        lines.append("- These constraints override default section guidance when there is a conflict.")
+        lines.append("- Before finalizing, silently check that every listed constraint is satisfied.")
+
     lines.append("")
 
     lines.append("Professional evidence catalog:")
@@ -698,13 +896,18 @@ def build_prompt(
     lines.append("4. Additional Context")
     lines.append("")
     lines.append("Important section rules:")
-    lines.append("- Section 1 should answer the question immediately in a short paragraph.")
-    lines.append("- Section 2 should provide 2 to 3 concise evidence-backed bullet points.")
-    lines.append("- Section 3 should highlight the strongest recurring pattern or implication using 1 to 2 concise bullet points.")
+    lines.append("- Section 1 should answer the question immediately and obey any user-requested format constraints.")
+    lines.append("- Section 2 should provide 2 to 3 concise evidence-backed bullet points unless the user requested an exact bullet count.")
+    lines.append("- Section 3 should highlight the strongest recurring pattern or implication using 1 to 2 concise bullet points unless doing so would violate a user-requested exact bullet count.")
     lines.append("- Section 4 is optional. Include it only if it adds meaningful nuance, uncertainty, anti-fit clarification, or scope boundaries.")
+    lines.append("- Do not include Section 4 if it risks repeating earlier points or making the response feel padded.")
     lines.append("- If Section 4 is included, use either 1 short paragraph or 1 concise bullet point.")
+    lines.append("- When the user asks for patterns, structure the answer as distinct pattern-to-evidence mappings, not a blended synthesis.")
+    lines.append("- When the user asks for examples, make each example clearly separate and tied to a business or professional outcome.")
     lines.append("- Keep the response focused but complete. The answer should stand on its own even without opening citations.")
     lines.append("- Do not create separate sections called Observed Evidence, Behavioral Reinforcement, Supporting Evidence, Context Note, or Caution or Limitation.")
+    lines.append("- Do not over-hedge. Use scoped confidence, but avoid unnecessary phrases like 'appears to' when the evidence directly supports the claim.")
+    lines.append("- Prefer concrete nouns and outcomes over broad abstractions such as 'clarity,' 'structure,' or 'complexity' unless the evidence specifically supports them.")
     lines.append("- Use inline citations like [P1], [P2], [B1] at the end of the sentence or bullet they support.")
     lines.append("- Keep citations selective. Not every sentence needs a citation chip.")
     lines.append("- Prefer the single strongest citation for a claim. Add a second citation only when it adds distinct support.")
@@ -830,6 +1033,33 @@ def chat_with_hdp_ai(question: str) -> dict[str, Any]:
         )
 
         answer = call_openai(prompt)
+
+        user_constraints = extract_user_response_constraints(cleaned_question)
+        valid_citation_ids = get_valid_citation_ids(core_evidence, behavioral_signals)
+        validation_errors = validate_ai_answer(
+            answer=answer,
+            constraints=user_constraints,
+            valid_citation_ids=valid_citation_ids,
+        )
+
+        if validation_errors:
+            repair_prompt = build_repair_prompt(
+                original_prompt=prompt,
+                draft_answer=answer,
+                validation_errors=validation_errors,
+            )
+            try:
+                repaired_answer = call_openai(repair_prompt)
+                repaired_validation_errors = validate_ai_answer(
+                    answer=repaired_answer,
+                    constraints=user_constraints,
+                    valid_citation_ids=valid_citation_ids,
+                )
+                if not repaired_validation_errors:
+                    answer = repaired_answer
+            except RuntimeError:
+                pass
+
         register_successful_ai_call(conn)
 
     return {
