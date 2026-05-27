@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+
+# Coverage / testing
+.coverage
+htmlcov/
+
+# Packaging
+*.egg
+*.dist-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+.env.*
+*.env
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Build / temp
+dist/
+build/
+tmp/
+temp/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node (future-proof if frontend tooling expands)
+node_modules/
+
+# Render local artifacts
+.render/
+
+# Misc
+*.bak
+*.swp
+
+# Mac resource files
+._*
