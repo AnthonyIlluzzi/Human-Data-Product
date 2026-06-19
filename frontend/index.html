@@ -430,30 +430,36 @@
       </p>
 
       <div class="lineage-stage-grid" aria-label="Medallion-style data transformation flow">
-        <div class="lineage-stage lineage-stage-bronze">
-          <span class="lineage-stage-label">Bronze</span>
-          <h3>Source Capture</h3>
-          <p>Professional source material is collected from resume content, project history, feedback, certifications, and work examples.</p>
-        </div>
-
-        <div class="lineage-stage lineage-stage-silver">
-          <span class="lineage-stage-label">Silver</span>
-          <h3>Semantic Normalization</h3>
-          <p>Evidence is deduplicated, standardized, mapped to consistent entities, and aligned to meaningful taxonomy terms.</p>
-        </div>
-
-        <div class="lineage-stage lineage-stage-gold">
-          <span class="lineage-stage-label">Gold</span>
-          <h3>Curated Product Layer</h3>
-          <p>Normalized records are serialized into a curated JSON semantic source layer prepared for repeatable ingestion.</p>
-        </div>
-
-        <div class="lineage-stage lineage-stage-serving">
-          <span class="lineage-stage-label">Serving</span>
-          <h3>Consumption Layer</h3>
-          <p>Structured data is loaded into SQLite and exposed through APIs, SQL access, insights, visualizations, and AI grounding.</p>
-        </div>
-      </div>
+		  <div class="lineage-stage lineage-stage-bronze">
+		    <span class="lineage-stage-label">Bronze</span>
+		    <h3>Source Capture</h3>
+		    <p>Professional source material is collected from resume content, project history, feedback, certifications, and work examples.</p>
+		  </div>
+		
+		  <div class="lineage-flow-chevron" aria-hidden="true">›</div>
+		
+		  <div class="lineage-stage lineage-stage-silver">
+		    <span class="lineage-stage-label">Silver</span>
+		    <h3>Semantic Normalization</h3>
+		    <p>Evidence is deduplicated, standardized, mapped to consistent entities, and aligned to meaningful taxonomy terms.</p>
+		  </div>
+		
+		  <div class="lineage-flow-chevron" aria-hidden="true">›</div>
+		
+		  <div class="lineage-stage lineage-stage-gold">
+		    <span class="lineage-stage-label">Gold</span>
+		    <h3>Curated Product Layer</h3>
+		    <p>Normalized records are serialized into a curated JSON semantic source layer prepared for repeatable ingestion.</p>
+		  </div>
+		
+		  <div class="lineage-flow-chevron" aria-hidden="true">›</div>
+		
+		  <div class="lineage-stage lineage-stage-serving">
+		    <span class="lineage-stage-label">Serving</span>
+		    <h3>Consumption Layer</h3>
+		    <p>Structured data is loaded into SQLite and exposed through APIs, SQL access, insights, visualizations, and AI grounding.</p>
+		  </div>
+		</div>
 
       <details class="lineage-example">
         <summary>Show transformation example</summary>
@@ -564,115 +570,103 @@
   </div>
 
   <div class="pipeline-visual-frame architecture-flow">
-    <div class="architecture-stage">
-      <div class="architecture-icon-box" aria-hidden="true">
-        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <ellipse cx="12" cy="5" rx="6.5" ry="2.5"></ellipse>
-          <path d="M5.5 5v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V5"></path>
-          <path d="M5.5 11v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-6"></path>
-        </svg>
-      </div>
-      <div class="architecture-stage-body">
-		  <h4>Curated Dataset</h4>
-		  <p>Semantic source layer</p>
-		  <button
-		    class="architecture-lineage-link"
-		    type="button"
-		    data-modal-target="data-lineage-modal"
-		    title="See how professional source material is transformed into a governed data product."
-		  >
-		    View lineage
-		  </button>
-		</div>
-    </div>
-
-    <div class="architecture-flow-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path>
-        <path d="M13 7l6 5-6 5"></path>
-      </svg>
-    </div>
-
-    <div class="architecture-stage">
-      <div class="architecture-icon-box" aria-hidden="true">
-        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4.5 7.5h15"></path>
-          <path d="M4.5 12h15"></path>
-          <path d="M4.5 16.5h15"></path>
-          <rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect>
-        </svg>
-      </div>
-      <div class="architecture-stage-body">
-        <h4>SQLite Model</h4>
-        <p>Structured storage</p>
-      </div>
-    </div>
-
-    <div class="architecture-flow-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path>
-        <path d="M13 7l6 5-6 5"></path>
-      </svg>
-    </div>
-
-    <div class="architecture-stage">
-      <div class="architecture-icon-box" aria-hidden="true">
-        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="5" width="16" height="14" rx="2.5"></rect>
-          <path d="M8 9h8"></path>
-          <path d="M8 12h5"></path>
-          <path d="M8 15h8"></path>
-        </svg>
-      </div>
-      <div class="architecture-stage-body">
-        <h4>Consumption Layer</h4>
-        <p>FastAPI + SQL access</p>
-      </div>
-    </div>
-
-    <div class="architecture-flow-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path>
-        <path d="M13 7l6 5-6 5"></path>
-      </svg>
-    </div>
-
-    <div class="architecture-stage">
-      <div class="architecture-icon-box" aria-hidden="true">
-        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 18V9"></path>
-          <path d="M10 18V6"></path>
-          <path d="M15 18v-4"></path>
-          <path d="M20 18V11"></path>
-        </svg>
-      </div>
-      <div class="architecture-stage-body">
-        <h4>Derived Insights</h4>
-        <p>Analytics + interpretation</p>
-      </div>
-    </div>
-
-    <div class="architecture-flow-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 24" class="architecture-arrow-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"></path>
-        <path d="M13 7l6 5-6 5"></path>
-      </svg>
-    </div>
-
-    <div class="architecture-stage">
-      <div class="architecture-icon-box" aria-hidden="true">
-        <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="5" width="16" height="11" rx="2.5"></rect>
-          <path d="M9 19h6"></path>
-          <path d="M12 16v3"></path>
-        </svg>
-      </div>
-      <div class="architecture-stage-body">
-        <h4>Frontend Workspace</h4>
-        <p>SQL, API, insights</p>
-      </div>
-    </div>
-  </div>
+	  <div class="architecture-stage">
+	    <div class="architecture-icon-box" aria-hidden="true">
+	      <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	        <ellipse cx="12" cy="5" rx="6.5" ry="2.5"></ellipse>
+	        <path d="M5.5 5v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V5"></path>
+	        <path d="M5.5 11v6c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-6"></path>
+	      </svg>
+	    </div>
+	    <div class="architecture-stage-body">
+	      <h4>Curated Dataset</h4>
+	      <p>Semantic source layer</p>
+	      <button
+	        class="architecture-lineage-link"
+	        type="button"
+	        data-modal-target="data-lineage-modal"
+	        title="See how professional source material is transformed into a governed data product."
+	      >
+	        View lineage
+	      </button>
+	    </div>
+	  </div>
+	
+	  <div class="architecture-flow-arrow" aria-hidden="true">
+	    <span class="architecture-chevron">›</span>
+	  </div>
+	
+	  <div class="architecture-stage">
+	    <div class="architecture-icon-box" aria-hidden="true">
+	      <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	        <path d="M4.5 7.5h15"></path>
+	        <path d="M4.5 12h15"></path>
+	        <path d="M4.5 16.5h15"></path>
+	        <rect x="3.5" y="5" width="17" height="14" rx="2.5"></rect>
+	      </svg>
+	    </div>
+	    <div class="architecture-stage-body architecture-stage-body-spacer">
+	      <h4>SQLite Model</h4>
+	      <p>Structured storage</p>
+	    </div>
+	  </div>
+	
+	  <div class="architecture-flow-arrow" aria-hidden="true">
+	    <span class="architecture-chevron">›</span>
+	  </div>
+	
+	  <div class="architecture-stage">
+	    <div class="architecture-icon-box" aria-hidden="true">
+	      <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	        <rect x="4" y="5" width="16" height="14" rx="2.5"></rect>
+	        <path d="M8 9h8"></path>
+	        <path d="M8 12h5"></path>
+	        <path d="M8 15h8"></path>
+	      </svg>
+	    </div>
+	    <div class="architecture-stage-body architecture-stage-body-spacer">
+	      <h4>Access Layer</h4>
+	      <p>FastAPI + SQL access</p>
+	    </div>
+	  </div>
+	
+	  <div class="architecture-flow-arrow" aria-hidden="true">
+	    <span class="architecture-chevron">›</span>
+	  </div>
+	
+	  <div class="architecture-stage">
+	    <div class="architecture-icon-box" aria-hidden="true">
+	      <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	        <path d="M5 18V9"></path>
+	        <path d="M10 18V6"></path>
+	        <path d="M15 18v-4"></path>
+	        <path d="M20 18V11"></path>
+	      </svg>
+	    </div>
+	    <div class="architecture-stage-body architecture-stage-body-spacer">
+	      <h4>Derived Insights</h4>
+	      <p>Analytics + interpretation</p>
+	    </div>
+	  </div>
+	
+	  <div class="architecture-flow-arrow" aria-hidden="true">
+	    <span class="architecture-chevron">›</span>
+	  </div>
+	
+	  <div class="architecture-stage">
+	    <div class="architecture-icon-box" aria-hidden="true">
+	      <svg viewBox="0 0 24 24" class="architecture-icon" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	        <rect x="4" y="5" width="16" height="11" rx="2.5"></rect>
+	        <path d="M9 19h6"></path>
+	        <path d="M12 16v3"></path>
+	      </svg>
+	    </div>
+	    <div class="architecture-stage-body architecture-stage-body-spacer">
+	      <h4>Frontend Workspace</h4>
+	      <p>SQL, API, insights</p>
+	    </div>
+	  </div>
+	</div>
 
   <p class="pipeline-visual-caption">
     Illustrates how structured professional data is modeled, exposed, and consumed as a Data Product.
