@@ -2051,8 +2051,8 @@ body.has-active-overlay .mobile-shell-header {
 }
 
 .lineage-stage-bronze {
-  border-color: #d8b08a;
-  background: #fff8f1;
+  border-color: #c98a45;
+  background: #f7eee5;
 }
 
 .lineage-stage-bronze .lineage-stage-label {
@@ -2061,18 +2061,18 @@ body.has-active-overlay .mobile-shell-header {
 }
 
 .lineage-stage-silver {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  border-color: #aab4c3;
+  background: #f2f4f7;
 }
 
 .lineage-stage-silver .lineage-stage-label {
-  background: #e2e8f0;
+  background: #dbe2ea;
   color: #475569;
 }
 
 .lineage-stage-gold {
-  border-color: #e1c36a;
-  background: #fffbea;
+  border-color: #d9b547;
+  background: #fbf5dd;
 }
 
 .lineage-stage-gold .lineage-stage-label {
@@ -2081,12 +2081,12 @@ body.has-active-overlay .mobile-shell-header {
 }
 
 .lineage-stage-serving {
-  border-color: #cfe0f4;
-  background: #f5f9ff;
+  border-color: #8db7e8;
+  background: #eef5ff;
 }
 
 .lineage-stage-serving .lineage-stage-label {
-  background: #dcecff;
+  background: #d7eaff;
   color: var(--primary-dark);
 }
 
@@ -2128,6 +2128,21 @@ body.has-active-overlay .mobile-shell-header {
   font-size: 13px;
   line-height: 1.5;
   color: var(--muted);
+}
+
+.lineage-example-card-bronze {
+  border-color: #c98a45;
+  background: #f7eee5;
+}
+
+.lineage-example-card-silver {
+  border-color: #aab4c3;
+  background: #f2f4f7;
+}
+
+.lineage-example-card-gold {
+  border-color: #d9b547;
+  background: #fbf5dd;
 }
 
 .lineage-principles {
