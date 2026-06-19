@@ -1990,6 +1990,12 @@ body.has-active-overlay .mobile-shell-header {
   text-decoration: underline;
 }
 
+.architecture-lineage-link:focus-visible {
+  outline: 2px solid rgba(10, 110, 209, 0.28);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .data-lineage-modal-card {
   width: min(920px, 100%);
 }
