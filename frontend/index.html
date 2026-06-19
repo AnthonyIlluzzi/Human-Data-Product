@@ -415,6 +415,80 @@
   </div>
 </div>
 
+<div id="data-lineage-modal" class="modal-overlay hidden">
+  <div class="modal-card data-lineage-modal-card">
+    <div class="modal-header">
+      <div class="modal-header-copy">
+        <p class="eyebrow">Data Product Architecture</p>
+        <h2>Data Lineage & Transformation Flow</h2>
+      </div>
+      <button class="modal-close" data-close-modal="data-lineage-modal" aria-label="Close data lineage modal">×</button>
+    </div>
+
+    <div class="modal-body data-lineage-modal-body">
+      <p class="data-lineage-intro">
+        This product transforms raw professional evidence into standardized entities and governed analytical structures to support querying, insights, and AI grounding.
+      </p>
+
+      <div class="lineage-stage-grid" aria-label="Medallion-style data transformation flow">
+        <div class="lineage-stage lineage-stage-bronze">
+          <span class="lineage-stage-label">Bronze</span>
+          <h3>Source Capture</h3>
+          <p>Professional source material is collected from resume content, project history, feedback, certifications, and work examples.</p>
+        </div>
+
+        <div class="lineage-stage lineage-stage-silver">
+          <span class="lineage-stage-label">Silver</span>
+          <h3>Semantic Normalization</h3>
+          <p>Evidence is deduplicated, standardized, mapped to consistent entities, and aligned to meaningful taxonomy terms.</p>
+        </div>
+
+        <div class="lineage-stage lineage-stage-gold">
+          <span class="lineage-stage-label">Gold</span>
+          <h3>Curated Product Layer</h3>
+          <p>Normalized records are serialized into a curated JSON semantic source layer prepared for repeatable ingestion.</p>
+        </div>
+
+        <div class="lineage-stage lineage-stage-serving">
+          <span class="lineage-stage-label">Serving</span>
+          <h3>Consumption Layer</h3>
+          <p>Structured data is loaded into SQLite and exposed through APIs, SQL access, insights, visualizations, and AI grounding.</p>
+        </div>
+      </div>
+
+      <details class="lineage-example">
+        <summary>Show transformation example</summary>
+        <div class="lineage-example-grid">
+          <div class="lineage-example-card">
+            <h4>Source Material</h4>
+            <p>Feedback references clear communication, collaboration, and responsiveness across professional work.</p>
+          </div>
+
+          <div class="lineage-example-card">
+            <h4>Normalized Themes</h4>
+            <p>Repeated language is grouped into standardized themes such as collaboration, communication, and responsiveness.</p>
+          </div>
+
+          <div class="lineage-example-card">
+            <h4>Structured Product Record</h4>
+            <p>Themes become queryable feedback records that can support insights, relationship exploration, and AI grounding.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="lineage-principles">
+        <h3>Transformation Principles</h3>
+        <ul>
+          <li>Preserve meaning</li>
+          <li>Reduce duplication</li>
+          <li>Maintain traceability</li>
+          <li>Enable querying and reuse</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Product Page -->
   <section id="product-page" class="page-shell hidden">
     <aside class="sidebar">
@@ -486,7 +560,7 @@
   <div class="section-heading">
     <h3>Product Architecture</h3>
     <p class="section-subtext">
-      High-level flow of how curated source data is transformed into a consumable workspace.
+      High-level flow of how curated semantic data is transformed into a consumable workspace.
     </p>
   </div>
 
@@ -500,9 +574,17 @@
         </svg>
       </div>
       <div class="architecture-stage-body">
-        <h4>Curated Dataset</h4>
-        <p>Source data</p>
-      </div>
+		  <h4>Curated Dataset</h4>
+		  <p>Semantic source layer</p>
+		  <button
+		    class="architecture-lineage-link"
+		    type="button"
+		    data-modal-target="data-lineage-modal"
+		    title="See how professional source material is transformed into a governed data product."
+		  >
+		    View lineage
+		  </button>
+		</div>
     </div>
 
     <div class="architecture-flow-arrow" aria-hidden="true">
