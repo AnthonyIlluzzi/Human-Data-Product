@@ -1891,21 +1891,24 @@ body.has-active-overlay .mobile-shell-header {
 .architecture-flow {
   display: grid;
   grid-template-columns:
-    minmax(0, 1fr) 18px
-    minmax(0, 1fr) 18px
-    minmax(0, 1fr) 18px
-    minmax(0, 1fr) 18px
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr) 16px
     minmax(0, 1fr);
-  gap: 8px;
-  align-items: center;
+  gap: 10px;
+  align-items: stretch;
   padding: 18px 16px;
 }
 
 .architecture-stage {
   min-width: 0;
+  min-height: 172px;
   display: grid;
+  grid-template-rows: 54px minmax(0, 1fr);
   gap: 10px;
   justify-items: center;
+  align-items: center;
   text-align: center;
   padding: 20px 16px 18px;
   border: 1px solid #dbe6f2;
@@ -1934,7 +1937,10 @@ body.has-active-overlay .mobile-shell-header {
 
 .architecture-stage-body {
   display: grid;
+  grid-template-rows: auto auto 18px;
   gap: 4px;
+  align-content: start;
+  justify-items: center;
 }
 
 .architecture-stage-body h4 {
@@ -1952,6 +1958,16 @@ body.has-active-overlay .mobile-shell-header {
   color: var(--muted);
 }
 
+.architecture-stage-body .architecture-lineage-link {
+  align-self: start;
+}
+
+.architecture-stage-body:not(:has(.architecture-lineage-link))::after {
+  content: "";
+  display: block;
+  height: 18px;
+}
+
 .architecture-flow-arrow {
   display: flex;
   align-items: center;
@@ -1960,10 +1976,15 @@ body.has-active-overlay .mobile-shell-header {
   opacity: 0.95;
 }
 
-.architecture-arrow-icon {
-  width: 20px;
-  height: 20px;
-  display: block;
+.architecture-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #7f9cc2;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0.78;
 }
 
 .pipeline-visual-caption {
@@ -2014,8 +2035,24 @@ body.has-active-overlay .mobile-shell-header {
 
 .lineage-stage-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns:
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr) 16px
+    minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.lineage-flow-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #7f9cc2;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0.62;
 }
 
 .lineage-stage {
@@ -4021,6 +4058,10 @@ body.has-active-overlay .mobile-shell-header {
   .architecture-flow-arrow {
     display: flex;
     min-height: 20px;
+    transform: none;
+  }
+
+  .architecture-chevron {
     transform: rotate(90deg);
   }
 
@@ -4157,7 +4198,7 @@ body.has-active-overlay .mobile-shell-header {
     height: 180px;
   }
   
-    .architecture-flow {
+  .architecture-flow {
     gap: 8px;
   }
 
@@ -4166,23 +4207,27 @@ body.has-active-overlay .mobile-shell-header {
   }
 
   .architecture-stage {
+    min-height: auto;
     grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-rows: auto;
     align-items: center;
     justify-items: start;
     text-align: left;
     gap: 10px;
     padding: 12px 10px;
   }
-
+  
   .architecture-icon-box {
     width: 42px;
     height: 42px;
   }
 
   .architecture-stage-body {
+    grid-template-rows: auto auto auto;
     gap: 1px;
+    justify-items: start;
   }
-
+  
   .architecture-stage-body h4 {
     white-space: normal;
   }
@@ -4434,6 +4479,11 @@ body.has-active-overlay .mobile-shell-header {
   .lineage-stage-grid,
   .lineage-example-grid {
     grid-template-columns: 1fr;
+  }
+
+  .lineage-flow-chevron {
+    transform: rotate(90deg);
+    min-height: 14px;
   }
 
   .lineage-stage {
