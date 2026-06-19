@@ -1974,6 +1974,175 @@ body.has-active-overlay .mobile-shell-header {
   color: var(--muted);
 }
 
+.architecture-lineage-link {
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 0 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.architecture-lineage-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.data-lineage-modal-card {
+  width: min(920px, 100%);
+}
+
+.data-lineage-modal-body {
+  display: grid;
+  gap: 18px;
+}
+
+.data-lineage-intro {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.lineage-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lineage-stage {
+  border: 1px solid #dbe6f2;
+  border-radius: 16px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.lineage-stage-label {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.lineage-stage h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.lineage-stage p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.lineage-stage-bronze {
+  border-color: #d8b08a;
+  background: #fff8f1;
+}
+
+.lineage-stage-bronze .lineage-stage-label {
+  background: #ead0b7;
+  color: #6f3f18;
+}
+
+.lineage-stage-silver {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.lineage-stage-silver .lineage-stage-label {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.lineage-stage-gold {
+  border-color: #e1c36a;
+  background: #fffbea;
+}
+
+.lineage-stage-gold .lineage-stage-label {
+  background: #f5df8d;
+  color: #755b00;
+}
+
+.lineage-stage-serving {
+  border-color: #cfe0f4;
+  background: #f5f9ff;
+}
+
+.lineage-stage-serving .lineage-stage-label {
+  background: #dcecff;
+  color: var(--primary-dark);
+}
+
+.lineage-example {
+  border: 1px solid #dbe6f2;
+  border-radius: 16px;
+  background: #f8fbff;
+  padding: 14px 16px;
+}
+
+.lineage-example summary {
+  cursor: pointer;
+  color: var(--primary-dark);
+  font-weight: 800;
+}
+
+.lineage-example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.lineage-example-card {
+  border: 1px solid #dbe6f2;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+.lineage-example-card h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.lineage-example-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.lineage-principles {
+  border-top: 1px solid #e4ebf3;
+  padding-top: 14px;
+}
+
+.lineage-principles h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.lineage-principles ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .overview-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 290px;
@@ -4235,6 +4404,23 @@ body.has-active-overlay .mobile-shell-header {
 
   .button-column {
     gap: 6px;
+  }
+
+  .data-lineage-modal-card {
+    max-height: calc(100dvh - 28px);
+  }
+
+  .lineage-stage-grid,
+  .lineage-example-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lineage-stage {
+    padding: 14px;
+  }
+
+  .data-lineage-intro {
+    font-size: 14px;
   }
 }
 
