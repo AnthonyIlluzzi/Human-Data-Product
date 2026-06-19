@@ -1962,7 +1962,7 @@ body.has-active-overlay .mobile-shell-header {
   align-self: start;
 }
 
-.architecture-stage-body:not(:has(.architecture-lineage-link))::after {
+.architecture-stage-body-spacer::after {
   content: "";
   display: block;
   height: 18px;
